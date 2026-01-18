@@ -249,7 +249,7 @@ export default function AgentDashboard() {
                     <span className="font-bold text-green-900">$48,200</span>
                   </div>
                   <div className="pt-2 border-t border-green-200">
-                    <p className="text-xs text-green-600">You are 23% ahead of your target!</p>
+                    <p className="text-xs text-green-600">You are 25% ahead of your target!</p>
                   </div>
                 </div>
               </CardContent>
