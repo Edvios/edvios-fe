@@ -4,9 +4,8 @@ import { z } from "zod";
 export const UserType = {
   STUDENT: "student",
   AGENT: "agent",
-  AMBASSADOR: "ambassador",
-  COUNSELOR: "counselor",
-  ADMIN: "admin",
+  SUPERADMIN: "super-admin",
+
 } as const;
 
 // Base user schema
@@ -17,9 +16,7 @@ const userSchema = z.object({
   userType: z.enum([
     UserType.STUDENT,
     UserType.AGENT,
-    UserType.AMBASSADOR,
-    UserType.COUNSELOR,
-    UserType.ADMIN,
+    UserType.SUPERADMIN,
   ]),
 });
 
@@ -36,9 +33,7 @@ export const loginRequestSchema = z.object({
   userType: z.enum([
     UserType.STUDENT,
     UserType.AGENT,
-    UserType.AMBASSADOR,
-    UserType.COUNSELOR,
-    UserType.ADMIN,
+    UserType.SUPERADMIN,
   ]),
 });
 
@@ -71,9 +66,7 @@ export const registerRequestSchema = z.object({
   userType: z.enum([
     UserType.STUDENT,
     UserType.AGENT,
-    UserType.AMBASSADOR,
-    UserType.COUNSELOR,
-    UserType.ADMIN,
+    UserType.SUPERADMIN,
   ]),
   phone: z
     .string()

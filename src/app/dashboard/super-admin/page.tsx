@@ -16,8 +16,10 @@ import {
   Activity,
   Database,
   Settings,
-  BarChart3
+  BarChart3,
+  User
 } from "lucide-react";
+import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
 
 interface UserData {
   email: string;
@@ -40,7 +42,7 @@ export default function SuperAdminDashboard() {
     }
     
     const user = JSON.parse(userSession);
-    if (user.userType !== 'admin') {
+    if (user.userType !== UserTypeEnum.SUPERADMIN) {
       router.push(`/dashboard/${user.userType}`);
       return;
     }

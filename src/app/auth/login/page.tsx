@@ -168,7 +168,7 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         disabled={isLoading}
                       >
                         <type.icon className="w-4 h-4 mr-2" />
-                        {type.id === UserTypeEnum.ADMIN ? 'Super Admin' : `Demo ${type.name}`}
+                        {type.id === UserTypeEnum.SUPERADMIN ? 'Super Admin' : `Demo ${type.name}`}
                       </Button>
                     ))}
                   </div>
@@ -190,7 +190,7 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         <SelectValue placeholder="Select user type" />
                       </SelectTrigger>
                       <SelectContent>
-                        {USER_TYPES.filter(type => type.id !== UserTypeEnum.ADMIN).map(type => (
+                        {USER_TYPES.filter(type => type.id !== UserTypeEnum.SUPERADMIN).map(type => (
                           <SelectItem key={type.id} value={type.id}>
                             <div className="flex items-center space-x-2">
                               <div className={`w-3 h-3 rounded-full ${type.color}`}></div>

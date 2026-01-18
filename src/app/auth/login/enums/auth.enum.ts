@@ -1,7 +1,7 @@
 export enum UserTypeEnum {
   STUDENT = "student",
   AGENT = "agent",
-  ADMIN = "admin"
+  SUPERADMIN = "super-admin"
 }
 
 export enum AuthTabEnum {

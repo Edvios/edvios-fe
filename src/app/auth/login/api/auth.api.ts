@@ -19,7 +19,7 @@ const getDefaultUserName = (userType: string, email: string): string => {
       return "Student " + emailPrefix;
     case "agent":
       return "Agent " + emailPrefix;
-    case "admin":
+    case "super-admin":
       return "Super Admin EDVIOS";
     default:
       return emailPrefix;

@@ -32,7 +32,7 @@ export const useAuth = (onLogin?: (userType: string, userData: UserData) => void
           router.push("/dashboard/student");
         } else if (loginData.userType === UserTypeEnum.AGENT) {
           router.push("/dashboard/agent");
-        } else if (loginData.userType === UserTypeEnum.ADMIN) {
+        } else if (loginData.userType === UserTypeEnum.SUPERADMIN) {
           router.push("/dashboard/super-admin");
         }
         
@@ -73,6 +73,7 @@ export const useAuth = (onLogin?: (userType: string, userData: UserData) => void
         lastName: registerData.lastName,
         email: registerData.email,
         password: registerData.password,
+        confirmPassword: registerData.confirmPassword,
         userType: registerData.userType,
         phone: registerData.phone,
         organization: registerData.organization
@@ -87,7 +88,7 @@ export const useAuth = (onLogin?: (userType: string, userData: UserData) => void
           router.push("/dashboard/student");
         } else if (registerData.userType === UserTypeEnum.AGENT) {
           router.push("/dashboard/agent");
-        } else if (registerData.userType === UserTypeEnum.ADMIN) {
+        } else if (registerData.userType === UserTypeEnum.SUPERADMIN) {
           router.push("/dashboard/super-admin");
         }
         
@@ -124,17 +125,17 @@ export const useLoginForm = () => {
   };
 
   const setDemoCredentials = (userType: string) => {
-    if (userType === UserTypeEnum.ADMIN) {
+    if (userType === UserTypeEnum.SUPERADMIN) {
       setLoginData({
         email: "superadmin@globalguidance.com",
         password: "password123",
-        userType: UserTypeEnum.ADMIN
+        userType: UserTypeEnum.SUPERADMIN as "super-admin"
       });
     } else {
       setLoginData({
         email: `demo.${userType}@edvios.com`,
         password: "demo123",
-        userType: userType
+        userType: userType as "student" | "agent" | "super-admin"
       });
     }
   };
