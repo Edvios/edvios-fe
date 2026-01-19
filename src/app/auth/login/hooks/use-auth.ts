@@ -124,22 +124,6 @@ export const useLoginForm = () => {
     setLoginData(prev => ({ ...prev, [field]: value }));
   };
 
-  const setDemoCredentials = (userType: string) => {
-    if (userType === UserTypeEnum.SUPERADMIN) {
-      setLoginData({
-        email: "superadmin@globalguidance.com",
-        password: "password123",
-        userType: UserTypeEnum.SUPERADMIN as "super-admin"
-      });
-    } else {
-      setLoginData({
-        email: `demo.${userType}@edvios.com`,
-        password: "demo123",
-        userType: userType as "student" | "agent" | "super-admin"
-      });
-    }
-  };
-
   const resetForm = () => {
     setLoginData({
       email: "",
@@ -152,7 +136,6 @@ export const useLoginForm = () => {
     loginData,
     setLoginData,
     updateLoginData,
-    setDemoCredentials,
     resetForm
   };
 };

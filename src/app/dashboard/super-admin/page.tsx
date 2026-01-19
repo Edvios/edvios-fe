@@ -17,7 +17,6 @@ import {
   Database,
   Settings,
   BarChart3,
-  User
 } from "lucide-react";
 import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
 

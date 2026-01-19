@@ -21,7 +21,7 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
   const [activeTab, setActiveTab] = useState<string>(AuthTabEnum.LOGIN);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { loginData, updateLoginData, setDemoCredentials } = useLoginForm();
+  const { loginData, updateLoginData } = useLoginForm();
   const { registerData, updateRegisterData } = useRegisterForm();
   const { handleLogin, handleRegister, isLoading } = useAuth(onLogin);
 

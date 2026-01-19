@@ -78,7 +78,7 @@ export function UserTypeToggle({
       </div>
 
       {showDescription && selectedOption && (
-        <div className="bg-orange-50/50 p-3 rounded-4xl border border-orange-100">
+        <div className="bg-orange-50/50 p-3 rounded-2xl border border-orange-100">
           <div className="flex items-center space-x-2 mb-1">
             <selectedOption.icon className="w-4 h-4" style={{ color: '#e5601b' }} />
             <span className="font-medium text-sm text-gray-800">{selectedOption.name}</span>
