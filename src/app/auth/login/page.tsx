@@ -5,8 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UserTypeToggle } from "@/app/auth/login/components/toggle";
+import { UserTypeToggle, UserTypeOption } from "@/app/auth/login/components/toggle";
 import { Lock, Mail, Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
 import { useAuth, useLoginForm, useRegisterForm } from "./hooks/use-auth";
 import { USER_TYPES } from "./constants/userTypes";
@@ -38,86 +37,91 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
   // Filter user types for registration (exclude SUPERADMIN)
   const registerUserTypes = USER_TYPES.filter(type => type.id !== UserTypeEnum.SUPERADMIN);
 
+  // Auth tab options
+  const authTabOptions: UserTypeOption[] = [
+    {
+      id: AuthTabEnum.LOGIN,
+      name: "Login",
+      icon: LogIn,
+      description: "Sign in to your existing account"
+    },
+    {
+      id: AuthTabEnum.REGISTER,
+      name: "Register",
+      icon: UserPlus,
+      description: "Create a new account to get started"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50/30 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="flex items-center justify-center gap-4 mb-3">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg ring-3 ring-orange-100" style={{
-              background: 'linear-gradient(135deg, #e5601b, #f88124)'
-            }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 3L1 9l11 6 11-6L12 3z" fill="white" />
-                <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" fill="white" />
-                <circle cx="12" cy="9" r="1.5" fill="white" />
-              </svg>
+      <div className="w-full max-w-6xl">
+        <Card className="shadow-2xl border-gray-200 overflow-hidden p-0">
+          <div className="grid md:grid-cols-2 min-h-[600px]">
+            {/* Left Side - Branding */}
+            <div 
+              className="p-12 flex flex-col justify-center items-start text-white bg-cover bg-center bg-no-repeat relative"
+              style={{
+                backgroundImage: 'url(/loginbg.jpeg)',
+              }}
+            >
+             
+              
+              <div className="space-y-6 relative z-10">
+                <div className="flex items-center gap-4">
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center bg-orange-gradient backdrop-blur-sm shadow-lg ring-4 ring-white/20">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 3L1 9l11 6 11-6L12 3z" fill="white" />
+                      <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" fill="white" />
+                      <circle cx="12" cy="9" r="1.5" fill="white" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-4xl text-white font-semibold tracking-wide">Edvios</p>
+                    <p className="text-lg text-white font-semibold tracking-wide">Educational Visionaries</p>
+                  </div>
+                </div>
+                <p className="text-xl text-white/90 font-medium mt-8">
+                  Access your personalized education portal
+                </p>
+                <div className="mt-12 space-y-4 text-white/80">
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-white mt-2"></div>
+                    <p>Connect with students and educational opportunities</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-white mt-2"></div>
+                    <p>Manage your educational journey seamlessly</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-white mt-2"></div>
+                    <p>Join our community of learners and educators</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="text-left">
-              <h1 className="text-3xl font-bold tracking-wide leading-none" style={{
-                background: 'linear-gradient(135deg, #e5601b, #f88124)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>Edvios</h1>
-              <p className="text-sm tracking-wide mt-0.5" style={{
-                background: 'linear-gradient(135deg, #e5601b, #f88124)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: 600
-              }}>Educational Visionaries</p>
-            </div>
-          </div>
-          <p className="text-gray-600 text-sm">Access your personalized education portal</p>
-        </div>
 
-        <Card className="shadow-2xl border-gray-200">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl" style={{
-              background: 'linear-gradient(135deg, #e5601b, #f88124)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}>Welcome Back</CardTitle>
-            <CardDescription className="text-gray-600">
-              Sign in to your account or create a new one
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 p-1 rounded-4xl bg-gray-100 relative">
-                {/* Sliding background indicator */}
-                <div 
-                  className="absolute top-1 bottom-1 rounded-4xl shadow-md transition-all duration-300 ease-in-out"
-                  style={{
-                    background: 'linear-gradient(135deg, #e5601b, #f88124)',
-                    width: 'calc(50% - 4px)',
-                    left: activeTab === 'login' ? '4px' : 'calc(50% + 0px)',
-                  }}
-                />
-                <TabsTrigger 
-                  value="login"
-                  className="relative z-10 data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-4xl transition-colors duration-300 ease-in-out border-0 bg-transparent"
-                  style={{
-                    border: 'none',
-                  }}
-                >
-                  Login
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="register"
-                  className="relative z-10 data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-4xl transition-colors duration-300 ease-in-out border-0 bg-transparent"
-                  style={{
-                    border: 'none',
-                  }}
-                >
-                  Register
-                </TabsTrigger>
-              </TabsList>
+            {/* Right Side - Login/Register Form */}
+            <div className="p-8 md:p-12 flex flex-col justify-center">
+              <CardHeader className="text-center pb-6 px-0">
+                <CardTitle className="text-2xl text-orange-gradient">Welcome Back</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Sign in to your account or create a new one
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="px-0">
+                <div className="space-y-6">
+                  {/* Auth Toggle */}
+                  <UserTypeToggle
+                    options={authTabOptions}
+                    value={activeTab}
+                    onChange={setActiveTab}
+                    disabled={isLoading}
+                    showDescription={false}
+                  />
 
-              {/* Login Tab */}
-              <TabsContent value="login" className="space-y-6">
+                  {/* Login Form */}
+                  {activeTab === AuthTabEnum.LOGIN && (
                 <div className="space-y-4">
                   {/* User Type Toggle */}
                   <UserTypeToggle
@@ -173,20 +177,17 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
 
                   <Button 
                     onClick={onSubmitLogin}
-                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200" 
-                    style={{
-                      background: 'linear-gradient(135deg, #e5601b, #f88124)'
-                    }} 
+                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-gradient" 
                     disabled={isLoading}
                   >
                     <LogIn className="w-4 h-4 mr-2" />
                     {isLoading ? "Logging in..." : "Login"}
                   </Button>
                 </div>
-              </TabsContent>
+              )}
 
-              {/* Register Tab */}
-              <TabsContent value="register" className="space-y-6">
+              {/* Register Form */}
+              {activeTab === AuthTabEnum.REGISTER && (
                 <div className="space-y-4">
                   {/* User Type Toggle */}
                   <UserTypeToggle
@@ -254,23 +255,6 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                     />
                   </div>
 
-                  {/* Organization */}
-                  {registerData.userType === UserTypeEnum.AGENT && (
-                    <div className="space-y-2">
-                      <Label htmlFor="register-organization" className="text-gray-700 font-medium">
-                        Agency Name (Optional)
-                      </Label>
-                      <Input
-                        id="register-organization"
-                        placeholder="Enter your agency name"
-                        value={registerData.organization}
-                        onChange={(e) => updateRegisterData("organization", e.target.value)}
-                        className="border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  )}
-
                   {/* Password */}
                   <div className="space-y-2">
                     <Label htmlFor="register-password" className="text-gray-700 font-medium">Password</Label>
@@ -315,19 +299,18 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
 
                   <Button 
                     onClick={onSubmitRegister}
-                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200" 
-                    style={{
-                      background: 'linear-gradient(135deg, #e5601b, #f88124)'
-                    }} 
+                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-gradient" 
                     disabled={isLoading}
                   >
                     <UserPlus className="w-4 h-4 mr-2" />
                     {isLoading ? "Creating Account..." : "Create Account"}
                   </Button>
                 </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
+              )}
+                </div>
+              </CardContent>
+            </div>
+          </div>
         </Card>
 
         {/* Footer */}

@@ -19,7 +19,7 @@ export const USER_TYPES: UserType[] = [
   },
   {
     id: UserTypeEnum.SUPERADMIN,
-    name: "Super Administrator",
+    name: "Super Admin",
     icon: Shield,
     description: "Full system access and administrative controls",
     color: "bg-red-500"

@@ -46,9 +46,8 @@ export function UserTypeToggle({
       <div className={`grid ${gridCols} gap-2 p-1 rounded-4xl bg-gray-100 relative`}>
         {/* Sliding background indicator */}
         <div 
-          className="absolute top-1 bottom-1 rounded-4xl shadow-md transition-all duration-300 ease-in-out"
+          className="absolute top-1 bottom-1 rounded-4xl shadow-md transition-all duration-300 ease-in-out bg-orange-gradient"
           style={{
-            background: 'linear-gradient(135deg, #e5601b, #f88124)',
             ...getBackgroundPosition(),
           }}
         />
@@ -59,7 +58,7 @@ export function UserTypeToggle({
             type="button"
             onClick={() => onChange(option.id)}
             disabled={disabled}
-            className="relative z-10 px-3 py-2.5 rounded-4xl transition-colors duration-300 ease-in-out border-0 text-sm font-medium"
+            className="relative z-10 px-2 py-2 rounded-4xl transition-colors duration-300 ease-in-out border-0 text-sm font-medium"
             style={{
               border: 'none',
               background: 'transparent',
