@@ -9,16 +9,28 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { ProgramFilters } from '@/app/program/types/program';
+import { InitialProgramDataResponse, ProgramFilterRequest } from '../dtos/program.dto';
 import { RotateCcw, Search } from 'lucide-react';
 
 interface ProgramFiltersProps {
-    filters: ProgramFilters;
-    onFilterChange: (key: keyof ProgramFilters, value: string) => void;
+    filters: ProgramFilterRequest;
+    initialData: InitialProgramDataResponse | null;
+    onFilterChange: (key: keyof ProgramFilterRequest, value: string) => void;
     onReset: () => void;
 }
 
-export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({ filters, onFilterChange, onReset }) => {
+export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
+    filters,
+    initialData,
+    onFilterChange,
+    onReset
+}) => {
+    const getBooleanValue = (value: 'yes' | 'no' | undefined): string => {
+        if (value === 'yes') return 'yes';
+        if (value === 'no') return 'no';
+        return 'all';
+    };
+
     return (
         <div className="bg-white p-5 rounded-lg border shadow-sm space-y-6">
             <div>
@@ -28,32 +40,51 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({ filters, 
                     <Input
                         placeholder="Search programs..."
                         className="pl-9"
-                        value={filters.searchTerm}
-                        onChange={(e) => onFilterChange('searchTerm', e.target.value)}
+                        value={filters.search || ''}
+                        onChange={(e) => onFilterChange('search', e.target.value)}
                     />
                 </div>
             </div>
 
             <div className="space-y-4">
-                {/* Subject */}
+                {/* Institution */}
                 <div className="space-y-2">
-                    <Label>Subject</Label>
+                    <Label>Institution</Label>
                     <Select
-                        value={filters.subject}
-                        onValueChange={(val) => onFilterChange('subject', val === 'all' ? '' : val)}
+                        value={filters.institutionId || ''}
+                        onValueChange={(val) => onFilterChange('institutionId', val === 'all' ? '' : val)}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="All Subjects" />
+                            <SelectValue placeholder="All Institutions" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Subjects</SelectItem>
-                            <SelectItem value="Computer Science">Computer Science</SelectItem>
-                            <SelectItem value="Business">Business</SelectItem>
-                            <SelectItem value="Engineering">Engineering</SelectItem>
-                            <SelectItem value="Data Science">Data Science</SelectItem>
-                            <SelectItem value="Health Science">Health Science</SelectItem>
-                            <SelectItem value="Arts & Humanities">Arts & Humanities</SelectItem>
-                            <SelectItem value="Law">Law</SelectItem>
+                            <SelectItem value="all">All Institutions</SelectItem>
+                            {initialData?.institutions.map((institution) => (
+                                <SelectItem key={institution.id} value={institution.id}>
+                                    {institution.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                {/* Country */}
+                <div className="space-y-2">
+                    <Label>Country</Label>
+                    <Select
+                        value={filters.country || ''}
+                        onValueChange={(val) => onFilterChange('country', val === 'all' ? '' : val)}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Countries" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Countries</SelectItem>
+                            {initialData?.countries.map((country) => (
+                                <SelectItem key={country} value={country}>
+                                    {country}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
@@ -62,30 +93,21 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({ filters, 
                 <div className="space-y-2">
                     <Label>Study Level</Label>
                     <Select
-                        value={filters.studyLevel}
-                        onValueChange={(val) => onFilterChange('studyLevel', val === 'all' ? '' : val)}
+                        value={filters.level || ''}
+                        onValueChange={(val) => onFilterChange('level', val === 'all' ? '' : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Levels" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Levels</SelectItem>
-                            <SelectItem value="Bachelor's Degree">Bachelor Degree</SelectItem>
-                            <SelectItem value="Master's Degree">Master Degree</SelectItem>
-                            <SelectItem value="PhD">PhD</SelectItem>
-                            <SelectItem value="Diploma">Diploma</SelectItem>
+                            {initialData?.levels.map((level) => (
+                                <SelectItem key={level} value={level}>
+                                    {level}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
-                </div>
-
-                {/* Institution */}
-                <div className="space-y-2">
-                    <Label>Institution</Label>
-                    <Input
-                        placeholder="e.g. Oxford"
-                        value={filters.institution}
-                        onChange={(e) => onFilterChange('institution', e.target.value)}
-                    />
                 </div>
 
                 {/* Intake */}
@@ -100,29 +122,42 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({ filters, 
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">Any Intake</SelectItem>
-                            <SelectItem value="September 2025">September 2025</SelectItem>
-                            <SelectItem value="January 2026">January 2026</SelectItem>
+                            {initialData?.intakes.map((intake) => (
+                                <SelectItem key={intake} value={intake}>
+                                    {intake}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
 
-                {/* Tuition Fee Max */}
+                {/* Subject */}
                 <div className="space-y-2">
-                    <Label>Max Tuition Fee</Label>
-                    <Input
-                        type="number"
-                        placeholder="e.g. 30000"
-                        value={filters.tuitionFeeMax}
-                        onChange={(e) => onFilterChange('tuitionFeeMax', e.target.value)}
-                    />
+                    <Label>Subject Area</Label>
+                    <Select
+                        value={filters.subjectArea}
+                        onValueChange={(val) => onFilterChange('subjectArea', val === 'all' ? '' : val)}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="All Subjects" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Subjects</SelectItem>
+                            {initialData?.subjects.map((subject) => (
+                                <SelectItem key={subject} value={subject}>
+                                    {subject}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
 
-                {/* Scholarship */}
+                {/* Scholarship Available */}
                 <div className="space-y-2">
                     <Label>Scholarship Available</Label>
                     <Select
-                        value={filters.scholarship}
-                        onValueChange={(val) => onFilterChange('scholarship', val)}
+                        value={filters.scholarshipAvailable}
+                        onValueChange={(val) => onFilterChange('scholarshipAvailable', val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Any" />
@@ -152,10 +187,9 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({ filters, 
                         </SelectContent>
                     </Select>
                 </div>
-
             </div>
 
-            <Button variant="outline" className="w-full  text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-gradient" onClick={onReset}>
+            <Button variant="outline" className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-gradient" onClick={onReset}>
                 <RotateCcw className="h-4 w-4" />
                 Reset Filters
             </Button>

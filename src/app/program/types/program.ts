@@ -21,14 +21,41 @@ export interface Program {
     popularityRank?: number;
 }
 
+export interface Institution {
+    id: string;
+    name: string;
+}
+
+export interface Pagination {
+    page: number;
+    size: number;
+    total: number;
+}
+
 export interface ProgramFilters {
-    institution: string;
-    studyLevel: string;
-    subject: string;
-    scholarship: string; // 'all' | 'yes' | 'no'
+    search: string;
+    institutionId: string;
+    country: string;
+    level: string;
     intake: string;
-    tuitionFeeMin: string;
-    tuitionFeeMax: string;
+    subjectArea: string;
+    scholarshipAvailable: string; // 'all' | 'yes' | 'no'
     englishWaiver: string; // 'all' | 'yes' | 'no'
-    searchTerm: string;
+    page: number;
+    size: number;
+}
+
+export interface InitialProgramData {
+    institutions: Institution[];
+    countries: string[];
+    levels: string[];
+    intakes: string[];
+    subjects: string[];
+    programs: Program[];
+    pagination: Pagination;
+}
+
+export interface FilteredProgramData {
+    programs: Program[];
+    pagination: Pagination;
 }
