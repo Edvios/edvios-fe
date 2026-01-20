@@ -10,8 +10,11 @@ export const useAuth = (onLogin?: (userType: string, userData: UserData) => void
   const router = useRouter();
 
   const handleLogin = async (loginData: LoginFormData): Promise<boolean> => {
-    if (!loginData.email || !loginData.password) {
-      AppToast.error("Please fill in all required fields");
+    if (!loginData.email) {
+      AppToast.error("Please enter your email");
+      return false;
+    } else if (!loginData.password) {
+      AppToast.error("Please enter your password");
       return false;
     }
 

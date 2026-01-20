@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserTypeToggle, UserTypeOption } from "@/app/auth/login/components/toggle";
-import { Lock, Mail, Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, LogIn, UserPlus, Phone } from "lucide-react";
 import { useAuth, useLoginForm, useRegisterForm } from "./hooks/use-auth";
 import { USER_TYPES } from "./constants/userTypes";
 import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
@@ -144,8 +144,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Enter your email"
                         value={loginData.email}
                         onChange={(e) => updateLoginData("email", e.target.value)}
-                        className="pl-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                     </div>
                   </div>
@@ -161,8 +161,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Enter your password"
                         value={loginData.password}
                         onChange={(e) => updateLoginData("password", e.target.value)}
-                        className="pl-10 pr-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                       <button
                         type="button"
@@ -208,7 +208,6 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="First name"
                         value={registerData.firstName}
                         onChange={(e) => updateRegisterData("firstName", e.target.value)}
-                        className="border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
                       />
                     </div>
@@ -219,7 +218,6 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Last name"
                         value={registerData.lastName}
                         onChange={(e) => updateRegisterData("lastName", e.target.value)}
-                        className="border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
                       />
                     </div>
@@ -236,8 +234,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Enter your email"
                         value={registerData.email}
                         onChange={(e) => updateRegisterData("email", e.target.value)}
-                        className="pl-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                     </div>
                   </div>
@@ -245,14 +243,17 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                   {/* Phone */}
                   <div className="space-y-2">
                     <Label htmlFor="register-phone" className="text-gray-700 font-medium">Phone Number (Optional)</Label>
-                    <Input
-                      id="register-phone"
-                      placeholder="Enter your phone number"
-                      value={registerData.phone}
-                      onChange={(e) => updateRegisterData("phone", e.target.value)}
-                      className="border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
-                      disabled={isLoading}
-                    />
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                      <Input
+                        id="register-phone"
+                        placeholder="Enter your phone number"
+                        value={registerData.phone}
+                        onChange={(e) => updateRegisterData("phone", e.target.value)}
+                        disabled={isLoading}
+                        className="pl-10"
+                      />
+                    </div>
                   </div>
 
                   {/* Password */}
@@ -266,8 +267,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Create a password"
                         value={registerData.password}
                         onChange={(e) => updateRegisterData("password", e.target.value)}
-                        className="pl-10 pr-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                       <button
                         type="button"
@@ -291,8 +292,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Confirm your password"
                         value={registerData.confirmPassword}
                         onChange={(e) => updateRegisterData("confirmPassword", e.target.value)}
-                        className="pl-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                     </div>
                   </div>
