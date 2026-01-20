@@ -10,7 +10,7 @@ interface ToastProviderProps {
     | 'bottom-right';
 }
 
-export function ToastProvider({ position = 'top-right' }: ToastProviderProps) {
+export function ToastProvider({ position = 'bottom-right' }: ToastProviderProps) {
   return (
     <Toaster
       position={position}
