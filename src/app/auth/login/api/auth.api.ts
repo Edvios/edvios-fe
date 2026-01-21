@@ -125,7 +125,6 @@ export const signUp = async (data: SignUpRequestDto): Promise<SignUpResponseDto>
  * @param token - Access token from Supabase signUp response
  */ 
 export const createUser = async (data: CreateUserRequestDto, token: string): Promise<CreateUserResponseDto> => {
-  const supabase = getSupabase();
   try {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('auth-token', token);
