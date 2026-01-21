@@ -3,13 +3,14 @@ import { createClient } from '@/lib/supabase/client'
 import axiosInstance from '@/lib/axios';
 import axios from 'axios';
 
-const supabase = createClient()
+const getSupabase = () => createClient()
 
 
 /**
  * API call for user login - Signs in with Supabase and fetches user data from backend
  */
 export const signIn = async (data: AuthRequestDto): Promise<AuthResponseDto> => {
+  const supabase = getSupabase();
   try {
     const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
       email: data.email,
@@ -71,6 +72,7 @@ export const signIn = async (data: AuthRequestDto): Promise<AuthResponseDto> => 
 };
 
 export const signUp = async (data: SignUpRequestDto): Promise<SignUpResponseDto> => {
+  const supabase = getSupabase();
   const email = data.email;
   const password = data.password;
   const role = data.role;
@@ -123,7 +125,6 @@ export const signUp = async (data: SignUpRequestDto): Promise<SignUpResponseDto>
  * @param token - Access token from Supabase signUp response
  */ 
 export const createUser = async (data: CreateUserRequestDto, token: string): Promise<CreateUserResponseDto> => {
-
   try {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('auth-token', token);
@@ -161,6 +162,7 @@ export const createUser = async (data: CreateUserRequestDto, token: string): Pro
  * API call for logout - Signs out from Supabase and clears session
  */
 export const logoutApi = async (): Promise<AuthResponseDto> => {
+  const supabase = getSupabase();
   try {
     // Sign out from Supabase
     const { error } = await supabase.auth.signOut();
