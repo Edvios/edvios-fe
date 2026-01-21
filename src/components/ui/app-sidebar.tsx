@@ -32,7 +32,7 @@ import {
 
 interface UserData {
   email: string;
-  userType: string;
+  role: string;
   name: string;
   id: string;
 }
@@ -96,30 +96,30 @@ const agentItems = [
 ];
 
 // Super Admin menu items
-const superAdminItems = [
+const adminItems = [
   {
     title: "Dashboard",
-    url: "/dashboard/super-admin",
+    url: "/dashboard/admin",
     icon: Home,
   },
   {
     title: "Users",
-    url: "/dashboard/super-admin/users",
+    url: "/dashboard/admin/users",
     icon: Users,
   },
   {
     title: "Agents",
-    url: "/dashboard/super-admin/agents",
+    url: "/dashboard/admin/agents",
     icon: Building,
   },
   {
     title: "Analytics",
-    url: "/dashboard/super-admin/analytics",
+    url: "/dashboard/admin/analytics",
     icon: BarChart3,
   },
   {
     title: "System Settings",
-    url: "/dashboard/super-admin/settings",
+    url: "/dashboard/admin/settings",
     icon: Settings,
   },
 ];
@@ -141,38 +141,38 @@ export function AppSidebar() {
   };
 
   const menuItems = useMemo(() => {
-    switch (userData?.userType) {
-      case "student":
+    switch (userData?.role) {
+      case "STUDENT":
         return studentItems;
-      case "agent":
+      case "AGENT":
         return agentItems;
-      case "super-admin":
-        return superAdminItems;
+      case "ADMIN":
+        return adminItems;
       default:
         return [];
     }
-  }, [userData?.userType]);
+  }, [userData?.role]);
 
-  const userTypeLabel = useMemo(() => {
-    switch (userData?.userType) {
-      case "student":
+  const roleLabel = useMemo(() => {
+    switch (userData?.role) {
+      case "STUDENT":
         return "Student Portal";
-      case "agent":
+      case "AGENT":
         return "Agent Portal";
-      case "super-admin":
+      case "ADMIN":
         return "Admin Portal";
       default:
         return "Portal";
     }
-  }, [userData?.userType]);
+  }, [userData?.role]);
 
   const renderUserIcon = () => {
-    switch (userData?.userType) {
-      case "student":
+    switch (userData?.role) {
+      case "STUDENT":
         return <GraduationCap className="w-5 h-5 text-white" />;
-      case "agent":
+      case "AGENT":
         return <Users className="w-5 h-5 text-white" />;
-      case "super-admin":
+      case "ADMIN":
         return <Shield className="w-5 h-5 text-white" />;
       default:
         return <User className="w-5 h-5 text-white" />;
@@ -201,7 +201,7 @@ export function AppSidebar() {
 
         {/* Main Menu */}
         <SidebarGroup>
-          <SidebarGroupLabel>{userTypeLabel}</SidebarGroupLabel>
+          <SidebarGroupLabel>{roleLabel}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (

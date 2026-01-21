@@ -22,14 +22,14 @@ import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
 
 interface UserData {
   email: string;
-  userType: string;
+  role: string;
   name: string;
   id: string;
   phone?: string;
   organization?: string;
 }
 
-export default function SuperAdminDashboard() {
+export default function ADMINDashboard() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
 
@@ -41,8 +41,8 @@ export default function SuperAdminDashboard() {
     }
     
     const user = JSON.parse(userSession);
-    if (user.userType !== UserTypeEnum.SUPERADMIN) {
-      router.push(`/dashboard/${user.userType}`);
+    if (!user.role || user.role !== UserTypeEnum.ADMIN) {
+      router.push(`/dashboard/${user.role?.toLowerCase() || 'admin'}`);
       return;
     }
     
@@ -202,7 +202,7 @@ export default function SuperAdminDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {[
-                    { action: "New agent registered", user: "Global Education Ltd.", time: "2 min ago", icon: Building, color: "text-green-600" },
+                    { action: "New AGENT registered", user: "Global Education Ltd.", time: "2 min ago", icon: Building, color: "text-green-600" },
                     { action: "Bulk application import", user: "System", time: "15 min ago", icon: Database, color: "text-blue-600" },
                     { action: "Security alert resolved", user: "Admin", time: "1 hour ago", icon: AlertTriangle, color: "text-orange-600" },
                     { action: "Payment processed", user: "Stripe Gateway", time: "2 hours ago", icon: DollarSign, color: "text-purple-600" },
@@ -287,7 +287,7 @@ export default function SuperAdminDashboard() {
                 <div className="space-y-2">
                   <div className="p-2 bg-white rounded border border-red-200">
                     <p className="text-sm font-medium text-red-900">2 Pending Reviews</p>
-                    <p className="text-xs text-red-600">Require admin approval</p>
+                    <p className="text-xs text-red-600">Require ADMIN approval</p>
                   </div>
                   <div className="p-2 bg-white rounded border border-orange-200">
                     <p className="text-sm font-medium text-orange-900">Storage at 78%</p>
