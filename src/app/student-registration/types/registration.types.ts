@@ -41,6 +41,6 @@ export interface StudentRegistrationResponse {
   message: string;
   data?: {
     registrationId: string;
-    studentId: string;
+    STUDENTId: string;
   };
 }

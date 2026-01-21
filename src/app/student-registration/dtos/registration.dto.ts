@@ -83,7 +83,7 @@ const additionalInfoSchema = z.object({
 );
 
 // Student Registration Data schema (flat structure from form)
-export const studentRegistrationDataSchema = z.object({
+export const STUDENTRegistrationDataSchema = z.object({
   firstName: z.string().min(2).max(50),
   lastName: z.string().min(2).max(50),
   email: z.string().email(),
@@ -122,7 +122,7 @@ export const studentRegistrationDataSchema = z.object({
 });
 
 // Student Registration DTO schema (structured for API)
-export const studentRegistrationDtoSchema = z.object({
+export const STUDENTRegistrationDtoSchema = z.object({
   personalInfo: personalInfoSchema,
   academicBackground: academicBackgroundSchema,
   studyPreferences: studyPreferencesSchema,
@@ -136,7 +136,7 @@ export const registrationResponseSchema = z.object({
   message: z.string(),
   data: z.object({
     registrationId: z.string(),
-    studentId: z.string(),
+    STUDENTId: z.string(),
   }).optional(),
 });
 
@@ -146,6 +146,6 @@ export type AcademicBackgroundDto = z.infer<typeof academicBackgroundSchema>;
 export type StudyPreferencesDto = z.infer<typeof studyPreferencesSchema>;
 export type DocumentReadinessDto = z.infer<typeof documentReadinessSchema>;
 export type AdditionalInfoDto = z.infer<typeof additionalInfoSchema>;
-export type StudentRegistrationDataDto = z.infer<typeof studentRegistrationDataSchema>;
-export type StudentRegistrationDto = z.infer<typeof studentRegistrationDtoSchema>;
+export type StudentRegistrationDataDto = z.infer<typeof STUDENTRegistrationDataSchema>;
+export type StudentRegistrationDto = z.infer<typeof STUDENTRegistrationDtoSchema>;
 export type RegistrationResponseDto = z.infer<typeof registrationResponseSchema>;

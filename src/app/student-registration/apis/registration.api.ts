@@ -1,5 +1,5 @@
 import { 
-  studentRegistrationDtoSchema,
+  STUDENTRegistrationDtoSchema,
   type StudentRegistrationDto,
   type RegistrationResponseDto
 } from '../dtos/registration.dto';
@@ -9,7 +9,7 @@ import type { StudentRegistrationData } from '../types/registration.types';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 console.log('API_BASE_URL:', API_BASE_URL);
 /**
- * Submit student registration
+ * Submit STUDENT registration
  */
 export const submitStudentRegistration = async (
   formData: StudentRegistrationData
@@ -65,7 +65,7 @@ export const submitStudentRegistration = async (
     };
 
     // Validate using Zod schema
-    const validation = studentRegistrationDtoSchema.safeParse(dtoData);
+    const validation = STUDENTRegistrationDtoSchema.safeParse(dtoData);
 
     if (!validation.success) {
       const errorMessages = validation.error.issues
@@ -76,7 +76,7 @@ export const submitStudentRegistration = async (
 
     // Mock API call - replace with actual fetch/axios call
     // Example:
-    // const response = await fetch(`${API_BASE_URL}/student-registration`, {
+    // const response = await fetch(`${API_BASE_URL}/STUDENT-registration`, {
     //   method: 'POST',
     //   headers: {
     //     'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ export const submitStudentRegistration = async (
       message: 'Registration submitted successfully!',
       data: {
         registrationId: `REG-${Date.now()}`,
-        studentId: `STU-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        STUDENTId: `STU-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
       },
     };
   } catch (error) {
