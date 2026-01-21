@@ -10,7 +10,7 @@ login/
 │   ├── auth.api.ts   # Mock authentication API calls (login, register, logout)
 │   └── index.ts      # API exports
 ├── constants/        # Constant values and configurations  
-│   └── userTypes.ts  # User type definitions with icons and descriptions
+│   └── roles.ts  # User type definitions with icons and descriptions
 ├── dtos/            # Data Transfer Objects
 │   └── index.ts      # Request and Response DTOs for API calls
 ├── enums/           # Enumeration types
@@ -48,7 +48,7 @@ const { registerData, updateRegisterData } = useRegisterForm();
 ```typescript
 import { loginApi, registerApi } from './api';
 
-const response = await loginApi({ email, password, userType });
+const response = await loginApi({ email, password, role });
 ```
 
 ## Mock API
