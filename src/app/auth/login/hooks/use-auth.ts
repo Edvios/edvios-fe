@@ -134,14 +134,7 @@ export const useAuth = () => {
       }
 
       AppToast.success("Registration successful");
-
-      if (registerData.role === UserTypeEnum.STUDENT) {
-        router.replace("/dashboard/student");
-      } else if (registerData.role === UserTypeEnum.AGENT) {
-        router.replace("/dashboard/agent");
-      } else if (registerData.role === UserTypeEnum.ADMIN) {
-        router.replace("/dashboard/admin");
-      }
+      router.replace("/student-registration");
 
       // Trigger router navigation
       router.refresh();

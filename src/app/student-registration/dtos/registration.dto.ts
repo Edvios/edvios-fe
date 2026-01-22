@@ -1,133 +1,41 @@
 import { z } from 'zod';
 
-// Personal Information schema
-const personalInfoSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, 'First name must be at least 2 characters')
-    .max(50, 'First name must not exceed 50 characters'),
-  lastName: z
-    .string()
-    .min(2, 'Last name must be at least 2 characters')
-    .max(50, 'Last name must not exceed 50 characters'),
-  email: z
-    .string()
-    .min(1, 'Email is required')
-    .email('Invalid email address'),
-  phone: z
-    .string()
-    .min(10, 'Phone number must be at least 10 digits'),
-  dateOfBirth: z.string().optional().or(z.literal('')),
-  nationality: z.string().optional().or(z.literal('')),
-  currentCountry: z.string().optional().or(z.literal('')),
-  currentCity: z.string().optional().or(z.literal('')),
-});
-
-// Academic Background schema
-const academicBackgroundSchema = z.object({
-  currentEducationLevel: z
-    .string()
-    .min(1, 'Education level is required'),
-  currentInstitution: z.string().optional().or(z.literal('')),
-  fieldOfStudy: z
-    .string()
-    .min(1, 'Field of study is required'),
-  gpa: z.string().optional().or(z.literal('')),
-  graduationDate: z.string().optional().or(z.literal('')),
-  englishProficiency: z.string().optional().or(z.literal('')),
-  ieltsScore: z.string().optional().or(z.literal('')),
-  toeflScore: z.string().optional().or(z.literal('')),
-});
-
-// Study Preferences schema
-const studyPreferencesSchema = z.object({
-  preferredDestination: z
-    .string()
-    .min(1, 'Preferred destination is required'),
-  preferredProgram: z
-    .string()
-    .min(1, 'Preferred program is required'),
-  studyLevel: z
-    .string()
-    .min(1, 'Study level is required'),
-  preferredIntake: z.string().optional().or(z.literal('')),
-  budgetRange: z.string().optional().or(z.literal('')),
-  scholarshipInterest: z.boolean(),
-});
-
-// Document Readiness schema
-const documentReadinessSchema = z.object({
-  hasPassport: z.boolean(),
-  hasTranscripts: z.boolean(),
-  hasRecommendationLetters: z.boolean(),
-  hasPersonalStatement: z.boolean(),
-  workExperience: z.string().optional().or(z.literal('')),
-  extracurriculars: z.string().optional().or(z.literal('')),
-  careerGoals: z.string().optional().or(z.literal('')),
-});
-
-// Additional Information schema
-const additionalInfoSchema = z.object({
-  howDidYouHear: z.string().optional().or(z.literal('')),
-  additionalRequirements: z.string().optional().or(z.literal('')),
-  preferredContactMethod: z.string().optional().or(z.literal('')),
-  bestTimeToContact: z.string().optional().or(z.literal('')),
-  marketingConsent: z.boolean(),
-  termsAccepted: z.boolean(),
-}).refine(
-  (data) => data.termsAccepted === true,
-  {
-    message: 'You must accept the terms and conditions',
-    path: ['termsAccepted'],
-  }
-);
-
-// Student Registration Data schema (flat structure from form)
-export const STUDENTRegistrationDataSchema = z.object({
-  firstName: z.string().min(2).max(50),
-  lastName: z.string().min(2).max(50),
-  email: z.string().email(),
-  phone: z.string().min(10),
-  dateOfBirth: z.string().optional().or(z.literal('')),
-  nationality: z.string().optional().or(z.literal('')),
-  currentCountry: z.string().optional().or(z.literal('')),
-  currentCity: z.string().optional().or(z.literal('')),
-  currentEducationLevel: z.string().min(1),
-  currentInstitution: z.string().optional().or(z.literal('')),
-  fieldOfStudy: z.string().min(1),
-  gpa: z.string().optional().or(z.literal('')),
-  graduationDate: z.string().optional().or(z.literal('')),
-  englishProficiency: z.string().optional().or(z.literal('')),
-  ieltsScore: z.string().optional().or(z.literal('')),
-  toeflScore: z.string().optional().or(z.literal('')),
-  preferredDestination: z.string().min(1),
-  preferredProgram: z.string().min(1),
-  studyLevel: z.string().min(1),
-  preferredIntake: z.string().optional().or(z.literal('')),
-  budgetRange: z.string().optional().or(z.literal('')),
-  scholarshipInterest: z.boolean(),
-  hasPassport: z.boolean(),
-  hasTranscripts: z.boolean(),
-  hasRecommendationLetters: z.boolean(),
-  hasPersonalStatement: z.boolean(),
-  workExperience: z.string().optional().or(z.literal('')),
-  extracurriculars: z.string().optional().or(z.literal('')),
-  careerGoals: z.string().optional().or(z.literal('')),
-  howDidYouHear: z.string().optional().or(z.literal('')),
-  additionalRequirements: z.string().optional().or(z.literal('')),
-  preferredContactMethod: z.string().optional().or(z.literal('')),
-  bestTimeToContact: z.string().optional().or(z.literal('')),
-  marketingConsent: z.boolean(),
-  termsAccepted: z.boolean(),
-});
-
-// Student Registration DTO schema (structured for API)
-export const STUDENTRegistrationDtoSchema = z.object({
-  personalInfo: personalInfoSchema,
-  academicBackground: academicBackgroundSchema,
-  studyPreferences: studyPreferencesSchema,
-  documentReadiness: documentReadinessSchema,
-  additionalInfo: additionalInfoSchema,
+// Create Student DTO schema matching backend
+export const createStudentDtoSchema = z.object({
+  firstName: z.string().nullable().optional(),
+  lastName: z.string().nullable().optional(),
+  email: z.string().email().nullable().optional(),
+  phone: z.string().nullable().optional(),
+  dob: z.string().nullable().optional(), // ISO string
+  address: z.string().nullable().optional(),
+  nationality: z.string().nullable().optional(),
+  currentEducationLevel: z.string().nullable().optional(),
+  currentInstitution: z.string().nullable().optional(),
+  fieldOfStudy: z.string().nullable().optional(),
+  gpa: z.number().nullable().optional(),
+  graduationDate: z.string().nullable().optional(), // ISO string
+  preferredDestination: z.string().nullable().optional(),
+  preferredProgram: z.string().nullable().optional(),
+  preferredStudyLevel: z.enum(['BACHELORS', 'MASTERS', 'PHD', 'DIPLOMA']).nullable().optional(),
+  preferredIntake: z.string().nullable().optional(),
+  englishTest: z.string().nullable().optional(),
+  englishScore: z.string().nullable().optional(),
+  hasValidPassport: z.boolean().optional(),
+  hasAcademicTranscripts: z.boolean().optional(),
+  hasRecommendationLetters: z.boolean().optional(),
+  hasPersonalStatement: z.boolean().optional(),
+  workExperience: z.string().nullable().optional(),
+  extraCurricular: z.string().nullable().optional(),
+  careerGoals: z.string().nullable().optional(),
+  referralSource: z.string().nullable().optional(),
+  preferredContactMethod: z.string().nullable().optional(),
+  bestTimeToContact: z.string().nullable().optional(),
+  additionalQuestions: z.string().nullable().optional(),
+  currentCountry: z.string().nullable().optional(),
+  currentCity: z.string().nullable().optional(),
+  budgetRange: z.string().nullable().optional(),
+  scholarshipInterest: z.boolean().optional(),
+  marketingConsent: z.boolean().optional(),
 });
 
 // Registration Response schema
@@ -135,17 +43,11 @@ export const registrationResponseSchema = z.object({
   success: z.boolean(),
   message: z.string(),
   data: z.object({
-    registrationId: z.string(),
-    STUDENTId: z.string(),
+    id: z.string(),
+    studentId: z.string(),
   }).optional(),
 });
 
 // Type exports
-export type PersonalInfoDto = z.infer<typeof personalInfoSchema>;
-export type AcademicBackgroundDto = z.infer<typeof academicBackgroundSchema>;
-export type StudyPreferencesDto = z.infer<typeof studyPreferencesSchema>;
-export type DocumentReadinessDto = z.infer<typeof documentReadinessSchema>;
-export type AdditionalInfoDto = z.infer<typeof additionalInfoSchema>;
-export type StudentRegistrationDataDto = z.infer<typeof STUDENTRegistrationDataSchema>;
-export type StudentRegistrationDto = z.infer<typeof STUDENTRegistrationDtoSchema>;
+export type CreateStudentDto = z.infer<typeof createStudentDtoSchema>;
 export type RegistrationResponseDto = z.infer<typeof registrationResponseSchema>;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import type { StudentRegistrationData } from '../types/registration.types';
 import type { RegistrationResponseDto } from '../dtos/registration.dto';
 import { submitStudentRegistration } from '../apis/registration.api';
@@ -30,40 +31,41 @@ const initialFormData: StudentRegistrationData = {
   lastName: '',
   email: '',
   phone: '',
-  dateOfBirth: '',
+  address: '',
   nationality: '',
-  currentCountry: '',
-  currentCity: '',
   currentEducationLevel: '',
   currentInstitution: '',
   fieldOfStudy: '',
   gpa: '',
   graduationDate: '',
-  englishProficiency: '',
-  ieltsScore: '',
-  toeflScore: '',
   preferredDestination: '',
   preferredProgram: '',
-  studyLevel: '',
+  preferredStudyLevel: '',
   preferredIntake: '',
-  budgetRange: '',
-  scholarshipInterest: false,
-  hasPassport: false,
-  hasTranscripts: false,
+  englishTest: '',
+  englishScore: '',
+  hasValidPassport: false,
+  hasAcademicTranscripts: false,
   hasRecommendationLetters: false,
   hasPersonalStatement: false,
   workExperience: '',
-  extracurriculars: '',
+  extraCurricular: '',
   careerGoals: '',
-  howDidYouHear: '',
-  additionalRequirements: '',
+  referralSource: '',
   preferredContactMethod: '',
   bestTimeToContact: '',
+  additionalQuestions: '',
+  dob: '',
+  currentCountry: '',
+  currentCity: '',
+  budgetRange: '',
+  scholarshipInterest: false,
   marketingConsent: false,
   termsAccepted: false
 };
 
 export const useRegistration = (): UseRegistrationReturn => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<StudentRegistrationData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,7 +85,7 @@ export const useRegistration = (): UseRegistrationReturn => {
   const validateCurrentStep = () => {
     switch (currentStep) {
       case 1:
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+        if (!formData.firstName || !formData.lastName || !formData.dob || !formData.email || !formData.phone ) {
           AppToast.error('Please fill in all required details');
           return false;
         }
@@ -95,9 +97,9 @@ export const useRegistration = (): UseRegistrationReturn => {
         }
         break;
       case 3:
-        if (!formData.preferredDestination || !formData.preferredProgram || !formData.studyLevel) {
+        if (!formData.preferredDestination || !formData.preferredProgram || !formData.preferredStudyLevel) {
           AppToast.error('Please fill in all required details');
-          return false;
+          return true;
         }
         break;
       case 5:
@@ -131,14 +133,21 @@ export const useRegistration = (): UseRegistrationReturn => {
         const result = await submitStudentRegistration(formData);
         setResponse(result);
         
-        if (result.success) {
-          AppToast.success(`Registration successful! Registration ID: ${result.data?.registrationId}`);
+        if (result) {
+          AppToast.success(`Registration successful!`);
+        
           if (onSubmit) {
             onSubmit(formData);
           }
           if (onClose) {
             onClose();
           }
+          setTimeout(() => {
+            router.push('/dashboard/student');
+          }, 1500);
+        } else {
+          console.error('Registration failed:');
+          setError('Registration failed');
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';

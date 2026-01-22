@@ -3,7 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request);
-  
   const pathname = request.nextUrl.pathname;
   const isAuthPage = pathname.startsWith("/auth/login");
   const isDashboardPage = pathname.startsWith("/dashboard");
