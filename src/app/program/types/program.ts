@@ -33,24 +33,34 @@ export interface Pagination {
 }
 
 export interface ProgramFilters {
-    search: string;
-    institutionId: string;
-    country: string;
-    level: string;
-    intake: string;
-    subjectArea: string;
-    scholarshipAvailable: string; // 'all' | 'yes' | 'no'
-    englishWaiver: string; // 'all' | 'yes' | 'no'
-    page: number;
-    size: number;
+    search?: string;
+    institutionId?: string;
+    country?: string;
+    level?: string;
+    intake?: string;
+    subjectArea?: string;
+    scholarshipAvailable?: boolean;
+    englishWaiver?: boolean;
+    page?: number;
+    size?: number;
+}
+
+export interface Intake {
+    id: string;
+    name: string;
+}
+
+export interface Subject {
+    id: string;
+    name: string;
 }
 
 export interface InitialProgramData {
     institutions: Institution[];
     countries: string[];
     levels: string[];
-    intakes: string[];
-    subjects: string[];
+    intakes: Intake[];
+    subjects: Subject[];
     programs: Program[];
     pagination: Pagination;
 }

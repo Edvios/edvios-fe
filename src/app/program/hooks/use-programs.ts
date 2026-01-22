@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback ,useRef} from 'react';
 import { ProgramService } from '../services/program.service';
 import { InitialProgramDataResponse, FilteredProgramDataResponse, ProgramFilterRequest } from '../dtos/program.dto';
+
 
 const initialFilters: ProgramFilterRequest = {
     search: '',
@@ -21,7 +22,8 @@ export const usePrograms = () => {
     const [filters, setFilters] = useState<ProgramFilterRequest>(initialFilters);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+    const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
 
     // Load initial data
     useEffect(() => {
@@ -55,27 +57,38 @@ export const usePrograms = () => {
     }, []);
 
     // Effect to handle filter changes with debouncing
+useEffect(() => {
+  if (!initialData) return;
+
+  if (debounceTimer.current) {
+    clearTimeout(debounceTimer.current);
+  }
+
+  debounceTimer.current = setTimeout(() => {
+    debouncedFetchFilteredPrograms(filters);
+  }, 500);
+
+  return () => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+  };
+}, [filters, initialData, debouncedFetchFilteredPrograms]);
+
+
+    // Update initial data with countries and levels from filtered data
     useEffect(() => {
-        if (!initialData) return;
+        if (filteredData && filteredData.programs.length > 0 && initialData) {
+            const countries = [...new Set(filteredData.programs.map(p => p.country))].sort();
+            const levels = [...new Set(filteredData.programs.map(p => p.level))].sort();
 
-        // Clear existing timer
-        if (debounceTimer) {
-            clearTimeout(debounceTimer);
+            setInitialData(prev => prev ? {
+                ...prev,
+                countries,
+                levels,
+            } : null);
         }
-
-        // Set new timer for debounced search
-        const timer = setTimeout(() => {
-            debouncedFetchFilteredPrograms(filters);
-        }, 500);
-
-        setDebounceTimer(timer);
-
-        return () => {
-            if (timer) {
-                clearTimeout(timer);
-            }
-        };
-    }, [filters, initialData, debouncedFetchFilteredPrograms]);
+    }, [filteredData]);
 
     const updateFilter = useCallback((key: keyof ProgramFilterRequest, value: string | number | undefined) => {
         setFilters(prev => {
@@ -86,11 +99,16 @@ export const usePrograms = () => {
                 newFilters.page = 1;
             }
 
-            // Convert boolean strings to proper values
+            // Convert boolean filter values
             if (key === 'scholarshipAvailable' || key === 'englishWaiver') {
-                if (value === 'yes') newFilters[key] = 'yes' as const;
-                else if (value === 'no') newFilters[key] = 'no' as const;
+                if (value === 'yes') newFilters[key] = true;
+                else if (value === 'no') newFilters[key] = false;
                 else newFilters[key] = undefined;
+            }
+
+            // Convert empty strings to undefined for other filters
+            if (typeof value === 'string' && value === '') {
+                newFilters[key] = undefined;
             }
 
             return newFilters;

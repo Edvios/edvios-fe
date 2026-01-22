@@ -15,7 +15,7 @@ import { RotateCcw, Search } from 'lucide-react';
 interface ProgramFiltersProps {
     filters: ProgramFilterRequest;
     initialData: InitialProgramDataResponse | null;
-    onFilterChange: (key: keyof ProgramFilterRequest, value: string) => void;
+    onFilterChange: (key: keyof ProgramFilterRequest, value: string | undefined) => void;
     onReset: () => void;
 }
 
@@ -25,11 +25,11 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
     onFilterChange,
     onReset
 }) => {
-    const getBooleanValue = (value: 'yes' | 'no' | undefined): string => {
-        if (value === 'yes') return 'yes';
-        if (value === 'no') return 'no';
-        return 'all';
-    };
+    // const getBooleanValue = (value: 'yes' | 'no' | undefined): string => {
+    //     if (value === 'yes') return 'yes';
+    //     if (value === 'no') return 'no';
+    //     return 'all';
+    // };
 
     return (
         <div className="bg-white p-5 rounded-lg border shadow-sm space-y-6">
@@ -52,13 +52,13 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     <Label>Institution</Label>
                     <Select
                         value={filters.institutionId || ''}
-                        onValueChange={(val) => onFilterChange('institutionId', val === 'all' ? '' : val)}
+                        onValueChange={(val) => onFilterChange('institutionId', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Institutions" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Institutions</SelectItem>
+                            <SelectItem value="any">All Institutions</SelectItem>
                             {initialData?.institutions.map((institution) => (
                                 <SelectItem key={institution.id} value={institution.id}>
                                     {institution.name}
@@ -73,13 +73,13 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     <Label>Country</Label>
                     <Select
                         value={filters.country || ''}
-                        onValueChange={(val) => onFilterChange('country', val === 'all' ? '' : val)}
+                        onValueChange={(val) => onFilterChange('country', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Countries" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Countries</SelectItem>
+                            <SelectItem value="any">All Countries</SelectItem>
                             {initialData?.countries.map((country) => (
                                 <SelectItem key={country} value={country}>
                                     {country}
@@ -114,17 +114,17 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                 <div className="space-y-2">
                     <Label>Intake</Label>
                     <Select
-                        value={filters.intake}
-                        onValueChange={(val) => onFilterChange('intake', val === 'all' ? '' : val)}
+                        value={filters.intake || ''}
+                        onValueChange={(val) => onFilterChange('intake', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Any Intake" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">Any Intake</SelectItem>
+                            <SelectItem value="any">Any Intake</SelectItem>
                             {initialData?.intakes.map((intake) => (
-                                <SelectItem key={intake} value={intake}>
-                                    {intake}
+                                <SelectItem key={intake.id} value={intake.id}>
+                                    {intake.name}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -135,17 +135,17 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                 <div className="space-y-2">
                     <Label>Subject Area</Label>
                     <Select
-                        value={filters.subjectArea}
-                        onValueChange={(val) => onFilterChange('subjectArea', val === 'all' ? '' : val)}
+                        value={filters.subjectArea || ''}
+                        onValueChange={(val) => onFilterChange('subjectArea', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Subjects" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Subjects</SelectItem>
+                            <SelectItem value="any">All Subjects</SelectItem>
                             {initialData?.subjects.map((subject) => (
-                                <SelectItem key={subject} value={subject}>
-                                    {subject}
+                                <SelectItem key={subject.id} value={subject.id}>
+                                    {subject.name}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -156,14 +156,14 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                 <div className="space-y-2">
                     <Label>Scholarship Available</Label>
                     <Select
-                        value={filters.scholarshipAvailable}
-                        onValueChange={(val) => onFilterChange('scholarshipAvailable', val)}
+                        value={filters.scholarshipAvailable === true ? 'yes' : filters.scholarshipAvailable === false ? 'no' : 'any'}
+                        onValueChange={(val) => onFilterChange('scholarshipAvailable', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Any" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">Any</SelectItem>
+                            <SelectItem value="any">Any</SelectItem>
                             <SelectItem value="yes">Yes</SelectItem>
                             <SelectItem value="no">No</SelectItem>
                         </SelectContent>
@@ -174,14 +174,14 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                 <div className="space-y-2">
                     <Label>English Waiver</Label>
                     <Select
-                        value={filters.englishWaiver}
-                        onValueChange={(val) => onFilterChange('englishWaiver', val)}
+                        value={filters.englishWaiver === true ? 'yes' : filters.englishWaiver === false ? 'no' : 'any'}
+                        onValueChange={(val) => onFilterChange('englishWaiver', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Any" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">Any</SelectItem>
+                            <SelectItem value="any">Any</SelectItem>
                             <SelectItem value="yes">Yes</SelectItem>
                             <SelectItem value="no">No</SelectItem>
                         </SelectContent>

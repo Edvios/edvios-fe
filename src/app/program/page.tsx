@@ -15,7 +15,6 @@ export default function ProgramFinderPage() {
         filteredData,
         filters,
         loading,
-        error,
         updateFilter,
         resetFilters,
         changePage,
