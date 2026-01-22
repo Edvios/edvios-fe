@@ -2,9 +2,9 @@ import { z } from "zod";
 
 // User type enum
 export const UserType = {
-  STUDENT: "student",
-  AGENT: "agent",
-  SUPERADMIN: "super-admin",
+  STUDENT: "STUDENT",
+  AGENT: "AGENT",
+  ADMIN: "ADMIN",
 
 } as const;
 
@@ -13,10 +13,10 @@ const userSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   name: z.string(),
-  userType: z.enum([
+  role: z.enum([
     UserType.STUDENT,
     UserType.AGENT,
-    UserType.SUPERADMIN,
+    UserType.ADMIN,
   ]),
 });
 
@@ -30,10 +30,10 @@ export const loginRequestSchema = z.object({
     .string()
     .min(1, "Password is required")
     .min(6, "Password must be at least 6 characters"),
-  userType: z.enum([
+  role: z.enum([
     UserType.STUDENT,
     UserType.AGENT,
-    UserType.SUPERADMIN,
+    UserType.ADMIN,
   ]),
 });
 
@@ -44,7 +44,7 @@ export const loginResponseSchema = z.object({
 });
 
 // Register request schema
-export const registerRequestSchema = z.object({
+export const createUserRequestSchema = z.object({
   firstName: z
     .string()
     .min(1, "First name is required")
@@ -54,37 +54,19 @@ export const registerRequestSchema = z.object({
     .min(1, "Last name is required")
     .max(50, "Last name must not exceed 50 characters"),
   email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Invalid email address"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(6, "Password must be at least 6 characters")
-    .max(100, "Password must not exceed 100 characters"),
-  confirmPassword: z.string().min(1, "Please confirm your password"),
-  userType: z.enum([
+    .email("Invalid email address")
+    .min(1, "Email is required"),
+  role: z.enum([
     UserType.STUDENT,
     UserType.AGENT,
-    UserType.SUPERADMIN,
+    UserType.ADMIN,
   ]),
   phone: z
     .string()
     .regex(/^[0-9+\-\s()]*$/, "Invalid phone number format")
     .optional()
     .or(z.literal("")),
-  organization: z
-    .string()
-    .max(100, "Organization name must not exceed 100 characters")
-    .optional()
-    .or(z.literal("")),
-}).refine(
-  (data) => data.password === data.confirmPassword,
-  {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  }
-);
+});
 
 // Register response schema
 export const registerResponseSchema = z.object({
@@ -95,9 +77,40 @@ export const registerResponseSchema = z.object({
   }),
 });
 
+export const signUpRequestSchema = z.object({
+  email: z.email(),
+  password: z.string().min(6),
+  role: z.enum([
+    UserType.STUDENT,
+    UserType.AGENT,
+    UserType.ADMIN,
+  ]).optional(),
+});
+
+export const createUserResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+});
+
+export const signUpResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+  accessToken: z.string().nullable(),
+});
+
+export const authResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+});
+
 // Type exports
 export type LoginRequestDto = z.infer<typeof loginRequestSchema>;
 export type LoginResponseDto = z.infer<typeof loginResponseSchema>;
-export type RegisterRequestDto = z.infer<typeof registerRequestSchema>;
+export type CreateUserRequestDto = z.infer<typeof createUserRequestSchema>;
 export type RegisterResponseDto = z.infer<typeof registerResponseSchema>;
 export type UserDto = z.infer<typeof userSchema>;
+export type SignUpRequestDto = z.infer<typeof signUpRequestSchema>;
+export type CreateUserResponseDto = z.infer<typeof createUserResponseSchema>;
+export type SignUpResponseDto = z.infer<typeof signUpResponseSchema>;
+export type AuthRequestDto = z.infer<typeof loginRequestSchema>;
+export type AuthResponseDto = z.infer<typeof authResponseSchema>;

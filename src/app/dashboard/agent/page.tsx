@@ -15,6 +15,8 @@ import {
   Mail,
   Phone
 } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import AppToast from "@/utils/toast-utils";
 
 interface UserData {
   email: string;
@@ -28,33 +30,54 @@ interface UserData {
 export default function AgentDashboard() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
-    const userSession = sessionStorage.getItem('user-session');
-    if (!userSession) {
-      router.push('/auth/login');
-      return;
-    }
+    const fetchUser = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error || !session) {
+          router.push('/auth/login');
+          return;
+        }
+        
+        const user = session.user;
+        setUserData({
+          email: user.email || '',
+          userType: (user.user_metadata?.role || user.app_metadata?.role || 'agent').toLowerCase(),
+          name: `${user.user_metadata?.firstName || ''} ${user.user_metadata?.lastName || ''}`.trim() || user.email || 'User',
+          id: user.id,
+          phone: user.user_metadata?.phone || '',
+          organization: user.user_metadata?.organization || ''
+        });
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        router.push('/auth/login');
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
-    const user = JSON.parse(userSession);
-    if (user.userType !== 'agent') {
-      router.push(`/dashboard/${user.userType}`);
-      return;
-    }
-    
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setUserData(user);
-  }, [router]);
+    fetchUser();
+  }, [router, supabase.auth]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('user-session');
-    sessionStorage.removeItem('auth-token');
-    router.push('/auth/login');
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      AppToast.success('Logged out successfully');
+      router.push('/auth/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Error logging out:', error);
+      AppToast.error('Failed to logout');
+    }
   };
 
-  if (!userData) {
+  if (isLoading || !userData) {
     return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
     </div>;
   }
 
