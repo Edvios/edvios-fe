@@ -132,15 +132,8 @@ export const createUser = async (data: CreateUserRequestDto, token: string): Pro
 
     const response = await axiosInstance.post('/auth/create-user', data);
 
-    const responseData = response.data;
-
     if (typeof window !== 'undefined') {
-      const userSession = {
-        ...responseData,
-        email: data.email,
-        role: data.role,
-        registrationTime: new Date().toISOString()
-      };
+      const userSession = response.data.user;
       sessionStorage.setItem('user-session', JSON.stringify(userSession));
       sessionStorage.setItem('auth-token', token);
     }

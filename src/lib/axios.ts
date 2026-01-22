@@ -30,17 +30,17 @@ axiosInstance.interceptors.request.use(
 // Response interceptor for error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
-    // Handle 401 Unauthorized - redirect to login
-    if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('user-session');
-        sessionStorage.removeItem('auth-token');
-        window.location.href = '/auth/login';
-      }
-    }
-    return Promise.reject(error);
-  }
+  // (error) => {
+  //   // Handle 401 Unauthorized - redirect to login
+  //   if (error.response?.status === 401) {
+  //     if (typeof window !== 'undefined') {
+  //       sessionStorage.removeItem('user-session');
+  //       sessionStorage.removeItem('auth-token');
+  //       window.location.href = '/auth/login';
+  //     }
+  //   }
+  //   return Promise.reject(error);
+  // }
 );
 
 export default axiosInstance;

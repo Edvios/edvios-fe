@@ -50,6 +50,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
             </div>
             
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
                 <Label htmlFor="firstName" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
@@ -105,18 +106,18 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="dateOfBirth" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="dob" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
                   Date of Birth
                 </Label>
                 <Input 
-                  id="dateOfBirth" 
+                  id="dob" 
                   type="date" 
-                  value={formData.dateOfBirth} 
-                  onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                  value={formData.dob} 
+                  onChange={(e) => handleInputChange('dob', e.target.value)}
                   className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
                 />
               </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="nationality" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
                   Nationality
@@ -135,6 +136,19 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              
+              <div className="space-y-2 group">
+                <Label htmlFor="address" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                  Address
+                </Label>
+                <Input 
+                  id="address" 
+                  value={formData.address} 
+                  onChange={(e) => handleInputChange('address', e.target.value)} 
+                  placeholder="Enter your address"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                />
               </div>
               
               <div className="space-y-2 group">
@@ -259,48 +273,33 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="englishProficiency" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
                   English Proficiency Test
                 </Label>
-                <Select value={formData.englishProficiency} onValueChange={(value) => handleInputChange('englishProficiency', value)}>
+                <Select value={formData.englishTest} onValueChange={(value) => handleInputChange('englishTest', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
                     <SelectValue placeholder="Select test taken" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ielts">IELTS</SelectItem>
-                    <SelectItem value="toefl">TOEFL</SelectItem>
-                    <SelectItem value="pte">PTE</SelectItem>
-                    <SelectItem value="duolingo">Duolingo</SelectItem>
-                    <SelectItem value="none">Not taken yet</SelectItem>
+                    <SelectItem value="IELTS">IELTS</SelectItem>
+                    <SelectItem value="TOEFL">TOEFL</SelectItem>
+                    <SelectItem value="PTE">PTE</SelectItem>
+                    <SelectItem value="DUOLINGO">Duolingo</SelectItem>
+                    <SelectItem value="NONE">Not taken yet</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               
-              {formData.englishProficiency === 'ielts' && (
+              {(formData.englishTest === 'IELTS' || formData.englishTest === 'TOEFL' || formData.englishTest === 'PTE' || formData.englishTest === 'DUOLINGO') && (
                 <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <Label htmlFor="ieltsScore" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
-                    IELTS Score
+                  <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                    {formData.englishTest} Score
                   </Label>
                   <Input 
-                    id="ieltsScore" 
-                    value={formData.ieltsScore} 
-                    onChange={(e) => handleInputChange('ieltsScore', e.target.value)} 
-                    placeholder="e.g., 7.0"
-                    className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
-                  />
-                </div>
-              )}
-              
-              {formData.englishProficiency === 'toefl' && (
-                <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <Label htmlFor="toeflScore" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
-                    TOEFL Score
-                  </Label>
-                  <Input 
-                    id="toeflScore" 
-                    value={formData.toeflScore} 
-                    onChange={(e) => handleInputChange('toeflScore', e.target.value)} 
-                    placeholder="e.g., 100"
+                    id="englishScore" 
+                    value={formData.englishScore} 
+                    onChange={(e) => handleInputChange('englishScore', e.target.value)} 
+                    placeholder="e.g., 7.0 or 100"
                     className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
                   />
                 </div>
@@ -368,19 +367,18 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="studyLevel" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="preferredStudyLevel" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
                   Study Level <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.studyLevel} onValueChange={(value) => handleInputChange('studyLevel', value)}>
+                <Select value={formData.preferredStudyLevel} onValueChange={(value) => handleInputChange('preferredStudyLevel', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
                     <SelectValue placeholder="Select study level" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="undergraduate">Undergraduate</SelectItem>
-                    <SelectItem value="postgraduate">Postgraduate</SelectItem>
-                    <SelectItem value="phd">PhD</SelectItem>
-                    <SelectItem value="diploma">Diploma</SelectItem>
-                    <SelectItem value="certificate">Certificate</SelectItem>
+                    <SelectItem value="BACHELORS">Bachelor&apos;s Degree</SelectItem>
+                    <SelectItem value="MASTERS">Master&apos;s Degree</SelectItem>
+                    <SelectItem value="PHD">PhD</SelectItem>
+                    <SelectItem value="DIPLOMA">Diploma</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -453,8 +451,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   Please indicate which documents you currently have ready. This helps us provide better guidance.
                 </Label>
               {[
-                { id: 'hasPassport', label: 'Valid Passport', field: 'hasPassport' },
-                { id: 'hasTranscripts', label: 'Academic Transcripts', field: 'hasTranscripts' },
+                { id: 'hasValidPassport', label: 'Valid Passport', field: 'hasValidPassport' },
+                { id: 'hasAcademicTranscripts', label: 'Academic Transcripts', field: 'hasAcademicTranscripts' },
                 { id: 'hasRecommendationLetters', label: 'Recommendation Letters', field: 'hasRecommendationLetters' },
                 { id: 'hasPersonalStatement', label: 'Personal Statement/Essay', field: 'hasPersonalStatement' }
               ].map((item) => (
@@ -490,13 +488,13 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="extracurriculars" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="extraCurricular" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
                   Extracurricular Activities
                 </Label>
                 <Textarea 
-                  id="extracurriculars" 
-                  value={formData.extracurriculars} 
-                  onChange={(e) => handleInputChange('extracurriculars', e.target.value)} 
+                  id="extraCurricular" 
+                  value={formData.extraCurricular} 
+                  onChange={(e) => handleInputChange('extraCurricular', e.target.value)} 
                   placeholder="Sports, volunteering, leadership roles, etc..."
                   rows={3}
                   className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20 resize-none"
@@ -535,10 +533,10 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
-                <Label htmlFor="howDidYouHear" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="referralSource" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
                   How did you hear about us?
                 </Label>
-                <Select value={formData.howDidYouHear} onValueChange={(value) => handleInputChange('howDidYouHear', value)}>
+                <Select value={formData.referralSource} onValueChange={(value) => handleInputChange('referralSource', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
                     <SelectValue placeholder="Select source" />
                   </SelectTrigger>
@@ -589,13 +587,13 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group md:col-span-2">
-                <Label htmlFor="additionalRequirements" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="additionalQuestions" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
                   Additional Requirements or Questions
                 </Label>
                 <Textarea 
-                  id="additionalRequirements" 
-                  value={formData.additionalRequirements} 
-                  onChange={(e) => handleInputChange('additionalRequirements', e.target.value)} 
+                  id="additionalQuestions" 
+                  value={formData.additionalQuestions} 
+                  onChange={(e) => handleInputChange('additionalQuestions', e.target.value)} 
                   placeholder="Any specific requirements, questions, or concerns you'd like to discuss..."
                   rows={4}
                   className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20 resize-none"
@@ -636,7 +634,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
       default:
         return null;
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-orange-500/5 p-4 md:p-6 lg:p-8">
