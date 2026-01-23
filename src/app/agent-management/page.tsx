@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Search, Plus, MoreVertical, Mail, Phone, CheckCircle, XCircle, Clock, Edit, Trash2, Eye } from 'lucide-react';
+import { Search, Plus, Mail, Phone, CheckCircle, XCircle, Clock, Edit, Trash2, Eye } from 'lucide-react';
 
 // Types
 interface Agent {
@@ -70,10 +70,10 @@ const sampleAgents: Agent[] = [
 ];
 
 const AgentManagementPage = () => {
-  const [agents, setAgents] = useState<Agent[]>(sampleAgents);
+  const [agents] = useState<Agent[]>(sampleAgents);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'pending'>('all');
-  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+ 
 
   // Filter agents
   const filteredAgents = agents.filter(agent => {
@@ -152,7 +152,7 @@ const AgentManagementPage = () => {
               <div className="flex gap-3 w-full md:w-auto">
                 <select
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as any)}
+                  onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive' | 'pending')}
                   className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 >
                   <option value="all">All Status</option>
