@@ -173,6 +173,7 @@ export const logout = async (): Promise<AuthResponseDto> => {
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('user-session');
       sessionStorage.removeItem('auth-token');
+      cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
     }
     AppToast.success("Logged out successfully");
     return { 
