@@ -2,6 +2,7 @@ import { AuthRequestDto, AuthResponseDto, CreateUserRequestDto, CreateUserRespon
 import { createClient } from '@/lib/supabase/client'
 import axiosInstance from '@/lib/axios';
 import axios from 'axios';
+import AppToast from "@/utils/toast-utils";
 
 const getSupabase = () => createClient()
 
@@ -154,7 +155,7 @@ export const createUser = async (data: CreateUserRequestDto, token: string): Pro
 /**
  * API call for logout - Signs out from Supabase and clears session
  */
-export const logoutApi = async (): Promise<AuthResponseDto> => {
+export const logout = async (): Promise<AuthResponseDto> => {
   const supabase = getSupabase();
   try {
     // Sign out from Supabase
@@ -173,7 +174,7 @@ export const logoutApi = async (): Promise<AuthResponseDto> => {
       sessionStorage.removeItem('user-session');
       sessionStorage.removeItem('auth-token');
     }
-
+    AppToast.success("Logged out successfully");
     return { 
         success: true, 
         message: "Successfully logged out" 

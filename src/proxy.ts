@@ -6,9 +6,10 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isAuthPage = pathname.startsWith("/auth/login");
   const isDashboardPage = pathname.startsWith("/dashboard");
+  const isStudentRegistrationPage = pathname.startsWith("/student-registration");
 
   // If user is not authenticated and trying to access protected routes
-  if (!user && isDashboardPage) {
+  if (!user && (isDashboardPage || isStudentRegistrationPage)) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
@@ -61,6 +62,18 @@ export async function proxy(request: NextRequest) {
       }
     }
   }
+
+  // Allow students to access student-registration route
+  // if (user && pathname.startsWith("/student-registration")) {
+  //   const userRole = user.user_metadata?.role || user.app_metadata?.role;
+    
+  //   // Only allow students to access student-registration
+  //   if (userRole?.toUpperCase() !== 'STUDENT') {
+  //     const url = request.nextUrl.clone();
+  //     url.pathname = '/dashboard/student';
+  //     return NextResponse.redirect(url);
+  //   }
+  // }
 
   return supabaseResponse;
 }

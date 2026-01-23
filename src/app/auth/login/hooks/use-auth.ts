@@ -39,7 +39,7 @@ export const useAuth = () => {
         AppToast.error(response.message);
         return false;
       }
-      AppToast.success("Login successful");
+      AppToast.success("Successfully logged in");
 
       if (loginData.role === UserTypeEnum.STUDENT) {
         router.replace("/dashboard/student");
