@@ -3,9 +3,9 @@
 
 import React, { useState } from 'react'
 import {
-  Search, Plus, School, MapPin, Globe, BookOpen, Award,
-  CheckCircle2, Mail, Users, Calendar, Star, Building,
-  GraduationCap, TrendingUp, FileText, Clock, DollarSign
+  Search, Plus, School, Globe, BookOpen, Award,
+  CheckCircle2, Mail, Building,
+  GraduationCap,
 } from 'lucide-react'
 
 // ────────────────────────────────────────────────
@@ -85,7 +85,6 @@ export default function InstitutionManagementPage() {
   const [countryFilter, setCountryFilter] = useState('all')
 
   const [institutions] = useState<Institution[]>(sampleInstitutions)
-  const [stats] = useState<InstitutionStats[]>(sampleStats)
 
   // Computed values
   const totalInstitutions = institutions.length
@@ -230,7 +229,7 @@ export default function InstitutionManagementPage() {
                       .sort((a, b) => a.ranking - b.ranking)
                       .slice(0, 3)
                       .map(inst => {
-                        const TypeIcon = getTypeIcon(inst.type)
+                        
                         return (
                           <div key={inst.id} className="flex items-center gap-4 p-4 bg-white rounded-lg border">
                             <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">

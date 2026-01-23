@@ -17,7 +17,6 @@ import {
   MessageCircle,
   HelpingHandIcon,
   Building2,
-  Book,
   BookOpen,
 } from "lucide-react";
 
