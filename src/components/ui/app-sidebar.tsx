@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   GraduationCap,
@@ -29,6 +29,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { logout } from "@/app/auth/login/api/auth.api";
 
 interface UserData {
   email: string;
@@ -61,7 +62,7 @@ const studentItems = [
   },
   {
     title: "Profile",
-    url: "#",
+    url: "/profile",
     icon: User,
   },
 ];
@@ -126,18 +127,29 @@ const adminItems = [
 
 export function AppSidebar() {
   const router = useRouter();
-  const [userData] = useState<UserData | null>(() => {
-    if (typeof window === "undefined") return null;
-    const userSession = sessionStorage.getItem("user-session");
-    return userSession ? JSON.parse(userSession) : null;
-  });
+  const [userData, setUserData] = useState<UserData | null>(null);
 
-  const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem("user-session");
-      sessionStorage.removeItem("auth-token");
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const userSession = sessionStorage.getItem("user-session");
+      if (userSession) setUserData(JSON.parse(userSession));
+    } catch {
+      // ignore parse errors
     }
-    router.push("/auth/login");
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+          await logout();
+        } catch (error) {
+          console.error('Logout failed:', error);
+        } finally {
+          sessionStorage.removeItem('user-session');
+          sessionStorage.removeItem('auth-token');
+          cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
+          router.push('/auth/login');
+        }
   };
 
   const menuItems = useMemo(() => {

@@ -16,7 +16,7 @@ const API_BASE_URL =
 
 export class ProgramService {
   static async fetchInitialData(): Promise<InitialProgramDataResponse> {
-    const response = await fetch(`${API_BASE_URL}/api/pai/programs`);
+    const response = await fetch(`${API_BASE_URL}/pai/programs`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch initial program data");
@@ -52,7 +52,7 @@ export class ProgramService {
     if (size) queryParams.append("size", size.toString());
 
     const response = await fetch(
-      `${API_BASE_URL}/api/pai/programs/filter?${queryParams}`,
+      `${API_BASE_URL}/pai/programs/filter?${queryParams}`,
       {
         method: "POST",
         headers: {

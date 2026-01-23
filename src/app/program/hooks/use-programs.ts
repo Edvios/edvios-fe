@@ -88,7 +88,7 @@ useEffect(() => {
                 levels,
             } : null);
         }
-    }, [filteredData]);
+    }, [filteredData, initialData]);
 
     const updateFilter = useCallback((key: keyof ProgramFilterRequest, value: string | number | undefined) => {
         setFilters(prev => {
