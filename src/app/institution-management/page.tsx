@@ -3,9 +3,8 @@
 
 import React, { useState } from 'react'
 import {
-  Search, Plus, School, MapPin, Globe, BookOpen, Award,
-  CheckCircle2, Mail, Users, Calendar, Star, Building,
-  GraduationCap, TrendingUp, FileText, Clock, DollarSign
+  Search, Plus, School, Globe, BookOpen, Award,
+  CheckCircle2, Mail, Building, GraduationCap
 } from 'lucide-react'
 
 // ────────────────────────────────────────────────
@@ -31,15 +30,6 @@ interface Institution {
   specialties: string[]
   accreditations: string[]
   applicationDeadlines: string[]
-}
-
-interface InstitutionStats {
-  institutionId: string
-  applications: number
-  acceptances: number
-  enrollments: number
-  revenue: number
-  month: string
 }
 
 // ────────────────────────────────────────────────
@@ -71,9 +61,7 @@ const sampleInstitutions: Institution[] = [
   // (I've omitted them here for brevity – copy them from your code)
 ]
 
-const sampleStats: InstitutionStats[] = [
-  // ... your stats data
-]
+// sampleStats removed (not used)
 
 // ────────────────────────────────────────────────
 // Main Component
@@ -85,7 +73,6 @@ export default function InstitutionManagementPage() {
   const [countryFilter, setCountryFilter] = useState('all')
 
   const [institutions] = useState<Institution[]>(sampleInstitutions)
-  const [stats] = useState<InstitutionStats[]>(sampleStats)
 
   // Computed values
   const totalInstitutions = institutions.length
@@ -233,8 +220,13 @@ export default function InstitutionManagementPage() {
                         const TypeIcon = getTypeIcon(inst.type)
                         return (
                           <div key={inst.id} className="flex items-center gap-4 p-4 bg-white rounded-lg border">
-                            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">
-                              #{inst.ranking}
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center text-white">
+                                <TypeIcon size={16} />
+                              </div>
+                              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">
+                                #{inst.ranking}
+                              </div>
                             </div>
                             <div className="flex-1">
                               <p className="font-medium">{inst.name}</p>

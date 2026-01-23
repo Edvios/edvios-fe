@@ -3,8 +3,8 @@
 
 import React, { useState } from 'react';
 import { 
-  Search, Plus, MoreVertical, Mail, Phone, CheckCircle, XCircle, Clock, 
-  Edit, Trash2, Eye, GraduationCap, Building, Calendar 
+  Search, Plus, Mail, Phone, CheckCircle, XCircle, Clock, 
+  Edit, Trash2, Eye, GraduationCap
 } from 'lucide-react';
 
 // ────────────────────────────────────────────────
@@ -185,7 +185,7 @@ function StudentFormModal({ student, onSave, onClose }: StudentFormProps) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select
                 value={form.status}
-                onChange={e => setForm({ ...form, status: e.target.value as any })}
+                onChange={e => setForm({ ...form, status: e.target.value as Student['status'] })}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="prospective">Prospective</option>
@@ -341,7 +341,7 @@ export default function StudentManagementPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <select
                   value={statusFilter}
-                  onChange={e => setStatusFilter(e.target.value as any)}
+                  onChange={e => setStatusFilter(e.target.value as 'all' | Student['status'])}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 min-w-[160px]"
                 >
                   <option value="all">All Statuses</option>

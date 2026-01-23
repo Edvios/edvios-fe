@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { 
-  Search, Plus, Edit, Trash2, X, Globe, Calendar, PoundSterling, 
+  Search, Plus, Edit, Trash2, X, Calendar, 
   Star, Building, MapPin, BookOpen, Clock, CheckCircle 
 } from 'lucide-react';
 
@@ -200,7 +200,7 @@ function ProgramFormModal({ program, onSave, onClose }: ProgramFormProps) {
               <label className="block text-sm font-medium mb-1">Availability</label>
               <select
                 value={form.availability}
-                onChange={e => setForm({ ...form, availability: e.target.value as any })}
+                onChange={e => setForm({ ...form, availability: e.target.value as Program['availability'] })}
                 className="w-full px-4 py-2.5 border rounded-lg"
               >
                 <option value="Available">Available</option>
