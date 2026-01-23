@@ -5,24 +5,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserTypeToggle, UserTypeOption } from "@/app/auth/login/components/toggle";
-import { Lock, Mail, Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
+import { UserTypeToggle } from "@/app/auth/login/components/toggle";
+import { Lock, Mail, Eye, EyeOff, LogIn, UserPlus, Phone } from "lucide-react";
 import { useAuth, useLoginForm, useRegisterForm } from "./hooks/use-auth";
-import { USER_TYPES } from "./constants/userTypes";
 import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
-import { UserData } from "./types";
 
-interface LoginPageProps {
-  onLogin?: (userType: string, userData: UserData) => void;
-}
-
-export default function LoginPage({ onLogin }: LoginPageProps = {}) {
+export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<string>(AuthTabEnum.LOGIN);
   const [showPassword, setShowPassword] = useState(false);
 
   const { loginData, updateLoginData } = useLoginForm();
   const { registerData, updateRegisterData } = useRegisterForm();
-  const { handleLogin, handleRegister, isLoading } = useAuth(onLogin);
+  const { handleLogin, handleRegister, isLoading } = useAuth();
 
   const onSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,26 +27,7 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
     e.preventDefault();
     await handleRegister(registerData);
   };
-
-  // Filter user types for registration (exclude SUPERADMIN)
-  const registerUserTypes = USER_TYPES.filter(type => type.id !== UserTypeEnum.SUPERADMIN);
-
-  // Auth tab options
-  const authTabOptions: UserTypeOption[] = [
-    {
-      id: AuthTabEnum.LOGIN,
-      name: "Login",
-      icon: LogIn,
-      description: "Sign in to your existing account"
-    },
-    {
-      id: AuthTabEnum.REGISTER,
-      name: "Register",
-      icon: UserPlus,
-      description: "Create a new account to get started"
-    }
-  ];
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50/30 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl">
@@ -113,26 +88,15 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                 <div className="space-y-6">
                   {/* Auth Toggle */}
                   <UserTypeToggle
-                    options={authTabOptions}
+                    options={[AuthTabEnum.LOGIN, AuthTabEnum.REGISTER]}
                     value={activeTab}
                     onChange={setActiveTab}
                     disabled={isLoading}
-                    showDescription={false}
                   />
 
                   {/* Login Form */}
                   {activeTab === AuthTabEnum.LOGIN && (
                 <div className="space-y-4">
-                  {/* User Type Toggle */}
-                  <UserTypeToggle
-                    options={USER_TYPES}
-                    value={loginData.userType}
-                    onChange={(value) => updateLoginData("userType", value)}
-                    disabled={isLoading}
-                    label="Login as"
-                    showDescription={true}
-                  />
-
                   {/* Email */}
                   <div className="space-y-2">
                     <Label htmlFor="login-email" className="text-gray-700 font-medium">Email</Label>
@@ -144,8 +108,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Enter your email"
                         value={loginData.email}
                         onChange={(e) => updateLoginData("email", e.target.value)}
-                        className="pl-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                     </div>
                   </div>
@@ -161,8 +125,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Enter your password"
                         value={loginData.password}
                         onChange={(e) => updateLoginData("password", e.target.value)}
-                        className="pl-10 pr-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                       <button
                         type="button"
@@ -191,12 +155,11 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                 <div className="space-y-4">
                   {/* User Type Toggle */}
                   <UserTypeToggle
-                    options={registerUserTypes}
-                    value={registerData.userType}
-                    onChange={(value) => updateRegisterData("userType", value)}
+                    options={[UserTypeEnum.STUDENT, UserTypeEnum.AGENT]}
+                    value={registerData.role}
+                    onChange={(value) => updateRegisterData("role", value)}
                     disabled={isLoading}
                     label="Register as"
-                    showDescription={true}
                   />
 
                   {/* Name */}
@@ -208,7 +171,6 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="First name"
                         value={registerData.firstName}
                         onChange={(e) => updateRegisterData("firstName", e.target.value)}
-                        className="border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
                       />
                     </div>
@@ -219,7 +181,6 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Last name"
                         value={registerData.lastName}
                         onChange={(e) => updateRegisterData("lastName", e.target.value)}
-                        className="border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
                       />
                     </div>
@@ -236,8 +197,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Enter your email"
                         value={registerData.email}
                         onChange={(e) => updateRegisterData("email", e.target.value)}
-                        className="pl-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                     </div>
                   </div>
@@ -245,14 +206,17 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                   {/* Phone */}
                   <div className="space-y-2">
                     <Label htmlFor="register-phone" className="text-gray-700 font-medium">Phone Number (Optional)</Label>
-                    <Input
-                      id="register-phone"
-                      placeholder="Enter your phone number"
-                      value={registerData.phone}
-                      onChange={(e) => updateRegisterData("phone", e.target.value)}
-                      className="border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
-                      disabled={isLoading}
-                    />
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                      <Input
+                        id="register-phone"
+                        placeholder="Enter your phone number"
+                        value={registerData.phone}
+                        onChange={(e) => updateRegisterData("phone", e.target.value)}
+                        disabled={isLoading}
+                        className="pl-10"
+                      />
+                    </div>
                   </div>
 
                   {/* Password */}
@@ -266,8 +230,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Create a password"
                         value={registerData.password}
                         onChange={(e) => updateRegisterData("password", e.target.value)}
-                        className="pl-10 pr-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                       <button
                         type="button"
@@ -291,8 +255,8 @@ export default function LoginPage({ onLogin }: LoginPageProps = {}) {
                         placeholder="Confirm your password"
                         value={registerData.confirmPassword}
                         onChange={(e) => updateRegisterData("confirmPassword", e.target.value)}
-                        className="pl-10 border-gray-300 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
                         disabled={isLoading}
+                        className="pl-10"
                       />
                     </div>
                   </div>

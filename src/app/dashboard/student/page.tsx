@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { logout } from "@/app/auth/login/api/auth.api";
+
 import { 
   BookOpen, 
   FileText, 
@@ -30,14 +32,14 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     const userSession = sessionStorage.getItem('user-session');
+    const user = JSON.parse(userSession!);
     if (!userSession) {
       router.push('/auth/login');
       return;
     }
     
-    const user = JSON.parse(userSession);
-    if (user.userType !== 'student') {
-      router.push(`/dashboard/${user.userType}`);
+    if (user.role !== 'STUDENT') {
+      router.push(`/dashboard/${user.role.toLowerCase()}`);
       return;
     }
     
@@ -45,10 +47,18 @@ export default function StudentDashboard() {
     setUserData(user);
   }, [router]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('user-session');
-    sessionStorage.removeItem('auth-token');
-    router.push('/auth/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      sessionStorage.removeItem('user-session');
+      sessionStorage.removeItem('auth-token');
+      cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
+      router.push('/auth/login');
+    }
   };
 
   if (!userData) {

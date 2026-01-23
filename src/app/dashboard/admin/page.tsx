@@ -18,47 +18,69 @@ import {
   Settings,
   BarChart3,
 } from "lucide-react";
-import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
+import { createClient } from "@/lib/supabase/client";
+import AppToast from "@/utils/toast-utils";
 
 interface UserData {
   email: string;
-  userType: string;
+  role: string;
   name: string;
   id: string;
   phone?: string;
   organization?: string;
 }
 
-export default function SuperAdminDashboard() {
+export default function ADMINDashboard() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
 
   useEffect(() => {
-    const userSession = sessionStorage.getItem('user-session');
-    if (!userSession) {
-      router.push('/auth/login');
-      return;
-    }
+    const fetchUser = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error || !session) {
+          router.push('/auth/login');
+          return;
+        }
+        
+        const user = session.user;
+        setUserData({
+          email: user.email || '',
+          role: (user.user_metadata?.role || user.app_metadata?.role || 'admin').toLowerCase(),
+          name: `${user.user_metadata?.firstName || ''} ${user.user_metadata?.lastName || ''}`.trim() || user.email || 'Admin',
+          id: user.id,
+          phone: user.user_metadata?.phone || '',
+          organization: user.user_metadata?.organization || ''
+        });
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        router.push('/auth/login');
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
-    const user = JSON.parse(userSession);
-    if (user.userType !== UserTypeEnum.SUPERADMIN) {
-      router.push(`/dashboard/${user.userType}`);
-      return;
-    }
-    
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setUserData(user);
-  }, [router]);
+    fetchUser();
+  }, [router, supabase.auth]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('user-session');
-    sessionStorage.removeItem('auth-token');
-    router.push('/auth/login');
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      AppToast.success('Logged out successfully');
+      router.push('/auth/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Error logging out:', error);
+      AppToast.error('Failed to logout');
+    }
   };
 
-  if (!userData) {
+  if (isLoading || !userData) {
     return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
     </div>;
   }
 
@@ -73,7 +95,7 @@ export default function SuperAdminDashboard() {
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Super Admin Portal</h1>
+                <h1 className="text-xl font-bold text-gray-900">Admin Portal</h1>
                 <p className="text-sm text-gray-500">System Administrator</p>
               </div>
             </div>
@@ -202,7 +224,7 @@ export default function SuperAdminDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {[
-                    { action: "New agent registered", user: "Global Education Ltd.", time: "2 min ago", icon: Building, color: "text-green-600" },
+                    { action: "New AGENT registered", user: "Global Education Ltd.", time: "2 min ago", icon: Building, color: "text-green-600" },
                     { action: "Bulk application import", user: "System", time: "15 min ago", icon: Database, color: "text-blue-600" },
                     { action: "Security alert resolved", user: "Admin", time: "1 hour ago", icon: AlertTriangle, color: "text-orange-600" },
                     { action: "Payment processed", user: "Stripe Gateway", time: "2 hours ago", icon: DollarSign, color: "text-purple-600" },
@@ -287,7 +309,7 @@ export default function SuperAdminDashboard() {
                 <div className="space-y-2">
                   <div className="p-2 bg-white rounded border border-red-200">
                     <p className="text-sm font-medium text-red-900">2 Pending Reviews</p>
-                    <p className="text-xs text-red-600">Require admin approval</p>
+                    <p className="text-xs text-red-600">Require ADMIN approval</p>
                   </div>
                   <div className="p-2 bg-white rounded border border-orange-200">
                     <p className="text-sm font-medium text-orange-900">Storage at 78%</p>

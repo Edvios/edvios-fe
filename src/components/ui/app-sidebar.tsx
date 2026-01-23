@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   GraduationCap,
@@ -16,6 +16,8 @@ import {
   Search,
   MessageCircle,
   HelpingHandIcon,
+  Building2,
+  BookOpen,
 } from "lucide-react";
 
 import {
@@ -29,10 +31,11 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { logout } from "@/app/auth/login/api/auth.api";
 
 interface UserData {
   email: string;
-  userType: string;
+  role: string;
   name: string;
   id: string;
 }
@@ -46,7 +49,7 @@ const studentItems = [
   },
   {
     title: "Program Finder",
-    url: "#",
+    url: "/program-finder",
     icon: Search,
   },
   {
@@ -61,7 +64,7 @@ const studentItems = [
   },
   {
     title: "Profile",
-    url: "#",
+    url: "/profile",
     icon: User,
   },
 ];
@@ -95,84 +98,96 @@ const agentItems = [
   },
 ];
 
-// Super Admin menu items
-const superAdminItems = [
+// Admin menu items
+const adminItems = [
   {
     title: "Dashboard",
-    url: "/dashboard/super-admin",
+    url: "/dashboard/admin",
     icon: Home,
   },
   {
-    title: "Users",
-    url: "/dashboard/super-admin/users",
+    title: "Students",
+    url: "/student-management",
     icon: Users,
   },
   {
     title: "Agents",
-    url: "/dashboard/super-admin/agents",
-    icon: Building,
+    url: "/agent-management",
+    icon: User,
   },
   {
-    title: "Analytics",
-    url: "/dashboard/super-admin/analytics",
-    icon: BarChart3,
+    title: "Institutions",
+    url: "/institution-management",
+    icon: Building2,
   },
   {
-    title: "System Settings",
-    url: "/dashboard/super-admin/settings",
-    icon: Settings,
+    title: "Programs",
+    url: "/program-management",
+    icon: BookOpen,
   },
 ];
 
 export function AppSidebar() {
   const router = useRouter();
-  const [userData] = useState<UserData | null>(() => {
-    if (typeof window === "undefined") return null;
-    const userSession = sessionStorage.getItem("user-session");
-    return userSession ? JSON.parse(userSession) : null;
-  });
+  const [userData, setUserData] = useState<UserData | null>(null);
 
-  const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem("user-session");
-      sessionStorage.removeItem("auth-token");
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const userSession = sessionStorage.getItem("user-session");
+
+      if (userSession) setUserData(JSON.parse(userSession));
+    } catch {
+      // ignore parse errors
     }
-    router.push("/auth/login");
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+          await logout();
+        } catch (error) {
+          console.error('Logout failed:', error);
+        } finally {
+          sessionStorage.removeItem('user-session');
+          sessionStorage.removeItem('auth-token');
+          cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
+          router.push('/auth/login');
+        }
   };
 
   const menuItems = useMemo(() => {
-    switch (userData?.userType) {
-      case "student":
+    switch (userData?.role) {
+      case "STUDENT":
         return studentItems;
-      case "agent":
+      case "AGENT":
         return agentItems;
-      case "super-admin":
-        return superAdminItems;
+      case "ADMIN":
+        return adminItems;
       default:
         return [];
     }
-  }, [userData?.userType]);
+  }, [userData?.role]);
 
-  const userTypeLabel = useMemo(() => {
-    switch (userData?.userType) {
-      case "student":
+  const roleLabel = useMemo(() => {
+    switch (userData?.role) {
+      case "STUDENT":
         return "Student Portal";
-      case "agent":
+      case "AGENT":
         return "Agent Portal";
-      case "super-admin":
+      case "ADMIN":
         return "Admin Portal";
       default:
         return "Portal";
     }
-  }, [userData?.userType]);
+  }, [userData?.role]);
 
   const renderUserIcon = () => {
-    switch (userData?.userType) {
-      case "student":
+    switch (userData?.role) {
+      case "STUDENT":
         return <GraduationCap className="w-5 h-5 text-white" />;
-      case "agent":
+      case "AGENT":
         return <Users className="w-5 h-5 text-white" />;
-      case "super-admin":
+      case "ADMIN":
         return <Shield className="w-5 h-5 text-white" />;
       default:
         return <User className="w-5 h-5 text-white" />;
@@ -201,7 +216,7 @@ export function AppSidebar() {
 
         {/* Main Menu */}
         <SidebarGroup>
-          <SidebarGroupLabel>{userTypeLabel}</SidebarGroupLabel>
+          <SidebarGroupLabel>{roleLabel}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
