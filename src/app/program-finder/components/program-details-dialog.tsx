@@ -22,7 +22,7 @@ import {
     BookOpen,
     LucideIcon,
 } from "lucide-react";
-import { Program } from "@/app/program/types/program";
+import { Program } from "@/app/program-finder/types/program";
 
 interface ProgramDetailsDialogProps {
     program: Program | null;

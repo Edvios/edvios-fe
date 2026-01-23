@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ProgramFiltersSidebar } from '@/app/program/components/program-filters';
-import { ProgramCard } from '@/app/program/components/program-card';
-import { ProgramDetailsDialog } from '@/app/program/components/program-details-dialog';
-import { ProgramPagination } from '@/app/program/components/program-pagination';
-import { Program } from '@/app/program/types/program';
-import { usePrograms } from '@/app/program/hooks/use-programs';
+import { ProgramFiltersSidebar } from '@/app/program-finder/components/program-filters';
+import { ProgramCard } from '@/app/program-finder/components/program-card';
+import { ProgramDetailsDialog } from '@/app/program-finder/components/program-details-dialog';
+import { ProgramPagination } from '@/app/program-finder/components/program-pagination';
+import { Program } from '@/app/program-finder/types/program';
+import { usePrograms } from '@/app/program-finder/hooks/use-programs';
 import { SearchX, Loader2 } from 'lucide-react';
 
 export default function ProgramFinderPage() {

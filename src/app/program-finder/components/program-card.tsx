@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Clock, Banknote, GraduationCap } from 'lucide-react';
-import { Program } from '@/app/program/types/program';
+import { Program } from '@/app/program-finder/types/program';
 
 interface ProgramCardProps {
     program: Program;
