@@ -93,7 +93,7 @@ const agentItems = [
   },
   {
     title: "Agency",
-    url: "/dashboard/agent/agency",
+    url: "/program-finder",
     icon: Building,
   },
 ];

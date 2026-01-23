@@ -15,33 +15,68 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://edvios-be.vercel.app";
 
 export class ProgramService {
+  // ==================== FETCH INITIAL DATA ====================
   static async fetchInitialData(): Promise<InitialProgramDataResponse> {
-    const response = await fetch(`${API_BASE_URL}/pai/programs`);
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch initial program data");
+    if (typeof window !== "undefined") {
+      const token = sessionStorage.getItem("auth-token");
+      if (token) headers["Authorization"] = `Bearer ${token}`;
     }
 
-    const backendData: BackendInitialProgramDataResponse =
-      backendInitialProgramDataResponseSchema.parse(await response.json());
+    const response = await fetch(`${API_BASE_URL}/pai/programs`, { headers });
+
+    if (!response.ok) throw new Error("Failed to fetch initial program data");
+
+    const json = await response.json();
+
+    const result = backendInitialProgramDataResponseSchema.safeParse(json);
+    if (!result.success) {
+      console.error("Initial backend schema validation failed:", result.error.format());
+      console.log("Received JSON:", json);
+      throw new Error("Initial backend schema validation failed");
+    }
+
+    const backendData = result.data;
+    const programs = backendData.data;
+
+    // ==================== DERIVE FILTERS ====================
+    const institutionsMap = new Map<string, { id: string; name: string }>();
+    const intakesMap = new Map<string, { id: string; name: string }>();
+    const subjectsMap = new Map<string, { id: string; name: string }>();
+    const countriesSet = new Set<string>();
+    const levelsSet = new Set<string>();
+
+    programs.forEach((p) => {
+      if (p.institution?.id && p.institution?.name) {
+        institutionsMap.set(p.institution.id, { id: p.institution.id, name: p.institution.name });
+        if (p.institution.country) countriesSet.add(p.institution.country);
+      }
+      if (p.intake?.id && p.intake?.name) intakesMap.set(p.intake.id, { id: p.intake.id, name: p.intake.name });
+      if (p.subject?.id && p.subject?.name) subjectsMap.set(p.subject.id, { id: p.subject.id, name: p.subject.name });
+      if (p.level) levelsSet.add(p.level);
+    });
 
     const transformedData: InitialProgramDataResponse = {
-      institutions: backendData.institutes,
-      countries: [],
-      levels: [],
-      intakes: backendData.intakes,
-      subjects: backendData.subjects,
-      programs: [],
+      institutions: Array.from(institutionsMap.values()),
+      countries: Array.from(countriesSet),
+      levels: Array.from(levelsSet),
+      intakes: Array.from(intakesMap.values()),
+      subjects: Array.from(subjectsMap.values()),
+      programs: programs.map(mapBackendProgramToFrontend),
       pagination: {
-        page: 1,
-        size: 12,
-        total: 0,
+        page: backendData.page,
+        size: backendData.size,
+        total: backendData.total,
       },
     };
 
     return initialProgramDataResponseSchema.parse(transformedData);
   }
 
+  // ==================== FETCH FILTERED PROGRAMS ====================
   static async fetchFilteredPrograms(
     filters: ProgramFilterRequest
   ): Promise<FilteredProgramDataResponse> {
@@ -51,54 +86,78 @@ export class ProgramService {
     if (page) queryParams.append("page", page.toString());
     if (size) queryParams.append("size", size.toString());
 
-    const response = await fetch(
-      `${API_BASE_URL}/pai/programs/filter?${queryParams}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(filterBody),
-      }
+    // Remove empty/null/undefined values
+    const cleanedFilterBody = Object.fromEntries(
+      Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
     );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch filtered programs");
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (typeof window !== "undefined") {
+      const token = sessionStorage.getItem("auth-token");
+      if (token) headers["Authorization"] = `Bearer ${token}`;
     }
 
-    const backendData: BackendFilteredProgramResponse =
-      backendFilteredProgramResponseSchema.parse(await response.json());
+    const response = await fetch(`${API_BASE_URL}/pai/programs/filter?${queryParams}`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(cleanedFilterBody),
+    });
 
-    const transformedData = {
-      programs: backendData.data.map((program: BackendProgram) => ({
-        id: program.id,
-        title: program.title,
-        institution: program.institution?.name ?? "",
-        location: program.institution?.city ?? "",
-        country: program.institution?.country ?? "",
-        level: program.level,
-        intake: program.intake?.name ?? "",
-        duration: program.duration,
-        tuitionFee: program.tuitionFee,
-        applicationFee: program.applicationFee,
-        englishTestScore: program.englishTestScore,
-        status: program.status.toLowerCase(),
-        subject: program.subject?.name ?? "",
-        ranking: program.institution?.ranking ?? 0,
-        scholarship: program.scholarship,
-        lastUpdated: program.lastUpdated,
-        applicationDeadline: program.applicationDeadline,
-        ucasCode: program.ucasCode,
-        englishWaiver: program.englishWaiver,
-        popularityRank: program.popularityRank,
-      })),
+    if (!response.ok) throw new Error("Failed to fetch filtered programs");
+
+    const json = await response.json();
+    console.log('=== FILTER API RESPONSE ===');
+    console.log('Filter request body:', cleanedFilterBody);
+    console.log('Filter query params:', queryParams.toString());
+    console.log('Response JSON:', json);
+    // Safe parse with Zod
+    const parsed = backendFilteredProgramResponseSchema.safeParse(json);
+    if (!parsed.success) {
+      console.error("Filtered backend schema validation failed:", parsed.error.format());
+      console.log("Received JSON:", json);
+      throw new Error("Filtered backend schema validation failed");
+    }
+
+    const backendData = parsed.data;
+    console.log('Parsed backend data:', backendData);
+    console.log('Number of programs in response:', backendData.data.length);
+    console.log('Total programs:', backendData.total);
+
+    const transformedData: FilteredProgramDataResponse = {
+      programs: backendData.data.map(mapBackendProgramToFrontend),
       pagination: {
         page: backendData.page,
-        size: backendData.size,
+        size: backendData.data.length, // Use actual number of programs returned
         total: backendData.total,
       },
     };
 
     return filteredProgramDataResponseSchema.parse(transformedData);
   }
+}
+
+// ==================== HELPER: MAP BACKEND → FRONTEND ====================
+function mapBackendProgramToFrontend(program: BackendProgram) {
+  return {
+    id: program.id,
+    title: program.title,
+    institution: program.institution?.name ?? "",
+    location: program.institution?.city ?? "",
+    country: program.institution?.country ?? "",
+    level: program.level ?? "",
+    intake: program.intake?.name ?? "",
+    duration: program.duration ?? "",
+    tuitionFee: program.tuitionFee ?? "",
+    applicationFee: program.applicationFee ?? "",
+    englishTestScore: program.englishTestScore ?? "",
+    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist",
+    subject: program.subject?.name ?? "",
+    ranking: 0,
+    scholarship: program.scholarship ?? false,
+    lastUpdated: program.lastUpdated ?? "",
+    applicationDeadline: program.applicationDeadline ?? "",
+    ucasCode: program.ucasCode ?? undefined,
+    englishWaiver: program.englishWaiver ?? undefined,
+    popularityRank: program.popularityRank ?? undefined,
+  };
 }

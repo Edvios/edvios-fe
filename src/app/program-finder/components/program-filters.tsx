@@ -94,13 +94,13 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     <Label>Study Level</Label>
                     <Select
                         value={filters.level || ''}
-                        onValueChange={(val) => onFilterChange('level', val === 'all' ? '' : val)}
+                        onValueChange={(val) => onFilterChange('level', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Levels" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Levels</SelectItem>
+                            <SelectItem value="any">All Levels</SelectItem>
                             {initialData?.levels.map((level) => (
                                 <SelectItem key={level} value={level}>
                                     {level}
@@ -114,8 +114,8 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                 <div className="space-y-2">
                     <Label>Intake</Label>
                     <Select
-                        value={filters.intake || ''}
-                        onValueChange={(val) => onFilterChange('intake', val === 'any' ? undefined : val)}
+                        value={filters.intakeId || ''}
+                        onValueChange={(val) => onFilterChange('intakeId', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Any Intake" />
@@ -135,8 +135,8 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                 <div className="space-y-2">
                     <Label>Subject Area</Label>
                     <Select
-                        value={filters.subjectArea || ''}
-                        onValueChange={(val) => onFilterChange('subjectArea', val === 'any' ? undefined : val)}
+                        value={filters.subjectId || ''}
+                        onValueChange={(val) => onFilterChange('subjectId', val === 'any' ? undefined : val)}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="All Subjects" />
