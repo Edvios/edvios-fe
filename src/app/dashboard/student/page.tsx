@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/app/auth/login/api/auth.api";
+
 import { 
   BookOpen, 
   FileText, 
@@ -49,6 +50,7 @@ export default function StudentDashboard() {
   const handleLogout = async () => {
     try {
       await logout();
+
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
