@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,7 +33,7 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
     // };
 
     return (
-        <div className="bg-white p-5 rounded-lg border shadow-sm space-y-6">
+        <div className="bg-white p-5 rounded-lg  shadow-sm space-y-6">
             <div>
                 <h3 className="font-semibold text-lg mb-4">Filters</h3>
                 <div className="relative">
