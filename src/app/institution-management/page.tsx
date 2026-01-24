@@ -1,14 +1,14 @@
 // app/institutions/page.tsx
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { Plus, School, CheckCircle2, BookOpen, Award } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useInstitutions } from '@/app/institution-management/hooks/use-institutions'
 import { StatsCard } from './components/StatsCard'
 import { InstitutionFilters } from './components/InstitutionFilters'
-import { InstitutionCard } from './components/InstitutionCard'
+import { InstitutionList } from './components/InstitutionList'
 import { OverviewTab } from './components/OverviewTab'
 import { Pagination } from './components/Pagination'
 import { CreateInstitutionDialog } from './components/CreateInstitutionDialog'
@@ -38,6 +38,41 @@ export default function InstitutionManagementPage() {
     changePageSize,
     fetchInstitutions
   } = useInstitutions()
+
+  // Memoized filter handlers to prevent unnecessary re-renders
+  const handleSearchChange = useCallback((val: string) => updateFilter('name', val), [updateFilter])
+  const handleStatusChange = useCallback((val: string) => updateFilter('status', val), [updateFilter])
+  const handleCountryChange = useCallback((val: string) => updateFilter('country', val), [updateFilter])
+  const handleTypeChange = useCallback((val: string) => updateFilter('type', val), [updateFilter])
+
+  // Memoized stats section to prevent re-renders
+  const statsSection = useMemo(() => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <StatsCard
+        label="Total Institutions"
+        value={metrics.totalInstitutions}
+        icon={School}
+      />
+      <StatsCard
+        label="Active Partners"
+        value={metrics.activeCount}
+        icon={CheckCircle2}
+        valueColor="text-green-600"
+      />
+      <StatsCard
+        label="Total Programs"
+        value={metrics.totalPrograms.toLocaleString()}
+        icon={BookOpen}
+        valueColor="text-purple-600"
+      />
+      <StatsCard
+        label="Premium Partners"
+        value={metrics.premiumCount}
+        icon={Award}
+        valueColor="text-amber-600"
+      />
+    </div>
+  ), [metrics])
 
   if (isLoading) {
     return (
@@ -85,31 +120,7 @@ export default function InstitutionManagementPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <StatsCard
-            label="Total Institutions"
-            value={metrics.totalInstitutions}
-            icon={School}
-          />
-          <StatsCard
-            label="Active Partners"
-            value={metrics.activeCount}
-            icon={CheckCircle2}
-            valueColor="text-green-600"
-          />
-          <StatsCard
-            label="Total Programs"
-            value={metrics.totalPrograms.toLocaleString()}
-            icon={BookOpen}
-            valueColor="text-purple-600"
-          />
-          <StatsCard
-            label="Premium Partners"
-            value={metrics.premiumCount}
-            icon={Award}
-            valueColor="text-amber-600"
-          />
-        </div>
+        {statsSection}
 
         {/* Tabs */}
         <Card className="border-gray-200 overflow-hidden">
@@ -140,23 +151,13 @@ export default function InstitutionManagementPage() {
                   status={filters.status}
                   country={filters.country}
                   type={filters.type}
-                  onSearchChange={(val) => updateFilter('name', val)}
-                  onStatusChange={(val) => updateFilter('status', val)}
-                  onCountryChange={(val) => updateFilter('country', val)}
-                  onTypeChange={(val) => updateFilter('type', val)}
+                  onSearchChange={handleSearchChange}
+                  onStatusChange={handleStatusChange}
+                  onCountryChange={handleCountryChange}
+                  onTypeChange={handleTypeChange}
                 />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {institutions.map(inst => (
-                    <InstitutionCard key={inst.id} institution={inst} />
-                  ))}
-                </div>
-
-                {institutions.length === 0 && (
-                  <div className="text-center py-12 text-gray-500">
-                    No institutions found matching your filters
-                  </div>
-                )}
+                <InstitutionList institutions={institutions} />
 
                 {/* Pagination */}
                 {institutions.length > 0 && (

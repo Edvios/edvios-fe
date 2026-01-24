@@ -1,6 +1,6 @@
 // app/institutions/components/InstitutionFilters.tsx
 
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -17,7 +17,7 @@ interface InstitutionFiltersProps {
   onTypeChange: (value: string) => void
 }
 
-export function InstitutionFilters({
+export const InstitutionFilters = React.memo(function InstitutionFilters({
   name,
   status,
   type,
@@ -27,6 +27,37 @@ export function InstitutionFilters({
   onCountryChange,
   onTypeChange,
 }: InstitutionFiltersProps) {
+  const [searchValue, setSearchValue] = useState(name)
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Sync local state with prop when it changes externally
+  useEffect(() => {
+    setSearchValue(name)
+  }, [name])
+
+  // Debounced search handler
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value)
+    
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current)
+    }
+    
+    // Set new timer
+    debounceTimerRef.current = setTimeout(() => {
+      onSearchChange(value)
+    }, 1000) // 500ms debounce delay
+  }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [])
   return (
     <div className="flex flex-col sm:flex-row gap-4">
       <div className="relative flex-1">
@@ -34,8 +65,8 @@ export function InstitutionFilters({
         <Input
           type="text"
           placeholder="Search by name..."
-          value={name}
-          onChange={e => onSearchChange(e.target.value)}
+          value={searchValue}
+          onChange={e => handleSearchChange(e.target.value)}
           className="pl-10 border-gray-300"
         />
       </div>
@@ -77,4 +108,4 @@ export function InstitutionFilters({
       </Select>
     </div>
   )
-}
+})

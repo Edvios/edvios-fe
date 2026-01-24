@@ -11,7 +11,7 @@ interface StatsCardProps {
   valueColor?: string
 }
 
-export function StatsCard({ label, value, icon: Icon, valueColor }: StatsCardProps) {
+export const StatsCard = React.memo(function StatsCard({ label, value, icon: Icon, valueColor }: StatsCardProps) {
   return (
     <Card className="border-gray-200">
       <CardContent className="p-6">
@@ -29,4 +29,4 @@ export function StatsCard({ label, value, icon: Icon, valueColor }: StatsCardPro
       </CardContent>
     </Card>
   )
-}
+})

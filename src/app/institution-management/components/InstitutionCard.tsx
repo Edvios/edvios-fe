@@ -38,7 +38,7 @@ const getTypeIcon = (type: string) => {
   }
 }
 
-export function InstitutionCard({ institution, onDeleted, onUpdated }: InstitutionCardProps) {
+export const InstitutionCard = React.memo(function InstitutionCard({ institution, onDeleted, onUpdated }: InstitutionCardProps) {
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false)
   const TypeIcon = getTypeIcon(institution.type)
 
@@ -170,4 +170,4 @@ export function InstitutionCard({ institution, onDeleted, onUpdated }: Instituti
       />
     </>
   )
-}
+})

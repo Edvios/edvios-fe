@@ -16,7 +16,7 @@ interface PaginationProps {
   onPrevious: () => void
 }
 
-export function Pagination({
+export const Pagination = React.memo(function Pagination({
   currentPage,
   totalPages,
   pageSize,
@@ -154,4 +154,4 @@ export function Pagination({
       </div>
     </div>
   )
-}
+})
