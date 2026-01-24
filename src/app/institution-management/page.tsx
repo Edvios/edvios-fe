@@ -218,6 +218,7 @@ export default function InstitutionManagementPage() {
                       .sort((a, b) => a.ranking - b.ranking)
                       .slice(0, 3)
                       .map(inst => {
+                        const TypeIcon = getTypeIcon(inst.type)
                         
                         return (
                           <div key={inst.id} className="flex items-center gap-4 p-4 bg-white rounded-lg border">
