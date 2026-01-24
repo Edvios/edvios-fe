@@ -12,7 +12,7 @@ import {
 } from "../dtos/program.dto";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_API_URL || "https://edvios-be.vercel.app";
 
 export class ProgramService {
   static async fetchInitialData(): Promise<InitialProgramDataResponse> {
