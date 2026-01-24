@@ -49,8 +49,8 @@ const statIcons: Record<string, LucideIcon> = {
   programs: FolderCheck,
 };
 
-function statusTone(status: string) {
-  const normalized = status.toLowerCase();
+function statusTone(status?: string) {
+  const normalized = (status ?? "").toLowerCase();
 
   if (normalized.includes("accepted") || normalized.includes("approved")) {
     return "bg-emerald-50 text-emerald-700";
@@ -70,7 +70,7 @@ function statusTone(status: string) {
 export default function StudentDashboard() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [tabValue, setTabValue] = useState<StudentTab>(StudentTab.Overview);
+  const [tabValue, setTabValue] = useState<StudentTab>(StudentTab.OVERVIEW);
   const { statCards, applications, interviews, documents, programs, refresh } = useStudentDashboard();
 
   const tabOrder = useMemo(() => Object.values(StudentTab), []);
@@ -147,7 +147,7 @@ export default function StudentDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
           {statCards.map((stat) => {
             const Icon = statIcons[stat.key] ?? FileText;
-            const accent = statAccentMap[stat.accent] ?? "text-slate-700 bg-slate-100";
+            const accent = statAccentMap[stat.accent as string] ?? "text-slate-700 bg-slate-100";      
             const trendColor = stat.direction === "up" ? "text-emerald-600" : "text-rose-600";
 
             return (
@@ -173,27 +173,30 @@ export default function StudentDashboard() {
         </div>
 
         <Tabs value={tabValue} onValueChange={(val) => setTabValue(val as StudentTab)} className="space-y-4">
-          <TabsList className="relative w-full grid grid-cols-5 p-1 rounded-4xl bg-gray-100 overflow-hidden">
+          <TabsList
+            className="relative w-full p-1 rounded-4xl bg-gray-100 overflow-hidden !bg-gray-100 !p-1 !rounded-4xl !w-full"
+            style={{ gridTemplateColumns: `repeat(${tabOrder.length}, 1fr)` }}
+          >
             <div
-              className="absolute top-1 bottom-1 rounded-4xl transition-all duration-300 ease-in-out"
+              className="absolute top-1 bottom-1 rounded-4xl transition-all duration-300 ease-in-out bg-orange-gradient"
               style={{
-                width: `calc(${100 / tabOrder.length}% - 4px)`,
-                left: `calc(${activeTabIndex * (100 / tabOrder.length)}% + 2px)`,
+                width: `calc(${100 / tabOrder.length}% - 8px)`,
+                left: `calc(${activeTabIndex * (100 / tabOrder.length)}% + 4px)`,
               }}
             />
+
             {tabOrder.map((tab) => (
               <TabsTrigger
                 key={tab}
                 value={tab}
-                className="relative z-10 data-[state=active]:text-white data-[state=inactive]:text-gray-700 data-[state=active]:bg-transparent data-[state=inactive]:bg-transparent rounded-4xl transition-colors duration-300 ease-in-out border-0 bg-transparent data-[state=active]:shadow-none"
-                style={{ border: "none" }}
+                className="relative z-10 px-2 py-2 rounded-4xl transition-colors duration-300 ease-in-out border-0 text-sm font-medium data-[state=active]:text-white data-[state=inactive]:text-gray-700 !h-auto !rounded-4xl !border-0 !px-2 !py-2 !shadow-none"
               >
                 {studentTabLabels[tab]}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          <TabsContent value={StudentTab.Overview} className="space-y-4">
+          <TabsContent value={StudentTab.OVERVIEW} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <Card className="lg:col-span-2 border border-slate-100">
                 <CardHeader>
@@ -248,7 +251,7 @@ export default function StudentDashboard() {
             </div>
           </TabsContent>
 
-          <TabsContent value={StudentTab.Applications} className="space-y-4">
+          <TabsContent value={StudentTab.APPLICATIONS} className="space-y-4">
             <Card className="border border-slate-100">
               <CardHeader>
                 <CardTitle>Applications</CardTitle>
@@ -280,7 +283,7 @@ export default function StudentDashboard() {
             </Card>
           </TabsContent>
 
-          <TabsContent value={StudentTab.Interviews} className="space-y-4">
+          <TabsContent value={StudentTab.INTERVIEWS} className="space-y-4">
             <Card className="border border-slate-100">
               <CardHeader>
                 <CardTitle>Interviews</CardTitle>
@@ -312,7 +315,7 @@ export default function StudentDashboard() {
             </Card>
           </TabsContent>
 
-          <TabsContent value={StudentTab.Documents} className="space-y-4">
+          <TabsContent value={StudentTab.DOCUMENTS} className="space-y-4">
             <Card className="border border-slate-100">
               <CardHeader>
                 <CardTitle>Documents</CardTitle>
@@ -337,7 +340,7 @@ export default function StudentDashboard() {
             </Card>
           </TabsContent>
 
-          <TabsContent value={StudentTab.Programs} className="space-y-4">
+          <TabsContent value={StudentTab.PROGRAMS} className="space-y-4">
             <Card className="border border-slate-100">
               <CardHeader>
                 <CardTitle>Enrolled Programs</CardTitle>

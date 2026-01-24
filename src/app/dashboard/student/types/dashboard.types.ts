@@ -1,13 +1,47 @@
-import {
-  applicationSchema,
-  documentSchema,
-  enrolledProgramSchema,
-  interviewSchema,
-  statCardSchema,
-} from "../dtos/dashboard.dto";
+// Structural types for the Student Dashboard
+// These mirror the simple, interface-based style used in `profile.types.ts`
 
-export type StatCard = import("zod").infer<typeof statCardSchema>;
-export type Application = import("zod").infer<typeof applicationSchema>;
-export type Interview = import("zod").infer<typeof interviewSchema>;
-export type DocumentItem = import("zod").infer<typeof documentSchema>;
-export type EnrolledProgram = import("zod").infer<typeof enrolledProgramSchema>;
+export interface StatCard {
+  key: string;
+  label?: string;
+  value?: number | string;
+  accent?: string;
+  direction?: "up" | "down";
+  change?: string;
+  changeLabel?: string;
+}
+
+export interface Application {
+  id?: string;
+  school?: string;
+  program?: string;
+  status?: string;
+  stage?: string;
+  date?: string;
+  nextStep?: string;
+}
+
+export interface Interview {
+  id?: string;
+  school?: string;
+  contact?: string;
+  date?: string;
+  timezone?: string;
+  time?: string;
+  status?: string;
+}
+
+export interface DocumentItem {
+  id?: string;
+  title?: string;
+  status?: string;
+  updatedAt?: string;
+}
+
+export interface EnrolledProgram {
+  id?: string;
+  school?: string;
+  program?: string;
+  term?: string;
+  startDate?: string;
+}
