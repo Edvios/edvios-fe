@@ -403,7 +403,7 @@ export function CreateInstitutionDialog({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="totalStudents" className="text-sm font-medium">Total Students</Label>
+                <Label htmlFor="totalStudents" className="text-sm font-medium">Total</Label>
                 <Input
                   id="totalStudents"
                   name="totalStudents"
@@ -418,7 +418,7 @@ export function CreateInstitutionDialog({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="internationalStudents" className="text-sm font-medium">International Students</Label>
+                <Label htmlFor="internationalStudents" className="text-sm font-medium">International</Label>
                 <Input
                   id="internationalStudents"
                   name="internationalStudents"
@@ -458,7 +458,7 @@ export function CreateInstitutionDialog({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="tuitionRange" className="text-sm font-medium">Annual Tuition Range</Label>
+                <Label htmlFor="tuitionRange" className="text-sm font-medium">Annual Tuition Fee</Label>
                 <Input
                   id="tuitionRange"
                   name="tuitionRange"
@@ -563,7 +563,7 @@ export function CreateInstitutionDialog({
           </div>
 
           {/* Specialties & Accreditations Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
             {/* Specialties */}
             <div className="space-y-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
               <h3 className="text-base font-semibold text-gray-900">Academic Specialties</h3>
@@ -586,7 +586,7 @@ export function CreateInstitutionDialog({
                   type="button"
                   onClick={addSpecialty}
                   disabled={isLoading}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-6"
+                  className="bg-orange-gradient hover:bg-orange-600 text-white px-6"
                 >
                   Add
                 </Button>
@@ -618,7 +618,7 @@ export function CreateInstitutionDialog({
             </div>
 
             {/* Accreditations */}
-            <div className="space-y-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+            <div className="space-y-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
               <h3 className="text-base font-semibold text-gray-900">Accreditations</h3>
 
               <div className="flex gap-2">
@@ -639,7 +639,7 @@ export function CreateInstitutionDialog({
                   type="button"
                   onClick={addAccreditation}
                   disabled={isLoading}
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-6"
+                  className="bg-orange-gradient hover:bg-orange-600 text-white px-6"
                 >
                   Add
                 </Button>
@@ -650,7 +650,7 @@ export function CreateInstitutionDialog({
                   {accreditations.map(accreditation => (
                     <Badge
                       key={accreditation}
-                      className="bg-purple-100 text-purple-800 border border-purple-300 pr-1 text-xs"
+                      className="bg-orange-100 text-orange-800 border border-orange-300 pr-1 text-xs"
                     >
                       {accreditation}
                       <button
@@ -669,7 +669,7 @@ export function CreateInstitutionDialog({
                 <p className="text-xs text-gray-500 italic">No accreditations added yet</p>
               )}
             </div>
-          </div>
+       
 
           {/* Form Actions */}
           <div className="flex gap-4 pt-6">
@@ -688,8 +688,8 @@ export function CreateInstitutionDialog({
               className="flex-1 h-11 bg-orange-gradient hover:opacity-90 text-base font-medium"
             >
               {isLoading 
-                ? (isEditMode ? 'Saving Changes...' : 'Creating Institution...') 
-                : (isEditMode ? 'Save Changes' : 'Create Institution')
+                ? (isEditMode ? 'Saving Changes...' : 'Creating Institute...') 
+                : (isEditMode ? 'Save Changes' : 'Create Institute')
               }
             </Button>
           </div>

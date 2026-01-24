@@ -19,18 +19,17 @@ export default function InstitutionManagementPage() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   
   const {
+    institutions,
     isLoading,
     error,
     activeTab,
     filters,
-    countries,
-    filteredInstitutions,
     metrics,
     topInstitutions,
     partnershipDistribution,
-    pagination,
     totalItems,
     totalPages,
+    paginationWithFilters,
     setActiveTab,
     updateFilter,
     goToPage,
@@ -137,33 +136,34 @@ export default function InstitutionManagementPage() {
             {activeTab === 'INSTITUTIONS' && (
               <div className="space-y-6">
                 <InstitutionFilters
-                  searchTerm={filters.searchTerm}
-                  statusFilter={filters.statusFilter}
-                  countryFilter={filters.countryFilter}
-                  countries={countries}
-                  onSearchChange={(val) => updateFilter('searchTerm', val)}
-                  onStatusChange={(val) => updateFilter('statusFilter', val)}
-                  onCountryChange={(val) => updateFilter('countryFilter', val)}
+                  name={filters.name}
+                  status={filters.status}
+                  country={filters.country}
+                  type={filters.type}
+                  onSearchChange={(val) => updateFilter('name', val)}
+                  onStatusChange={(val) => updateFilter('status', val)}
+                  onCountryChange={(val) => updateFilter('country', val)}
+                  onTypeChange={(val) => updateFilter('type', val)}
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredInstitutions.map(inst => (
+                  {institutions.map(inst => (
                     <InstitutionCard key={inst.id} institution={inst} />
                   ))}
                 </div>
 
-                {filteredInstitutions.length === 0 && (
+                {institutions.length === 0 && (
                   <div className="text-center py-12 text-gray-500">
                     No institutions found matching your filters
                   </div>
                 )}
 
                 {/* Pagination */}
-                {filteredInstitutions.length > 0 && (
+                {institutions.length > 0 && (
                   <Pagination
-                    currentPage={pagination.page}
+                    currentPage={paginationWithFilters.page}
                     totalPages={totalPages}
-                    pageSize={pagination.size}
+                    pageSize={paginationWithFilters.size}
                     totalItems={totalItems}
                     onPageChange={goToPage}
                     onPageSizeChange={changePageSize}

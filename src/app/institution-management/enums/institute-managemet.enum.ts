@@ -25,3 +25,11 @@ export enum TabType {
   PARTNERSHIPS = 'PARTNERSHIPS',
   ANALYTICS = 'ANALYTICS'
 }
+
+export enum InstitutionCountry {
+  USA = 'USA',
+  CANADA = 'CANADA',
+  UK = 'UK',
+  AUSTRALIA = 'AUSTRALIA',
+  INDIA = 'INDIA'
+}

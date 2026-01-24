@@ -114,10 +114,7 @@ export function InstitutionDetailsDialog({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Institution Details</DialogTitle>
-            <DialogDescription>
-              View detailed information about this institution
-            </DialogDescription>
+            <DialogTitle className="text-3xl font-bold">Institution Details</DialogTitle>
           </DialogHeader>
 
           {isLoading && (
@@ -135,9 +132,9 @@ export function InstitutionDetailsDialog({
           {institution && !isLoading && (
             <div className="space-y-6">
               {/* Header Section */}
-              <div className="flex items-start justify-between pb-4 border-b">
+              <div className="flex items-start justify-between pb-4 ">
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-gray-900">{institution.name}</h3>
+                  <p className="text-2xl font-bold text-gray-900">{institution.name}</p>
                   <div className="flex items-center gap-2 mt-2 text-gray-600">
                     <MapPin size={16} />
                     <span>{institution.city}, {institution.country}</span>
@@ -285,7 +282,7 @@ export function InstitutionDetailsDialog({
               <div className="flex gap-3 pt-4 border-t">
                 <Button
                   onClick={handleEdit}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  className="flex-1 bg-orange-gradient hover:bg-orange-500"
                 >
                   <Edit size={18} className="mr-2" />
                   Edit Institution

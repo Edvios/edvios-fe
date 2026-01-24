@@ -25,9 +25,10 @@ export interface Institution {
 }
 
 export interface InstitutionFilters {
-  searchTerm: string
-  statusFilter: string
-  countryFilter: string
+  name: string
+  country: string
+  status: string
+  type: string
 }
 
 export interface InstitutionMetrics {
@@ -39,9 +40,13 @@ export interface InstitutionMetrics {
   totalInternational: number
 }
 
-export interface PaginationParams {
+export interface PaginationWithFilterParams {
   page: number
   size: number
+  country?: string
+  name?: string
+  status?: string
+  type?: string
 }
 
 export interface PaginatedResponse<T> {

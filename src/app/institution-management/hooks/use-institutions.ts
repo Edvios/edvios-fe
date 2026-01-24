@@ -6,7 +6,7 @@ import type {
   Institution, 
   InstitutionFilters, 
   InstitutionMetrics,
-  PaginationParams 
+  PaginationWithFilterParams 
 } from '@/app/institution-management/types/institute-managemet.types'
 import type { TabType } from '@/app/institution-management/enums/institute-managemet.enum'
 
@@ -16,9 +16,9 @@ export function useInstitutions() {
   const [error, setError] = useState<string | null>(null)
 
   // Pagination state
-  const [pagination, setPagination] = useState<PaginationParams>({
+  const [paginationWithFilters, setPaginationWithFilters] = useState<PaginationWithFilterParams>({
     page: 1,
-    size: 12
+    size: 12,
   })
   const [totalItems, setTotalItems] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
@@ -26,24 +26,25 @@ export function useInstitutions() {
   // Tab management
   const [activeTab, setActiveTab] = useState<TabType>('OVERVIEW' as TabType)
 
-  // Filters
-  const [filters, setFilters] = useState<InstitutionFilters>({
-    searchTerm: '',
-    statusFilter: 'all',
-    countryFilter: 'all'
-  })
-
-  // Fetch institutions when pagination changes
+  // Fetch institutions when pagination or filters change
   useEffect(() => {
     const loadInstitutions = async () => {
       try {
         setIsLoading(true)
         setError(null)
 
-        const response = await institutionApi.getAll({
-          page: pagination.page,
-          size: pagination.size
-        })
+        // Only include non-empty filter values
+        const params: PaginationWithFilterParams = {
+          page: paginationWithFilters.page,
+          size: paginationWithFilters.size,
+        }
+
+        if (paginationWithFilters.country) params.country = paginationWithFilters.country
+        if (paginationWithFilters.name) params.name = paginationWithFilters.name
+        if (paginationWithFilters.status) params.status = paginationWithFilters.status
+        if (paginationWithFilters.type) params.type = paginationWithFilters.type
+
+        const response = await institutionApi.getAll(params)
         
         setInstitutions(response.data)
         setTotalItems(response.total)
@@ -57,7 +58,7 @@ export function useInstitutions() {
     }
 
     loadInstitutions()
-  }, [pagination.page, pagination.size])
+  }, [paginationWithFilters])
 
   // Manual fetch function for refreshing data
   const fetchInstitutions = useCallback(async (resetPage: boolean = false) => {
@@ -65,18 +66,27 @@ export function useInstitutions() {
       setIsLoading(true)
       setError(null)
 
-      const pageToFetch = resetPage ? 1 : pagination.page;
-      const response = await institutionApi.getAll({
+      const pageToFetch = resetPage ? 1 : paginationWithFilters.page;
+      
+      // Only include non-empty filter values
+      const params: PaginationWithFilterParams = {
         page: pageToFetch,
-        size: pagination.size
-      })
+        size: paginationWithFilters.size,
+      }
+
+      if (paginationWithFilters.country) params.country = paginationWithFilters.country
+      if (paginationWithFilters.name) params.name = paginationWithFilters.name
+      if (paginationWithFilters.status) params.status = paginationWithFilters.status
+      if (paginationWithFilters.type) params.type = paginationWithFilters.type
+
+      const response = await institutionApi.getAll(params)
       
       setInstitutions(response.data)
       setTotalItems(response.total)
       setTotalPages(response.totalPages)
       
       if (resetPage) {
-        setPagination(prev => ({ ...prev, page: 1 }))
+        setPaginationWithFilters(prev => ({ ...prev, page: 1 }))
       }
       
       setIsLoading(false)
@@ -85,58 +95,48 @@ export function useInstitutions() {
       setError(err instanceof Error ? err.message : 'Failed to fetch institutions')
       setIsLoading(false)
     }
-  }, [pagination.page, pagination.size])
+  }, [paginationWithFilters])
 
   // Update filters
   const updateFilter = useCallback((key: keyof InstitutionFilters, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }))
-    // Reset to page 1 when filters change
-    setPagination(prev => ({ ...prev, page: 1 }))
+    // Update pagination with filters, reset to page 1
+    setPaginationWithFilters(prev => ({
+      ...prev,
+      [key]: value || undefined, // Remove empty strings
+      page: 1 // Reset to first page when filters change
+    }))
   }, [])
 
   // Pagination actions
   const goToPage = useCallback((page: number) => {
     if (page >= 1 && page <= totalPages) {
-      setPagination(prev => ({ ...prev, page }))
+      setPaginationWithFilters(prev => ({ ...prev, page }))
     }
   }, [totalPages])
 
   const nextPage = useCallback(() => {
-    if (pagination.page < totalPages) {
-      setPagination(prev => ({ ...prev, page: prev.page + 1 }))
+    if (paginationWithFilters.page < totalPages) {
+      setPaginationWithFilters(prev => ({ ...prev, page: prev.page + 1 }))
     }
-  }, [pagination.page, totalPages])
+  }, [paginationWithFilters.page, totalPages])
 
   const previousPage = useCallback(() => {
-    if (pagination.page > 1) {
-      setPagination(prev => ({ ...prev, page: prev.page - 1 }))
+    if (paginationWithFilters.page > 1) {
+      setPaginationWithFilters(prev => ({ ...prev, page: prev.page - 1 }))
     }
-  }, [pagination.page])
+  }, [paginationWithFilters.page])
 
   const changePageSize = useCallback((size: number) => {
-    setPagination({ page: 1, size })
+    setPaginationWithFilters({ page: 1, size })
   }, [])
 
-  // Computed: Available countries
-  const countries = useMemo(() => 
-    Array.from(new Set(institutions.map(i => i.country))),
-    [institutions]
-  )
-
-  // Computed: Filtered institutions
-  const filteredInstitutions = useMemo(() => {
-    return institutions.filter(inst => {
-      const searchMatch =
-        inst.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        inst.city.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        inst.country.toLowerCase().includes(filters.searchTerm.toLowerCase())
-
-      const statusMatch = filters.statusFilter === 'all' || inst.status === filters.statusFilter
-      const countryMatch = filters.countryFilter === 'all' || inst.country === filters.countryFilter
-
-      return searchMatch && statusMatch && countryMatch
-    })
-  }, [institutions, filters])
+  // Extract current filter values from paginationWithFilters
+  const filters = useMemo<InstitutionFilters>(() => ({
+    name: paginationWithFilters.name || '',
+    country: paginationWithFilters.country || '',
+    status: paginationWithFilters.status || '',
+    type: paginationWithFilters.type || ''
+  }), [paginationWithFilters])
 
   // Computed: Metrics (based on all institutions, not just current page)
   const metrics = useMemo<InstitutionMetrics>(() => ({
@@ -172,13 +172,11 @@ export function useInstitutions() {
     filters,
 
     // Pagination
-    pagination,
+    paginationWithFilters,
     totalItems,
     totalPages,
 
     // Computed
-    countries,
-    filteredInstitutions,
     metrics,
     topInstitutions,
     partnershipDistribution,
@@ -187,7 +185,6 @@ export function useInstitutions() {
     setActiveTab,
     updateFilter,
     fetchInstitutions,
-  
 
     // Pagination actions
     goToPage,
