@@ -1,13 +1,12 @@
 // app/institutions/components/InstitutionDetailsDialog.tsx
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { MapPin, Calendar, Users, Globe, Mail, Award, Building, BookOpen, Trash2, Edit } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog'
 import {
   AlertDialog,
