@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback ,useRef} from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ProgramService } from '../services/program.service';
 import { InitialProgramDataResponse, FilteredProgramDataResponse, ProgramFilterRequest } from '../dtos/program.dto';
 
 
 const initialFilters: ProgramFilterRequest = {
-    search: '',
-    institutionId: '',
-    country: '',
-    level: '',
-    intake: '',
-    subjectArea: '',
+    search: undefined,
+    institutionId: undefined,
+    country: undefined,
+    level: undefined,
+    intakeId: undefined,
+    subjectId: undefined,
     scholarshipAvailable: undefined,
     englishWaiver: undefined,
     page: 1,
@@ -57,40 +57,32 @@ export const usePrograms = () => {
     }, []);
 
     // Effect to handle filter changes with debouncing
-useEffect(() => {
-  if (!initialData) return;
-
-  if (debounceTimer.current) {
-    clearTimeout(debounceTimer.current);
-  }
-
-  debounceTimer.current = setTimeout(() => {
-    debouncedFetchFilteredPrograms(filters);
-  }, 500);
-
-  return () => {
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-    }
-  };
-}, [filters, initialData, debouncedFetchFilteredPrograms]);
-
-
-    // Update initial data with countries and levels from filtered data
     useEffect(() => {
-        if (filteredData && filteredData.programs.length > 0 && initialData) {
-            const countries = [...new Set(filteredData.programs.map(p => p.country))].sort();
-            const levels = [...new Set(filteredData.programs.map(p => p.level))].sort();
+        if (!initialData) return;
 
-            setInitialData(prev => prev ? {
-                ...prev,
-                countries,
-                levels,
-            } : null);
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
         }
-    }, [filteredData, initialData]);
+
+        console.log('Filters changed:', filters);
+
+        debounceTimer.current = setTimeout(() => {
+            console.log('Fetching filtered programs with filters:', filters);
+            debouncedFetchFilteredPrograms(filters);
+        }, 500);
+
+        return () => {
+            if (debounceTimer.current) {
+                clearTimeout(debounceTimer.current);
+            }
+        };
+    }, [filters, initialData, debouncedFetchFilteredPrograms]);
+
+
+
 
     const updateFilter = useCallback((key: keyof ProgramFilterRequest, value: string | number | undefined) => {
+        console.log(`Updating filter: ${key} = ${value}`);
         setFilters(prev => {
             const newFilters = { ...prev, [key]: value };
 
@@ -111,6 +103,7 @@ useEffect(() => {
                 newFilters[key] = undefined;
             }
 
+            console.log('New filters state:', newFilters);
             return newFilters;
         });
     }, []);

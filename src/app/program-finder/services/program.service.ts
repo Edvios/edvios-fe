@@ -1,3 +1,4 @@
+import axiosInstance from "@/lib/axios";
 import {
   InitialProgramDataResponse,
   FilteredProgramDataResponse,
@@ -11,94 +12,148 @@ import {
   BackendProgram,
 } from "../dtos/program.dto";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://edvios-be.vercel.app";
-
 export class ProgramService {
+  // ==================== FETCH INITIAL DATA ====================
   static async fetchInitialData(): Promise<InitialProgramDataResponse> {
-    const response = await fetch(`${API_BASE_URL}/pai/programs`);
+    try {
+      const response = await axiosInstance.get<BackendInitialProgramDataResponse>(
+        "/pai/programs"
+      );
 
-    if (!response.ok) {
+      const result = backendInitialProgramDataResponseSchema.safeParse(response.data);
+      if (!result.success) {
+        console.error("Initial backend schema validation failed:", result.error.format());
+        console.log("Received JSON:", response.data);
+        throw new Error("Initial backend schema validation failed");
+      }
+
+      const backendData = result.data;
+      const programs = backendData.data;
+
+      // ==================== DERIVE FILTERS ====================
+      const institutionsMap = new Map<string, { id: string; name: string }>();
+      const intakesMap = new Map<string, { id: string; name: string }>();
+      const subjectsMap = new Map<string, { id: string; name: string }>();
+      const countriesSet = new Set<string>();
+      const levelsSet = new Set<string>();
+
+      programs.forEach((p) => {
+        if (p.institution?.id && p.institution?.name) {
+          institutionsMap.set(p.institution.id, { id: p.institution.id, name: p.institution.name });
+          if (p.institution.country) countriesSet.add(p.institution.country);
+        }
+        if (p.intake?.id && p.intake?.name) intakesMap.set(p.intake.id, { id: p.intake.id, name: p.intake.name });
+        if (p.subject?.id && p.subject?.name) subjectsMap.set(p.subject.id, { id: p.subject.id, name: p.subject.name });
+        if (p.level) levelsSet.add(p.level);
+      });
+
+      const transformedData: InitialProgramDataResponse = {
+        institutions: Array.from(institutionsMap.values()),
+        countries: Array.from(countriesSet),
+        levels: Array.from(levelsSet),
+        intakes: Array.from(intakesMap.values()),
+        subjects: Array.from(subjectsMap.values()),
+        programs: programs.map(mapBackendProgramToFrontend),
+        pagination: {
+          page: backendData.page,
+          size: backendData.size,
+          total: backendData.total,
+        },
+      };
+
+      return initialProgramDataResponseSchema.parse(transformedData);
+    } catch (error) {
+      console.error("Failed to fetch initial program data:", error);
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new Error("Failed to fetch initial program data");
     }
-
-    const backendData: BackendInitialProgramDataResponse =
-      backendInitialProgramDataResponseSchema.parse(await response.json());
-
-    const transformedData: InitialProgramDataResponse = {
-      institutions: backendData.institutes,
-      countries: [],
-      levels: [],
-      intakes: backendData.intakes,
-      subjects: backendData.subjects,
-      programs: [],
-      pagination: {
-        page: 1,
-        size: 12,
-        total: 0,
-      },
-    };
-
-    return initialProgramDataResponseSchema.parse(transformedData);
   }
 
+  // ==================== FETCH FILTERED PROGRAMS ====================
   static async fetchFilteredPrograms(
     filters: ProgramFilterRequest
   ): Promise<FilteredProgramDataResponse> {
-    const { page, size, ...filterBody } = filters;
+    try {
+      const { page, size, ...filterBody } = filters;
 
-    const queryParams = new URLSearchParams();
-    if (page) queryParams.append("page", page.toString());
-    if (size) queryParams.append("size", size.toString());
+      const queryParams = new URLSearchParams();
+      if (page) queryParams.append("page", page.toString());
+      if (size) queryParams.append("size", size.toString());
 
-    const response = await fetch(
-      `${API_BASE_URL}/pai/programs/filter?${queryParams}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(filterBody),
+      // Remove empty/null/undefined values
+      const cleanedFilterBody = Object.fromEntries(
+        Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
+      );
+
+      console.log('=== FILTER REQUEST ===');
+      console.log('Filter request body:', cleanedFilterBody);
+      console.log('Filter query params:', queryParams.toString());
+
+      const response = await axiosInstance.post<BackendFilteredProgramResponse>(
+        `/pai/programs/filter?${queryParams}`,
+        cleanedFilterBody
+      );
+
+      console.log('=== FILTER API RESPONSE ===');
+      console.log('Response data:', response.data);
+
+      // Safe parse with Zod
+      const parsed = backendFilteredProgramResponseSchema.safeParse(response.data);
+      if (!parsed.success) {
+        console.error("Filtered backend schema validation failed:", parsed.error.format());
+        console.log("Received JSON:", response.data);
+        throw new Error("Filtered backend schema validation failed");
       }
-    );
 
-    if (!response.ok) {
+      const backendData = parsed.data;
+      console.log('Parsed backend data:', backendData);
+      console.log('Number of programs in response:', backendData.data.length);
+      console.log('Total programs:', backendData.total);
+
+      const transformedData: FilteredProgramDataResponse = {
+        programs: backendData.data.map(mapBackendProgramToFrontend),
+        pagination: {
+          page: backendData.page,
+          size: backendData.data.length, // Use actual number of programs returned
+          total: backendData.total,
+        },
+      };
+
+      return filteredProgramDataResponseSchema.parse(transformedData);
+    } catch (error) {
+      console.error("Failed to fetch filtered programs:", error);
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new Error("Failed to fetch filtered programs");
     }
-
-    const backendData: BackendFilteredProgramResponse =
-      backendFilteredProgramResponseSchema.parse(await response.json());
-
-    const transformedData = {
-      programs: backendData.data.map((program: BackendProgram) => ({
-        id: program.id,
-        title: program.title,
-        institution: program.institution?.name ?? "",
-        location: program.institution?.city ?? "",
-        country: program.institution?.country ?? "",
-        level: program.level,
-        intake: program.intake?.name ?? "",
-        duration: program.duration,
-        tuitionFee: program.tuitionFee,
-        applicationFee: program.applicationFee,
-        englishTestScore: program.englishTestScore,
-        status: program.status.toLowerCase(),
-        subject: program.subject?.name ?? "",
-        ranking: program.institution?.ranking ?? 0,
-        scholarship: program.scholarship,
-        lastUpdated: program.lastUpdated,
-        applicationDeadline: program.applicationDeadline,
-        ucasCode: program.ucasCode,
-        englishWaiver: program.englishWaiver,
-        popularityRank: program.popularityRank,
-      })),
-      pagination: {
-        page: backendData.page,
-        size: backendData.size,
-        total: backendData.total,
-      },
-    };
-
-    return filteredProgramDataResponseSchema.parse(transformedData);
   }
+}
+
+// ==================== HELPER: MAP BACKEND → FRONTEND ====================
+function mapBackendProgramToFrontend(program: BackendProgram) {
+  return {
+    id: program.id,
+    title: program.title,
+    institution: program.institution?.name ?? "",
+    location: program.institution?.city ?? "",
+    country: program.institution?.country ?? "",
+    level: program.level ?? "",
+    intake: program.intake?.name ?? "",
+    duration: program.duration ?? "",
+    tuitionFee: program.tuitionFee ?? "",
+    applicationFee: program.applicationFee ?? "",
+    englishTestScore: program.englishTestScore ?? "",
+    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist",
+    subject: program.subject?.name ?? "",
+    ranking: 0,
+    scholarship: program.scholarship ?? false,
+    lastUpdated: program.lastUpdated ?? "",
+    applicationDeadline: program.applicationDeadline ?? "",
+    ucasCode: program.ucasCode ?? undefined,
+    englishWaiver: program.englishWaiver ?? undefined,
+    popularityRank: program.popularityRank ?? undefined,
+  };
 }
