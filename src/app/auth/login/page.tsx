@@ -37,7 +37,7 @@ export default function LoginPage() {
             <div 
               className="p-12 flex flex-col justify-center items-start text-white bg-cover bg-center bg-no-repeat relative"
               style={{
-                backgroundImage: 'url(/loginbg.jpeg)',
+                backgroundImage: 'url(/loginbg.jpg)',
               }}
             >
              

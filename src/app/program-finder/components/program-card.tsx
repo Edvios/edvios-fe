@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ interface ProgramCardProps {
 
 export const ProgramCard: React.FC<ProgramCardProps> = ({ program, onDetailClick }) => {
     return (
-        <Card className="hover:shadow-lg transition-shadow duration-200 border-1 h-full flex flex-col">
+        <Card className="hover:shadow-xl transition-shadow duration-200 h-full flex flex-col">
             <CardHeader className="pb-3">
                 <div className="flex justify-between items-start gap-4">
                     <div>
