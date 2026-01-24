@@ -30,7 +30,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { X } from 'lucide-react'
+import { X, Building2, Users, DollarSign, Mail, Globe } from 'lucide-react'
 import { institutionApi } from '@/app/institution-management/api/institution-managemet.api'
 import type { CreateInstitutionDTO, UpdateInstitutionDTO } from '@/app/institution-management/dtos/institution-managemet.dto'
 import type { Institution } from '@/app/institution-management/types/institute-managemet.types'
@@ -267,30 +267,34 @@ export function CreateInstitutionDialog({
   return (
     <>
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="border-b pb-4">
+          <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+            <Building2 className="w-6 h-6 text-orange-500" />
             {isEditMode ? 'Edit Institution' : 'Add New Institution'}
           </DialogTitle>
-          <DialogDescription>
-            {isEditMode ? 'Update the institution details' : 'Fill in the details to create a new institution'}
+          <DialogDescription className="text-base">
+            {isEditMode ? 'Update the institution details below' : 'Fill in the details to register a new educational institution'}
           </DialogDescription>
         </DialogHeader>
 
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-            {error}
+          <div className="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
+            <p className="text-sm font-medium text-red-800">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic Information */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Basic Information Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
+            <div className="flex items-center gap-2 pb-2">
+              <Building2 className="w-5 h-5 text-gray-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="name">Institution Name *</Label>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium">Institution Name *</Label>
                 <Input
                   id="name"
                   name="name"
@@ -298,27 +302,28 @@ export function CreateInstitutionDialog({
                   onChange={handleInputChange}
                   placeholder="e.g., Global Tech University"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="type">Type *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="type" className="text-sm font-medium">Institution Type *</Label>
                 <Select value={formData.type} onValueChange={(val) => handleSelectChange('type', val)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {INSTITUTION_TYPES.map(type => (
                       <SelectItem key={type} value={type}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                        {type.charAt(0) + type.slice(1).toLowerCase()}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              <div>
-                <Label htmlFor="country">Country *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="country" className="text-sm font-medium">Country *</Label>
                 <Input
                   id="country"
                   name="country"
@@ -326,11 +331,12 @@ export function CreateInstitutionDialog({
                   onChange={handleInputChange}
                   placeholder="e.g., United States"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="city">City *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="city" className="text-sm font-medium">City *</Label>
                 <Input
                   id="city"
                   name="city"
@@ -338,11 +344,12 @@ export function CreateInstitutionDialog({
                   onChange={handleInputChange}
                   placeholder="e.g., New York"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="ranking">Ranking</Label>
+              <div className="space-y-2">
+                <Label htmlFor="ranking" className="text-sm font-medium">Global Ranking</Label>
                 <Input
                   id="ranking"
                   name="ranking"
@@ -350,46 +357,53 @@ export function CreateInstitutionDialog({
                   min="0"
                   value={formData.ranking}
                   onChange={handleInputChange}
-                  placeholder="0"
+                  placeholder="e.g., 150"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="establishedYear">Established Year</Label>
+              <div className="space-y-2">
+                <Label htmlFor="establishedYear" className="text-sm font-medium">Established Year</Label>
                 <Input
                   id="establishedYear"
                   name="establishedYear"
                   type="number"
                   min="1800"
+                  max={new Date().getFullYear()}
                   value={formData.establishedYear}
                   onChange={handleInputChange}
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
             </div>
 
-            <div>
-              <Label htmlFor="description">Description *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="description" className="text-sm font-medium">Institution Description *</Label>
               <Textarea
                 id="description"
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder="Detailed description of the institution..."
+                placeholder="Provide a comprehensive description of the institution, its mission, values, and key offerings..."
                 rows={4}
                 disabled={isLoading}
+                className="resize-none"
               />
             </div>
           </div>
 
-          {/* Student Information */}
+          {/* Student Demographics Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Student Information</h3>
+            <div className="flex items-center gap-2 pb-2">
+              <Users className="w-5 h-5 text-gray-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Student Demographics</h3>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="totalStudents">Total Students</Label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="totalStudents" className="text-sm font-medium">Total Students</Label>
                 <Input
                   id="totalStudents"
                   name="totalStudents"
@@ -397,12 +411,14 @@ export function CreateInstitutionDialog({
                   min="0"
                   value={formData.totalStudents}
                   onChange={handleInputChange}
+                  placeholder="e.g., 15000"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="internationalStudents">International Students</Label>
+              <div className="space-y-2">
+                <Label htmlFor="internationalStudents" className="text-sm font-medium">International Students</Label>
                 <Input
                   id="internationalStudents"
                   name="internationalStudents"
@@ -410,12 +426,14 @@ export function CreateInstitutionDialog({
                   min="0"
                   value={formData.internationalStudents}
                   onChange={handleInputChange}
+                  placeholder="e.g., 3000"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="programsCount">Programs Count</Label>
+              <div className="space-y-2">
+                <Label htmlFor="programsCount" className="text-sm font-medium">Available Programs</Label>
                 <Input
                   id="programsCount"
                   name="programsCount"
@@ -423,19 +441,24 @@ export function CreateInstitutionDialog({
                   min="0"
                   value={formData.programsCount}
                   onChange={handleInputChange}
+                  placeholder="e.g., 125"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
             </div>
           </div>
 
-          {/* Financial & Partnership */}
+          {/* Financial & Partnership Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Financial & Partnership</h3>
+            <div className="flex items-center gap-2 pb-2">
+              <DollarSign className="w-5 h-5 text-gray-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Financial & Partnership Details</h3>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="tuitionRange">Tuition Range</Label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="tuitionRange" className="text-sm font-medium">Annual Tuition Range</Label>
                 <Input
                   id="tuitionRange"
                   name="tuitionRange"
@@ -443,35 +466,36 @@ export function CreateInstitutionDialog({
                   onChange={handleInputChange}
                   placeholder="e.g., $20,000 - $40,000"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="status">Status *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="status" className="text-sm font-medium">Status *</Label>
                 <Select value={formData.status} onValueChange={(val) => handleSelectChange('status', val)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {STATUS_OPTIONS.map(status => (
                       <SelectItem key={status} value={status}>
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                        {status.charAt(0) + status.slice(1).toLowerCase()}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              <div>
-                <Label htmlFor="partnership">Partnership Type *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="partnership" className="text-sm font-medium">Partnership Level *</Label>
                 <Select value={formData.partnership} onValueChange={(val) => handleSelectChange('partnership', val)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {PARTNERSHIP_TYPES.map(type => (
                       <SelectItem key={type} value={type}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                        {type.charAt(0) + type.slice(1).toLowerCase()}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -480,26 +504,36 @@ export function CreateInstitutionDialog({
             </div>
           </div>
 
-          {/* Contact Information */}
+          {/* Contact Information Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Contact Information</h3>
+            <div className="flex items-center gap-2 pb-2">
+              <Mail className="w-5 h-5 text-gray-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Contact Information</h3>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="contactEmail">Contact Email *</Label>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="contactEmail" className="text-sm font-medium flex items-center gap-2">
+                  <Mail className="w-4 h-4" />
+                  Contact Email *
+                </Label>
                 <Input
                   id="contactEmail"
                   name="contactEmail"
                   type="email"
                   value={formData.contactEmail}
                   onChange={handleInputChange}
-                  placeholder="info@institution.edu"
+                  placeholder="admissions@institution.edu"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="website">Website *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="website" className="text-sm font-medium flex items-center gap-2">
+                  <Globe className="w-4 h-4" />
+                  Official Website *
+                </Label>
                 <Input
                   id="website"
                   name="website"
@@ -508,142 +542,153 @@ export function CreateInstitutionDialog({
                   onChange={handleInputChange}
                   placeholder="https://www.institution.edu"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
 
-              <div>
-                <Label htmlFor="logo">Logo URL</Label>
+              <div className="space-y-2 lg:col-span-2">
+                <Label htmlFor="logo" className="text-sm font-medium">Logo URL (Optional)</Label>
                 <Input
                   id="logo"
                   name="logo"
                   type="url"
                   value={formData.logo}
                   onChange={handleInputChange}
-                  placeholder="https://www.institution.edu/logo.png"
+                  placeholder="https://www.institution.edu/images/logo.png"
                   disabled={isLoading}
+                  className="h-10"
                 />
               </div>
             </div>
           </div>
 
-          {/* Specialties */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Specialties</h3>
+          {/* Specialties & Accreditations Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Specialties */}
+            <div className="space-y-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
+              <h3 className="text-base font-semibold text-gray-900">Academic Specialties</h3>
 
-            <div className="flex gap-2">
-              <Input
-                value={specialtyInput}
-                onChange={(e) => setSpecialtyInput(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    addSpecialty()
-                  }
-                }}
-                placeholder="Add a specialty and press Enter"
-                disabled={isLoading}
-              />
-              <Button
-                type="button"
-                onClick={addSpecialty}
-                disabled={isLoading}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-900"
-              >
-                Add
-              </Button>
+              <div className="flex gap-2">
+                <Input
+                  value={specialtyInput}
+                  onChange={(e) => setSpecialtyInput(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      addSpecialty()
+                    }
+                  }}
+                  placeholder="e.g., Computer Science"
+                  disabled={isLoading}
+                  className="h-10 bg-white"
+                />
+                <Button
+                  type="button"
+                  onClick={addSpecialty}
+                  disabled={isLoading}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-6"
+                >
+                  Add
+                </Button>
+              </div>
+
+              {specialties.length > 0 && (
+                <div className="flex flex-wrap gap-2 min-h-[40px]">
+                  {specialties.map(specialty => (
+                    <Badge
+                      key={specialty}
+                      className="bg-orange-100 text-orange-800 border border-orange-300 pr-1 text-xs"
+                    >
+                      {specialty}
+                      <button
+                        type="button"
+                        onClick={() => removeSpecialty(specialty)}
+                        className="ml-1.5 hover:bg-orange-200 rounded-full p-0.5"
+                        disabled={isLoading}
+                      >
+                        <X size={12} />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              {specialties.length === 0 && (
+                <p className="text-xs text-gray-500 italic">No specialties added yet</p>
+              )}
             </div>
 
-            {specialties.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {specialties.map(specialty => (
-                  <Badge
-                    key={specialty}
-                    variant="secondary"
-                    className="bg-orange-100 text-orange-700 border-0 cursor-pointer"
-                  >
-                    {specialty}
-                    <button
-                      type="button"
-                      onClick={() => removeSpecialty(specialty)}
-                      className="ml-1"
-                      disabled={isLoading}
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
+            {/* Accreditations */}
+            <div className="space-y-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+              <h3 className="text-base font-semibold text-gray-900">Accreditations</h3>
+
+              <div className="flex gap-2">
+                <Input
+                  value={accreditationInput}
+                  onChange={(e) => setAccreditationInput(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      addAccreditation()
+                    }
+                  }}
+                  placeholder="e.g., ABET Accredited"
+                  disabled={isLoading}
+                  className="h-10 bg-white"
+                />
+                <Button
+                  type="button"
+                  onClick={addAccreditation}
+                  disabled={isLoading}
+                  className="bg-purple-500 hover:bg-purple-600 text-white px-6"
+                >
+                  Add
+                </Button>
               </div>
-            )}
-          </div>
 
-          {/* Accreditations */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Accreditations</h3>
-
-            <div className="flex gap-2">
-              <Input
-                value={accreditationInput}
-                onChange={(e) => setAccreditationInput(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    addAccreditation()
-                  }
-                }}
-                placeholder="Add an accreditation and press Enter"
-                disabled={isLoading}
-              />
-              <Button
-                type="button"
-                onClick={addAccreditation}
-                disabled={isLoading}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-900"
-              >
-                Add
-              </Button>
+              {accreditations.length > 0 && (
+                <div className="flex flex-wrap gap-2 min-h-[40px]">
+                  {accreditations.map(accreditation => (
+                    <Badge
+                      key={accreditation}
+                      className="bg-purple-100 text-purple-800 border border-purple-300 pr-1 text-xs"
+                    >
+                      {accreditation}
+                      <button
+                        type="button"
+                        onClick={() => removeAccreditation(accreditation)}
+                        className="ml-1.5 hover:bg-purple-200 rounded-full p-0.5"
+                        disabled={isLoading}
+                      >
+                        <X size={12} />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              {accreditations.length === 0 && (
+                <p className="text-xs text-gray-500 italic">No accreditations added yet</p>
+              )}
             </div>
-
-            {accreditations.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {accreditations.map(accreditation => (
-                  <Badge
-                    key={accreditation}
-                    variant="secondary"
-                    className="bg-purple-100 text-purple-700 border-0 cursor-pointer"
-                  >
-                    {accreditation}
-                    <button
-                      type="button"
-                      onClick={() => removeAccreditation(accreditation)}
-                      className="ml-1"
-                      disabled={isLoading}
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Form Actions */}
-          <div className="flex gap-3 pt-4 border-t">
+          <div className="flex gap-4 pt-6">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 h-11"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
-              className="flex-1 bg-orange-gradient hover:opacity-90"
+              className="flex-1 h-11 bg-orange-gradient hover:opacity-90 text-base font-medium"
             >
               {isLoading 
-                ? (isEditMode ? 'Saving...' : 'Creating...') 
+                ? (isEditMode ? 'Saving Changes...' : 'Creating Institution...') 
                 : (isEditMode ? 'Save Changes' : 'Create Institution')
               }
             </Button>
@@ -656,9 +701,10 @@ export function CreateInstitutionDialog({
     <AlertDialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Confirm Changes</AlertDialogTitle>
-          <AlertDialogDescription>
-            Are you sure you want to save these changes to <strong>{formData.name}</strong>?
+          <AlertDialogTitle className="text-xl">Confirm Changes</AlertDialogTitle>
+          <AlertDialogDescription className="text-base">
+            Are you sure you want to save these changes to <strong className="text-gray-900">{formData.name}</strong>?
+            <br />
             This will update the institution details in the database.
           </AlertDialogDescription>
         </AlertDialogHeader>
