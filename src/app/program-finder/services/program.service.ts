@@ -84,7 +84,7 @@ export class ProgramService {
 
       // Remove empty/null/undefined values
       const cleanedFilterBody = Object.fromEntries(
-        Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
+        Object.entries(filterBody).filter(([value]) => value !== "" && value !== null && value !== undefined)
       );
 
       console.log('=== FILTER REQUEST ===');
