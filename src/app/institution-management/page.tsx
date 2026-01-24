@@ -4,7 +4,8 @@
 import React, { useState } from 'react'
 import {
   Search, Plus, School, Globe, BookOpen, Award,
-  CheckCircle2, Mail, Building, GraduationCap
+  CheckCircle2, Mail, Building,
+  GraduationCap,
 } from 'lucide-react'
 
 // ────────────────────────────────────────────────
@@ -217,7 +218,7 @@ export default function InstitutionManagementPage() {
                       .sort((a, b) => a.ranking - b.ranking)
                       .slice(0, 3)
                       .map(inst => {
-                        const TypeIcon = getTypeIcon(inst.type)
+                        
                         return (
                           <div key={inst.id} className="flex items-center gap-4 p-4 bg-white rounded-lg border">
                             <div className="flex items-center gap-3">

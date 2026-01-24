@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { 
   Search, Plus, Mail, Phone, CheckCircle, XCircle, Clock, 
-  Edit, Trash2, Eye, GraduationCap
+  Edit, Trash2, Eye, GraduationCap 
 } from 'lucide-react';
 
 // ────────────────────────────────────────────────
@@ -341,7 +341,7 @@ export default function StudentManagementPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <select
                   value={statusFilter}
-                  onChange={e => setStatusFilter(e.target.value as 'all' | Student['status'])}
+                  onChange={e => setStatusFilter(e.target.value as 'all' | 'active' | 'prospective' | 'suspended' | 'graduated' | 'inactive')}
                   className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 min-w-[160px]"
                 >
                   <option value="all">All Statuses</option>
