@@ -73,7 +73,6 @@ const AgentManagementPage = () => {
   const [agents] = useState<Agent[]>(sampleAgents);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'pending'>('all');
-  // removed unused selectedAgent state
 
   // Filter agents
   const filteredAgents = agents.filter(agent => {
