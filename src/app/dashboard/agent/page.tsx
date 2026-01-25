@@ -13,7 +13,8 @@ import {
   CheckCircle,
   Building,
   Mail,
-  Phone
+  Phone,
+  MessageSquare
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import AppToast from "@/utils/toast-utils";
@@ -96,10 +97,16 @@ export default function AgentDashboard() {
                 <p className="text-sm text-gray-500">Welcome, {userData.name}</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="default" size="sm" onClick={() => router.push('/chat')}>
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Support Inbox
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>

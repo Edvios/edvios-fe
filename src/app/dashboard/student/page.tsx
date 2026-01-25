@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudentTab, studentTabLabels } from "./enums/student-tabs";
+import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
 import { useStudentDashboard } from "./hooks/use-student-dashboard";
 import {
-  AlertCircle,
   Calendar,
   CheckCircle,
+  AlertCircle,
+  MessageCircle,
   ClipboardList,
   Download,
   FileText,
@@ -24,14 +26,6 @@ import {
 import { logout } from "@/app/auth/login/api/auth.api";
 //import CountUp from "@/components/ui/count-up";
 
-interface UserData {
-  email: string;
-  userType: string;
-  name: string;
-  id: string;
-  phone?: string;
-  organization?: string;
-}
 
 const statAccentMap: Record<string, string> = {
   blue: "text-blue-600 bg-blue-50",
@@ -115,11 +109,31 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <div className="pt-2">
-          <p className="text-sm text-slate-500">Welcome back, {userData.name}</p>
-          <h1 className="text-3xl font-bold text-slate-900">Student Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      {/* Header */}
+      <header className="bg-white border-b shadow-sm sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                <GraduationCap className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">Student Portal</h1>
+                <p className="text-sm text-gray-500">Welcome back, {userData.firstName}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="default" size="sm" onClick={() => router.push('/chat')}>
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Chat with Agent
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -138,7 +152,7 @@ export default function StudentDashboard() {
             Logout
           </Button>
 
-          <Button size="sm" className="gap-2 px-3 py-1 bg-gradient-to-r from-orange-500 to-orange-400 text-white hover:from-orange-600 hover:to-orange-500" onClick={() => router.push('/dashboard/student/add')}>
+          <Button size="sm" className="gap-2 px-3 py-1 bg-orange-gradient text-white hover:from-orange-600 hover:to-orange-500" onClick={() => router.push('/dashboard/student/add')}>
             <Plus className="h-4 w-4" />
             Add Lead
           </Button>
@@ -189,7 +203,7 @@ export default function StudentDashboard() {
               <TabsTrigger
                 key={tab}
                 value={tab}
-                className="relative z-10 px-2 py-2 rounded-4xl transition-colors duration-300 ease-in-out border-0 text-sm font-medium data-[state=active]:text-white data-[state=inactive]:text-gray-700 !h-auto !rounded-4xl !border-0 !px-2 !py-2 !shadow-none"
+                className="relative z-10 px-2 py-2 duration-300 ease-in-out border-0 text-sm font-medium data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=inactive]:text-gray-700 !h-auto !rounded-4xl !border-0 !px-2 !py-2 !shadow-none !bg-transparent"
               >
                 {studentTabLabels[tab]}
               </TabsTrigger>
@@ -364,7 +378,7 @@ export default function StudentDashboard() {
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
+      </header>
     </div>
   );
 }

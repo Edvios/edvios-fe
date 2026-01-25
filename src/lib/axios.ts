@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createClient } from './supabase/client';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://edvios-be.vercel.app';
 
@@ -12,10 +13,26 @@ const axiosInstance = axios.create({
 
 // Request interceptor to add auth token
 axiosInstance.interceptors.request.use(
-  (config) => {
+  async (config) => {
     // Get token from sessionStorage
     if (typeof window !== 'undefined') {
-      const token = sessionStorage.getItem('auth-token');
+      let token = sessionStorage.getItem('auth-token');
+      
+      // If no token in sessionStorage, try Supabase session
+      if (!token) {
+        try {
+          const supabase = createClient();
+          const { data } = await supabase.auth.getSession();
+          if (data.session?.access_token) {
+            token = data.session.access_token;
+            // Optionally sync back to sessionStorage
+            sessionStorage.setItem('auth-token', token);
+          }
+        } catch (e) {
+          // Ignore error, continue without token or let it fail
+        }
+      }
+
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
