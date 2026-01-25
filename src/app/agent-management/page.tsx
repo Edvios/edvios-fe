@@ -1,289 +1,214 @@
 'use client';
-import React, { useState } from 'react';
-import { Search, Plus, Mail, Phone, CheckCircle, XCircle, Clock, Edit, Trash2, Eye } from 'lucide-react';
 
-// Types
-interface Agent {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  status: 'active' | 'inactive' | 'pending';
-  studentsManaged: number;
-  institutionsManaged: number;
-  joinedDate: string;
-  avatar?: string;
-}
-
-// Sample data
-const sampleAgents: Agent[] = [
-  {
-    id: '1',
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@agency.com',
-    phone: '+1 (555) 123-4567',
-    status: 'active',
-    studentsManaged: 45,
-    institutionsManaged: 8,
-    joinedDate: '2024-01-15'
-  },
-  {
-    id: '2',
-    name: 'Michael Chen',
-    email: 'michael.chen@agency.com',
-    phone: '+1 (555) 234-5678',
-    status: 'active',
-    studentsManaged: 32,
-    institutionsManaged: 5,
-    joinedDate: '2024-02-20'
-  },
-  {
-    id: '3',
-    name: 'Emily Rodriguez',
-    email: 'emily.rodriguez@agency.com',
-    phone: '+1 (555) 345-6789',
-    status: 'pending',
-    studentsManaged: 0,
-    institutionsManaged: 0,
-    joinedDate: '2025-01-20'
-  },
-  {
-    id: '4',
-    name: 'David Kim',
-    email: 'david.kim@agency.com',
-    phone: '+1 (555) 456-7890',
-    status: 'inactive',
-    studentsManaged: 28,
-    institutionsManaged: 4,
-    joinedDate: '2023-11-10'
-  },
-  {
-    id: '5',
-    name: 'Lisa Patel',
-    email: 'lisa.patel@agency.com',
-    phone: '+1 (555) 567-8901',
-    status: 'active',
-    studentsManaged: 56,
-    institutionsManaged: 12,
-    joinedDate: '2023-08-05'
-  }
-];
+import React, { useState, useEffect, useMemo } from 'react';
+import { Search, ShieldCheck, Users, Clock, RotateCcw, XCircle, Filter } from 'lucide-react';
+import { useAgents } from './hooks/use-agents';
+import { Agent, AgentStatus } from './types/agent.types';
+import { approveAgent, deleteAgent} from './api/agent.api';
+import { AgentsTable } from './components/AgentsTable';
+import { AgentProfileDialog } from './components/AgentProfileDialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AppToast } from '@/utils/toast-utils';
 
 const AgentManagementPage = () => {
-  const [agents] = useState<Agent[]>(sampleAgents);
+  // Filter states
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'pending'>('all');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<AgentStatus>('ALL');
 
-  // Filter agents
-  const filteredAgents = agents.filter(agent => {
-    const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         agent.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || agent.status === statusFilter;
-    return matchesSearch && matchesStatus;
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+
+  // Dialog states
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+      setCurrentPage(1);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Fetch data
+  const { agents, total, loading, error, refetch } = useAgents({
+    search: debouncedSearch,
+    filter: statusFilter,
+    page: currentPage,
+    pageSize,
   });
 
-  const getStatusBadge = (status: Agent['status']) => {
-    const statusConfig = {
-      active: { bg: 'bg-green-100', text: 'text-green-800', icon: CheckCircle },
-      inactive: { bg: 'bg-red-100', text: 'text-red-800', icon: XCircle },
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: Clock }
-    };
-    
-    const config = statusConfig[status];
-    const Icon = config.icon;
-    
-    return (
-      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
-        <Icon className="w-3 h-3" />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </span>
-    );
+  // Calculate stats - in a real app these might come from a separate endpoint
+  const stats = useMemo(() => {
+    return [
+      { label: 'Total Agents', value: total, icon: Users, color: 'from-orange-500 to-orange-600' },
+      { label: 'Pending Review', value: agents.filter(a => a.role === 'PENDING_AGENT').length, icon: Clock, color: 'from-yellow-400 to-yellow-600' },
+    ];
+  }, [agents, total]);
+
+  const handleApprove = async (agentId: string) => {
+    try {
+      setActionLoading(true);
+      await approveAgent(agentId);
+      AppToast.success('Agent approved successfully');
+      refetch();
+    } catch {
+      AppToast.error('Failed to approve agent');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  const stats = [
-    { label: 'Total Agents', value: agents.length, color: 'bg-blue-500' },
-    { label: 'Active Agents', value: agents.filter(a => a.status === 'active').length, color: 'bg-green-500' },
-    { label: 'Pending Approval', value: agents.filter(a => a.status === 'pending').length, color: 'bg-yellow-500' },
-    { label: 'Total Students', value: agents.reduce((sum, a) => sum + a.studentsManaged, 0), color: 'bg-purple-500' }
-  ];
+  const handleDelete = async (agentId: string) => {
+    try {
+      setActionLoading(true);
+      await deleteAgent(agentId);
+      AppToast.success('Agent deleted successfully');
+      refetch();
+    } catch {
+      AppToast.error('Failed to delete agent');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const resetFilters = () => {
+    setSearchQuery('');
+    setStatusFilter('ALL');
+    setCurrentPage(1);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#FDFCFB] p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Agent Management</h1>
-          <p className="text-gray-600">Manage and monitor all agents in the system</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-lg shadow p-6 border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">{stat.label}</p>
-                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                </div>
-                <div className={`w-12 h-12 rounded-lg ${stat.color} opacity-10`}></div>
-              </div>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+              Agent <span className="text-orange-600">Portal Control</span>
+            </h1>
+            <p className="text-gray-500 mt-2 text-lg">Approve, manage, and monitor educational consultants.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="px-5 py-2.5 bg-orange-50 rounded-2xl border border-orange-100 flex items-center gap-3 shadow-sm">
+              <ShieldCheck className="w-5 h-5 text-orange-600" />
+              <span className="text-sm font-bold text-orange-700 uppercase tracking-wider">Admin Verified</span>
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* Filters and Actions */}
-        <div className="bg-white rounded-lg shadow border border-gray-200 mb-6">
-          <div className="p-6">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-              <div className="flex-1 w-full md:w-auto">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    placeholder="Search agents by name or email..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  />
-                </div>
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <Card key={index} className="border-none shadow-xl overflow-hidden group hover:-translate-y-1 transition-all duration-500">
+                <CardContent className="p-0">
+                  <div className={`bg-linear-to-br ${stat.color} p-6 text-white flex items-center justify-between`}>
+                    <div>
+                      <p className="text-white/80 font-medium mb-1 uppercase tracking-wider text-xs">{stat.label}</p>
+                      <p className="text-4xl font-bold">
+                        {loading ? '...' : stat.value}
+                      </p>
+                    </div>
+                    <div className="bg-white/20 p-4 rounded-2xl backdrop-blur-md group-hover:scale-110 transition-transform duration-500">
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Filters */}
+        <Card className="border-none shadow-xl bg-white rounded-3xl overflow-visible">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Input
+                  placeholder="Search by agent name, email or organization..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 h-14 border-none bg-gray-50/50 rounded-2xl focus-visible:ring-2 focus-visible:ring-orange-500 text-base"
+                />
               </div>
-              
-              <div className="flex gap-3 w-full md:w-auto">
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive' | 'pending')}
-                  className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v as AgentStatus); setCurrentPage(1); }}>
+                  <SelectTrigger className="h-14 w-full sm:w-45 border-none bg-gray-50/50 rounded-2xl font-semibold focus:ring-2 focus:ring-orange-500">
+                    <div className="flex items-center gap-2">
+                      <Filter className="w-4 h-4 text-orange-500" />
+                      <SelectValue placeholder="Status" />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="rounded-2xl border-none shadow-2xl">
+                    <SelectItem value="ALL">All Statuses</SelectItem>
+                    <SelectItem value="AGENT">Approved</SelectItem>
+                    <SelectItem value="PENDING_AGENT">Pending</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  variant="outline"
+                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-orange-50 text-orange-600 hover:bg-orange-100 transition-all font-bold"
+                  onClick={resetFilters}
                 >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="pending">Pending</option>
-                </select>
-                
-                <button className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                  <Plus className="w-5 h-5" />
-                  Add Agent
-                </button>
+                  <RotateCcw className="w-5 h-5" /> Reset
+                </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        {/* Agents Table */}
-        <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Agent
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Students
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Institutions
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Joined Date
-                  </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredAgents.map((agent) => (
-                  <tr key={agent.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
-                          {agent.name.split(' ').map(n => n[0]).join('')}
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{agent.name}</div>
-                          <div className="text-sm text-gray-500">ID: {agent.id}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center text-sm text-gray-900">
-                          <Mail className="w-4 h-4 mr-2 text-gray-400" />
-                          {agent.email}
-                        </div>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                          {agent.phone}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(agent.status)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{agent.studentsManaged}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{agent.institutionsManaged}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {new Date(agent.joinedDate).toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'short', 
-                          day: 'numeric' 
-                        })}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Error */}
+        {error && (
+          <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+            <XCircle className="w-5 h-5" />
+            <span className="text-sm font-medium">{error}</span>
           </div>
+        )}
 
-          {filteredAgents.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No agents found matching your criteria.</p>
+        {/* Table */}
+        <div className="relative">
+          {actionLoading && (
+            <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] z-10 flex items-center justify-center rounded-3xl">
+              <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin shadow-lg" />
             </div>
           )}
-
-          {/* Pagination */}
-          {filteredAgents.length > 0 && (
-            <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-              <div className="text-sm text-gray-600">
-                Showing <span className="font-medium">{filteredAgents.length}</span> of <span className="font-medium">{agents.length}</span> agents
-              </div>
-              <div className="flex gap-2">
-                <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                  Previous
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
+          <AgentsTable
+            agents={agents}
+            total={total}
+            loading={loading}
+            page={currentPage}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onViewProfile={(agent) => { setSelectedAgent(agent); setProfileDialogOpen(true); }}
+            onApprove={handleApprove}
+            onDelete={handleDelete}
+          />
         </div>
+
+        {/* Dialog */}
+        <AgentProfileDialog
+          agent={selectedAgent}
+          open={profileDialogOpen}
+          onClose={() => { setProfileDialogOpen(false); setSelectedAgent(null); }}
+        />
       </div>
     </div>
   );

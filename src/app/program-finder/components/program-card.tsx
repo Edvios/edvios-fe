@@ -14,13 +14,13 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({ program, onDetailClick
     return (
         <Card className="hover:shadow-xl transition-shadow duration-200 h-full flex flex-col">
             <CardHeader className="pb-3">
-                <div className="flex justify-between items-start gap-4">
+                <div className="justify-between items-start gap-4">
                     <div>
-                        <h3 className="text-xl font-bold text-gray-900 line-clamp-2">{program.title}</h3>
+                        <h3 className="text-xl font-bold text-gray-900 line-clamp-4">{program.title}</h3>
                         <p className="text-secondary-foreground font-medium mt-1">{program.institution}</p>
                     </div>
                     {program.scholarship && (
-                        <div className="inline-flex items-center rounded-full border border-transparent bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800 transition-colors hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 shrink-0">
+                        <div className="inline-flex items-end mt-2 rounded-full border border-transparent bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800 transition-colors hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 shrink-0">
                             Scholarship
                         </div>
                     )}
