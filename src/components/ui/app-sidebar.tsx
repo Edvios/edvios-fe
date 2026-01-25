@@ -4,9 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
-  GraduationCap,
   Users,
-  Shield,
   Home,
   FileText,
   Settings,

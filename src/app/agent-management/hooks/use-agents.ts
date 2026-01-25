@@ -30,6 +30,7 @@ export const useAgents = (filters: AgentFilters) => {
       setAgents(response?.agents ?? []);
       setTotal(response?.total ?? 0);
     } catch (err) {
+      console.error("Error fetching agents:", err);
       setAgents([]);
       setTotal(0);
       setError("Failed to load agents");
