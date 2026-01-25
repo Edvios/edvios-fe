@@ -41,11 +41,11 @@ export const approveAgent = async (agentId: string): Promise<void> => {
 };
 
 // Reject/Delete an agent
-export const deleteAgent = async (agentId: string): Promise<void> => {
+export const deleteAgent = async (userId: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/auth/delete-user/${agentId}`);
+    await axiosInstance.delete(`/auth/delete-user/${userId}`);
   } catch (error) {
-    console.error(`Error deleting agent ${agentId}:`, error);
+    console.error(`Error deleting agent ${userId}:`, error);
     throw error;
   }
 };

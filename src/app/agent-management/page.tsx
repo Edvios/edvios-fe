@@ -72,10 +72,10 @@ const AgentManagementPage = () => {
     }
   };
 
-  const handleDelete = async (agentId: string) => {
+  const handleDelete = async (userId: string) => {
     try {
       setActionLoading(true);
-      await deleteAgent(agentId);
+      await deleteAgent(userId);
       AppToast.success('Agent deleted successfully');
       refetch();
     } catch {
