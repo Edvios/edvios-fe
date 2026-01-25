@@ -45,9 +45,10 @@ export const useFileUpload = () => {
         name: file.name,
         size: file.size,
       };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Upload failed:", error);
-      setUploadError(error.message || "Failed to upload file");
+      
+      setUploadError(error instanceof Error ? error.message : "Failed to upload file");
       return null;
     } finally {
       setIsUploading(false);

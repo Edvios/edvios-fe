@@ -164,10 +164,16 @@ export function StudentAgentChat({
         if (unreadIds.length > 0) {
           await updateMessageStatus(unreadIds, "READ");
         }
-      } catch (error: any) {
+      }  catch (error) {
         console.error("Failed to load messages:", error);
         
-        if (error.response?.status === 403) {
+        // Type guard for axios error response
+        if (
+          error &&
+          typeof error === 'object' &&
+          'response' in error &&
+          (error as { response?: { status?: number } }).response?.status === 403
+        ) {
           setChatError("You do not have permission to view this conversation.");
         } else {
           // Fall back to localStorage
@@ -255,7 +261,7 @@ export function StudentAgentChat({
         }
 
         let messageId = crypto.randomUUID();
-        let messageContent = newMessage.trim();
+        const messageContent = newMessage.trim();
 
         // Save to database if we have a db chat
         if (dbChat?.id) {
