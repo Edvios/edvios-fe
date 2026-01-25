@@ -9,7 +9,6 @@ import { StudentTab, studentTabLabels } from "./enums/student-tabs";
 import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
 import { useStudentDashboard } from "./hooks/use-student-dashboard";
 import {
-  AlertCircle,
   Calendar,
   CheckCircle,
   AlertCircle,
@@ -379,7 +378,7 @@ export default function StudentDashboard() {
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
+      </header>
     </div>
   );
 }
