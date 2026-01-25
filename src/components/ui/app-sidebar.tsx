@@ -54,7 +54,7 @@ const studentItems = [
   },
   {
     title: "Communication Hub",
-    url: "#",
+    url: "/chat",
     icon: MessageCircle,
   },
   {
@@ -200,11 +200,11 @@ export function AppSidebar() {
         {/* User Info Section */}
         <SidebarGroup>
           <div className="flex items-center gap-3 px-4 py-4">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-orange-gradient">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient">
               {renderUserIcon()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-md font-semibold truncate text-orange-gradient">
+              <p className="text-md font-semibold truncate text-gradient">
                 Edvios
               </p>
               <p className="text-xs text-muted-foreground truncate">

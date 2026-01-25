@@ -158,7 +158,7 @@ export function InstitutionDetailsDialog({
               {/* Key Information Grid */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-10 h-10 bg-orange-gradient rounded-lg flex items-center justify-center text-white">
+                  <div className="w-10 h-10 bg-gradient rounded-lg flex items-center justify-center text-white">
                     <Award size={20} />
                   </div>
                   <div>
@@ -221,7 +221,7 @@ export function InstitutionDetailsDialog({
               {/* Tuition Range */}
               <div>
                 <h4 className="text-sm font-semibold text-gray-700 mb-2">Tuition Range</h4>
-                <p className="text-lg font-medium text-orange-600">{institution.tuitionRange}</p>
+                <p className="text-lg font-medium text-green-600">{institution.tuitionRange}</p>
               </div>
 
               {/* Contact Information */}
@@ -230,7 +230,7 @@ export function InstitutionDetailsDialog({
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-gray-600">
                     <Mail size={16} />
-                    <a href={`mailto:${institution.contactEmail}`} className="hover:text-orange-600">
+                    <a href={`mailto:${institution.contactEmail}`} className="hover:text-green-600">
                       {institution.contactEmail}
                     </a>
                   </div>
@@ -240,7 +240,7 @@ export function InstitutionDetailsDialog({
                       href={institution.website} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="hover:text-orange-600"
+                      className="hover:text-green-600"
                     >
                       {institution.website}
                     </a>
@@ -254,7 +254,7 @@ export function InstitutionDetailsDialog({
                   <h4 className="text-sm font-semibold text-gray-700 mb-3">Specialties</h4>
                   <div className="flex flex-wrap gap-2">
                     {institution.specialties.map((specialty) => (
-                      <Badge key={specialty} variant="secondary" className="bg-orange-100 text-orange-700 border-0">
+                      <Badge key={specialty} variant="secondary" className="bg-green-100 text-green-700 border-0">
                         {specialty}
                       </Badge>
                     ))}
@@ -281,7 +281,7 @@ export function InstitutionDetailsDialog({
               <div className="flex gap-3 pt-4 border-t">
                 <Button
                   onClick={handleEdit}
-                  className="flex-1 bg-orange-gradient hover:bg-orange-500"
+                  className="flex-1 bg-gradient hover:bg-green-500"
                 >
                   <Edit size={18} className="mr-2" />
                   Edit Institution

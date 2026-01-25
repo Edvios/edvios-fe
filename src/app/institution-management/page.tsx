@@ -112,7 +112,7 @@ export default function InstitutionManagementPage() {
           </div>
           <Button 
             onClick={() => setCreateDialogOpen(true)}
-            className="bg-orange-gradient hover:opacity-90 shadow-sm"
+            className="bg-gradient hover:opacity-90 shadow-sm"
           >
             <Plus size={18} className="mr-2" />
             Add Institution

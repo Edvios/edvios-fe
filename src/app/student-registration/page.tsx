@@ -41,7 +41,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-orange-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
                 <Users className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -53,7 +53,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
-                <Label htmlFor="firstName" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="firstName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   First Name <span className="text-destructive">*</span>
                 </Label>
                 <Input 
@@ -61,12 +61,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.firstName} 
                   onChange={(e) => handleInputChange('firstName', e.target.value)} 
                   placeholder="Enter your first name"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="lastName" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="lastName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Last Name <span className="text-destructive">*</span>
                 </Label>
                 <Input 
@@ -74,12 +74,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.lastName} 
                   onChange={(e) => handleInputChange('lastName', e.target.value)} 
                   placeholder="Enter your last name"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="email" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="email" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Email Address <span className="text-destructive">*</span>
                 </Label>
                 <Input 
@@ -88,12 +88,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.email} 
                   onChange={(e) => handleInputChange('email', e.target.value)} 
                   placeholder="your.email@example.com"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="phone" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="phone" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Phone Number <span className="text-destructive">*</span>
                 </Label>
                 <Input 
@@ -101,12 +101,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.phone} 
                   onChange={(e) => handleInputChange('phone', e.target.value)} 
                   placeholder="+1 234 567 8900"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="dob" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="dob" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Date of Birth
                 </Label>
                 <Input 
@@ -114,12 +114,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   type="date" 
                   value={formData.dob} 
                   onChange={(e) => handleInputChange('dob', e.target.value)}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="nationality" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="nationality" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Nationality
                 </Label>
                 <Select value={formData.nationality} onValueChange={(value) => handleInputChange('nationality', value)}>
@@ -139,7 +139,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="address" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="address" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Address
                 </Label>
                 <Input 
@@ -147,12 +147,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.address} 
                   onChange={(e) => handleInputChange('address', e.target.value)} 
                   placeholder="Enter your address"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Current Country
                 </Label>
                 <Input 
@@ -160,12 +160,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.currentCountry} 
                   onChange={(e) => handleInputChange('currentCountry', e.target.value)} 
                   placeholder="Country where you currently live"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="currentCity" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="currentCity" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Current City
                 </Label>
                 <Input 
@@ -173,7 +173,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.currentCity} 
                   onChange={(e) => handleInputChange('currentCity', e.target.value)} 
                   placeholder="City where you currently live"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
             </div>
@@ -184,7 +184,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-orange-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
                 <GraduationCap className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -195,11 +195,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
-                <Label htmlFor="currentEducationLevel" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="currentEducationLevel" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Current Education Level <span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.currentEducationLevel} onValueChange={(value) => handleInputChange('currentEducationLevel', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select your current education level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -213,7 +213,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="currentInstitution" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="currentInstitution" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Current Institution
                 </Label>
                 <Input 
@@ -221,16 +221,16 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.currentInstitution} 
                   onChange={(e) => handleInputChange('currentInstitution', e.target.value)} 
                   placeholder="Name of your current school/university"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="fieldOfStudy" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="fieldOfStudy" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Field of Study <span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.fieldOfStudy} onValueChange={(value) => handleInputChange('fieldOfStudy', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select your field of study" />
                   </SelectTrigger>
                   <SelectContent>
@@ -247,7 +247,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="gpa" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="gpa" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   GPA/Percentage
                 </Label>
                 <Input 
@@ -255,12 +255,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.gpa} 
                   onChange={(e) => handleInputChange('gpa', e.target.value)} 
                   placeholder="e.g., 3.8 or 85%"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="graduationDate" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="graduationDate" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Graduation Date
                 </Label>
                 <Input 
@@ -268,16 +268,16 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   type="date" 
                   value={formData.graduationDate} 
                   onChange={(e) => handleInputChange('graduationDate', e.target.value)}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   English Proficiency Test
                 </Label>
                 <Select value={formData.englishTest} onValueChange={(value) => handleInputChange('englishTest', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select test taken" />
                   </SelectTrigger>
                   <SelectContent>
@@ -292,7 +292,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               
               {(formData.englishTest === 'IELTS' || formData.englishTest === 'TOEFL' || formData.englishTest === 'PTE' || formData.englishTest === 'DUOLINGO') && (
                 <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                  <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                     {formData.englishTest} Score
                   </Label>
                   <Input 
@@ -300,7 +300,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     value={formData.englishScore} 
                     onChange={(e) => handleInputChange('englishScore', e.target.value)} 
                     placeholder="e.g., 7.0 or 100"
-                    className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20"
+                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                   />
                 </div>
               )}
@@ -312,7 +312,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-orange-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
                 <Target className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -323,11 +323,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
-                <Label htmlFor="preferredDestination" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="preferredDestination" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Preferred Destination <span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.preferredDestination} onValueChange={(value) => handleInputChange('preferredDestination', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select preferred country" />
                   </SelectTrigger>
                   <SelectContent>
@@ -344,11 +344,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="preferredProgram" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="preferredProgram" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Preferred Program <span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.preferredProgram} onValueChange={(value) => handleInputChange('preferredProgram', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select program type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -367,11 +367,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="preferredStudyLevel" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="preferredStudyLevel" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Study Level <span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.preferredStudyLevel} onValueChange={(value) => handleInputChange('preferredStudyLevel', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select study level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -384,11 +384,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="preferredIntake" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="preferredIntake" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Preferred Intake
                 </Label>
                 <Select value={formData.preferredIntake} onValueChange={(value) => handleInputChange('preferredIntake', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select intake period" />
                   </SelectTrigger>
                   <SelectContent>
@@ -401,11 +401,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group md:col-span-2">
-                <Label htmlFor="budgetRange" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="budgetRange" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Budget Range (per year)
                 </Label>
                 <Select value={formData.budgetRange} onValueChange={(value) => handleInputChange('budgetRange', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select budget range" />
                   </SelectTrigger>
                   <SelectContent>
@@ -423,7 +423,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   id="scholarshipInterest" 
                   checked={formData.scholarshipInterest} 
                   onCheckedChange={(checked) => handleInputChange('scholarshipInterest', checked === true)}
-                  className="data-[state=checked]:bg-orange-gradient"
+                  className="data-[state=checked]:bg-gradient"
                 />
                 <Label htmlFor="scholarshipInterest" className="text-sm font-medium cursor-pointer">
                   I&apos;m Interested in scholarships
@@ -437,7 +437,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-orange-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
                 <FileText className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -447,7 +447,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             </div>
             
             <div className="space-y-4">
-                <Label htmlFor="extracurriculars" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="extracurriculars" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Please indicate which documents you currently have ready. This helps us provide better guidance.
                 </Label>
               {[
@@ -461,7 +461,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     id={item.id} 
                     checked={formData[item.field as keyof typeof formData] as boolean} 
                     onCheckedChange={(checked) => handleInputChange(item.field, checked)}
-                    className="data-[state=checked]:bg-orange-gradient"
+                    className="data-[state=checked]:bg-gradient"
                   />
                   <Label htmlFor={item.id} className="text-sm font-medium cursor-pointer flex-1">
                     {item.label}
@@ -474,7 +474,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             
             <div className="space-y-5">
               <div className="space-y-2 group">
-                <Label htmlFor="workExperience" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="workExperience" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Work Experience (if any)
                 </Label>
                 <Textarea 
@@ -483,12 +483,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   onChange={(e) => handleInputChange('workExperience', e.target.value)} 
                   placeholder="Briefly describe your work experience..."
                   rows={3}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20 resize-none"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="extraCurricular" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="extraCurricular" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Extracurricular Activities
                 </Label>
                 <Textarea 
@@ -497,12 +497,12 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   onChange={(e) => handleInputChange('extraCurricular', e.target.value)} 
                   placeholder="Sports, volunteering, leadership roles, etc..."
                   rows={3}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20 resize-none"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
                 />
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="careerGoals" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="careerGoals" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Career Goals
                 </Label>
                 <Textarea 
@@ -511,7 +511,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   onChange={(e) => handleInputChange('careerGoals', e.target.value)} 
                   placeholder="What are your career aspirations after graduation?"
                   rows={3}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20 resize-none"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
                 />
               </div>
             </div>
@@ -522,7 +522,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-orange-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
                 <CheckCircle className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -533,11 +533,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
-                <Label htmlFor="referralSource" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="referralSource" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   How did you hear about us?
                 </Label>
                 <Select value={formData.referralSource} onValueChange={(value) => handleInputChange('referralSource', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select source" />
                   </SelectTrigger>
                   <SelectContent>
@@ -553,11 +553,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group">
-                <Label htmlFor="preferredContactMethod" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="preferredContactMethod" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Preferred Contact Method
                 </Label>
                 <Select value={formData.preferredContactMethod} onValueChange={(value) => handleInputChange('preferredContactMethod', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select contact method" />
                   </SelectTrigger>
                   <SelectContent>
@@ -570,11 +570,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group md:col-span-2">
-                <Label htmlFor="bestTimeToContact" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="bestTimeToContact" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Best Time to Contact
                 </Label>
                 <Select value={formData.bestTimeToContact} onValueChange={(value) => handleInputChange('bestTimeToContact', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select best time" />
                   </SelectTrigger>
                   <SelectContent>
@@ -587,7 +587,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               
               <div className="space-y-2 group md:col-span-2">
-                <Label htmlFor="additionalQuestions" className="text-sm font-medium transition-colors group-focus-within:text-orange-gradient">
+                <Label htmlFor="additionalQuestions" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Additional Requirements or Questions
                 </Label>
                 <Textarea 
@@ -596,14 +596,14 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   onChange={(e) => handleInputChange('additionalQuestions', e.target.value)} 
                   placeholder="Any specific requirements, questions, or concerns you'd like to discuss..."
                   rows={4}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-orange-500/20 resize-none"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
                 />
               </div>
             </div>
             
             <Separator className="my-6" />
             
-            <div className="p-4 rounded-lg border-2 border-orange-500/30 bg-orange-500/5 hover:border-orange-500/50 transition-all duration-200 space-y-4">
+            <div className="p-4 rounded-lg border-2 border-green-500/30 bg-green-500/5 hover:border-green-500/50 transition-all duration-200 space-y-4">
               <div className="flex items-start space-x-3">
                 <Checkbox 
                   id="marketingConsent" 
@@ -624,7 +624,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   className="mt-1"
                 />
                 <Label htmlFor="termsAccepted" className="text-sm cursor-pointer leading-relaxed">
-                  I accept the <span className="text-orange-gradient font-medium underline">Terms and Conditions</span> and <span className="text-orange-gradient font-medium underline">Privacy Policy</span> <span className="text-destructive">*</span>
+                  I accept the <span className="text-gradient font-medium underline">Terms and Conditions</span> and <span className="text-gradient font-medium underline">Privacy Policy</span> <span className="text-destructive">*</span>
                 </Label>
               </div>
             </div>
@@ -637,11 +637,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-orange-500/5 p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-green-500/5 p-4 md:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto">
         <Card className="shadow-2xl border-0 overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-orange-gradient opacity-10 blur-3xl rounded-full"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-gradient opacity-5 blur-3xl rounded-full"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient opacity-10 blur-3xl rounded-full"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient opacity-5 blur-3xl rounded-full"></div>
           
           <CardHeader className="text-center relative pb-8 pt-10">
             <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
@@ -656,7 +656,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <span className="font-medium">{Math.round(progressPercentage)}% Complete</span>
               </div>
               <Progress value={progressPercentage} className="h-2 bg-secondary">
-                <div className="h-full bg-orange-gradient rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercentage}%` }} />
+                <div className="h-full bg-gradient rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercentage}%` }} />
               </Progress>
             </div>
             
@@ -668,9 +668,9 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     key={step}
                     className={`relative flex items-center justify-center w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-300 ${
                       step < currentStep
-                        ? 'bg-orange-gradient text-white scale-95'
+                        ? 'bg-gradient text-white scale-95'
                         : step === currentStep
-                        ? 'bg-orange-gradient text-white scale-110 shadow-lg'
+                        ? 'bg-gradient text-white scale-110 shadow-lg'
                         : 'bg-secondary text-muted-foreground scale-90'
                     }`}
                   >
@@ -695,7 +695,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   <Button 
                     variant="outline" 
                     onClick={handlePrevStep}
-                    className="hover:border-orange-500 hover:text-orange-gradient transition-all duration-200"
+                    className="hover:border-green-500 hover:text-gradient transition-all duration-200"
                   >
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Previous
@@ -705,7 +705,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Button 
                   variant="outline" 
                   onClick={handleAIAssistance}
-                  className="hover:border-orange-500 hover:bg-orange-500/10 transition-all duration-200"
+                  className="hover:border-green-500 hover:bg-green-500/10 transition-all duration-200"
                 >
                   <Bot className="h-4 w-4 mr-2" />
                   AI Help
@@ -716,7 +716,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 {currentStep < totalSteps ? (
                   <Button 
                     onClick={handleNextStep} 
-                    className="bg-orange-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px]"
+                    className="bg-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px]"
                   >
                     Next Step
                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -725,7 +725,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   <Button 
                     onClick={() => handleSubmit(onSubmit, onClose)}
                     disabled={isSubmitting}
-                    className="bg-orange-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px] disabled:opacity-50"
+                    className="bg-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px] disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <>
