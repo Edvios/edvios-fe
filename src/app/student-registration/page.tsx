@@ -88,7 +88,9 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   value={formData.email} 
                   onChange={(e) => handleInputChange('email', e.target.value)} 
                   placeholder="your.email@example.com"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 bg-muted/50 cursor-not-allowed"
+                  readOnly
+                  disabled
                 />
               </div>
               
@@ -640,8 +642,6 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-green-500/5 p-4 md:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto">
         <Card className="shadow-2xl border-0 overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient opacity-10 blur-3xl rounded-full"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient opacity-5 blur-3xl rounded-full"></div>
           
           <CardHeader className="text-center relative pb-8 pt-10">
             <CardTitle className="text-3xl md:text-4xl font-bold mb-2">

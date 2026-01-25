@@ -49,9 +49,9 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-none shadow-2xl rounded-3xl">
-                <div className="bg-gradient-to-r from-orange-500 to-orange-600 h-40 w-full relative">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 h-40 w-full relative">
                     <div className="absolute -bottom-12 left-8 flex items-end gap-6">
-                        <div className="w-32 h-32 rounded-3xl bg-white shadow-xl flex items-center justify-center text-orange-600 font-bold text-4xl border-4 border-white">
+                        <div className="w-32 h-32 rounded-3xl bg-white shadow-xl flex items-center justify-center text-green-600 font-bold text-4xl border-4 border-white">
                             {(firstName?.[0] || '') + (lastName?.[0] || '')}
                         </div>
                         <div className="mb-2 pb-2">
@@ -65,7 +65,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         {/* Personal & Contact Details */}
                         <div className="space-y-6">
-                            <h4 className="text-xs font-bold text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <User className="w-4 h-4" /> Personal & Contact
                             </h4>
                             <div className="grid gap-4">
@@ -79,7 +79,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
 
                         {/* Academic Background */}
                         <div className="space-y-6">
-                            <h4 className="text-xs font-bold text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <GraduationCap className="w-4 h-4" /> Academic Background
                             </h4>
                             <div className="grid gap-4">
@@ -94,7 +94,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         {/* Preferences */}
                         <div className="space-y-6">
-                            <h4 className="text-xs font-bold text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Heart className="w-4 h-4" /> Study Preferences
                             </h4>
                             <div className="grid gap-4">
@@ -106,7 +106,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
 
                         {/* Additional Info */}
                         <div className="space-y-6">
-                            <h4 className="text-xs font-bold text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Briefcase className="w-4 h-4" /> Additional Information
                             </h4>
                             <div className="grid gap-4">
@@ -135,7 +135,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
                 </div>
 
                 <DialogFooter className="p-8 border-t bg-gray-50/80 rounded-b-3xl">
-                    <Button variant="outline" onClick={onClose} className="h-12 px-8 rounded-xl border-gray-200 hover:bg-white hover:text-orange-600 transition-all font-semibold">
+                    <Button variant="outline" onClick={onClose} className="h-12 px-8 rounded-xl border-gray-200 hover:bg-white hover:text-green-600 transition-all font-semibold">
                         Close Profile
                     </Button>
                 </DialogFooter>
@@ -145,8 +145,8 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
 };
 
 const DetailItem = ({ icon: Icon, label, value }: { icon: LucideIcon, label: string, value: string }) => (
-    <div className="flex items-start gap-3 p-3 hover:bg-orange-50/50 rounded-2xl transition-colors group">
-        <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400 group-hover:text-orange-500 group-hover:border-orange-200 transition-all">
+    <div className="flex items-start gap-3 p-3 hover:bg-green-50/50 rounded-2xl transition-colors group">
+        <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-200 transition-all">
             <Icon className="w-5 h-5" />
         </div>
         <div>

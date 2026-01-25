@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserTypeToggle } from "@/app/auth/login/components/toggle";
-import { Lock, Mail, Eye, EyeOff, LogIn, UserPlus, Phone } from "lucide-react";
+import { Lock, Mail, LogIn, UserPlus, Phone } from "lucide-react";
 import { useAuth, useLoginForm, useRegisterForm } from "./hooks/use-auth";
 import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
 
@@ -100,7 +100,6 @@ export default function LoginPage() {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors"
                         disabled={isLoading}
                       >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
@@ -205,7 +204,6 @@ export default function LoginPage() {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors"
                         disabled={isLoading}
                       >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
@@ -245,7 +243,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>© 2024 Edvios - Educational Visionaries. All rights reserved.</p>
+          <p>© 2025 Edvios. All rights reserved.</p>
         </div>
       </div>
     </div>
