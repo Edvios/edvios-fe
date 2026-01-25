@@ -14,7 +14,8 @@ import {
   User, 
   Calendar,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  MessageCircle
 } from "lucide-react";
 
 interface UserData {
@@ -82,10 +83,16 @@ export default function StudentDashboard() {
                 <p className="text-sm text-gray-500">Welcome back, {userData.name}</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="default" size="sm" onClick={() => router.push('/chat')}>
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Chat with Agent
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>
