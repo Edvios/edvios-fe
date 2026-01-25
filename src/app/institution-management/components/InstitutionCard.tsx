@@ -50,7 +50,7 @@ export const InstitutionCard = React.memo(function InstitutionCard({ institution
           <div className="mb-3 md:mb-4">
             {/* Icon and Badges Row */}
             <div className="flex items-start justify-between mb-2.5 md:mb-3 gap-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-gradient rounded-xl flex items-center justify-center text-white flex-shrink-0">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient rounded-xl flex items-center justify-center text-white flex-shrink-0">
                 {React.createElement(TypeIcon, { className: "w-5 h-5 md:w-6 md:h-6" })}
               </div>
               <div className="flex gap-2 items-start flex-shrink-0">
@@ -125,7 +125,7 @@ export const InstitutionCard = React.memo(function InstitutionCard({ institution
           <div className="mt-auto">
             <div className="grid grid-cols-3 gap-3 md:gap-4 text-center pt-3 md:pt-4 border-t border-gray-200">
               <div>
-                <p className="text-lg md:text-xl lg:text-2xl font-bold text-orange-gradient leading-tight">
+                <p className="text-lg md:text-xl lg:text-2xl font-bold text-gradient leading-tight">
                   #{typeof institution.ranking === 'number' ? institution.ranking : 'N/A'}
                 </p>
                 <p className="text-[10px] md:text-xs text-gray-500 mt-1">Ranking</p>
@@ -153,7 +153,7 @@ export const InstitutionCard = React.memo(function InstitutionCard({ institution
               >
                 View Details
               </Button>
-              <Button className="flex-1 bg-orange-gradient hover:opacity-90 text-xs md:text-sm h-9 md:h-10">
+              <Button className="flex-1 bg-gradient hover:opacity-90 text-xs md:text-sm h-9 md:h-10">
                 Contact
               </Button>
             </div>

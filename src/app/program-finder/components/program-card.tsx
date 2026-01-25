@@ -69,9 +69,9 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({ program, onDetailClick
                     View Details
                 </Button>
                 <Button
-                    className="w-full sm:w-1/2  text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-gradient"
+                    className="w-full sm:w-1/2  text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient"
                     style={{
-                        background: 'bg-orange-gradient',
+                        background: 'bg-gradient',
                     }}
                 >
                     Apply Now

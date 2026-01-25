@@ -54,8 +54,8 @@ const AgentManagementPage = () => {
   // Calculate stats - in a real app these might come from a separate endpoint
   const stats = useMemo(() => {
     return [
-      { label: 'Total Agents', value: total, icon: Users, color: 'from-orange-500 to-orange-600' },
-      { label: 'Pending Review', value: agents.filter(a => a.role === 'PENDING_AGENT').length, icon: Clock, color: 'from-yellow-400 to-yellow-600' },
+      { label: 'Total Agents', value: total, icon: Users, color: 'from-green-500 to-green-600' },
+      { label: 'Pending Review', value: agents.filter(a => a.role === 'PENDING_AGENT').length, icon: Clock, color: 'from-blue-400 to-blue-600' },
     ];
   }, [agents, total]);
 
@@ -98,14 +98,14 @@ const AgentManagementPage = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-              Agent <span className="text-orange-600">Portal Control</span>
+              Agent <span className="text-green-600">Portal Control</span>
             </h1>
             <p className="text-gray-500 mt-2 text-lg">Approve, manage, and monitor educational consultants.</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="px-5 py-2.5 bg-orange-50 rounded-2xl border border-orange-100 flex items-center gap-3 shadow-sm">
-              <ShieldCheck className="w-5 h-5 text-orange-600" />
-              <span className="text-sm font-bold text-orange-700 uppercase tracking-wider">Admin Verified</span>
+            <div className="px-5 py-2.5 bg-green-50 rounded-2xl border border-green-100 flex items-center gap-3 shadow-sm">
+              <ShieldCheck className="w-5 h-5 text-green-600" />
+              <span className="text-sm font-bold text-green-700 uppercase tracking-wider">Admin Verified</span>
             </div>
           </div>
         </div>
@@ -144,15 +144,15 @@ const AgentManagementPage = () => {
                   placeholder="Search by agent name, email or organization..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-14 border-none bg-gray-50/50 rounded-2xl focus-visible:ring-2 focus-visible:ring-orange-500 text-base"
+                  className="pl-12 h-14 border-none bg-gray-50/50 rounded-2xl focus-visible:ring-2 focus-visible:ring-green-500 text-base"
                 />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v as AgentStatus); setCurrentPage(1); }}>
-                  <SelectTrigger className="h-14 w-full sm:w-45 border-none bg-gray-50/50 rounded-2xl font-semibold focus:ring-2 focus:ring-orange-500">
+                  <SelectTrigger className="h-14 w-full sm:w-45 border-none bg-gray-50/50 rounded-2xl font-semibold focus:ring-2 focus:ring-green-500">
                     <div className="flex items-center gap-2">
-                      <Filter className="w-4 h-4 text-orange-500" />
+                      <Filter className="w-4 h-4 text-green-500" />
                       <SelectValue placeholder="Status" />
                     </div>
                   </SelectTrigger>
@@ -165,7 +165,7 @@ const AgentManagementPage = () => {
 
                 <Button
                   variant="outline"
-                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-orange-50 text-orange-600 hover:bg-orange-100 transition-all font-bold"
+                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-green-50 text-green-600 hover:bg-green-100 transition-all font-bold"
                   onClick={resetFilters}
                 >
                   <RotateCcw className="w-5 h-5" /> Reset
@@ -187,7 +187,7 @@ const AgentManagementPage = () => {
         <div className="relative">
           {actionLoading && (
             <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] z-10 flex items-center justify-center rounded-3xl">
-              <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin shadow-lg" />
+              <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin shadow-lg" />
             </div>
           )}
           <AgentsTable

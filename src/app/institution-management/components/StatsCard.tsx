@@ -22,7 +22,7 @@ export const StatsCard = React.memo(function StatsCard({ label, value, icon: Ico
               {value}
             </p>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-orange-gradient flex items-center justify-center text-white opacity-80">
+          <div className="h-10 w-10 rounded-xl bg-gradient flex items-center justify-center text-white opacity-80">
             <Icon size={24} />
           </div>
         </div>

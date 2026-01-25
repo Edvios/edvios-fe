@@ -145,8 +145,7 @@ export const ProgramDetailsDialog: React.FC<ProgramDetailsDialogProps> = ({
                     </Button>
 
                     <Button
-                        className="w-full sm:w-auto text-white px-10"
-                        style={{ background: "linear-gradient(135deg, #e5601b, #f88124)" }}
+                        className="w-full sm:w-auto text-white px-10 bg-gradient"
                     >
                         Apply Now
                     </Button>

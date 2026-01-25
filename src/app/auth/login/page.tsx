@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserTypeToggle } from "@/app/auth/login/components/toggle";
-import { Lock, Mail, Eye, EyeOff, LogIn, UserPlus, Phone } from "lucide-react";
+import { Lock, Mail, LogIn, UserPlus, Phone } from "lucide-react";
 import { useAuth, useLoginForm, useRegisterForm } from "./hooks/use-auth";
 import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
 
@@ -29,7 +29,7 @@ export default function LoginPage() {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50/30 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50/30 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl">
         <Card className="shadow-2xl border-gray-200 overflow-hidden p-0">
           <div className="grid md:grid-cols-2 min-h-[600px]">
@@ -37,49 +37,15 @@ export default function LoginPage() {
             <div 
               className="p-12 flex flex-col justify-center items-start text-white bg-cover bg-center bg-no-repeat relative"
               style={{
-                backgroundImage: 'url(/loginbg.jpg)',
+                backgroundImage: activeTab === AuthTabEnum.LOGIN ? 'url(/loginbg.png)' : 'url(/registerbg.png)',
               }}
             >
-             
-              
-              <div className="space-y-6 relative z-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-full flex items-center justify-center bg-orange-gradient backdrop-blur-sm shadow-lg ring-4 ring-white/20">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 3L1 9l11 6 11-6L12 3z" fill="white" />
-                      <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" fill="white" />
-                      <circle cx="12" cy="9" r="1.5" fill="white" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-4xl text-white font-semibold tracking-wide">Edvios</p>
-                    <p className="text-lg text-white font-semibold tracking-wide">Educational Visionaries</p>
-                  </div>
-                </div>
-                <p className="text-xl text-white/90 font-medium mt-8">
-                  Access your personalized education portal
-                </p>
-                <div className="mt-12 space-y-4 text-white/80">
-                  <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-white mt-2"></div>
-                    <p>Connect with students and educational opportunities</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-white mt-2"></div>
-                    <p>Manage your educational journey seamlessly</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-white mt-2"></div>
-                    <p>Join our community of learners and educators</p>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Right Side - Login/Register Form */}
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <CardHeader className="text-center pb-6 px-0">
-                <CardTitle className="text-2xl text-orange-gradient">Welcome Back</CardTitle>
+                <CardTitle className="text-2xl text-gradient">Welcome Back</CardTitle>
                 <CardDescription className="text-gray-600">
                   Sign in to your account or create a new one
                 </CardDescription>
@@ -131,17 +97,16 @@ export default function LoginPage() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors"
                         disabled={isLoading}
                       >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
 
                   <Button 
                     onClick={onSubmitLogin}
-                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-gradient" 
+                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient" 
                     disabled={isLoading}
                   >
                     <LogIn className="w-4 h-4 mr-2" />
@@ -236,10 +201,9 @@ export default function LoginPage() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-500 transition-colors"
                         disabled={isLoading}
                       >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
@@ -263,7 +227,7 @@ export default function LoginPage() {
 
                   <Button 
                     onClick={onSubmitRegister}
-                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-orange-gradient" 
+                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient" 
                     disabled={isLoading}
                   >
                     <UserPlus className="w-4 h-4 mr-2" />
@@ -279,7 +243,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>© 2024 Edvios - Educational Visionaries. All rights reserved.</p>
+          <p>© 2025 Edvios. All rights reserved.</p>
         </div>
       </div>
     </div>
