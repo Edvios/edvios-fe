@@ -182,19 +182,6 @@ export function AppSidebar() {
     }
   }, [userData?.role]);
 
-  const renderUserIcon = () => {
-    switch (userData?.role) {
-      case "STUDENT":
-        return <GraduationCap className="w-5 h-5 text-white" />;
-      case "AGENT":
-        return <Users className="w-5 h-5 text-white" />;
-      case "ADMIN":
-        return <Shield className="w-5 h-5 text-white" />;
-      default:
-        return <User className="w-5 h-5 text-white" />;
-    }
-  };
-
   return (
     <Sidebar>
       <SidebarContent>
