@@ -16,6 +16,8 @@ import {
   Search,
   MessageCircle,
   HelpingHandIcon,
+  Building2,
+  BookOpen,
 } from "lucide-react";
 
 import {
@@ -47,7 +49,7 @@ const studentItems = [
   },
   {
     title: "Program Finder",
-    url: "/program",
+    url: "/program-finder",
     icon: Search,
   },
   {
@@ -91,12 +93,12 @@ const agentItems = [
   },
   {
     title: "Agency",
-    url: "/dashboard/agent/agency",
+    url: "/program-finder",
     icon: Building,
   },
 ];
 
-// Super Admin menu items
+// Admin menu items
 const adminItems = [
   {
     title: "Dashboard",
@@ -104,24 +106,24 @@ const adminItems = [
     icon: Home,
   },
   {
-    title: "Users",
-    url: "/dashboard/admin/users",
+    title: "Students",
+    url: "/student-management",
     icon: Users,
   },
   {
     title: "Agents",
-    url: "/dashboard/admin/agents",
-    icon: Building,
+    url: "/agent-management",
+    icon: User,
   },
   {
-    title: "Analytics",
-    url: "/dashboard/admin/analytics",
-    icon: BarChart3,
+    title: "Institutions",
+    url: "/institution-management",
+    icon: Building2,
   },
   {
-    title: "System Settings",
-    url: "/dashboard/admin/settings",
-    icon: Settings,
+    title: "Programs",
+    url: "/program-management",
+    icon: BookOpen,
   },
 ];
 
@@ -133,6 +135,7 @@ export function AppSidebar() {
     if (typeof window === "undefined") return;
     try {
       const userSession = sessionStorage.getItem("user-session");
+
       if (userSession) setUserData(JSON.parse(userSession));
     } catch {
       // ignore parse errors

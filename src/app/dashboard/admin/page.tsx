@@ -95,7 +95,7 @@ export default function ADMINDashboard() {
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Super Admin Portal</h1>
+                <h1 className="text-xl font-bold text-gray-900">Admin Portal</h1>
                 <p className="text-sm text-gray-500">System Administrator</p>
               </div>
             </div>

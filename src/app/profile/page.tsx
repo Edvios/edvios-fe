@@ -120,6 +120,7 @@ export default function StudentProfilePage() {
                 if (typeof window !== "undefined") {
                   sessionStorage.removeItem("user-session");
                   sessionStorage.removeItem("auth-token");
+                  cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
                   window.location.href = "/auth/login";
                 }
               }}
