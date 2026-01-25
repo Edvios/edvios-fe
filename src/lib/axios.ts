@@ -29,7 +29,7 @@ axiosInstance.interceptors.request.use(
             sessionStorage.setItem('auth-token', token);
           }
         } catch (e) {
-          // Ignore error, continue without token or let it fail
+          console.error('Error retrieving Supabase session:', e);
         }
       }
 

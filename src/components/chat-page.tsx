@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { RealtimeChat } from '@/components/realtime-chat'
 import { useChatManager } from '@/hooks/use-chat-manager'
 import { Button } from '@/components/ui/button'
