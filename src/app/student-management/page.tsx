@@ -45,7 +45,7 @@ const StudentManagementPage = () => {
   // Calculate stats
   const stats = useMemo(() => {
     return [
-      { label: 'Total Students', value: total, icon: GraduationCap, color: 'from-orange-500 to-orange-600' },
+      { label: 'Total Students', value: total, icon: GraduationCap, color: 'from-green-500 to-green-600' },
     ];
   }, [total]);
 
@@ -92,7 +92,7 @@ const handleDeleteStudent = async (studentId: string) => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-              Student <span className="text-orange-600">Management</span>
+              Student <span className="text-green-600">Management</span>
             </h1>
             <p className="text-gray-500 mt-2 text-lg">Manage and review international student applications and profiles.</p>
           </div>
@@ -109,7 +109,7 @@ const handleDeleteStudent = async (studentId: string) => {
                 <CardContent className="p-0">
                   <div className={`bg-gradient-to-br ${stat.color} p-6 text-white flex items-center justify-between`}>
                     <div>
-                      <p className="text-orange-100 font-medium mb-1 opacity-90">{stat.label}</p>
+                      <p className="text-green-100 font-medium mb-1 opacity-90">{stat.label}</p>
                       <p className="text-4xl font-bold">
                         {loading ? '...' : stat.value}
                       </p>
@@ -127,17 +127,17 @@ const handleDeleteStudent = async (studentId: string) => {
         {/* Search Bar */}
         <div className="flex flex-col md:flex-row gap-4 items-center">
           <div className="flex-1 relative w-full">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-orange-500" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-green-500" />
             <Input
               placeholder="Search by name, email or ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 border-none shadow-md bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-orange-500 text-lg"
+              className="pl-12 h-14 border-none shadow-md bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-green-500 text-lg"
             />
           </div>
           <Button
             variant="outline"
-            className="h-14 px-8 gap-2 rounded-2xl border-none shadow-md bg-white hover:bg-orange-50 hover:text-orange-600 transition-all font-semibold"
+            className="h-14 px-8 gap-2 rounded-2xl border-none shadow-md bg-white hover:bg-green-50 hover:text-green-600 transition-all font-semibold"
             onClick={resetFilters}
           >
             <RotateCcw className="w-5 h-5" /> Reset
@@ -156,7 +156,7 @@ const handleDeleteStudent = async (studentId: string) => {
         <div className="relative">
           {actionLoading && (
             <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-2xl">
-              <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           <StudentsTable

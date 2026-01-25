@@ -75,6 +75,27 @@ export const useRegistration = (): UseRegistrationReturn => {
   const totalSteps = 5;
   const progressPercentage = (currentStep / totalSteps) * 100;
 
+  // Autofill user data from session storage on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userSession = sessionStorage.getItem('user-session');
+      if (userSession) {
+        try {
+          const userData = JSON.parse(userSession);
+          setFormData(prev => ({
+            ...prev,
+            firstName: userData.firstName || prev.firstName,
+            lastName: userData.lastName || prev.lastName,
+            email: userData.email || prev.email,
+            phone: userData.phone || prev.phone,
+          }));
+        } catch (error) {
+          console.error('Failed to parse user session data:', error);
+        }
+      }
+    }
+  }, []);
+
   const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,

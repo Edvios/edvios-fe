@@ -377,7 +377,7 @@ export default function ProgramManagementPage() {
                     {program.tags.map((tag, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full"
+                        className="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full"
                       >
                         {tag}
                       </span>

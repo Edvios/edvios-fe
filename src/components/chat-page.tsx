@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { RealtimeChat } from '@/components/realtime-chat'
 import { useChatManager } from '@/hooks/use-chat-manager'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { MessageSquare, ArrowLeft, Loader2, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
