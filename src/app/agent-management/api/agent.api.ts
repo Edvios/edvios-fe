@@ -7,7 +7,7 @@ export const fetchAgents = async (filters: AgentFilters): Promise<AgentResponse>
     const params: Record<string, string | number> = {};
 
     if (filters.search) params.search = filters.search;
-    if (filters.filter && filters.filter !== 'ALL') params.filter = filters.filter;
+    if (filters.filter) params.filter = filters.filter;
     if (filters.page) params.page = filters.page;
     if (filters.pageSize) params.size = filters.pageSize;
 

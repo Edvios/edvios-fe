@@ -25,12 +25,14 @@ interface AgentProfileDialogProps {
     agent: Agent | null;
     open: boolean;
     onClose: () => void;
+    onApprove?: (agentId: string) => void;
 }
 
 export const AgentProfileDialog: React.FC<AgentProfileDialogProps> = ({
     agent,
     open,
     onClose,
+    onApprove,
 }) => {
     if (!agent) return null;
 
@@ -124,10 +126,22 @@ export const AgentProfileDialog: React.FC<AgentProfileDialogProps> = ({
                     </div>
                 </div>
 
-                <DialogFooter className="p-8 border-t bg-gray-50/50 rounded-b-[2rem]">
+                <DialogFooter className="p-8 border-t bg-gray-50/50 rounded-b-[2rem] flex flex-row items-center justify-between gap-4 sm:justify-between">
                     <Button variant="outline" onClick={onClose} className="h-12 px-8 rounded-2xl border-gray-200 hover:bg-white hover:text-orange-600 transition-all font-bold">
                         Close Profile
                     </Button>
+
+                    {agent.role === 'PENDING_AGENT' && onApprove && (
+                        <Button
+                            onClick={() => {
+                                onApprove(agent.id);
+                                onClose();
+                            }}
+                            className="h-12 px-8 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white transition-all font-bold shadow-lg shadow-orange-200"
+                        >
+                            Approve Agent
+                        </Button>
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>
