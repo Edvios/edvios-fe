@@ -109,82 +109,82 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      {/* Header */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Student Portal</h1>
-                <p className="text-sm text-gray-500">Welcome back, {userData.firstName}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button className="bg-gradient text-white" size="sm" onClick={() => router.push('/chat')}>
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Chat with Agent
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
+    // <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    //   {/* Header */}
+    //   <header className="bg-white border-b shadow-sm sticky top-0 z-10">
+    //     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    //       <div className="flex justify-between items-center">
+    //         <div className="flex items-center space-x-3">
+    //           <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+    //             <GraduationCap className="w-6 h-6 text-white" />
+    //           </div>
+    //           <div>
+    //             <h1 className="text-xl font-bold text-gray-900">Student Portal</h1>
+    //             <p className="text-sm text-gray-500">Welcome back, {userData.firstName}</p>
+    //           </div>
+    //         </div>
+    //         <div className="flex items-center gap-2">
+    //           <Button className="bg-gradient text-white" size="sm" onClick={() => router.push('/chat')}>
+    //             <MessageCircle className="w-4 h-4 mr-2" />
+    //             Chat with Agent
+    //           </Button>
+    //           <Button variant="outline" size="sm" onClick={handleLogout}>
+    //             <LogOut className="w-4 h-4 mr-2" />
+    //             Logout
+    //           </Button>
+    //         </div>
+    //       </div>
+    //     </div>
 
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" className="gap-2" aria-label="Refresh dashboard" onClick={() => refresh()}>
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </Button>
+    //     <div className="flex items-center gap-3">
+    //       <Button variant="outline" size="sm" className="gap-2" aria-label="Refresh dashboard" onClick={() => refresh()}>
+    //         <RefreshCw className="h-4 w-4" />
+    //         Refresh
+    //       </Button>
 
-          <Button variant="outline" size="sm" className="gap-2" aria-label="Export data" onClick={() => console.log('export data')}>
-            <Download className="h-4 w-4" />
-            Export
-          </Button>
+    //       <Button variant="outline" size="sm" className="gap-2" aria-label="Export data" onClick={() => console.log('export data')}>
+    //         <Download className="h-4 w-4" />
+    //         Export
+    //       </Button>
 
-          <Button variant="outline" size="sm" className="gap-2" aria-label="Logout" onClick={() => handleLogout()}>
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
+    //       <Button variant="outline" size="sm" className="gap-2" aria-label="Logout" onClick={() => handleLogout()}>
+    //         <LogOut className="h-4 w-4" />
+    //         Logout
+    //       </Button>
 
-          <Button size="sm" className="gap-2 px-3 py-1 bg-gradient text-white hover:from-green-600 hover:to-green-500" onClick={() => router.push('/dashboard/student/add')}>
-            <Plus className="h-4 w-4" />
-            Add Lead
-          </Button>
-        </div>
+    //       <Button size="sm" className="gap-2 px-3 py-1 bg-gradient text-white hover:from-green-600 hover:to-green-500" onClick={() => router.push('/dashboard/student/add')}>
+    //         <Plus className="h-4 w-4" />
+    //         Add Lead
+    //       </Button>
+    //     </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
-          {statCards.map((stat) => {
-            const Icon = statIcons[stat.key] ?? FileText;
-            const accent = statAccentMap[stat.accent as string] ?? "text-slate-700 bg-slate-100";      
-            const trendColor = stat.direction === "up" ? "text-emerald-600" : "text-rose-600";
+    //     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+    //       {statCards.map((stat) => {
+    //         const Icon = statIcons[stat.key] ?? FileText;
+    //         const accent = statAccentMap[stat.accent as string] ?? "text-slate-700 bg-slate-100";      
+    //         const trendColor = stat.direction === "up" ? "text-emerald-600" : "text-rose-600";
 
-            return (
-              <Card key={stat.key} className="border border-slate-100 shadow-sm">
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-slate-500">{stat.label}</p>
-                    <span className={`inline-flex items-center justify-center rounded-full p-2 text-sm font-medium ${accent}`}>
-                      <Icon className="h-4 w-4" />
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="text-3xl font-semibold text-slate-900"></div>
-                  <div className="text-xs text-slate-500 flex items-center gap-2">
-                    <span className={trendColor}>{stat.change}</span>
-                    <span>{stat.changeLabel}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+    //         return (
+    //           <Card key={stat.key} className="border border-slate-100 shadow-sm">
+    //             <CardHeader className="pb-2">
+    //               <div className="flex items-center justify-between">
+    //                 <p className="text-sm text-slate-500">{stat.label}</p>
+    //                 <span className={`inline-flex items-center justify-center rounded-full p-2 text-sm font-medium ${accent}`}>
+    //                   <Icon className="h-4 w-4" />
+    //                 </span>
+    //               </div>
+    //             </CardHeader>
+    //             <CardContent className="space-y-3">
+    //               <div className="text-3xl font-semibold text-slate-900"></div>
+    //               <div className="text-xs text-slate-500 flex items-center gap-2">
+    //                 <span className={trendColor}>{stat.change}</span>
+    //                 <span>{stat.changeLabel}</span>
+    //               </div>
+    //             </CardContent>
+    //           </Card>
+    //         );
+    //       })}
+    //     </div>
 
         <Tabs value={tabValue} onValueChange={(val) => setTabValue(val as StudentTab)} className="space-y-4">
           <TabsList
@@ -318,10 +318,10 @@ export default function StudentDashboard() {
                         <Calendar className="h-4 w-4 text-purple-600" />
                         {interview.date}
                       </span>
-                      <span className="text-slate-400">{interview.timezone}</span>
+                      {/* <span className="text-slate-400">{interview.timezone}</span>
                       <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(interview.status)}`}>
                         {interview.status}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 ))}
@@ -378,8 +378,8 @@ export default function StudentDashboard() {
             </Card>
           </TabsContent>
         </Tabs>
-      </header>
-    </div>
+      // </header>
+    // </div>
   );
 }
 //<CountUp target={stat.value} trigger={refreshKey} />
