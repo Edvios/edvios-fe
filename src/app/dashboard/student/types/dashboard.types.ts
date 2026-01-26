@@ -45,3 +45,13 @@ export interface EnrolledProgram {
   term?: string;
   startDate?: string;
 }
+
+export interface UserData {
+  email: string;
+  userType: string;
+  firstName: string;
+  lastName: string;
+  id: string;
+  phone?: string;
+  role: string;
+}

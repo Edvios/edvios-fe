@@ -1,11 +1,15 @@
+
 "use client";
 
 import React, { useState } from 'react';
 import { ProgramFiltersSidebar } from '@/app/program-finder/components/program-filters';
 import { ProgramCard } from '@/app/program-finder/components/program-card';
 import { ProgramDetailsDialog } from '@/app/program-finder/components/program-details-dialog';
+import { ProgramApplyDialog } from '@/app/program-finder/components/program-apply-dialog';
 import { ProgramPagination } from '@/app/program-finder/components/program-pagination';
 import { Program } from '@/app/program-finder/types/program';
+import { ProgramApplicationRequest } from '@/app/program-finder/dtos/program.dto';
+import { ProgramService } from '@/app/program-finder/services/program.service';
 import { usePrograms } from '@/app/program-finder/hooks/use-programs';
 import { SearchX, Loader2 } from 'lucide-react';
 
@@ -23,9 +27,22 @@ export default function ProgramFinderPage() {
     const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
+    const [isApplyOpen, setIsApplyOpen] = useState(false);
+    const [programToApply, setProgramToApply] = useState<Program | null>(null);
+
     const handleViewDetails = (program: Program) => {
         setSelectedProgram(program);
         setIsDetailsOpen(true);
+    };
+
+    const handleApplyClick = (program: Program) => {
+        setIsDetailsOpen(false);
+        setProgramToApply(program);
+        setIsApplyOpen(true);
+    };
+
+    const handleApplySubmit = async (data: ProgramApplicationRequest) => {
+        await ProgramService.applyToProgram(data);
     };
 
     // if (error) {
@@ -83,6 +100,7 @@ export default function ProgramFinderPage() {
                                         key={program.id}
                                         program={program}
                                         onDetailClick={handleViewDetails}
+                                        onApplyClick={handleApplyClick}
                                     />
                                 ))}
                             </div>
@@ -115,6 +133,14 @@ export default function ProgramFinderPage() {
                 program={selectedProgram}
                 open={isDetailsOpen}
                 onOpenChange={setIsDetailsOpen}
+                onApplyClick={handleApplyClick}
+            />
+
+            <ProgramApplyDialog
+                program={programToApply}
+                open={isApplyOpen}
+                onOpenChange={setIsApplyOpen}
+                onSubmit={handleApplySubmit}
             />
         </div>
     );

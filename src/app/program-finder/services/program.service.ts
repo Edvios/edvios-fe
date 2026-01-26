@@ -10,6 +10,8 @@ import {
   BackendFilteredProgramResponse,
   backendFilteredProgramResponseSchema,
   BackendProgram,
+  programApplicationRequestSchema,
+  ProgramApplicationRequest,
 } from "../dtos/program.dto";
 
 export class ProgramService {
@@ -84,7 +86,7 @@ export class ProgramService {
 
       // Remove empty/null/undefined values
       const cleanedFilterBody = Object.fromEntries(
-        Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
+        Object.entries(filterBody).filter(([value]) => value !== "" && value !== null && value !== undefined)
       );
 
       console.log('=== FILTER REQUEST ===');
@@ -130,6 +132,23 @@ export class ProgramService {
       throw new Error("Failed to fetch filtered programs");
     }
   }
+
+  // ==================== APPLY TO PROGRAM ====================
+  static async applyToProgram(data: ProgramApplicationRequest): Promise<{ success: boolean; message: string }> {
+    try {
+      console.log("Submitting application:", data);
+
+      // const response = await axiosInstance.post("/pai/applications", data);
+      // return response.data;
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      return { success: true, message: "Application submitted successfully" };
+    } catch (error) {
+      console.error("Failed to submit application:", error);
+      throw new Error("Failed to submit application. Please try again later.");
+    }
+  }
 }
 
 // ==================== HELPER: MAP BACKEND → FRONTEND ====================
@@ -157,3 +176,5 @@ function mapBackendProgramToFrontend(program: BackendProgram) {
     popularityRank: program.popularityRank ?? undefined,
   };
 }
+
+

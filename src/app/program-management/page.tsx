@@ -560,12 +560,15 @@ export default function ProgramManagementPage() {
                 </select>
               </div>
 
+
               <div className="p-4 bg-white rounded-lg border">
                 <h3 className="text-sm font-medium mb-3">Country</h3>
                 <select value={country ?? ''} onChange={e => setCountry(e.target.value || undefined)} className="w-full px-3 py-2 border rounded-md">
                   <option value="">All Countries</option>
                   {Array.from(new Set(institutionsList.map(i => i.country).filter(Boolean))).map(c => (<option key={c} value={c}>{c}</option>))}
                 </select>
+
+          
               </div>
 
               <div className="p-4 bg-white rounded-lg border">
