@@ -37,7 +37,7 @@ export function OverviewTab({
           <div className="space-y-4">
             {topInstitutions.map(inst => (
               <div key={inst.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                <div className="w-10 h-10 bg-orange-gradient rounded-lg flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 bg-gradient rounded-lg flex items-center justify-center text-white font-bold">
                   #{inst.ranking?.toString() || 'N/A'}
                 </div>
                 <div className="flex-1">
@@ -45,7 +45,7 @@ export function OverviewTab({
                   <p className="text-sm text-gray-500">{inst.city}, {inst.country}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-orange-600">{Array.isArray(inst.programs) ? inst.programs.length : inst.programs ?? 0} programs</p>
+                  <p className="text-sm font-medium text-green-600">{Array.isArray(inst.programs) ? inst.programs.length : inst.programs ?? 0} programs</p>
                   <Badge className={`mt-1 border-0 ${getPartnershipClasses(inst.partnership)}`}>
                     {inst.partnership.charAt(0).toUpperCase() + inst.partnership.slice(1)}
                   </Badge>

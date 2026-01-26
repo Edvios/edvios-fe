@@ -85,13 +85,13 @@ export default function ADMINDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-green-50">
       {/* Header */}
       <header className="bg-white border-b shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient rounded-full flex items-center justify-center">
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -169,7 +169,7 @@ export default function ADMINDashboard() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium text-gray-600">Revenue</CardTitle>
-                <DollarSign className="w-5 h-5 text-orange-500" />
+                <DollarSign className="w-5 h-5 text-green-500" />
               </div>
             </CardHeader>
             <CardContent>
@@ -226,7 +226,7 @@ export default function ADMINDashboard() {
                   {[
                     { action: "New AGENT registered", user: "Global Education Ltd.", time: "2 min ago", icon: Building, color: "text-green-600" },
                     { action: "Bulk application import", user: "System", time: "15 min ago", icon: Database, color: "text-blue-600" },
-                    { action: "Security alert resolved", user: "Admin", time: "1 hour ago", icon: AlertTriangle, color: "text-orange-600" },
+                    { action: "Security alert resolved", user: "Admin", time: "1 hour ago", icon: AlertTriangle, color: "text-green-600" },
                     { action: "Payment processed", user: "Stripe Gateway", time: "2 hours ago", icon: DollarSign, color: "text-purple-600" },
                   ].map((activity, idx) => (
                     <div key={idx} className="flex items-start space-x-3 p-3 border-l-2 border-gray-200 hover:border-primary hover:bg-gray-50 transition-all">
@@ -298,7 +298,7 @@ export default function ADMINDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-red-50 to-orange-50 border-red-200">
+            <Card className="bg-gradient-to-br from-red-50 to-green-50 border-red-200">
               <CardHeader>
                 <CardTitle className="text-red-900 flex items-center">
                   <AlertTriangle className="w-5 h-5 mr-2" />
@@ -311,9 +311,9 @@ export default function ADMINDashboard() {
                     <p className="text-sm font-medium text-red-900">2 Pending Reviews</p>
                     <p className="text-xs text-red-600">Require ADMIN approval</p>
                   </div>
-                  <div className="p-2 bg-white rounded border border-orange-200">
-                    <p className="text-sm font-medium text-orange-900">Storage at 78%</p>
-                    <p className="text-xs text-orange-600">Consider upgrading</p>
+                  <div className="p-2 bg-white rounded border border-green-200">
+                    <p className="text-sm font-medium text-green-900">Storage at 78%</p>
+                    <p className="text-xs text-green-600">Consider upgrading</p>
                   </div>
                 </div>
               </CardContent>

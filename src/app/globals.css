@@ -20,10 +20,10 @@
   --destructive-foreground: 255 255 255;
   /* --border: oklch(0.922 0 0); */
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: #99c12a;
   --radius: 0.625rem;
-  --orange-gradient-start: #e26526;
-  --orange-gradient-end: #f88124;
+  --gradient-start: #83a81f;
+  --gradient-end: #99c12a;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -81,14 +81,14 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Orange gradient utilities */
-.bg-orange-gradient {
-  background: linear-gradient(135deg, var(--orange-gradient-start), var(--orange-gradient-end));
+/* green gradient utilities */
+.bg-gradient {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   opacity: 0.8;
 }
 
-.text-orange-gradient {
-  background: linear-gradient(135deg, var(--orange-gradient-start), var(--orange-gradient-end));
+.text-gradient {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -98,7 +98,7 @@ body {
 h1, h2, h3, h4, h5, h6,
 .headline,
 [class*="CardTitle"] {
-  background: linear-gradient(135deg, var(--orange-gradient-start), var(--orange-gradient-end));
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

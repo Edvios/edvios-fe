@@ -57,12 +57,12 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
             header: 'Agent',
             Cell: ({ row }: { row: Agent }) => (
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-2 border-white">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-2 border-white">
                         {(row.firstName?.[0] || '') + (row.lastName?.[0] || '')}
                     </div>
                     <div>
                         <div className="font-bold text-gray-900 text-base">{row.firstName} {row.lastName}</div>
-                        <div className="flex items-center gap-2 text-xs text-orange-600 font-mono">
+                        <div className="flex items-center gap-2 text-xs text-green-600 font-mono">
                             <Clock className="w-3 h-3" />
                             Joined {new Date(row.createdAt).toLocaleDateString()}
                         </div>
@@ -75,12 +75,12 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
             Cell: ({ row }: { row: Agent }) => (
                 <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Mail className="w-4 h-4 text-orange-400" />
+                        <Mail className="w-4 h-4 text-green-400" />
                         {row.email}
                     </div>
                     {row.organization && (
                         <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
-                            <Building2 className="w-4 h-4 text-orange-400" />
+                            <Building2 className="w-4 h-4 text-green-400" />
                             {row.organization}
                         </div>
                     )}

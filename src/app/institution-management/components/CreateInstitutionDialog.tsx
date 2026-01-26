@@ -270,7 +270,7 @@ export function CreateInstitutionDialog({
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b pb-4">
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-orange-500" />
+            <Building2 className="w-6 h-6 text-green-500" />
             {isEditMode ? 'Edit Institution' : 'Add New Institution'}
           </DialogTitle>
           <DialogDescription className="text-base">
@@ -565,7 +565,7 @@ export function CreateInstitutionDialog({
           {/* Specialties & Accreditations Section */}
       
             {/* Specialties */}
-            <div className="space-y-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
+            <div className="space-y-4 p-4 bg-green-50 rounded-lg border border-green-200">
               <h3 className="text-base font-semibold text-gray-900">Academic Specialties</h3>
 
               <div className="flex gap-2">
@@ -586,7 +586,7 @@ export function CreateInstitutionDialog({
                   type="button"
                   onClick={addSpecialty}
                   disabled={isLoading}
-                  className="bg-orange-gradient hover:bg-orange-600 text-white px-6"
+                  className="bg-gradient hover:bg-green-600 text-white px-6"
                 >
                   Add
                 </Button>
@@ -597,13 +597,13 @@ export function CreateInstitutionDialog({
                   {specialties.map(specialty => (
                     <Badge
                       key={specialty}
-                      className="bg-orange-100 text-orange-800 border border-orange-300 pr-1 text-xs"
+                      className="bg-green-100 text-green-800 border border-green-300 pr-1 text-xs"
                     >
                       {specialty}
                       <button
                         type="button"
                         onClick={() => removeSpecialty(specialty)}
-                        className="ml-1.5 hover:bg-orange-200 rounded-full p-0.5"
+                        className="ml-1.5 hover:bg-green-200 rounded-full p-0.5"
                         disabled={isLoading}
                       >
                         <X size={12} />
@@ -618,7 +618,7 @@ export function CreateInstitutionDialog({
             </div>
 
             {/* Accreditations */}
-            <div className="space-y-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
+            <div className="space-y-4 p-4 bg-green-50 rounded-lg border border-green-200">
               <h3 className="text-base font-semibold text-gray-900">Accreditations</h3>
 
               <div className="flex gap-2">
@@ -639,7 +639,7 @@ export function CreateInstitutionDialog({
                   type="button"
                   onClick={addAccreditation}
                   disabled={isLoading}
-                  className="bg-orange-gradient hover:bg-orange-600 text-white px-6"
+                  className="bg-gradient hover:bg-green-600 text-white px-6"
                 >
                   Add
                 </Button>
@@ -650,7 +650,7 @@ export function CreateInstitutionDialog({
                   {accreditations.map(accreditation => (
                     <Badge
                       key={accreditation}
-                      className="bg-orange-100 text-orange-800 border border-orange-300 pr-1 text-xs"
+                      className="bg-green-100 text-green-800 border border-green-300 pr-1 text-xs"
                     >
                       {accreditation}
                       <button
@@ -685,7 +685,7 @@ export function CreateInstitutionDialog({
             <Button
               type="submit"
               disabled={isLoading}
-              className="flex-1 h-11 bg-orange-gradient hover:opacity-90 text-base font-medium"
+              className="flex-1 h-11 bg-gradient hover:opacity-90 text-base font-medium"
             >
               {isLoading 
                 ? (isEditMode ? 'Saving Changes...' : 'Creating Institute...') 
@@ -713,7 +713,7 @@ export function CreateInstitutionDialog({
           <AlertDialogAction
             onClick={submitForm}
             disabled={isLoading}
-            className="bg-orange-gradient hover:opacity-90"
+            className="bg-gradient hover:opacity-90"
           >
             {isLoading ? 'Saving...' : 'Confirm & Save'}
           </AlertDialogAction>

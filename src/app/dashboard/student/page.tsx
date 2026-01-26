@@ -124,7 +124,7 @@ export default function StudentDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="default" size="sm" onClick={() => router.push('/chat')}>
+              <Button className="bg-gradient text-white" size="sm" onClick={() => router.push('/chat')}>
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Chat with Agent
               </Button>
@@ -152,7 +152,7 @@ export default function StudentDashboard() {
             Logout
           </Button>
 
-          <Button size="sm" className="gap-2 px-3 py-1 bg-orange-gradient text-white hover:from-orange-600 hover:to-orange-500" onClick={() => router.push('/dashboard/student/add')}>
+          <Button size="sm" className="gap-2 px-3 py-1 bg-gradient text-white hover:from-green-600 hover:to-green-500" onClick={() => router.push('/dashboard/student/add')}>
             <Plus className="h-4 w-4" />
             Add Lead
           </Button>
@@ -192,7 +192,7 @@ export default function StudentDashboard() {
             style={{ gridTemplateColumns: `repeat(${tabOrder.length}, 1fr)` }}
           >
             <div
-              className="absolute top-1 bottom-1 rounded-4xl transition-all duration-300 ease-in-out bg-orange-gradient"
+              className="absolute top-1 bottom-1 rounded-4xl transition-all duration-300 ease-in-out bg-gradient"
               style={{
                 width: `calc(${100 / tabOrder.length}% - 8px)`,
                 left: `calc(${activeTabIndex * (100 / tabOrder.length)}% + 4px)`,

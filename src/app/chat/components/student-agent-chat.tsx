@@ -11,7 +11,6 @@ import { ChatUser, ChatMessageData } from "../types/chat.types";
 import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
 import { useFileUpload } from "../hooks/use-file-upload";
 import { useRef } from "react";
-import Image from "next/image";
 import {
   startChat,
   getChatMessages,

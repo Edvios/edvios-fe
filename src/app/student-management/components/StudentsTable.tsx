@@ -38,7 +38,7 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
             header: 'Student',
             Cell: ({ row }: { row: Student }) => (
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold border border-orange-200 shadow-sm">
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-semibold border border-green-200 shadow-sm">
                         {(row.firstName?.[0] || '') + (row.lastName?.[0] || '')}
                     </div>
                     <div>
@@ -67,7 +67,7 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
             header: 'Location',
             Cell: ({ row }: { row: Student }) => (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <MapPin className="w-3.5 h-3.5 text-orange-400" />
+                    <MapPin className="w-3.5 h-3.5 text-green-400" />
                     {row.currentCountry || 'N/A'}
                 </div>
             )
