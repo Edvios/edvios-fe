@@ -86,7 +86,7 @@ export class ProgramService {
 
       // Remove empty/null/undefined values
       const cleanedFilterBody = Object.fromEntries(
-        Object.entries(filterBody).filter(([value]) => value !== "" && value !== null && value !== undefined)
+        Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
       );
 
       console.log('=== FILTER REQUEST ===');
@@ -118,7 +118,7 @@ export class ProgramService {
         programs: backendData.data.map(mapBackendProgramToFrontend),
         pagination: {
           page: backendData.page,
-          size: backendData.data.length, // Use actual number of programs returned
+          size: backendData.size ?? backendData.data.length,
           total: backendData.total,
         },
       };
@@ -138,8 +138,8 @@ export class ProgramService {
     try {
       console.log("Submitting application:", data);
 
-      // const response = await axiosInstance.post("/pai/applications", data);
-      // return response.data;
+      const response = await axiosInstance.post("/pai/applications", data);
+      return response.data;
 
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
