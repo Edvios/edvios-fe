@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, ShieldCheck, Users, Clock, RotateCcw, XCircle, Filter } from 'lucide-react';
 import { useAgents } from './hooks/use-agents';
 import { Agent, AgentStatus } from './types/agent.types';
-import { approveAgent, deleteAgent} from './api/agent.api';
+import { approveAgent, deleteAgent } from './api/agent.api';
 import { AgentsTable } from './components/AgentsTable';
 import { AgentProfileDialog } from './components/AgentProfileDialog';
 import { Input } from '@/components/ui/input';
@@ -72,10 +72,10 @@ const AgentManagementPage = () => {
     }
   };
 
-  const handleDelete = async (agentId: string) => {
+  const handleDelete = async (userId: string) => {
     try {
       setActionLoading(true);
-      await deleteAgent(agentId);
+      await deleteAgent(userId);
       AppToast.success('Agent deleted successfully');
       refetch();
     } catch {
@@ -208,6 +208,7 @@ const AgentManagementPage = () => {
           agent={selectedAgent}
           open={profileDialogOpen}
           onClose={() => { setProfileDialogOpen(false); setSelectedAgent(null); }}
+          onApprove={handleApprove}
         />
       </div>
     </div>

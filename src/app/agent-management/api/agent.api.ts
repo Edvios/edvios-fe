@@ -7,7 +7,7 @@ export const fetchAgents = async (filters: AgentFilters): Promise<AgentResponse>
     const params: Record<string, string | number> = {};
 
     if (filters.search) params.search = filters.search;
-    if (filters.filter && filters.filter !== 'ALL') params.filter = filters.filter;
+    if (filters.filter) params.filter = filters.filter;
     if (filters.page) params.page = filters.page;
     if (filters.pageSize) params.size = filters.pageSize;
 
@@ -41,11 +41,11 @@ export const approveAgent = async (agentId: string): Promise<void> => {
 };
 
 // Reject/Delete an agent
-export const deleteAgent = async (agentId: string): Promise<void> => {
+export const deleteAgent = async (userId: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/auth/delete-user/${agentId}`);
+    await axiosInstance.delete(`/auth/delete-user/${userId}`);
   } catch (error) {
-    console.error(`Error deleting agent ${agentId}:`, error);
+    console.error(`Error deleting agent ${userId}:`, error);
     throw error;
   }
 };

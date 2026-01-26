@@ -8,9 +8,10 @@ import { Program } from '@/app/program-finder/types/program';
 interface ProgramCardProps {
     program: Program;
     onDetailClick: (program: Program) => void;
+    onApplyClick: (program: Program) => void;
 }
 
-export const ProgramCard: React.FC<ProgramCardProps> = ({ program, onDetailClick }) => {
+export const ProgramCard: React.FC<ProgramCardProps> = ({ program, onDetailClick, onApplyClick }) => {
     return (
         <Card className="hover:shadow-xl transition-shadow duration-200 h-full flex flex-col">
             <CardHeader className="pb-3">
@@ -80,3 +81,4 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({ program, onDetailClick
         </Card>
     );
 };
+
