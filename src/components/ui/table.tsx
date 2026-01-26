@@ -45,7 +45,7 @@ export function Table<T extends { id: string }>({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto rounded-lg border">
+      <div className="overflow-x-auto ">
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr>
@@ -64,7 +64,7 @@ export function Table<T extends { id: string }>({
             {data.map((row) => (
               <tr
                 key={row.id}
-                className="border-t hover:bg-muted/50 transition"
+                className=" hover:bg-muted/50 transition"
               >
                 {columns.map((col, index) => (
                   <td key={index} className="px-4 py-3">
@@ -81,13 +81,13 @@ export function Table<T extends { id: string }>({
 
       {/* Pagination */}
       {pagination && (
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center justify-between p-2 mb-2">
           <span className="text-sm text-muted-foreground">
             Page {pagination.currentPage} of{" "}
             {Math.ceil(pagination.totalItems / pagination.pageSize)}
           </span>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 p-2">
             <Button
               variant="outline"
               size="sm"

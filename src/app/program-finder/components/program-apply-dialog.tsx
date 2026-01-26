@@ -7,11 +7,9 @@ import {
     DialogHeader,
     DialogTitle,
     DialogDescription,
-    DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+  import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
     Select,
@@ -86,7 +84,7 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                         Application Sent!
                     </DialogTitle>
                     <DialogDescription className="text-center text-gray-600">
-                        Your application for <strong>{program.title}</strong> has been successfully submitted. We'll get back to you soon.
+                        Your application for <strong>{program.title}</strong> has been successfully submitted. 
                     </DialogDescription>
                 </DialogContent>
             </Dialog>
