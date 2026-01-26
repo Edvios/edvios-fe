@@ -32,10 +32,15 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50/30 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl">
         <Card className="shadow-2xl border-gray-200 overflow-hidden p-0">
-          <div className="grid md:grid-cols-2 min-h-[600px]">
+          {/* Mobile Logo */}
+          <div className="md:hidden flex justify-center pt-4">
+            <img src="/logo.png" alt="Edvios Logo" className="h-30 w-auto" />
+          </div>
+
+          <div className="grid md:grid-cols-2 md:min-h-[600px]">
             {/* Left Side - Branding */}
             <div 
-              className="p-12 flex flex-col justify-center items-start text-white bg-cover bg-center bg-no-repeat relative"
+              className="hidden md:flex  flex-col justify-center items-start text-white bg-cover bg-center bg-no-repeat relative"
               style={{
                 backgroundImage: activeTab === AuthTabEnum.LOGIN ? 'url(/loginbg.png)' : 'url(/registerbg.png)',
               }}
@@ -43,8 +48,8 @@ export default function LoginPage() {
             </div>
 
             {/* Right Side - Login/Register Form */}
-            <div className="p-8 md:p-12 flex flex-col justify-center">
-              <CardHeader className="text-center pb-6 px-0">
+            <div className="p-4 md:p-12 flex flex-col md:justify-center">
+              <CardHeader className="text-center pb-4 px-0 pt-0 md:pt-4 md:pb-0">
                 <CardTitle className="text-2xl text-gradient">Welcome Back</CardTitle>
                 <CardDescription className="text-gray-600">
                   Sign in to your account or create a new one
@@ -243,7 +248,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>© 2025 Edvios. All rights reserved.</p>
+          <p>© 2026 Edvios. All rights reserved.</p>
         </div>
       </div>
     </div>
