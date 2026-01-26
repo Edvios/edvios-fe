@@ -49,35 +49,35 @@ const StudentManagementPage = () => {
     ];
   }, [total]);
 
-const handleViewProfile = async (student: Student) => {
-  try {
-    setActionLoading(true);
-    const fullStudent = await getStudent(student.id);
-    setSelectedStudent(fullStudent);
-    setProfileDialogOpen(true);
-  } catch {
-    AppToast.error(
-      'Student not registered successfully, Student data may be incomplete.'
-    );
-    setSelectedStudent(student);
-    setProfileDialogOpen(false);
-  } finally {
-    setActionLoading(false);
-  }
-};
+  const handleViewProfile = async (student: Student) => {
+    try {
+      setActionLoading(true);
+      const fullStudent = await getStudent(student.id);
+      setSelectedStudent(fullStudent);
+      setProfileDialogOpen(true);
+    } catch {
+      AppToast.error(
+        'Student not registered successfully, Student data may be incomplete.'
+      );
+      setSelectedStudent(student);
+      setProfileDialogOpen(false);
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
-const handleDeleteStudent = async (studentId: string) => {
-  try {
-    setActionLoading(true);
-    await deleteStudent(studentId);
-    AppToast.success('Student deleted successfully');
-    refetch();
-  } catch {
-    AppToast.error('Failed to delete student');
-  } finally {
-    setActionLoading(false);
-  }
-};
+  const handleDeleteStudent = async (userId: string) => {
+    try {
+      setActionLoading(true);
+      await deleteStudent(userId);
+      AppToast.success('Student deleted successfully');
+      refetch();
+    } catch {
+      AppToast.error('Failed to delete student');
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
 
   const resetFilters = () => {

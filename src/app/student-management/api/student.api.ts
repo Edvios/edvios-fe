@@ -51,11 +51,11 @@ export const updateStudent = async (studentId: string, data: UpdateStudentData):
 // };
 
 // Delete a student
-export const deleteStudent = async (studentId: string): Promise<void> => {
+export const deleteStudent = async (userId: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/students/${studentId}`);
+    await axiosInstance.delete(`/auth/delete-user/${userId}`);
   } catch (error) {
-    console.error(`Error deleting student ${studentId}:`, error);
+    console.error(`Error deleting student ${userId}:`, error);
     throw error;
   }
 };

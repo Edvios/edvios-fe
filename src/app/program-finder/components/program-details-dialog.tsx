@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -28,12 +29,14 @@ interface ProgramDetailsDialogProps {
     program: Program | null;
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    onApplyClick: (program: Program) => void;
 }
 
 export const ProgramDetailsDialog: React.FC<ProgramDetailsDialogProps> = ({
     program,
     open,
     onOpenChange,
+    onApplyClick,
 }) => {
     if (!program) return null;
 
@@ -145,7 +148,8 @@ export const ProgramDetailsDialog: React.FC<ProgramDetailsDialogProps> = ({
                     </Button>
 
                     <Button
-                        className="w-full sm:w-auto text-white px-10 bg-gradient"
+                        className="w-full sm:w-auto text-white px-10 bg-orange-gradient shadow-lg hover:shadow-xl transition-all"
+                        onClick={() => onApplyClick(program)}
                     >
                         Apply Now
                     </Button>
@@ -190,3 +194,6 @@ const Detail = ({
         </span>
     </div>
 );
+
+
+
