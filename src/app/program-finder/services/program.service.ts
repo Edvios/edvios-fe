@@ -138,7 +138,7 @@ export class ProgramService {
     try {
       console.log("Submitting application:", data);
 
-      const response = await axiosInstance.post("/pai/applications", data);
+      const response = await axiosInstance.post("/applications", data);
       return response.data;
 
       await new Promise((resolve) => setTimeout(resolve, 1500));
