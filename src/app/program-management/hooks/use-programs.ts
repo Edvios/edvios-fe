@@ -7,6 +7,7 @@ import {
   updateProgram,
   deleteProgram,
 } from '../api/program.api.client';
+import AppToast from '../../../utils/toast-utils';
 import type { ProgramFormDto } from '../dtos/program.dto';
 
 export function useProgramsWithRemote() {
@@ -86,25 +87,38 @@ export function useProgramsWithRemote() {
   }, [programs, search, institutionId, country, level, intakeId, subjectId, scholarship, englishWaiver]);
 
   const handleSave = async (data: ProgramFormDto) => {
-    if (data.id) {
-      await updateProgram(data.id, data as Partial<ProgramFormDto>);
-    } else {
-      await createProgram(data);
-    }
+    try {
+      if (data.id) {
+        await updateProgram(data.id, data as Partial<ProgramFormDto>);
+        AppToast.success('Program updated successfully');
+      } else {
+        await createProgram(data);
+        AppToast.success('Program created successfully');
+      }
 
-    // Refresh current page
-    const refreshed = await fetchProgramsPage(page, size, search || undefined);
-    setPrograms(refreshed.items);
-    setTotal(refreshed.total ?? 0);
-    setModalOpen(false);
-    setEditing(null);
+      // Refresh current page
+      const refreshed = await fetchProgramsPage(page, size, search || undefined);
+      setPrograms(refreshed.items);
+      setTotal(refreshed.total ?? 0);
+      setModalOpen(false);
+      setEditing(null);
+    } catch (err) {
+      console.error('Save program failed:', err);
+      AppToast.error('Failed to save program');
+    }
   };
 
   const handleDelete = async (id: string) => {
-    await deleteProgram(id);
-    const refreshed = await fetchProgramsPage(page, size, search || undefined);
-    setPrograms(refreshed.items);
-    setTotal(refreshed.total ?? 0);
+    try {
+      await deleteProgram(id);
+      AppToast.success('Program deleted successfully');
+      const refreshed = await fetchProgramsPage(page, size, search || undefined);
+      setPrograms(refreshed.items);
+      setTotal(refreshed.total ?? 0);
+    } catch (err) {
+      console.error('Delete program failed:', err);
+      AppToast.error('Failed to delete program');
+    }
   };
 
   return {

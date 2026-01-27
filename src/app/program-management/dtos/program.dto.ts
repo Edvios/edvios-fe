@@ -54,7 +54,7 @@ export const defaultProgramForm: ProgramFormDto = {
 	badges: [],
 	tags: [],
 	intake: '',
-	availability: Availability.Available,
+	availability: Availability.AVAILABLE,
 	tuitionFee: '',
 	englishTestScore: '',
 	scholarship: false,

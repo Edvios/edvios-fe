@@ -28,7 +28,7 @@ function mapRowToProgram(r: any): Program {
     tags: Array.isArray(r.tags) ? r.tags : [],
     intake: String(intakeNameResolved ?? ''),
     intakeName: String(intakeNameResolved ?? r.intake_name ?? ''),
-    availability: r.availability ?? Availability.Available,
+    availability: r.availability ?? Availability.AVAILABLE,
     tuition: String(r.tuitionFee ?? ''),
     tuitionFee: String(r.tuitionFee ?? ''),
     englishTestScore: String(r.englishTestScore ?? ''),
@@ -327,21 +327,4 @@ export async function fetchSubjectsList() {
     : [];
 }
 
-export interface InstitutionItem {
-  id: string;
-  name: string;
-  country?: string;
-  ranking?: string | number;
-}
-
-export interface IntakeItem {
-  id: string;
-  name: string;
-}
-
-export interface SubjectItem {
-  id: string;
-  name: string;
-}
-
-export type { InstitutionItem as Institution, IntakeItem as Intake, SubjectItem as Subject };
+export type { Institution, Intake, Subject } from '../types';

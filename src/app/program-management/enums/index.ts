@@ -1,7 +1,7 @@
 export enum Availability {
-  Available = 'Available',
-  Closed = 'Closed',
-  Waitlist = 'Waitlist',
+  AVAILABLE = 'AVAILABLE',
+  CLOSED = 'CLOSED',
+  WAITLIST = 'WAITLIST',
 }
 
 export enum ProgramStatus {

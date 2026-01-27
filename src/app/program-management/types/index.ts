@@ -55,3 +55,20 @@ export interface ProgramFormProps {
 }
 
 export type { };
+
+export interface Institution {
+  id: string;
+  name: string;
+  country?: string;
+  ranking?: string | number;
+}
+
+export interface Intake {
+  id: string;
+  name: string;
+}
+
+export interface Subject {
+  id: string;
+  name: string;
+}
