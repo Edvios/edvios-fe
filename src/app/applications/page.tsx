@@ -1,9 +1,8 @@
 // app/applications/page.tsx
 'use client'
 
-import React, { useState, useCallback, useMemo } from 'react'
-import { Plus, GraduationCap, AlertCircle, CheckCircle2, Clock, XCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useState, useCallback, useMemo } from 'react'
+import { GraduationCap, AlertCircle, CheckCircle2, Clock, XCircle } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { useApplications } from '@/app/applications/hooks/use-applications'
 import { ApplicationCard } from '@/app/applications/components/ApplicationCard'
