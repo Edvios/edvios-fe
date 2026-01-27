@@ -141,6 +141,7 @@ export default function ProgramFinderPage() {
                 open={isApplyOpen}
                 onOpenChange={setIsApplyOpen}
                 onSubmit={handleApplySubmit}
+                intakes={initialData?.intakes ?? []}
             />
         </div>
     );

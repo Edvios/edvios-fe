@@ -139,10 +139,6 @@ export class ProgramService {
 
       const response = await axiosInstance.post("/applications", data);
       return response.data;
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      return { success: true, message: "Application submitted successfully" };
     } catch (error) {
       console.error("Failed to submit application:", error);
       throw new Error("Failed to submit application. Please try again later.");

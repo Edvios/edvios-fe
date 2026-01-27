@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Program } from "@/app/program-finder/types/program";
 import { ProgramApplicationRequest } from "@/app/program-finder/dtos/program.dto";
+import { Intake } from "@/app/program-finder/types/program";
 import { CheckCircle2, Loader2, Info } from "lucide-react";
 
 interface ProgramApplyDialogProps {
@@ -27,6 +28,7 @@ interface ProgramApplyDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onSubmit: (data: ProgramApplicationRequest) => Promise<void>;
+    intakes: Intake[];
 }
 
 export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
@@ -34,6 +36,7 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
     open,
     onOpenChange,
     onSubmit,
+    intakes,
 }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -42,6 +45,18 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
         preferredIntakeId: "",
         additionalNotes: "",
     });
+
+    // Reset form and success state when dialog opens
+    React.useEffect(() => {
+        if (open) {
+            setIsSuccess(false);
+            setFormData({
+                academicYear: "",
+                preferredIntakeId: "",
+                additionalNotes: "",
+            });
+        }
+    }, [open]);
 
     if (!program) return null;
 
@@ -66,32 +81,8 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
     };
 
     const handleClose = () => {
-        // Reset form and success state on dialog close
-        setIsSuccess(false);
-        setFormData({
-            academicYear: "",
-            preferredIntakeId: "",
-            additionalNotes: "",
-        });
         onOpenChange(false);
     };
-    if (isSuccess) {
-        return (
-            <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent className="sm:max-w-[425px] flex flex-col items-center justify-center py-12">
-                    <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                        <CheckCircle2 className="h-10 w-10 text-green-600" />
-                    </div>
-                    <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
-                        Application Sent!
-                    </DialogTitle>
-                    <DialogDescription className="text-center text-gray-600">
-                        Your application for <strong>{program.title}</strong> has been successfully submitted. We&apos;ll get back to you soon.
-                    </DialogDescription>
-                </DialogContent>
-            </Dialog>
-        );
-    }
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
@@ -117,29 +108,14 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
 
                     {isSuccess ? (
                         <div className="flex flex-col items-center justify-center py-12">
-                            <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                            <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
                                 <CheckCircle2 className="h-10 w-10 text-green-600" />
                             </div>
                             <Button
-                                variant="ghost"
-                                className="mt-4"
                                 onClick={handleClose}
+                                className="w-full sm:w-auto bg-gradient text-white px-12 shadow-lg hover:shadow-xl transition-all"
                             >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full sm:w-auto bg-gradient text-white px-8 shadow-lg hover:shadow-xl transition-all"
-                            >
-                                {isSubmitting ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Submitting...
-                                    </>
-                                ) : (
-                                    "Confirm Application"
-                                )}
+                                Close
                             </Button>
                         </div>
                     ) : (
@@ -174,9 +150,14 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                                             <SelectValue placeholder="Select Intake" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="january">January</SelectItem>
-                                            <SelectItem value="may">May</SelectItem>
-                                            <SelectItem value="september">September</SelectItem>
+                                            {intakes.map((intake) => (
+                                                <SelectItem key={intake.id} value={intake.id}>
+                                                    {intake.name}
+                                                </SelectItem>
+                                            ))}
+                                            {intakes.length === 0 && (
+                                                <SelectItem value="none" disabled>No intakes available</SelectItem>
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </div>
