@@ -46,7 +46,7 @@ export const programSchema = z.object({
   tuitionFee: z.string(),
   applicationFee: z.string(),
   englishTestScore: z.string(),
-  status: z.enum(["available", "closed", "waitlist"]),
+  status: z.enum(["available", "closed", "waitlist", "deadline_passed"]),
   subject: z.string(),
   ranking: z.number(),
   scholarship: z.boolean(),
