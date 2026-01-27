@@ -94,7 +94,6 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden">
-                <div className="bg-orange-gradient h-2" />
                 <div className="px-6 py-6">
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold text-gray-900">
