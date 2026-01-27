@@ -86,7 +86,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
 
   return (
     <Card className="p-0 overflow-hidden hover:shadow-md transition-shadow">
-      <div className="rounded-t-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-3 text-white">
+      <div className="rounded-t-xl bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
@@ -227,7 +227,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
         <div className="flex gap-2">
           <button
             onClick={() => setShowDetails(s => !s)}
-            className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
             title="Toggle details"
           >
             Details
@@ -254,7 +254,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
                 setLoadingDetails(false);
               }
             }}
-            className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
             title="Edit"
           >
             <Edit size={18} />
@@ -262,7 +262,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <button
-                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                 title="Delete"
               >
                 <Trash2 size={18} />
@@ -276,7 +276,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 text-white"
+                  className="bg-gradient-to-r from-green-500 to-green-600 text-white"
                   onClick={async () => {
                     setDeleting(true);
                     try {

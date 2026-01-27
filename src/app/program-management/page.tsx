@@ -233,7 +233,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
         <CardHeader className="sticky top-0 bg-white border-b z-10">
           <div className="flex items-center justify-between px-6 py-4">
             <CardTitle className="text-2xl">{isEdit ? 'Edit Program' : 'Add New Program'}</CardTitle>
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
+            <button onClick={onClose} className="p-2 hover:bg-green-50 rounded-full text-green-600">
               <X className="w-6 h-6" />
             </button>
           </div>
@@ -266,7 +266,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                     if (errors.university) setErrors(prev => { const n = { ...prev }; delete (n as Record<string,string>).university; return n; });
                   }}
                   aria-invalid={errors.university ? 'true' : undefined}
-                  className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.university ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-orange-500`}
+                  className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.university ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-green-500`}
                 >
                   <option value="">Select university</option>
                   {universities.map(u => (
@@ -283,7 +283,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                 <select value={form.location} onChange={e => {
                     setForm({ ...form, location: e.target.value });
                     if (errors.location) setErrors(prev => { const n = { ...prev }; delete n.location; return n; });
-                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.location ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-orange-500`}>
+                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.location ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-green-500`}>
                   <option value="">Select country</option>
                   {form.location && form.location !== '' && !locations.includes(form.location) && (
                     <option key="__current" value={form.location}>{form.location}</option>
@@ -329,7 +329,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                 <select value={form.intake} onChange={e => {
                     setForm({ ...form, intake: e.target.value });
                     if (errors.intake) setErrors(prev => { const n = { ...prev }; delete n.intake; return n; });
-                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.intake ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-orange-500`}>
+                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.intake ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-green-500`}>
                   <option value="">Select intake</option>
                   {form.intake && form.intake !== '' && !intakes.includes(form.intake) && (
                     <option key="__current_intake" value={form.intake}>{form.intake}</option>
@@ -348,7 +348,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                 <select value={form.level ?? ''} onChange={e => {
                     setForm({ ...form, level: e.target.value || undefined });
                     if (errors.level) setErrors(prev => { const n = { ...prev }; delete n.level; return n; });
-                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.level ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-orange-500`}>
+                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.level ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-green-500`}>
                   <option value="">Select level</option>
                   {Object.values(StudyLevel).map(v => (
                     <option key={v} value={v}>{
@@ -391,7 +391,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                     const sub = subjectsList.find(s => s.id === val);
                     setForm({ ...form, subjectId: val || undefined, subjectName: sub?.name ?? '' });
                     if (errors.subjectId) setErrors(prev => { const n = { ...prev }; delete n.subjectId; return n; });
-                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.subjectId ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-orange-500`}>
+                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.subjectId ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-green-500`}>
                   <option value="">Select subject</option>
                   {subjectsList.map(s => (
                     <option key={s.id} value={s.id}>{s.name}</option>
@@ -428,7 +428,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                     const val = e.target.value;
                     setForm({ ...form, status: val ? (val as ProgramStatus) : undefined });
                     if (errors.status) setErrors(prev => { const n = { ...prev }; delete n.status; return n; });
-                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.status ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-orange-500`}>
+                  }} className={`w-full mt-2 px-4 h-12 rounded-md border ${errors.status ? 'border-red-300' : 'border-orange-200'} bg-transparent focus:ring-2 focus:ring-green-500`}>
                   <option value="">Select status</option>
                   {Object.values(ProgramStatus).map(v => (
                     <option key={v} value={v}>{v}</option>
@@ -440,8 +440,8 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
           </CardContent>
 
           <CardFooter className="flex justify-end gap-4 pt-4 border-t">
-            <Button type="button" variant="outline" className="border-orange-200 text-orange-600" onClick={onClose} disabled={isSaving}>Cancel</Button>
-            <Button type="submit" className="bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg" disabled={isSaving}>
+            <Button type="button" variant="outline" className="border-green-200 text-gray-900" onClick={onClose} disabled={isSaving}>Cancel</Button>
+            <Button type="submit" className="bg-gradient-to-r from-green-500 to-green-600 text-gray-900 shadow-lg" disabled={isSaving}>
               {isSaving ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="animate-spin" size={16} />
@@ -530,7 +530,7 @@ export default function ProgramManagementPage() {
             }}
             variant="default"
             size="lg"
-            className="bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg w-full sm:w-auto"
+            className="bg-gradient-to-r from-green-500 to-green-600 text-gray-900 shadow-lg w-full sm:w-auto"
           >
             <Plus size={18} />
             Add New Program
@@ -613,10 +613,10 @@ export default function ProgramManagementPage() {
                 </select>
               </div>
 
-              <div className="flex gap-2">
+                <div className="flex gap-2">
                 <Button variant="outline" onClick={() => {
                   setInstitutionId(undefined); setCountry(undefined); setLevel(undefined); setIntakeId(undefined); setSubjectId(undefined); setScholarship(undefined); setEnglishWaiver(undefined); setSearch('');
-                }} className="w-full bg-white text-orange-600 border-orange-200">Reset Filters</Button>
+                }} className="w-full bg-white text-gray-900 border-green-200">Reset Filters</Button>
               </div>
             </div>
           </aside>
