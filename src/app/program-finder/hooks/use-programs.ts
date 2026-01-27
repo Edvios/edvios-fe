@@ -25,6 +25,9 @@ export const usePrograms = () => {
     const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
 
+    const lastAppliedFiltersRef = useRef<string>(JSON.stringify(initialFilters));
+
+
     // Load initial data
     useEffect(() => {
         const loadInitialData = async () => {
@@ -60,6 +63,11 @@ export const usePrograms = () => {
     useEffect(() => {
         if (!initialData) return;
 
+        const currentFiltersStr = JSON.stringify(filters);
+        if (currentFiltersStr === lastAppliedFiltersRef.current) {
+            return;
+        }
+
         if (debounceTimer.current) {
             clearTimeout(debounceTimer.current);
         }
@@ -68,6 +76,7 @@ export const usePrograms = () => {
 
         debounceTimer.current = setTimeout(() => {
             console.log('Fetching filtered programs with filters:', filters);
+            lastAppliedFiltersRef.current = currentFiltersStr;
             debouncedFetchFilteredPrograms(filters);
         }, 500);
 

@@ -164,7 +164,7 @@ function mapBackendProgramToFrontend(program: BackendProgram) {
     tuitionFee: program.tuitionFee ?? "",
     applicationFee: program.applicationFee ?? "",
     englishTestScore: program.englishTestScore ?? "",
-    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist",
+    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist" | "deadline_passed",
     subject: program.subject?.name ?? "",
     ranking: 0,
     scholarship: program.scholarship ?? false,
