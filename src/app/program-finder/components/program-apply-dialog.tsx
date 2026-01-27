@@ -85,8 +85,8 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                     <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
                         Application Sent!
                     </DialogTitle>
-                    <DialogDescription className="text-center text-gray-600">
-                        Your application for <strong>{program.title}</strong> has been successfully submitted. We'll get back to you soon.
+                        <DialogDescription className="text-center text-gray-600">
+                        Your application for <strong>{program.title}</strong> has been successfully submitted. We&apos;ll get back to you soon.
                     </DialogDescription>
                 </DialogContent>
             </Dialog>
