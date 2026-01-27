@@ -74,6 +74,7 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({ program, onDetailClick
                     style={{
                         background: 'bg-gradient',
                     }}
+                    onClick={() => onApplyClick(program)}
                 >
                     Apply Now
                 </Button>
