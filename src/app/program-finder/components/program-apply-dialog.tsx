@@ -208,7 +208,7 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                                 <Button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full sm:w-auto bg-orange-gradient text-white px-8 shadow-lg hover:shadow-xl transition-all"
+                                    className="w-full sm:w-auto bg-gradient text-white px-8 shadow-lg hover:shadow-xl transition-all"
                                 >
                                     {isSubmitting ? (
                                         <>
