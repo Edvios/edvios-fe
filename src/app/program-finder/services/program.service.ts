@@ -10,7 +10,6 @@ import {
   BackendFilteredProgramResponse,
   backendFilteredProgramResponseSchema,
   BackendProgram,
-  programApplicationRequestSchema,
   ProgramApplicationRequest,
 } from "../dtos/program.dto";
 

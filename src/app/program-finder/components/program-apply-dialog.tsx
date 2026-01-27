@@ -75,6 +75,23 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
         });
         onOpenChange(false);
     };
+    if (isSuccess) {
+        return (
+            <Dialog open={open} onOpenChange={onOpenChange}>
+                <DialogContent className="sm:max-w-[425px] flex flex-col items-center justify-center py-12">
+                    <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <CheckCircle2 className="h-10 w-10 text-green-600" />
+                    </div>
+                    <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
+                        Application Sent!
+                    </DialogTitle>
+                    <DialogDescription className="text-center text-gray-600">
+                        Your application for <strong>{program.title}</strong> has been successfully submitted. We&apos;ll get back to you soon.
+                    </DialogDescription>
+                </DialogContent>
+            </Dialog>
+        );
+    }
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
@@ -108,7 +125,21 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                                 className="mt-4"
                                 onClick={handleClose}
                             >
-                                Close
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full sm:w-auto bg-gradient text-white px-8 shadow-lg hover:shadow-xl transition-all"
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Submitting...
+                                    </>
+                                ) : (
+                                    "Confirm Application"
+                                )}
                             </Button>
                         </div>
                     ) : (
