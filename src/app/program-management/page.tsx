@@ -241,7 +241,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <CardContent className="px-8 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Program Title *</Label>
                 <Input
@@ -277,7 +277,7 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Location</Label>
                 <select value={form.location} onChange={e => {
@@ -294,9 +294,6 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                 </select>
                 {errors.location && <div className="text-sm text-red-600 mt-1">{errors.location}</div>}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Tuition (1st year)</Label>
                 <Input value={form.tuition} onChange={e => {
@@ -305,6 +302,9 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                   }} className={`w-full mt-2 h-12 px-4 ${errors.tuition ? 'border-red-300' : ''}`} placeholder="£37,380 – £62,820" />
                 {errors.tuition && <div className="text-sm text-red-600 mt-1">{errors.tuition}</div>}
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Application Fee</Label>
                 <Input value={form.applicationFee} onChange={e => {
@@ -313,9 +313,6 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                   }} className={`w-full mt-2 h-12 px-4 ${errors.applicationFee ? 'border-red-300' : ''}`} />
                 {errors.applicationFee && <div className="text-sm text-red-600 mt-1">{errors.applicationFee}</div>}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Duration</Label>
                 <Input value={form.duration} onChange={e => {
@@ -324,6 +321,9 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                   }} className={`w-full mt-2 h-12 px-4 ${errors.duration ? 'border-red-300' : ''}`} placeholder="36 months" />
                 {errors.duration && <div className="text-sm text-red-600 mt-1">{errors.duration}</div>}
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Intake</Label>
                 <select value={form.intake} onChange={e => {
@@ -340,9 +340,6 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                 </select>
                 {errors.intake && <div className="text-sm text-red-600 mt-1">{errors.intake}</div>}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Level</Label>
                 <select value={form.level ?? ''} onChange={e => {
@@ -361,6 +358,9 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                 </select>
                 {errors.level && <div className="text-sm text-red-600 mt-1">{errors.level}</div>}
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">English Test Score</Label>
                 <Input value={form.englishTestScore} onChange={e => {
@@ -369,13 +369,13 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                   }} className={`w-full mt-2 h-12 px-4 ${errors.englishTestScore ? 'border-red-300' : ''}`} placeholder="e.g. IELTS 6.5" />
                 {errors.englishTestScore && <div className="text-sm text-red-600 mt-1">{errors.englishTestScore}</div>}
               </div>
-              <div className="flex items-center gap-3 mt-2 md:mt-0">
+              <div className="flex items-center gap-3 md:justify-center lg:justify-start">
                 <Checkbox id="scholarship" checked={!!form.scholarship} onCheckedChange={v => setForm({ ...form, scholarship: !!v })} />
                 <Label htmlFor="scholarship">Scholarships Available</Label>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Application Deadline</Label>
                 <Input value={form.applicationDeadline} onChange={e => {
@@ -399,6 +399,9 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                 </select>
                 {errors.subjectId && <div className="text-sm text-red-600 mt-1">{errors.subjectId}</div>}
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">UCAS Code</Label>
                 <Input value={form.ucasCode} onChange={e => {
@@ -407,13 +410,6 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                   }} className={`w-full mt-2 h-12 px-4 ${errors.ucasCode ? 'border-red-300' : ''}`} />
                 {errors.ucasCode && <div className="text-sm text-red-600 mt-1">{errors.ucasCode}</div>}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-              <div className="flex items-center gap-3 mt-2">
-                <Checkbox id="englishWaiver" checked={!!form.englishWaiver} onCheckedChange={v => setForm({ ...form, englishWaiver: !!v })} />
-                <Label htmlFor="englishWaiver">English Waiver</Label>
-              </div>
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Popularity Rank</Label>
                 <Input type="number" value={form.popularityRank ?? ''} onChange={e => {
@@ -421,6 +417,13 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
                     if (errors.popularityRank) setErrors(prev => { const n = { ...prev }; delete n.popularityRank; return n; });
                   }} className={`w-full mt-2 h-12 px-4 ${errors.popularityRank ? 'border-red-300' : ''}`} />
                 {errors.popularityRank && <div className="text-sm text-red-600 mt-1">{errors.popularityRank}</div>}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-center gap-3">
+                <Checkbox id="englishWaiver" checked={!!form.englishWaiver} onCheckedChange={v => setForm({ ...form, englishWaiver: !!v })} />
+                <Label htmlFor="englishWaiver">English Waiver</Label>
               </div>
               <div className="flex flex-col">
                 <Label className="mb-2 text-sm font-medium text-gray-700">Status</Label>
@@ -440,8 +443,8 @@ function ProgramFormModal({ program, onSave, onClose, programs }: ProgramFormPro
           </CardContent>
 
           <CardFooter className="flex justify-end gap-4 pt-4 border-t">
-            <Button type="button" variant="outline" className="border-green-200 text-gray-900" onClick={onClose} disabled={isSaving}>Cancel</Button>
-            <Button type="submit" className="bg-gradient-to-r from-green-500 to-green-600 text-gray-900 shadow-lg" disabled={isSaving}>
+            <Button type="button" variant="default" className="bg-gradient text-white" onClick={onClose} disabled={isSaving}>Cancel</Button>
+            <Button type="submit" className="bg-gradient text-white shadow-lg" disabled={isSaving}>
               {isSaving ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="animate-spin" size={16} />
@@ -530,128 +533,95 @@ export default function ProgramManagementPage() {
             }}
             variant="default"
             size="lg"
-            className="bg-gradient-to-r from-green-500 to-green-600 text-gray-900 shadow-lg w-full sm:w-auto"
+            className="bg-gradient text-white shadow-lg w-full sm:w-auto"
           >
             <Plus size={18} />
             Add New Program
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar filters */}
-          <aside className="col-span-1">
-            <div className="sticky top-6 space-y-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input
-                  type="text"
-                  placeholder="Search programs..."
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-
-              <div className="p-4 bg-white rounded-lg border">
-                <h3 className="text-sm font-medium mb-3">Institution</h3>
-                <select value={institutionId ?? ''} onChange={e => setInstitutionId(e.target.value || undefined)} className="w-full px-3 py-2 border rounded-md">
-                  <option value="">All Institutions</option>
-                  {institutionsList.map(i => (<option key={i.id} value={i.id}>{i.name}</option>))}
-                </select>
-              </div>
-
-
-              <div className="p-4 bg-white rounded-lg border">
-                <h3 className="text-sm font-medium mb-3">Country</h3>
-                <select value={country ?? ''} onChange={e => setCountry(e.target.value || undefined)} className="w-full px-3 py-2 border rounded-md">
-                  <option value="">All Countries</option>
-                  {Array.from(new Set(institutionsList.map(i => i.country).filter(Boolean))).map(c => (<option key={c} value={c}>{c}</option>))}
-                </select>
-
-          
-              </div>
-
-              <div className="p-4 bg-white rounded-lg border">
-                <h3 className="text-sm font-medium mb-3">Study Level</h3>
-                <select value={level ?? ''} onChange={e => setLevel(e.target.value || undefined)} className="w-full px-3 py-2 border rounded-md">
-                  <option value="">All Levels</option>
-                  {Object.values(StudyLevel).map(v => (<option key={v} value={v}>{v}</option>))}
-                </select>
-              </div>
-
-              <div className="p-4 bg-white rounded-lg border">
-                <h3 className="text-sm font-medium mb-3">Intake</h3>
-                <select value={intakeId ?? ''} onChange={e => setIntakeId(e.target.value || undefined)} className="w-full px-3 py-2 border rounded-md">
-                  <option value="">Any Intake</option>
-                  {intakesList.map(i => (<option key={i.id} value={i.id}>{i.name}</option>))}
-                </select>
-              </div>
-
-              <div className="p-4 bg-white rounded-lg border">
-                <h3 className="text-sm font-medium mb-3">Subject Area</h3>
-                <select value={subjectId ?? ''} onChange={e => setSubjectId(e.target.value || undefined)} className="w-full px-3 py-2 border rounded-md">
-                  <option value="">All Subject</option>
-                  {subjectsList.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
-                </select>
-              </div>
-
-              <div className="p-4 bg-white rounded-lg border">
-                <h3 className="text-sm font-medium mb-3">Scholarship Available</h3>
-                <select value={scholarship ?? 'any'} onChange={e => setScholarship(e.target.value || 'any')} className="w-full px-3 py-2 border rounded-md">
-                  <option value="any">Any</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-
-              <div className="p-4 bg-white rounded-lg border">
-                <h3 className="text-sm font-medium mb-3">English Waiver</h3>
-                <select value={englishWaiver ?? 'any'} onChange={e => setEnglishWaiver(e.target.value || 'any')} className="w-full px-3 py-2 border rounded-md">
-                  <option value="any">Any</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-
-                <div className="flex gap-2">
-                <Button variant="outline" onClick={() => {
-                  setInstitutionId(undefined); setCountry(undefined); setLevel(undefined); setIntakeId(undefined); setSubjectId(undefined); setScholarship(undefined); setEnglishWaiver(undefined); setSearch('');
-                }} className="w-full bg-white text-gray-900 border-green-200">Reset Filters</Button>
-              </div>
+        {/* Filters bar (top, horizontal, no borders) */}
+        <div className="mb-6">
+          <div className="mb-3">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Search programs..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="w-full max-w-3xl pl-12 pr-4 h-12 rounded-md bg-white text-gray-900"
+              />
             </div>
-          </aside>
+          </div>
 
-          {/* Main content */}
-          <section className="col-span-3">
-            {/* Cards Grid */}
-            {filtered.length === 0 ? (
-              <div className="text-center py-16 text-gray-500">
-                No programs found. Try adjusting your search or add a new one.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filtered.map(program => (
-                  <ProgramCard
-                    key={program.id}
-                    program={program}
-                    onEdit={(p) => {
-                      setEditing(p);
-                      setModalOpen(true);
-                    }}
-                    onDelete={(id) => handleDelete(id)}
-                  />
-                ))}
-              </div>
-            )}
-          </section>
+          <div className="flex flex-wrap items-center gap-3">
+              <select value={institutionId ?? ''} onChange={e => setInstitutionId(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[160px]">
+                <option value="">All Institutions</option>
+                {institutionsList.map(i => (<option key={i.id} value={i.id}>{i.name}</option>))}
+              </select>
+
+              <select value={country ?? ''} onChange={e => setCountry(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[140px]">
+                <option value="">All Countries</option>
+                {Array.from(new Set(institutionsList.map(i => i.country).filter(Boolean))).map(c => (<option key={c} value={c}>{c}</option>))}
+              </select>
+
+              <select value={level ?? ''} onChange={e => setLevel(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[140px]">
+                <option value="">All Levels</option>
+                {Object.values(StudyLevel).map(v => (<option key={v} value={v}>{v}</option>))}
+              </select>
+
+              <select value={intakeId ?? ''} onChange={e => setIntakeId(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[140px]">
+                <option value="">Any Intake</option>
+                {intakesList.map(i => (<option key={i.id} value={i.id}>{i.name}</option>))}
+              </select>
+
+              <select value={subjectId ?? ''} onChange={e => setSubjectId(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[140px]">
+                <option value="">All Subject</option>
+                {subjectsList.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
+              </select>
+
+              <select value={scholarship ?? 'any'} onChange={e => setScholarship(e.target.value || 'any')} className="h-12 px-4 rounded-md bg-white text-sm min-w-[160px]">
+                <option value="any">Scholarship: Any</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+
+              <select value={englishWaiver ?? 'any'} onChange={e => setEnglishWaiver(e.target.value || 'any')} className="h-12 px-4 rounded-md bg-white text-sm min-w-[160px]">
+                <option value="any">English Waiver: Any</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+
+              <Button variant="default" onClick={() => {
+                setInstitutionId(undefined); setCountry(undefined); setLevel(undefined); setIntakeId(undefined); setSubjectId(undefined); setScholarship(undefined); setEnglishWaiver(undefined); setSearch('');
+              }} className="ml-2 bg-gradient text-white shadow">Reset</Button>
+            </div>
         </div>
+
+        {/* Main content */}
+        <section>
+          {filtered.length === 0 ? (
+            <div className="text-center py-16 text-gray-500">No programs found. Try adjusting your search or add a new one.</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map(program => (
+                <ProgramCard
+                  key={program.id}
+                  program={program}
+                  onEdit={(p) => { setEditing(p); setModalOpen(true); }}
+                  onDelete={(id) => handleDelete(id)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
         {/* Pagination */}
         <div className="max-w-7xl mx-auto">
           <ProgramPagination pagination={{ page, size, total }} onPageChange={(p) => setPage(p)} />
         </div>
       </div>
 
-      {/* Modal */}
       {modalOpen && (
         <ProgramFormModal
           program={editing ?? undefined}
