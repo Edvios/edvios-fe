@@ -31,6 +31,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { logout } from "@/app/auth/login/api/auth.api";
+import axiosInstance from "@/lib/axios";
 
 interface UserData {
   email: string;
@@ -140,7 +141,14 @@ export function AppSidebar() {
     try {
       const userSession = sessionStorage.getItem("user-session");
 
-      if (userSession) setUserData(JSON.parse(userSession));
+      if (userSession) {
+        setUserData(JSON.parse(userSession));
+      } else {
+        axiosInstance.get("/auth/me").then((response) => {
+        setUserData(response.data);
+        sessionStorage.setItem("user-session", JSON.stringify(response.data));
+        });
+      }
     } catch {
       // ignore parse errors
     }
@@ -148,15 +156,15 @@ export function AppSidebar() {
 
   const handleLogout = async () => {
     try {
-          await logout();
-        } catch (error) {
-          console.error('Logout failed:', error);
-        } finally {
-          sessionStorage.removeItem('user-session');
-          sessionStorage.removeItem('auth-token');
-          cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
-          router.push('/auth/login');
-        }
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      sessionStorage.removeItem("user-session");
+      sessionStorage.removeItem("auth-token");
+      cookieStore.delete("sb-jlqamlxzkfmpfisjlzrg-auth-token");
+      router.push("/auth/login");
+    }
   };
 
   const menuItems = useMemo(() => {
