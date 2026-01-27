@@ -7,10 +7,8 @@ import {
     DialogHeader,
     DialogTitle,
     DialogDescription,
-    DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -85,7 +83,7 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                     <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
                         Application Sent!
                     </DialogTitle>
-                        <DialogDescription className="text-center text-gray-600">
+                    <DialogDescription className="text-center text-gray-600">
                         Your application for <strong>{program.title}</strong> has been successfully submitted. We&apos;ll get back to you soon.
                     </DialogDescription>
                 </DialogContent>
@@ -174,7 +172,7 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full sm:w-auto bg-orange-gradient text-white px-8 shadow-lg hover:shadow-xl transition-all"
+                                className="w-full sm:w-auto bg-gradient text-white px-8 shadow-lg hover:shadow-xl transition-all"
                             >
                                 {isSubmitting ? (
                                     <>
