@@ -112,7 +112,8 @@ export const backendFilteredProgramResponseSchema = z.object({
   data: z.array(backendProgramSchema),
   total: z.number(),
   page: z.number(),
-  lastPage: z.number(),
+  size: z.number().optional(),
+  lastPage: z.number().optional(),
 });
 export type BackendFilteredProgramResponse = z.infer<
   typeof backendFilteredProgramResponseSchema

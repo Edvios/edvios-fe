@@ -115,6 +115,11 @@ const adminItems = [
     icon: User,
   },
   {
+    title: "Applications",
+    url: "/applications",
+    icon: FileText,
+  },
+  {
     title: "Institutions",
     url: "/institution-management",
     icon: Building2,
