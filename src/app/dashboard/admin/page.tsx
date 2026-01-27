@@ -132,10 +132,6 @@ export default function ADMINDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">2,847</div>
-              <p className="text-xs text-green-600 mt-1 flex items-center">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                +18.2% this month
-              </p>
             </CardContent>
           </Card>
 
@@ -148,7 +144,6 @@ export default function ADMINDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">156</div>
-              <p className="text-xs text-gray-500 mt-1">124 active today</p>
             </CardContent>
           </Card>
 
@@ -160,8 +155,7 @@ export default function ADMINDashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">8,942</div>
-              <p className="text-xs text-gray-500 mt-1">412 pending review</p>
+              <div className="text-3xl font-bold">89</div>
             </CardContent>
           </Card>
 
@@ -174,17 +168,14 @@ export default function ADMINDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">$284K</div>
-              <p className="text-xs text-green-600 mt-1 flex items-center">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                +24.5% vs last month
-              </p>
+             
             </CardContent>
           </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* System Health */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>System Health</CardTitle>
@@ -240,7 +231,7 @@ export default function ADMINDashboard() {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
 
           {/* Quick Stats & Actions */}
           <div className="space-y-6">
@@ -298,7 +289,7 @@ export default function ADMINDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-red-50 to-green-50 border-red-200">
+            {/* <Card className="bg-gradient-to-br from-red-50 to-green-50 border-red-200">
               <CardHeader>
                 <CardTitle className="text-red-900 flex items-center">
                   <AlertTriangle className="w-5 h-5 mr-2" />
@@ -317,7 +308,7 @@ export default function ADMINDashboard() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </main>

@@ -48,6 +48,7 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+
         try {
             await onSubmit({
                 programId: program.id,
@@ -56,23 +57,24 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                 additionalNotes: formData.additionalNotes,
             });
             setIsSuccess(true);
-            setTimeout(() => {
-                setIsSuccess(false);
-                onOpenChange(false);
-                // Reset form
-                setFormData({
-                    academicYear: "",
-                    preferredIntakeId: "",
-                    additionalNotes: "",
-                });
-            }, 2000);
         } catch (error) {
             console.error("Application submission failed:", error);
+            alert("Failed to submit application. Please try again.");
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    const handleClose = () => {
+        // Reset form and success state on dialog close
+        setIsSuccess(false);
+        setFormData({
+            academicYear: "",
+            preferredIntakeId: "",
+            additionalNotes: "",
+        });
+        onOpenChange(false);
+    };
     if (isSuccess) {
         return (
             <Dialog open={open} onOpenChange={onOpenChange}>
@@ -92,80 +94,36 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden">
                 <div className="bg-orange-gradient h-2" />
                 <div className="px-6 py-6">
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold text-gray-900">
-                            Apply for Program
+                            {isSuccess ? "Application Sent!" : "Apply for Program"}
                         </DialogTitle>
                         <DialogDescription className="text-gray-600 mt-1">
-                            You are applying for <span className="font-semibold text-primary">{program.title}</span> at {program.institution}.
+                            {isSuccess ? (
+                                <span className="text-center block">
+                                    Your application for <strong>{program.title}</strong> has been successfully submitted.
+                                </span>
+                            ) : (
+                                <>
+                                    You are applying for <span className="font-semibold text-primary">{program.title}</span> at {program.institution}.
+                                </>
+                            )}
                         </DialogDescription>
                     </DialogHeader>
 
-                    <form onSubmit={handleSubmit} className="space-y-6 mt-8">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="academicYear">Academic Year</Label>
-                                <Select
-                                    value={formData.academicYear}
-                                    onValueChange={(val) => setFormData({ ...formData, academicYear: val })}
-                                    required
-                                >
-                                    <SelectTrigger id="academicYear" className="w-full">
-                                        <SelectValue placeholder="Select Year" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="2024">2024</SelectItem>
-                                        <SelectItem value="2025">2025</SelectItem>
-                                        <SelectItem value="2026">2026</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                    {isSuccess ? (
+                        <div className="flex flex-col items-center justify-center py-12">
+                            <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                                <CheckCircle2 className="h-10 w-10 text-green-600" />
                             </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="preferredIntake">Preferred Intake</Label>
-                                <Select
-                                    value={formData.preferredIntakeId}
-                                    onValueChange={(val) => setFormData({ ...formData, preferredIntakeId: val })}
-                                    required
-                                >
-                                    <SelectTrigger id="preferredIntake" className="w-full">
-                                        <SelectValue placeholder="Select Intake" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="january">January</SelectItem>
-                                        <SelectItem value="may">May</SelectItem>
-                                        <SelectItem value="september">September</SelectItem>
-                                        {/* In a real app, these would come from program.intakes if available */}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="additionalNotes">Additional Information</Label>
-                            <Textarea
-                                id="additionalNotes"
-                                placeholder="Tell us more about your background or any specific questions you have..."
-                                className="min-h-[120px] resize-none focus:ring-primary/20"
-                                value={formData.additionalNotes}
-                                onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
-                            />
-                            <p className="text-xs text-gray-500 flex items-center gap-1.5 mt-1">
-                                <Info className="h-3 w-3" />
-                                This information helps us process your application faster.
-                            </p>
-                        </div>
-
-                        <div className="bg-gray-50 -mx-6 -mb-6 px-6 py-4 flex flex-col sm:flex-row gap-3 justify-end items-center">
                             <Button
-                                type="button"
                                 variant="ghost"
-                                className="w-full sm:w-auto text-gray-600 hover:bg-gray-100"
-                                onClick={() => onOpenChange(false)}
+                                className="mt-4"
+                                onClick={handleClose}
                             >
                                 Cancel
                             </Button>
@@ -184,10 +142,89 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
                                 )}
                             </Button>
                         </div>
-                    </form>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-6 mt-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="academicYear">Academic Year</Label>
+                                    <Select
+                                        value={formData.academicYear}
+                                        onValueChange={(val) => setFormData({ ...formData, academicYear: val })}
+                                        required
+                                    >
+                                        <SelectTrigger id="academicYear" className="w-full">
+                                            <SelectValue placeholder="Select Year" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="2024">2024</SelectItem>
+                                            <SelectItem value="2025">2025</SelectItem>
+                                            <SelectItem value="2026">2026</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="preferredIntake">Preferred Intake</Label>
+                                    <Select
+                                        value={formData.preferredIntakeId}
+                                        onValueChange={(val) => setFormData({ ...formData, preferredIntakeId: val })}
+                                        required
+                                    >
+                                        <SelectTrigger id="preferredIntake" className="w-full">
+                                            <SelectValue placeholder="Select Intake" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="january">January</SelectItem>
+                                            <SelectItem value="may">May</SelectItem>
+                                            <SelectItem value="september">September</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="additionalNotes">Additional Information</Label>
+                                <Textarea
+                                    id="additionalNotes"
+                                    placeholder="Tell us more about your background or any specific questions you have..."
+                                    className="min-h-[120px] resize-none focus:ring-primary/20"
+                                    value={formData.additionalNotes}
+                                    onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
+                                />
+                                <p className="text-xs text-gray-500 flex items-center gap-1.5 mt-1">
+                                    <Info className="h-3 w-3" />
+                                    This information helps us process your application faster.
+                                </p>
+                            </div>
+
+                            <div className="bg-gray-50 -mx-6 -mb-6 px-6 py-4 flex flex-col sm:flex-row gap-3 justify-end items-center">
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    className="w-full sm:w-auto text-gray-600 hover:bg-gray-100"
+                                    onClick={handleClose}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full sm:w-auto bg-orange-gradient text-white px-8 shadow-lg hover:shadow-xl transition-all"
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Submitting...
+                                        </>
+                                    ) : (
+                                        "Confirm Application"
+                                    )}
+                                </Button>
+                            </div>
+                        </form>
+                    )}
                 </div>
             </DialogContent>
         </Dialog>
     );
 };
-
