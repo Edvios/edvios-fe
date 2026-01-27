@@ -139,10 +139,6 @@ export class ProgramService {
 
       const response = await axiosInstance.post("/applications", data);
       return response.data;
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      return { success: true, message: "Application submitted successfully" };
     } catch (error) {
       console.error("Failed to submit application:", error);
       throw new Error("Failed to submit application. Please try again later.");
@@ -164,7 +160,7 @@ function mapBackendProgramToFrontend(program: BackendProgram) {
     tuitionFee: program.tuitionFee ?? "",
     applicationFee: program.applicationFee ?? "",
     englishTestScore: program.englishTestScore ?? "",
-    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist",
+    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist" | "deadline_passed",
     subject: program.subject?.name ?? "",
     ranking: 0,
     scholarship: program.scholarship ?? false,
