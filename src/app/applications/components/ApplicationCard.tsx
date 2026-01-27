@@ -56,6 +56,10 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
   onStatusUpdate,
 }) => {
   const [updating, setUpdating] = useState(false);
+  const decisionMade =
+    application.status === ApplicationStatus.ACCEPTED ||
+    application.status === ApplicationStatus.REJECTED;
+  const decisionLabel = application.status === ApplicationStatus.ACCEPTED ? 'Accepted' : 'Rejected';
 
   const handleStatusUpdate = async (status: ApplicationStatus) => {
     setUpdating(true);
@@ -121,7 +125,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <span>{locationText || 'Location to be confirmed'}</span>
           </div>
           {application.program.scholarship && (
-            <Badge className="bg-purple-50 text-purple-700 border-purple-200 border">
+            <Badge className="bg-gradient-50 text-gradient-700 border-gradient-200 border">
               <Award className="w-3 h-3 mr-1" />
               Scholarship Available
             </Badge>
@@ -130,9 +134,9 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
       </CardHeader>
 
       <CardContent className="space-y-5">
-        <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+        <div className="bg-gradient-50 rounded-lg p-4 border border-green-100">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-1.5 bg-blue-600 rounded-md">
+            <div className="p-1.5 bg-gradient rounded-md">
               <User className="w-4 h-4 text-white" />
             </div>
             <h3 className="font-semibold text-base text-gray-900">Applicant Details</h3>
@@ -167,7 +171,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <GraduationCap className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">Level</span>
@@ -175,7 +179,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <p className="font-semibold text-sm text-gray-900">{application.program.level ?? 'N/A'}</p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <Calendar className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">Intake</span>
@@ -183,7 +187,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <p className="font-semibold text-sm text-gray-900">{intakeText}</p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <Clock className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">Duration</span>
@@ -191,7 +195,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <p className="font-semibold text-sm text-gray-900">{application.program.duration ?? 'N/A'}</p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <DollarSign className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">Tuition</span>
@@ -199,7 +203,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <p className="font-semibold text-sm text-gray-900">{application.program.tuitionFee ?? 'N/A'}</p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <DollarSign className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">App. Fee</span>
@@ -207,7 +211,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <p className="font-semibold text-sm text-gray-900">{application.program.applicationFee ?? 'N/A'}</p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <Calendar className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">Deadline</span>
@@ -220,38 +224,52 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
           </div>
         </div>
 
-        <div className="bg-amber-50 rounded-lg p-3 border border-amber-100">
+        <div className="bg-gradient-50 rounded-lg p-3 ">
           <p className="text-xs text-gray-600 font-medium mb-1">English Requirements</p>
           <p className="font-semibold text-sm text-gray-900">{application.program.englishTestScore ?? 'Not specified'}</p>
           {application.program.englishWaiver && (
-            <Badge variant="outline" className="mt-2 text-xs border-gray-200">Waiver Available</Badge>
+            <Badge variant="outline" className="mt-2 text-xs border-gradient-200">Waiver Available</Badge>
           )}
         </div>
 
-        <div className="flex items-center justify-between text-sm border-t border-gray-200 pt-3">
-          <span className="text-gray-600">Application submitted:</span>
+        <div className="flex items-center justify-between text-sm pt-3">
+          <span className="text-gradient-600">Application submitted:</span>
           <span className="font-medium text-gray-900">{formatDate(submittedAt)}</span>
         </div>
       </CardContent>
 
-      <CardFooter className="flex gap-3 pt-4 border-t border-gray-200">
-        <Button
-          onClick={() => handleStatusUpdate(ApplicationStatus.ACCEPTED)}
-          disabled={application.status !== ApplicationStatus.SUBMITTED || updating}
-          className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium"
-        >
-          <Check className="w-4 h-4 mr-2" />
-          Accept Application
-        </Button>
-        <Button
-          onClick={() => handleStatusUpdate(ApplicationStatus.REJECTED)}
-          disabled={application.status !== ApplicationStatus.SUBMITTED || updating}
-          variant="destructive"
-          className="flex-1 font-medium"
-        >
-          <X className="w-4 h-4 mr-2" />
-          Reject Application
-        </Button>
+      <CardFooter className="flex gap-3 pt-4">
+        {decisionMade ? (
+          <Button
+            className={`w-full text-white font-semibold cursor-default ${
+              application.status === ApplicationStatus.ACCEPTED
+                ? 'bg-green-600 hover:bg-green-600'
+                : 'bg-red-600 hover:bg-red-600'
+            }`}
+          >
+            {decisionLabel}
+          </Button>
+        ) : (
+          <>
+            <Button
+              onClick={() => handleStatusUpdate(ApplicationStatus.ACCEPTED)}
+              disabled={application.status !== ApplicationStatus.SUBMITTED || updating}
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium"
+            >
+              <Check className="w-4 h-4 mr-2" />
+              Accept Application
+            </Button>
+            <Button
+              onClick={() => handleStatusUpdate(ApplicationStatus.REJECTED)}
+              disabled={application.status !== ApplicationStatus.SUBMITTED || updating}
+              variant="destructive"
+              className="flex-1 font-medium"
+            >
+              <X className="w-4 h-4 mr-2" />
+              Reject Application
+            </Button>
+          </>
+        )}
       </CardFooter>
     </Card>
   );
