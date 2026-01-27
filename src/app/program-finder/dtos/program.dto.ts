@@ -162,3 +162,19 @@ export type InitialProgramDataResponse = z.infer<
 export type FilteredProgramDataResponse = z.infer<
   typeof filteredProgramDataResponseSchema
 >;
+
+/* ===============================
+   Application Request
+================================ */
+export const programApplicationRequestSchema = z.object({
+  programId: z.string(),
+  studentId: z.string().optional(), // In real app, this would come from auth
+  additionalNotes: z.string().optional(),
+  preferredIntakeId: z.string().optional(),
+  academicYear: z.string().optional(),
+  documents: z.array(z.string()).optional(), // URLs or IDs
+});
+
+export type ProgramApplicationRequest = z.infer<typeof programApplicationRequestSchema>;
+
+

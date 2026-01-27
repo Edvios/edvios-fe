@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Edvios - Educational Visionaries",
+  title: "Edvios",
   description: "Your personalized education portal",
 };
 

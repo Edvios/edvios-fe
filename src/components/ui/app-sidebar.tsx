@@ -2,10 +2,9 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
-  GraduationCap,
   Users,
-  Shield,
   Home,
   FileText,
   Settings,
@@ -54,7 +53,7 @@ const studentItems = [
   },
   {
     title: "Communication Hub",
-    url: "#",
+    url: "/chat",
     icon: MessageCircle,
   },
   {
@@ -181,35 +180,14 @@ export function AppSidebar() {
     }
   }, [userData?.role]);
 
-  const renderUserIcon = () => {
-    switch (userData?.role) {
-      case "STUDENT":
-        return <GraduationCap className="w-5 h-5 text-white" />;
-      case "AGENT":
-        return <Users className="w-5 h-5 text-white" />;
-      case "ADMIN":
-        return <Shield className="w-5 h-5 text-white" />;
-      default:
-        return <User className="w-5 h-5 text-white" />;
-    }
-  };
-
   return (
     <Sidebar>
       <SidebarContent>
         {/* User Info Section */}
         <SidebarGroup>
-          <div className="flex items-center gap-3 px-4 py-4">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-orange-gradient">
-              {renderUserIcon()}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-md font-semibold truncate text-orange-gradient">
-                Edvios
-              </p>
-              <p className="text-xs text-muted-foreground truncate">
-                Educational Visionaries
-              </p>
+          <div className="flex items-center justify-center px-4 py-2">
+            <div className="flex items-center justify-center">
+              <Image src="/logo.png" alt="Logo" width={80} height={80} />
             </div>
           </div>
         </SidebarGroup>

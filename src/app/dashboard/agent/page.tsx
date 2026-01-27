@@ -13,7 +13,8 @@ import {
   CheckCircle,
   Building,
   Mail,
-  Phone
+  Phone,
+  MessageSquare
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import AppToast from "@/utils/toast-utils";
@@ -96,10 +97,16 @@ export default function AgentDashboard() {
                 <p className="text-sm text-gray-500">Welcome, {userData.name}</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="default" size="sm" onClick={() => router.push('/chat')}>
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Support Inbox
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -160,7 +167,7 @@ export default function AgentDashboard() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium text-gray-600">Commission</CardTitle>
-                <DollarSign className="w-5 h-5 text-orange-500" />
+                <DollarSign className="w-5 h-5 text-green-500" />
               </div>
             </CardHeader>
             <CardContent>
@@ -182,7 +189,7 @@ export default function AgentDashboard() {
                 <div className="space-y-4">
                   {[
                     { name: "John Smith", email: "john.smith@email.com", status: "Active", applications: 3, statusColor: "text-green-600 bg-green-50" },
-                    { name: "Sarah Johnson", email: "sarah.j@email.com", status: "Pending Docs", applications: 2, statusColor: "text-orange-600 bg-orange-50" },
+                    { name: "Sarah Johnson", email: "sarah.j@email.com", status: "Pending Docs", applications: 2, statusColor: "text-green-600 bg-green-50" },
                     { name: "Michael Chen", email: "m.chen@email.com", status: "Active", applications: 5, statusColor: "text-green-600 bg-green-50" },
                     { name: "Emily Davis", email: "emily.d@email.com", status: "In Review", applications: 4, statusColor: "text-blue-600 bg-blue-50" },
                   ].map((client, idx) => (
@@ -221,7 +228,7 @@ export default function AgentDashboard() {
                 <div className="space-y-4">
                   {[
                     { title: "Review Documents", client: "Sarah Johnson", priority: "High", icon: FileText, color: "text-red-600" },
-                    { title: "Follow-up Call", client: "John Smith", priority: "Medium", icon: Phone, color: "text-orange-600" },
+                    { title: "Follow-up Call", client: "John Smith", priority: "Medium", icon: Phone, color: "text-green-600" },
                     { title: "Send Confirmation", client: "Emily Davis", priority: "Low", icon: Mail, color: "text-blue-600" },
                   ].map((task, idx) => (
                     <div key={idx} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
