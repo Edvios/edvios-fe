@@ -77,25 +77,31 @@ const agentItems = [
     icon: Home,
   },
   {
-    title: "Clients",
-    url: "/dashboard/agent/clients",
+    title: "Students",
+    url: "/student-management",
     icon: Users,
   },
   {
     title: "Applications",
-    url: "/dashboard/agent/applications",
+    url: "/applications",
     icon: FileText,
   },
   {
-    title: "Commissions",
-    url: "/dashboard/agent/commissions",
-    icon: BarChart3,
+    title: "Institutions",
+    url: "/institution-management",
+    icon: Building2,
   },
   {
-    title: "Agency",
-    url: "/program-finder",
-    icon: Building,
+    title: "Programs",
+    url: "/program-management",
+    icon: BookOpen,
   },
+  {
+    title: "Chat",
+    url: "/chat",
+    icon: MessageCircle,
+  }
+
 ];
 
 // Admin menu items
@@ -225,7 +231,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         {/* Settings Section */}
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupLabel>Account</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -239,7 +245,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarContent>
 
       {/* Footer with Logout */}
