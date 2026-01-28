@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,17 +6,16 @@ import { Button } from "@/components/ui/button";
 import { 
   Users, 
   FileText, 
-  TrendingUp, 
   LogOut, 
   DollarSign,
-  CheckCircle,
   Building,
-  Mail,
-  Phone,
-  MessageSquare
+  MessageSquare,
+  Layers,
+  BookOpen
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import AppToast from "@/utils/toast-utils";
+import { useApplications } from "./hooks/useAdminDashboard";
 
 interface UserData {
   email: string;
@@ -33,6 +31,15 @@ export default function AgentDashboard() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
+
+  const {applications, loading, error, counts, countsLoading} = useApplications();
+
+  const totalApplications = counts ?
+    counts.totalApplications.count.SUBMITTED +
+    counts.totalApplications.count.UNDER_REVIEW +
+    counts.totalApplications.count.ACCEPTED +
+    counts.totalApplications.count.REJECTED
+    : 0;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -89,8 +96,8 @@ export default function AgentDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                <Building className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-[#99c12a] rounded-full flex items-center justify-center">
+                <Building className="w-6 h-6 text-white " />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Agent Portal</h1>
@@ -98,10 +105,7 @@ export default function AgentDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="default" size="sm" onClick={() => router.push('/chat')}>
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Support Inbox
-              </Button>
+              
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -111,68 +115,45 @@ export default function AgentDashboard() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Agent Dashboard</h2>
-          <p className="text-gray-600">Manage your clients and track commissions</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
+      {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <Card >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Active Clients</CardTitle>
+                <CardTitle className="text-sm font-medium text-gray-600">Total Students</CardTitle>
                 <Users className="w-5 h-5 text-green-500" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">24</div>
-              <p className="text-xs text-green-600 mt-1 flex items-center">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                +12% from last month
-              </p>
+              <div className="text-3xl font-bold">{counts?.totalStudents || 0}</div>
+              <p className="text-xs text-gray-500 mt-1">{counts?.newUsers || 0} New students</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Applications</CardTitle>
+                <CardTitle className="text-sm font-medium text-gray-600">Total Applications</CardTitle>
                 <FileText className="w-5 h-5 text-blue-500" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">156</div>
-              <p className="text-xs text-gray-500 mt-1">32 pending approval</p>
+              <div className="text-3xl font-bold">{totalApplications || 0}</div>
+              <p className="text-xs text-gray-500 mt-1">{counts?.totalApplications.count.SUBMITTED || 0} pending approval</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Success Rate</CardTitle>
-                <CheckCircle className="w-5 h-5 text-purple-500" />
+                <CardTitle className="text-sm font-medium text-gray-600">Total Programs</CardTitle>
+                <Layers className="w-5 h-5 text-green-500" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">78%</div>
-              <p className="text-xs text-gray-500 mt-1">Applications accepted</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Commission</CardTitle>
-                <DollarSign className="w-5 h-5 text-green-500" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">$12,400</div>
-              <p className="text-xs text-gray-500 mt-1">This month</p>
+              <div className="text-3xl font-bold">{counts?.totalPrograms || 0}</div>
+              <p className="text-xs text-gray-500 mt-1">{counts?.totalInstitutions || 0} institutions</p>
             </CardContent>
           </Card>
         </div>
@@ -182,36 +163,31 @@ export default function AgentDashboard() {
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Recent Clients</CardTitle>
+                <CardTitle>Recent Applications</CardTitle>
                 <CardDescription>Your latest client interactions</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[
-                    { name: "John Smith", email: "john.smith@email.com", status: "Active", applications: 3, statusColor: "text-green-600 bg-green-50" },
-                    { name: "Sarah Johnson", email: "sarah.j@email.com", status: "Pending Docs", applications: 2, statusColor: "text-green-600 bg-green-50" },
-                    { name: "Michael Chen", email: "m.chen@email.com", status: "Active", applications: 5, statusColor: "text-green-600 bg-green-50" },
-                    { name: "Emily Davis", email: "emily.d@email.com", status: "In Review", applications: 4, statusColor: "text-blue-600 bg-blue-50" },
-                  ].map((client, idx) => (
+                  {applications.map((client, idx) => (
                     <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-semibold">
-                          {client.name.split(' ').map(n => n[0]).join('')}
+                        <div className="w-10 h-10 bg-[#99c12a] rounded-full flex items-center justify-center text-white font-semibold">
+                          {client.student.firstName?.split(' ').map(n => n[0]).join('')}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{client.name}</p>
-                          <p className="text-sm text-gray-500">{client.email}</p>
-                          <p className="text-xs text-gray-400 mt-1">{client.applications} applications</p>
+                          <p className="font-medium text-gray-900">{client.student.firstName}</p>
+                          <p className="text-sm text-gray-500">{client.student.email}</p>
+                          {/* <p className="text-xs text-gray-400 mt-1">{client.applications} applications</p> */}
                         </div>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${client.statusColor}`}>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800`}>
                         {client.status}
                       </span>
                     </div>
                   ))}
                 </div>
-                <Button className="w-full mt-4" variant="outline">
-                  View All Clients
+                <Button className="w-full mt-4" variant="outline" onClick={() => router.push('/applications')}>
+                  View All Applications
                 </Button>
               </CardContent>
             </Card>
@@ -219,71 +195,28 @@ export default function AgentDashboard() {
 
           {/* Tasks & Quick Actions */}
           <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Pending Tasks</CardTitle>
-                <CardDescription>Items requiring attention</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { title: "Review Documents", client: "Sarah Johnson", priority: "High", icon: FileText, color: "text-red-600" },
-                    { title: "Follow-up Call", client: "John Smith", priority: "Medium", icon: Phone, color: "text-green-600" },
-                    { title: "Send Confirmation", client: "Emily Davis", priority: "Low", icon: Mail, color: "text-blue-600" },
-                  ].map((task, idx) => (
-                    <div key={idx} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <task.icon className={`w-5 h-5 mt-0.5 ${task.color}`} />
-                      <div className="flex-1">
-                        <p className="font-medium text-sm text-gray-900">{task.title}</p>
-                        <p className="text-xs text-gray-500 mt-1">{task.client}</p>
-                        <span className="text-xs text-gray-400">Priority: {task.priority}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+          
 
             <Card className="mt-6">
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button className="w-full" variant="outline">
-                  <Users className="w-4 h-4 mr-2" />
-                  Add New Client
-                </Button>
-                <Button className="w-full" variant="outline">
+                <Button variant="default" size="sm" onClick={() => router.push('/chat')} className="w-full">
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Support Inbox
+              </Button>
+                <Button className="w-full" variant="outline" onClick={() => router.push('/institution-management')}>
                   <FileText className="w-4 h-4 mr-2" />
-                  Submit Application
+                  Add Institutions
                 </Button>
-                <Button className="w-full" variant="outline">
-                  <DollarSign className="w-4 h-4 mr-2" />
-                  View Commissions
+                <Button className="w-full" variant="outline" onClick={() => router.push('/program-management')}>
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Add Programs
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="mt-6 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-              <CardHeader>
-                <CardTitle className="text-green-900">Performance</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-green-700">This Month</span>
-                    <span className="font-bold text-green-900">$12,400</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-green-700">YTD</span>
-                    <span className="font-bold text-green-900">$48,200</span>
-                  </div>
-                  <div className="pt-2 border-t border-green-200">
-                    <p className="text-xs text-green-600">You are 25% ahead of your target!</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </main>

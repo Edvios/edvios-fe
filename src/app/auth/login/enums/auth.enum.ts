@@ -1,7 +1,8 @@
 export enum UserTypeEnum {
   STUDENT = "STUDENT",
   AGENT = "AGENT",
-  ADMIN = "ADMIN"
+  ADMIN = "ADMIN",
+  PENDING_AGENT = "PENDING_AGENT"
 }
 
 export enum AuthTabEnum {
