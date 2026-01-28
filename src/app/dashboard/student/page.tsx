@@ -20,13 +20,6 @@ import {
 import { logout } from "@/app/auth/login/api/auth.api";
 //import CountUp from "@/components/ui/count-up";
 
-const statIcons: Record<string, LucideIcon> = {
-  applications: FileText,
-  accepted: CheckCircle,
-  interviews: Calendar,
-  documents: ClipboardList,
-  programs: FolderCheck,
-};
 
 function statusTone(status?: string) {
   const normalized = (status ?? "").toLowerCase();
