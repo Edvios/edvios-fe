@@ -94,6 +94,31 @@ body {
   background-clip: text;
 }
 
+/* Two-column form row utility */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem; /* larger consistent gap between columns & rows */
+  align-items: start;
+}
+
+.form-field {
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem 0; /* consistent vertical spacing inside each field */
+}
+
+/* Responsive: stack fields on small screens */
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .form-field {
+    padding: 0.5rem 0;
+  }
+}
+
 /* Headline gradient styles */
 h1, h2, h3, h4, h5, h6,
 .headline,
