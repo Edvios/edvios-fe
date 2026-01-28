@@ -1,11 +1,16 @@
 'use client';
 
 import React from 'react';
+
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+      DialogFooter,
 } from '@/components/ui/dialog';
+
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Button } from '@/components/ui/button';
 import { Student } from '../types/student.types';
 import { LucideIcon } from "lucide-react";
@@ -49,9 +54,15 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="max-w-4xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto p-0 border-none shadow-2xl rounded-2xl md:rounded-3xl">
+                <VisuallyHidden>
+                    <DialogTitle>Agent profile</DialogTitle>
+                    <DialogDescription>
+                    View detailed agent information and account status.
+                    </DialogDescription>
+                </VisuallyHidden>
                 <div className="bg-gradient h-32 md:h-40 w-full relative">
                     <div className="absolute -bottom-12 left-4 md:left-8 flex flex-col md:flex-row items-center md:items-end gap-4 md:gap-6 text-center md:text-left w-full md:w-auto px-4 md:px-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl md:rounded-3xl bg-white shadow-xl flex items-center justify-center text-primary font-bold text-3xl md:text-4xl border-4 border-white">
+                        <div className="mt-2 w-24 h-24 md:w-32 md:h-32 rounded-2xl md:rounded-3xl bg-white shadow-xl flex items-center justify-center text-primary font-bold text-3xl md:text-4xl border-4 border-white">
                             {(firstName?.[0] || '') + (lastName?.[0] || '')}
                         </div>
                         <div className="md:mb-2 md:pb-2">
