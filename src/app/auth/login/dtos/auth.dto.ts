@@ -1,12 +1,6 @@
 import { z } from "zod";
 
-// User type enum
-export const UserType = {
-  STUDENT: "STUDENT",
-  AGENT: "AGENT",
-  ADMIN: "ADMIN",
-
-} as const;
+import { UserTypeEnum } from "../enums/auth.enum";
 
 // Base user schema
 const userSchema = z.object({
@@ -14,9 +8,10 @@ const userSchema = z.object({
   email: z.string().email(),
   name: z.string(),
   role: z.enum([
-    UserType.STUDENT,
-    UserType.AGENT,
-    UserType.ADMIN,
+    UserTypeEnum.STUDENT,
+    UserTypeEnum.AGENT,
+    UserTypeEnum.ADMIN,
+    UserTypeEnum.PENDING_AGENT,
   ]),
 });
 
@@ -31,9 +26,10 @@ export const loginRequestSchema = z.object({
     .min(1, "Password is required")
     .min(6, "Password must be at least 6 characters"),
   role: z.enum([
-    UserType.STUDENT,
-    UserType.AGENT,
-    UserType.ADMIN,
+    UserTypeEnum.STUDENT,
+    UserTypeEnum.AGENT,
+    UserTypeEnum.ADMIN,
+    UserTypeEnum.PENDING_AGENT,
   ]),
 });
 
@@ -57,9 +53,10 @@ export const createUserRequestSchema = z.object({
     .email("Invalid email address")
     .min(1, "Email is required"),
   role: z.enum([
-    UserType.STUDENT,
-    UserType.AGENT,
-    UserType.ADMIN,
+    UserTypeEnum.STUDENT,
+    UserTypeEnum.AGENT,
+    UserTypeEnum.ADMIN,
+    UserTypeEnum.PENDING_AGENT,
   ]),
   phone: z
     .string()
@@ -81,9 +78,10 @@ export const signUpRequestSchema = z.object({
   email: z.email(),
   password: z.string().min(6),
   role: z.enum([
-    UserType.STUDENT,
-    UserType.AGENT,
-    UserType.ADMIN,
+    UserTypeEnum.STUDENT,
+    UserTypeEnum.AGENT,
+    UserTypeEnum.ADMIN,
+    UserTypeEnum.PENDING_AGENT,
   ]).optional(),
 });
 

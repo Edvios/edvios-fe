@@ -7,12 +7,25 @@ export async function proxy(request: NextRequest) {
   const isAuthPage = pathname.startsWith("/auth/login");
   const isDashboardPage = pathname.startsWith("/dashboard");
   const isStudentRegistrationPage = pathname.startsWith("/student-registration");
+  const isPendingApprovalPage = pathname.startsWith("/pending-approval");
 
   // If user is not authenticated and trying to access protected routes
   if (!user && (isDashboardPage || isStudentRegistrationPage)) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
+  }
+
+  // If user is pending agent, block all pages except pending approval
+  if (user) {
+    const userRole = user.user_metadata?.role || user.app_metadata?.role;
+    const normalizedRole = typeof userRole === "string" ? userRole.toUpperCase() : undefined;
+
+    if (normalizedRole === "PENDING_AGENT" && !isPendingApprovalPage) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/pending-approval";
+      return NextResponse.redirect(url);
+    }
   }
 
   // If user is authenticated and trying to access login page, redirect to their role-specific dashboard

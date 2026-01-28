@@ -30,7 +30,7 @@ export const useAuth = () => {
       const loginRequest: LoginRequestDto = {
         email: loginData.email,
         password: loginData.password,
-        role: loginData.role,
+        role: loginData.role as UserTypeEnum,
       };
 
       const response = await signIn(loginRequest);
@@ -87,10 +87,15 @@ export const useAuth = () => {
     let signUpSuccessful = false;
 
     try {
+      const roleForRegistration =
+        (registerData.role === UserTypeEnum.AGENT
+          ? UserTypeEnum.PENDING_AGENT
+          : registerData.role) as UserTypeEnum;
+
       const signUpRequest: SignUpRequestDto = {
         email: registerData.email,
         password: registerData.password,
-        role: registerData.role,
+        role: roleForRegistration,
       };
 
       const signUpResponse = await signUp(signUpRequest);
@@ -105,9 +110,10 @@ export const useAuth = () => {
         email: registerData.email,
         firstName: registerData.firstName,
         lastName: registerData.lastName,
-        role: registerData.role,
+        role: roleForRegistration,
         phone: registerData.phone,
       };
+      console.log("Creating user with request:", createUserRequest);
 
       const createUserResponse = await createUser(
         createUserRequest,
