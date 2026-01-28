@@ -10,7 +10,6 @@ import {
   BackendFilteredProgramResponse,
   backendFilteredProgramResponseSchema,
   BackendProgram,
-  programApplicationRequestSchema,
   ProgramApplicationRequest,
 } from "../dtos/program.dto";
 
@@ -86,7 +85,7 @@ export class ProgramService {
 
       // Remove empty/null/undefined values
       const cleanedFilterBody = Object.fromEntries(
-        Object.entries(filterBody).filter(([value]) => value !== "" && value !== null && value !== undefined)
+        Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
       );
 
       console.log('=== FILTER REQUEST ===');
@@ -118,7 +117,7 @@ export class ProgramService {
         programs: backendData.data.map(mapBackendProgramToFrontend),
         pagination: {
           page: backendData.page,
-          size: backendData.data.length, // Use actual number of programs returned
+          size: backendData.size ?? backendData.data.length,
           total: backendData.total,
         },
       };
@@ -138,12 +137,8 @@ export class ProgramService {
     try {
       console.log("Submitting application:", data);
 
-      // const response = await axiosInstance.post("/pai/applications", data);
-      // return response.data;
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      return { success: true, message: "Application submitted successfully" };
+      const response = await axiosInstance.post("/applications", data);
+      return response.data;
     } catch (error) {
       console.error("Failed to submit application:", error);
       throw new Error("Failed to submit application. Please try again later.");
@@ -165,7 +160,7 @@ function mapBackendProgramToFrontend(program: BackendProgram) {
     tuitionFee: program.tuitionFee ?? "",
     applicationFee: program.applicationFee ?? "",
     englishTestScore: program.englishTestScore ?? "",
-    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist",
+    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist" | "deadline_passed",
     subject: program.subject?.name ?? "",
     ranking: 0,
     scholarship: program.scholarship ?? false,

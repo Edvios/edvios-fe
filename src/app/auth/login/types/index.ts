@@ -3,7 +3,7 @@ import { LucideIcon } from "lucide-react";
 export interface LoginFormData {
   email: string;
   password: string;
-  role: "STUDENT" | "AGENT" | "ADMIN";
+  role: "STUDENT" | "AGENT" | "ADMIN" | "PENDING_AGENT";
 }
 
 export interface RegisterFormData {
@@ -12,7 +12,7 @@ export interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
-  role: "STUDENT" | "AGENT" | "ADMIN";
+  role: "STUDENT" | "AGENT" | "ADMIN" | "PENDING_AGENT";
   phone: string;
 }
 
@@ -26,7 +26,7 @@ export interface UserType {
 
 export interface UserData {
   email: string;
-  role: "STUDENT" | "AGENT" | "ADMIN";
+  role: "STUDENT" | "AGENT" | "ADMIN" | "PENDING_AGENT";
   name: string;
   id: string;
   phone?: string;

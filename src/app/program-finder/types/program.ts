@@ -10,7 +10,7 @@ export interface Program {
     tuitionFee: string;
     applicationFee: string;
     englishTestScore: string;
-    status: 'available' | 'closed' | 'waitlist';
+    status: 'available' | 'closed' | 'waitlist' | 'deadline_passed';
     subject: string;
     ranking: number;
     scholarship: boolean;

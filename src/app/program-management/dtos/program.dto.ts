@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Availability, StudyLevel, ProgramStatus } from '../enums';
+import { Availability, ProgramStatus } from '../enums';
 
 export const programSchema = z.object({
 	id: z.string().optional(),

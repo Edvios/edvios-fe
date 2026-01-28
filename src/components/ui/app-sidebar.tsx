@@ -31,6 +31,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { logout } from "@/app/auth/login/api/auth.api";
+import axiosInstance from "@/lib/axios";
 
 interface UserData {
   email: string;
@@ -76,25 +77,31 @@ const agentItems = [
     icon: Home,
   },
   {
-    title: "Clients",
-    url: "/dashboard/agent/clients",
+    title: "Students",
+    url: "/student-management",
     icon: Users,
   },
   {
     title: "Applications",
-    url: "/dashboard/agent/applications",
+    url: "/applications",
     icon: FileText,
   },
   {
-    title: "Commissions",
-    url: "/dashboard/agent/commissions",
-    icon: BarChart3,
+    title: "Institutions",
+    url: "/institution-management",
+    icon: Building2,
   },
   {
-    title: "Agency",
-    url: "/program-finder",
-    icon: Building,
+    title: "Programs",
+    url: "/program-management",
+    icon: BookOpen,
   },
+  {
+    title: "Chat",
+    url: "/chat",
+    icon: MessageCircle,
+  }
+
 ];
 
 // Admin menu items
@@ -113,6 +120,11 @@ const adminItems = [
     title: "Agents",
     url: "/agent-management",
     icon: User,
+  },
+  {
+    title: "Applications",
+    url: "/applications",
+    icon: FileText,
   },
   {
     title: "Institutions",
@@ -135,7 +147,14 @@ export function AppSidebar() {
     try {
       const userSession = sessionStorage.getItem("user-session");
 
-      if (userSession) setUserData(JSON.parse(userSession));
+      if (userSession) {
+        setUserData(JSON.parse(userSession));
+      } else {
+        axiosInstance.get("/auth/me").then((response) => {
+        setUserData(response.data);
+        sessionStorage.setItem("user-session", JSON.stringify(response.data));
+        });
+      }
     } catch {
       // ignore parse errors
     }
@@ -143,15 +162,15 @@ export function AppSidebar() {
 
   const handleLogout = async () => {
     try {
-          await logout();
-        } catch (error) {
-          console.error('Logout failed:', error);
-        } finally {
-          sessionStorage.removeItem('user-session');
-          sessionStorage.removeItem('auth-token');
-          cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
-          router.push('/auth/login');
-        }
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      sessionStorage.removeItem("user-session");
+      sessionStorage.removeItem("auth-token");
+      cookieStore.delete("sb-jlqamlxzkfmpfisjlzrg-auth-token");
+      router.push("/auth/login");
+    }
   };
 
   const menuItems = useMemo(() => {
@@ -212,7 +231,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         {/* Settings Section */}
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupLabel>Account</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -226,7 +245,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarContent>
 
       {/* Footer with Logout */}

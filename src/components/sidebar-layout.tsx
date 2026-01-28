@@ -12,7 +12,7 @@ export default function SidebarLayout({
   const pathname = usePathname();
   
   // Pages that should NOT have the sidebar
-  const excludedPaths = ['/auth/login', '/student-registration'];
+  const excludedPaths = ['/auth/login', '/student-registration', '/pending-approval'];
   const shouldShowSidebar = !excludedPaths.some(path => pathname.startsWith(path));
 
   if (!shouldShowSidebar) {
