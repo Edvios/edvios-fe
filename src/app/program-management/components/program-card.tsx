@@ -248,7 +248,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
                   onEdit?.(program);
                 }
               } catch (e) {
-                // fallback to shallow program
+                console.error('Edit fetchProgramById failed', e);
                 onEdit?.(program);
               } finally {
                 setLoadingDetails(false);

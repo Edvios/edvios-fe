@@ -172,7 +172,7 @@ async function fetchInstitutionsFromSupabase() {
           }))
           .filter((x: any) => !!x.name);
       } catch (err) {
-        // ignore and try next candidate
+        console.error('fetchInstitutionsFromSupabase table query error', tbl, err);
         continue;
       }
     }
@@ -212,7 +212,7 @@ export async function fetchInstitutionsList() {
         console.debug('[fetchInstitutionsList] loaded', rows.length, 'rows from Supabase (fallback)');
       }
     } catch (err) {
-      // ignore
+      console.error('fetchInstitutionsList Supabase fallback error', err);
     }
   }
 
@@ -255,7 +255,9 @@ export async function fetchIntakesList() {
     const sup = await fetchIntakesFromSupabase();
     if (Array.isArray(sup) && sup.length) rows = sup;
     if (Array.isArray(sup) && sup.length) console.debug('[fetchIntakesList] loaded', rows.length, 'intakes from Supabase');
-  } catch (err) {}
+  } catch (err) {
+    console.error('fetchIntakesList Supabase error', err);
+  }
 
   if (!rows || rows.length === 0) {
     const candidates = ['/intakes', '/pai/programs/intakes', '/pai/intakes'];
@@ -293,6 +295,7 @@ export async function fetchSubjectsList() {
         if (error || !Array.isArray(data)) return [];
         return data.map((r: any) => ({ id: String(r.id ?? r.subjectId ?? r.subject_id ?? ''), name: String(r.name ?? r.subject_name ?? r.subject ?? r.label ?? '').trim() }));
       } catch (err) {
+        console.error('fetchSubjectsFromSupabase exception', err);
         return [];
       }
     })();
@@ -300,7 +303,9 @@ export async function fetchSubjectsList() {
       rows = sup;
       console.debug('[fetchSubjectsList] loaded', rows.length, 'subjects from Supabase');
     }
-  } catch (err) {}
+  } catch (err) {
+    console.error('fetchSubjectsList Supabase error', err);
+  }
 
   if (!rows || rows.length === 0) {
     const candidates = ['/pai/programs/subjects', '/subjects', '/pai/subjects'];
