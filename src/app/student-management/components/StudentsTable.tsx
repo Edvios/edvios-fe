@@ -37,13 +37,15 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
         {
             header: 'Student',
             Cell: ({ row }: { row: Student }) => (
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-semibold border border-green-200 shadow-sm">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient flex items-center justify-center text-white font-bold text-lg shadow-md">
                         {(row.firstName?.[0] || '') + (row.lastName?.[0] || '')}
                     </div>
                     <div>
-                        <div className="font-semibold text-gray-900">{row.firstName} {row.lastName}</div>
-                        <div className="text-[10px] text-gray-400 font-mono">ID: {row.id}</div>
+                        <div className="font-bold text-gray-900 text-base">{row.firstName} {row.lastName}</div>
+                        <div className="flex items-center gap-2 text-xs text-gradient font-mono">
+                            Joined {new Date(row.createdAt).toLocaleDateString()}
+                        </div>
                     </div>
                 </div>
             )
@@ -53,11 +55,11 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
             Cell: ({ row }: { row: Student }) => (
                 <div className="space-y-1">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Mail className="w-3.5 h-3.5 text-gray-400" />
+                        <Mail className="w-3.5 h-3.5 text-gradient" />
                         {row.email}
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Phone className="w-3.5 h-3.5 text-gray-400" />
+                        <Phone className="w-3.5 h-3.5 text-gradient" />
                         {row.phone || 'N/A'}
                     </div>
                 </div>
@@ -67,7 +69,7 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
             header: 'Location',
             Cell: ({ row }: { row: Student }) => (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <MapPin className="w-3.5 h-3.5 text-green-400" />
+                    <MapPin className="w-3.5 h-3.5 text-gradient" />
                     {row.currentCountry || 'N/A'}
                 </div>
             )
@@ -116,7 +118,7 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
     ];
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-xl overflow-hidden">
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden">
             <Table
                 data={students}
                 columns={columns}
