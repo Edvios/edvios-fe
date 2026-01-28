@@ -9,12 +9,9 @@ import {
   Users, 
   Building, 
   LogOut, 
-  TrendingUp,
   DollarSign,
-  AlertTriangle,
   CheckCircle,
   Activity,
-  Database,
   Settings,
   BarChart3,
 } from "lucide-react";

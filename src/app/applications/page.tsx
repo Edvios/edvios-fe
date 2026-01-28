@@ -12,19 +12,10 @@ import { StatsCard } from '@/app/institution-management/components/StatsCard'
 
 export default function AdminPanel() {
   const [filter, setFilter] = useState<'all' | ApplicationStatus>('all')
-  const { applications, loading, error, updateApplicationStatus } = useApplications(
+  
+  const { applications, loading, error, countsLoading, metrics, updateApplicationStatus } = useApplications(
     filter === 'all' ? undefined : filter
   )
-
-  // Calculate metrics based on filtered applications
-  const metrics = useMemo(() => {
-    const total = applications.length
-    const pending = applications.filter(app => app.status === ApplicationStatus.SUBMITTED).length
-    const approved = applications.filter(app => app.status === ApplicationStatus.ACCEPTED).length
-    const rejected = applications.filter(app => app.status === ApplicationStatus.REJECTED).length
-    
-    return { total, pending, approved, rejected }
-  }, [applications])
 
   // Memoized filter handler
   const handleFilterChange = useCallback((val: 'all' | ApplicationStatus) => {
@@ -60,7 +51,7 @@ export default function AdminPanel() {
     </div>
   ), [metrics])
 
-  if (loading) {
+  if (loading || countsLoading) {
     return (
       <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">

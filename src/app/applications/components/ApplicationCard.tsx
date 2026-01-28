@@ -26,27 +26,27 @@ interface ApplicationCardProps {
 
 const statusVariants: Record<ApplicationStatus, { className: string; label: string }> = {
   [ApplicationStatus.DRAFT]: {
-    className: 'bg-gray-50 text-gray-700 border-gray-200',
+    className: 'bg-gray-100 text-gray-700 border-0',
     label: 'Draft',
   },
   [ApplicationStatus.SUBMITTED]: {
-    className: 'bg-blue-50 text-blue-700 border-blue-200',
+    className: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0',
     label: 'Submitted',
   },
   [ApplicationStatus.UNDER_REVIEW]: {
-    className: 'bg-amber-50 text-amber-700 border-amber-200',
+    className: 'bg-gradient-to-r from-amber-500 to-orange-600 text-white border-0',
     label: 'Under Review',
   },
   [ApplicationStatus.ACCEPTED]: {
-    className: 'bg-green-50 text-green-700 border-green-200',
+    className: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0',
     label: 'Accepted',
   },
   [ApplicationStatus.REJECTED]: {
-    className: 'bg-red-50 text-red-700 border-red-200',
+    className: 'bg-gradient-to-r from-red-500 to-rose-600 text-white border-0',
     label: 'Rejected',
   },
   [ApplicationStatus.WITHDRAWN]: {
-    className: 'bg-gray-50 text-gray-700 border-gray-200',
+    className: 'bg-gray-100 text-gray-700 border-0',
     label: 'Withdrawn',
   },
 };
@@ -56,10 +56,6 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
   onStatusUpdate,
 }) => {
   const [updating, setUpdating] = useState(false);
-  const decisionMade =
-    application.status === ApplicationStatus.ACCEPTED ||
-    application.status === ApplicationStatus.REJECTED;
-  const decisionLabel = application.status === ApplicationStatus.ACCEPTED ? 'Accepted' : 'Rejected';
 
   const handleStatusUpdate = async (status: ApplicationStatus) => {
     setUpdating(true);
@@ -72,7 +68,13 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
 
   const getStatusBadge = (status: ApplicationStatus) => {
     const variant = statusVariants[status];
-    return <Badge className={`${variant.className} border font-medium`}>{variant.label}</Badge>;
+    return (
+      <Badge 
+        className={`${variant.className} font-semibold px-4 py-1.5 text-sm rounded-md shadow-sm`}
+      >
+        {variant.label}
+      </Badge>
+    );
   };
 
   const formatDate = (dateString?: string | null) => {
@@ -238,37 +240,29 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
         </div>
       </CardContent>
 
-      <CardFooter className="flex gap-3 pt-4">
-        {decisionMade ? (
-          <Button
-            className={`w-full text-white font-semibold cursor-default ${
-              application.status === ApplicationStatus.ACCEPTED
-                ? 'bg-green-600 hover:bg-green-600'
-                : 'bg-red-600 hover:bg-red-600'
-            }`}
-          >
-            {decisionLabel}
-          </Button>
-        ) : (
-          <>
+      <CardFooter className="flex justify-between items-center pt-4">
+        {application.status === ApplicationStatus.SUBMITTED && (
+          <div className="flex gap-2">
             <Button
               onClick={() => handleStatusUpdate(ApplicationStatus.ACCEPTED)}
-              disabled={application.status !== ApplicationStatus.SUBMITTED || updating}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium"
+              disabled={updating}
+              size="sm"
+              className="bg-green-600 hover:bg-green-700 text-white font-medium"
             >
-              <Check className="w-4 h-4 mr-2" />
-              Accept Application
+              <Check className="w-4 h-4 mr-1" />
+              Accept
             </Button>
             <Button
               onClick={() => handleStatusUpdate(ApplicationStatus.REJECTED)}
-              disabled={application.status !== ApplicationStatus.SUBMITTED || updating}
+              disabled={updating}
+              size="sm"
               variant="destructive"
-              className="flex-1 font-medium"
+              className="font-medium"
             >
-              <X className="w-4 h-4 mr-2" />
-              Reject Application
+              <X className="w-4 h-4 mr-1" />
+              Reject
             </Button>
-          </>
+          </div>
         )}
       </CardFooter>
     </Card>
