@@ -9,16 +9,10 @@ import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
 import { useStudentDashboard } from "./hooks/use-student-dashboard";
 import {
   Calendar,
-  CheckCircle,
   AlertCircle,
-  ClipboardList,
-  FileText,
-  FolderCheck,
   GraduationCap,
-  type LucideIcon,
 } from "lucide-react";
 import { logout } from "@/app/auth/login/api/auth.api";
-//import CountUp from "@/components/ui/count-up";
 
 
 function statusTone(status?: string) {
@@ -63,22 +57,7 @@ export default function StudentDashboard() {
     }
     
      
-    setUserData(user);
   }, [router]);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-
-    } catch (error) {
-      console.error('Logout failed:', error);
-    } finally {
-      sessionStorage.removeItem('user-session');
-      sessionStorage.removeItem('auth-token');
-      cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
-      router.push('/auth/login');
-    }
-  };
 
   if (!userData) {
     return <div className="min-h-screen flex items-center justify-center">
