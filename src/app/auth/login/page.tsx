@@ -35,7 +35,7 @@ export default function LoginPage() {
         <Card className="shadow-2xl border-gray-200 overflow-hidden p-0">
           {/* Mobile Logo */}
           <div className="md:hidden flex justify-center pt-4">
-            <Image src="/logo.png" alt="Edvios Logo" className="h-30 w-auto" width={1} height={1} />
+            <Image src="/logo.png" alt="Edvios Logo" width={80} height={80} className="h-20 w-auto" />
           </div>
 
           <div className="grid md:grid-cols-2 md:min-h-[600px]">
