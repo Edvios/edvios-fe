@@ -49,14 +49,14 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="max-w-4xl w-[95vw] md:w-full max-h-[90vh] overflow-y-auto p-0 border-none shadow-2xl rounded-2xl md:rounded-3xl">
-                <div className="bg-gradient-to-r from-green-500 to-green-600 h-32 md:h-40 w-full relative">
+                <div className="bg-gradient h-32 md:h-40 w-full relative">
                     <div className="absolute -bottom-12 left-4 md:left-8 flex flex-col md:flex-row items-center md:items-end gap-4 md:gap-6 text-center md:text-left w-full md:w-auto px-4 md:px-0">
-                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl md:rounded-3xl bg-white shadow-xl flex items-center justify-center text-green-600 font-bold text-3xl md:text-4xl border-4 border-white">
+                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl md:rounded-3xl bg-white shadow-xl flex items-center justify-center text-primary font-bold text-3xl md:text-4xl border-4 border-white">
                             {(firstName?.[0] || '') + (lastName?.[0] || '')}
                         </div>
                         <div className="md:mb-2 md:pb-2">
-                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 md:text-white bg-white md:bg-transparent px-4 py-1 rounded-xl md:p-0 shadow-sm md:shadow-none">{fullName}</h2>
-                            <p className="text-gray-500 md:text-green-50 font-medium text-sm md:text-base">Student ID: {student.id}</p>
+                            <p className="text-2xl md:text-3xl font-bold text-gray-900 md:text-white bg-white md:bg-transparent px-4 py-1 rounded-xl md:p-0 shadow-sm md:shadow-none">{fullName}</p>
+                            <p className="text-primary md:text-primary font-medium text-sm md:text-base">Student ID: {student.id}</p>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                         {/* Personal & Contact Details */}
                         <div className="space-y-4 md:space-y-6">
-                            <h4 className="text-[10px] md:text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-[10px] md:text-xs font-bold text-gradient uppercase tracking-[0.2em] flex items-center gap-2">
                                 <User className="w-3.5 h-3.5 md:w-4 md:h-4" /> Personal & Contact
                             </h4>
                             <div className="grid gap-3 md:gap-4">
@@ -79,7 +79,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
 
                         {/* Academic Background */}
                         <div className="space-y-4 md:space-y-6">
-                            <h4 className="text-[10px] md:text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-[10px] md:text-xs font-bold text-gradient uppercase tracking-[0.2em] flex items-center gap-2">
                                 <GraduationCap className="w-3.5 h-3.5 md:w-4 md:h-4" /> Academic Background
                             </h4>
                             <div className="grid gap-3 md:gap-4">
@@ -94,7 +94,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                         {/* Preferences */}
                         <div className="space-y-4 md:space-y-6">
-                            <h4 className="text-[10px] md:text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-[10px] md:text-xs font-bold text-gradient uppercase tracking-[0.2em] flex items-center gap-2\">
                                 <Heart className="w-3.5 h-3.5 md:w-4 md:h-4" /> Study Preferences
                             </h4>
                             <div className="grid gap-3 md:gap-4">
@@ -106,14 +106,14 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
 
                         {/* Additional Info */}
                         <div className="space-y-4 md:space-y-6">
-                            <h4 className="text-[10px] md:text-xs font-bold text-green-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h4 className="text-[10px] md:text-xs font-bold text-gradient uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Briefcase className="w-3.5 h-3.5 md:w-4 md:h-4" /> Additional Information
                             </h4>
                             <div className="grid gap-3 md:gap-4">
                                 <DetailItem icon={Briefcase} label="Work Experience" value={student.workExperience || 'None'} />
                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
                                     <span className="text-[10px] text-gray-500 font-medium uppercase">Scholarship Interest</span>
-                                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${student.scholarshipInterest ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
+                                    <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${student.scholarshipInterest ? 'bg-gradient text-white' : 'bg-gray-200 text-gray-600'}`}>
                                         {student.scholarshipInterest ? 'YES' : 'NO'}
                                     </span>
                                 </div>
@@ -135,7 +135,7 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
                 </div>
 
                 <DialogFooter className="p-4 md:p-8 border-t bg-gray-50/80 rounded-b-2xl md:rounded-b-3xl">
-                    <Button variant="outline" onClick={onClose} className="w-full md:w-auto h-12 px-8 rounded-xl border-gray-200 hover:bg-white hover:text-green-600 transition-all font-semibold">
+                    <Button variant="outline" onClick={onClose} className="w-full md:w-auto h-12 px-8 rounded-xl border-gray-200 hover:bg-white hover:text-gradient transition-all font-semibold">
                         Close Profile
                     </Button>
                 </DialogFooter>
@@ -145,8 +145,8 @@ export const StudentProfileDialog: React.FC<StudentProfileDialogProps> = ({
 };
 
 const DetailItem = ({ icon: Icon, label, value }: { icon: LucideIcon, label: string, value: string }) => (
-    <div className="flex items-start gap-3 p-3 hover:bg-green-50/50 rounded-2xl transition-colors group">
-        <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400 group-hover:text-green-500 group-hover:border-green-200 transition-all">
+    <div className="flex items-start gap-3 p-3 hover:bg-gradient/5 rounded-2xl transition-colors group">
+        <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-400 group-hover:text-gradient group-hover:border-gradient transition-all">
             <Icon className="w-5 h-5" />
         </div>
         <div>

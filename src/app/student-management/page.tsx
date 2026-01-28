@@ -45,7 +45,7 @@ const StudentManagementPage = () => {
   // Calculate stats
   const stats = useMemo(() => {
     return [
-      { label: 'Total Students', value: total, icon: GraduationCap, color: 'from-green-500 to-green-600' },
+      { label: 'Total Students', value: total, icon: GraduationCap, color: 'bg-gradient' },
     ];
   }, [total]);
 

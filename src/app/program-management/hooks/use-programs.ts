@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Program } from '../types';
 import {
-  fetchPrograms,
   fetchProgramsPage,
   createProgram,
   updateProgram,

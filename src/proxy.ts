@@ -7,12 +7,57 @@ export async function proxy(request: NextRequest) {
   const isAuthPage = pathname.startsWith("/auth/login");
   const isDashboardPage = pathname.startsWith("/dashboard");
   const isStudentRegistrationPage = pathname.startsWith("/student-registration");
+  const isPendingApprovalPage = pathname.startsWith("/pending-approval");
+  const isManagementPage = 
+    pathname.startsWith("/agent-management") ||
+    pathname.startsWith("/institution-management") ||
+    pathname.startsWith("/program-management") ||
+    pathname.startsWith("/student-management");
 
   // If user is not authenticated and trying to access protected routes
   if (!user && (isDashboardPage || isStudentRegistrationPage)) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
+  }
+
+  // If user is pending agent, block all pages except pending approval
+  if (user) {
+    const userRole = user.user_metadata?.role || user.app_metadata?.role;
+    const normalizedRole = typeof userRole === "string" ? userRole.toUpperCase() : undefined;
+
+    if (normalizedRole === "PENDING_AGENT" && !isPendingApprovalPage) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/pending-approval";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // Management pages access control - only ADMIN and AGENT roles allowed
+  if (user && isManagementPage) {
+    const userRole = user.user_metadata?.role || user.app_metadata?.role;
+    const normalizedRole = typeof userRole === "string" ? userRole.toUpperCase() : undefined;
+
+    // Block STUDENT and PENDING_AGENT from management pages
+    if (normalizedRole === "STUDENT" || normalizedRole === "PENDING_AGENT") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard/student";
+      return NextResponse.redirect(url);
+    }
+
+    // Block AGENT from agent-management page (only ADMIN allowed)
+    if (pathname.startsWith("/agent-management") && normalizedRole === "AGENT") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard/agent";
+      return NextResponse.redirect(url);
+    }
+
+    // Allow only ADMIN and AGENT roles for other management pages
+    if (normalizedRole !== "ADMIN" && normalizedRole !== "AGENT") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/auth/login";
+      return NextResponse.redirect(url);
+    }
   }
 
   // If user is authenticated and trying to access login page, redirect to their role-specific dashboard
@@ -62,18 +107,6 @@ export async function proxy(request: NextRequest) {
       }
     }
   }
-
-  // Allow students to access student-registration route
-  // if (user && pathname.startsWith("/student-registration")) {
-  //   const userRole = user.user_metadata?.role || user.app_metadata?.role;
-    
-  //   // Only allow students to access student-registration
-  //   if (userRole?.toUpperCase() !== 'STUDENT') {
-  //     const url = request.nextUrl.clone();
-  //     url.pathname = '/dashboard/student';
-  //     return NextResponse.redirect(url);
-  //   }
-  // }
 
   return supabaseResponse;
 }
