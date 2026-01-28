@@ -54,7 +54,7 @@ const AgentManagementPage = () => {
   // Calculate stats - in a real app these might come from a separate endpoint
   const stats = useMemo(() => {
     return [
-      { label: 'Total Agents', value: total, icon: Users, color: 'from-green-500 to-green-600' },
+      { label: 'Total Agents', value: total, icon: Users, color: 'bg-gradient' },
       { label: 'Pending Review', value: agents.filter(a => a.role === 'PENDING_AGENT').length, icon: Clock, color: 'from-blue-400 to-blue-600' },
     ];
   }, [agents, total]);
