@@ -22,7 +22,8 @@ function mapRowToProgram(r: any): Program {
     university: String(r.university ?? inst.name ?? r.institution_name ?? ''),
     location: String(r.location ?? institutionLocation ?? r.institution_country ?? ''),
     countryCode: String(r.country_code ?? ''),
-    ranking: String(r.ranking ?? ''),
+    // Support multiple possible ranking field names from different backends
+    ranking: String(r.ranking ?? r.rank ?? r.world_ranking ?? r.ranking_text ?? r.institution_rank ?? ''),
     rating: Number(r.rating ?? 0),
     badges: Array.isArray(r.badges) ? r.badges : [],
     tags: Array.isArray(r.tags) ? r.tags : [],
@@ -31,7 +32,8 @@ function mapRowToProgram(r: any): Program {
     availability: r.availability ?? Availability.AVAILABLE,
     tuition: String(r.tuitionFee ?? ''),
     tuitionFee: String(r.tuitionFee ?? ''),
-    englishTestScore: String(r.englishTestScore ?? ''),
+    // Normalize various possible english test score fields
+    englishTestScore: String(r.englishTestScore ?? r.english_test ?? r.englishTest ?? r.english ?? ''),
     level: r.level ? String(r.level) : undefined,
     applicationDeadline: String(r.applicationDeadline ?? r.application_deadline ?? r.application_deadline_at ?? ''),
     ucasCode: String(r.ucasCode ?? r.ucas_code ?? ''),
