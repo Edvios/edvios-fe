@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 // Calendar removed — currently unused
 import { ProfileTab } from "./enums/profile-tabs.enum";
-import { useStudentProfile } from "./hooks/use-student-profile";
+import { useStudentProfile, useProfileEffects } from "./hooks/use-student-profile";
 import { StudentProfile } from "./types/profile.types";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
@@ -20,16 +20,132 @@ import {
   Search,
   User,
 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 // tabOrder removed — not used
 
+// Small local helpers to compute changed fields and merge them into the
+// existing student DTO. Kept local to this file to avoid an extra import
+// and to make the profile save self-contained.
+type AnyRecord = Record<string, unknown>;
+
+function getChangedFields(original: AnyRecord | undefined | null, modified: AnyRecord | undefined | null): AnyRecord {
+  const changes: AnyRecord = {};
+  if (!modified) return changes;
+
+  for (const key of Object.keys(modified)) {
+    const newVal = (modified as Record<string, unknown>)[key];
+    const oldVal = original ? (original as Record<string, unknown>)[key] : undefined;
+
+    if (newVal === undefined) continue;
+
+    const isObject = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+    if (isObject(newVal) && isObject(oldVal)) {
+      const nested = getChangedFields(oldVal, newVal);
+      if (Object.keys(nested).length > 0) changes[key] = nested as unknown;
+    } else if (Array.isArray(newVal) && Array.isArray(oldVal)) {
+      if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) changes[key] = newVal as unknown;
+    } else {
+      if (newVal !== oldVal) changes[key] = newVal as unknown;
+    }
+  }
+
+  return changes;
+}
+
+function mergeStudentRegistrationDto(original: AnyRecord | undefined | null, changes: AnyRecord | undefined | null): AnyRecord {
+  const result: AnyRecord = original ? { ...(original as Record<string, unknown>) } : {};
+  if (!changes) return result;
+  for (const k of Object.keys(changes)) {
+    const v = (changes as Record<string, unknown>)[k];
+    if (v && typeof v === "object" && !Array.isArray(v)) {
+      result[k] = { ...((result[k] as Record<string, unknown>) ?? {}), ...(v as Record<string, unknown>) } as unknown;
+    } else {
+      result[k] = v as unknown;
+    }
+  }
+
+  const keysToSync = ["firstName", "lastName", "email", "phone"];
+  let mergedUser: Record<string, unknown> | undefined;
+  for (const k of keysToSync) {
+    if (changes && Object.prototype.hasOwnProperty.call(changes, k)) {
+      mergedUser = { ...(mergedUser ?? (result.user ?? {} as Record<string, unknown>)), [k]: (changes as Record<string, unknown>)[k] };
+    }
+  }
+
+  if (mergedUser) result.user = mergedUser as unknown;
+
+  return result;
+}
+
+function applyUpdatesToDto(original: AnyRecord | undefined | null, modified: AnyRecord | undefined | null): AnyRecord {
+  const changes = getChangedFields(original, modified);
+  return mergeStudentRegistrationDto(original, changes);
+}
+
 export default function StudentProfilePage() {
-  const { profile, activeTab, setActiveTab, resetProfile } = useStudentProfile();
+  const candidateSessionIdKeys = [
+    "id",
+    "_id",
+    "userId",
+    "user_id",
+    "uid",
+    "sub",
+    "studentId",
+    "student_id",
+    "STUDENTId",
+    "studentID",
+  ];
+
+  const getStudentIdFromSession = () => {
+    if (typeof window === "undefined") return undefined;
+    const raw = sessionStorage.getItem("user-session");
+    if (!raw) return undefined;
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null;
+      if (!isRecord(parsed)) return undefined;
+
+      const tryLookup = (obj: Record<string, unknown> | undefined) => {
+        if (!obj) return undefined;
+        const found = candidateSessionIdKeys
+          .map((k) => obj[k])
+          .find((v) => v !== undefined && v !== null);
+        return found ? String(found) : undefined;
+      };
+
+      // top-level
+      const top = tryLookup(parsed as Record<string, unknown>);
+      if (top) return top;
+
+      // common nested shapes
+      const data = (parsed as Record<string, unknown>).data as Record<string, unknown> | undefined;
+      const foundInData = tryLookup(data);
+      if (foundInData) return foundInData;
+
+      const user = (parsed as Record<string, unknown>).user as Record<string, unknown> | undefined;
+      const foundInUser = tryLookup(user) ?? (user && user.id ? String(user.id) : undefined);
+      if (foundInUser) return foundInUser;
+
+      return undefined;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const studentId = getStudentIdFromSession();
+
+  const { data: profileData, loading, error, fetchStudent, saveStudent } = useStudentProfile(studentId);
+
+  const [activeTab, setActiveTab] = useState<ProfileTab>(ProfileTab.OVERVIEW);
+  const resetProfile = () => {
+    if (studentId) fetchStudent(studentId);
+  };
   const [isEditing, setIsEditing] = useState(false);
-  const [displayProfile, setDisplayProfile] = useState<StudentProfile>(profile);
-  const [formProfile, setFormProfile] = useState<StudentProfile>(profile);
+  const [displayProfile, setDisplayProfile] = useState<StudentProfile>(profileData ?? ({} as StudentProfile));
+  const [formProfile, setFormProfile] = useState<StudentProfile>(profileData ?? ({} as StudentProfile));
   // date picker state removed — not used
-  const [gpaInput, setGpaInput] = useState<string>(String(profile.gpa ?? ""));
+  const [gpaInput, setGpaInput] = useState<string>(String(profileData?.gpa ?? ""));
   
   const initials = useMemo(() => {
     const name = displayProfile.firstName
@@ -40,37 +156,13 @@ export default function StudentProfilePage() {
 
   // dobDate and handleDateSelect removed — not used
 
-  useEffect(() => {
-    // prefer auth-provided email (may be returned in user_metadata) when profile.email is missing
-    let emailFromMeta: string | undefined;
-    const p = profile as unknown as Record<string, unknown>;
-    const maybeMeta = p.user_metadata;
-    if (typeof maybeMeta === "object" && maybeMeta !== null) {
-      const meta = maybeMeta as Record<string, unknown>;
-      if (typeof meta.email === "string") emailFromMeta = meta.email;
-    }
-    // normalize possible misspelled `adress` into `address` for UI
-    const firstFromFull = typeof profile.fullName === "string" && profile.fullName.trim().length > 0
-      ? String(profile.fullName).trim().split(/\s+/)[0]
-      : undefined;
-    const lastFromFull = typeof profile.fullName === "string" && profile.fullName.trim().length > 0
-      ? String(profile.fullName).trim().split(/\s+/).slice(1).join(" ") || undefined
-      : undefined;
-
-    const normalized = {
-      ...profile,
-      email: profile.email ?? emailFromMeta,
-      address: profile.address ?? profile.adress,
-      firstName: profile.firstName ?? firstFromFull,
-      lastName: profile.lastName ?? lastFromFull,
-    } as typeof profile;
-    setDisplayProfile(normalized);
-  }, [profile]);
-
-  useEffect(() => {
-    setFormProfile(displayProfile);
-    setGpaInput(String(displayProfile.gpa ?? ""));
-  }, [displayProfile]);
+  useProfileEffects({
+    profileData,
+    displayProfile,
+    setDisplayProfile,
+    setFormProfile,
+    setGpaInput,
+  });
 
   const displayAddress = displayProfile.address ?? displayProfile.adress ?? "";
 
@@ -161,6 +253,7 @@ export default function StudentProfilePage() {
                     <>
                       <Button
                         size="sm"
+                        disabled={loading}
                         onClick={async () => {
                           // Save only changed fields to backend
                           try {
@@ -173,17 +266,19 @@ export default function StudentProfilePage() {
                                   const candidateKeys = ["STUDENTId", "studentId", "student_id", "studentID"];
                                   const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null;
                                   if (isRecord(parsed)) {
-                                    for (const k of candidateKeys) {
-                                      const direct = parsed[k];
-                                      let val: unknown = direct;
-                                      if (val === undefined && isRecord(parsed) && "data" in parsed) {
-                                        const maybeData = (parsed as Record<string, unknown>).data;
-                                        if (isRecord(maybeData)) val = maybeData[k];
+                                    const val = ((): unknown => {
+                                      const direct = candidateKeys.map((k) => parsed[k]);
+                                      const foundDirect = direct.find((v) => v !== undefined && v !== null);
+                                      if (foundDirect !== undefined && foundDirect !== null) return foundDirect;
+                                      if ("data" in parsed && isRecord((parsed as Record<string, unknown>).data)) {
+                                        const maybeData = (parsed as Record<string, unknown>).data as Record<string, unknown>;
+                                        const nested = candidateKeys.map((k) => maybeData[k]);
+                                        return nested.find((v) => v !== undefined && v !== null);
                                       }
-                                      if (val !== undefined && val !== null) {
-                                        apiPath = `/profile/api?studentId=${encodeURIComponent(String(val))}`;
-                                        break;
-                                      }
+                                      return undefined;
+                                    })();
+                                    if (val !== undefined && val !== null) {
+                                      apiPath = `/profile/api?studentId=${encodeURIComponent(String(val))}`;
                                     }
                                   }
                                 } catch {
@@ -191,56 +286,42 @@ export default function StudentProfilePage() {
                                 }
                               }
                             }
-                            // Only send changed fields
-                            const changed: Partial<StudentProfile> = {};
-                            const setChanged = <K extends keyof StudentProfile>(obj: Partial<StudentProfile>, k: K, v: StudentProfile[K]) => {
-                              obj[k] = v;
-                            };
-                            (Object.keys(formProfile) as Array<keyof StudentProfile>).forEach((key) => {
-                              const val = formProfile[key];
-                              if (val !== displayProfile[key]) {
-                                setChanged(changed, key, val as StudentProfile[typeof key]);
-                              }
-                            });
-                            // firstName/lastName will be sent individually; no combined fullName field
+                            // Send the full user+student object so backend can persist both sides
+                            // Create a merged payload that only applies edited fields
+                            // and keeps nested `user` fields in sync.
+                            let payloadAny: Record<string, unknown> | undefined;
+                              try {
+                              payloadAny = applyUpdatesToDto(displayProfile as AnyRecord, formProfile as AnyRecord);
+                            } catch (e) {
+                              // fallback to shallow merge if helper fails
+                              payloadAny = { ...(displayProfile as Record<string, unknown>), ...(formProfile as Record<string, unknown>) };
+                              console.debug('applyUpdatesToDto failed', e);
+                            }
 
                             // normalize address field for backends using `adress` typo
-                            if (changed.address) {
-                              changed.adress = changed.adress ?? changed.address;
+                            if (payloadAny && (payloadAny as Record<string, unknown>).address) {
+                              (payloadAny as Record<string, unknown>).adress = (payloadAny as Record<string, unknown>).adress ?? (payloadAny as Record<string, unknown>).address;
                             }
 
-                            if (Object.keys(changed).length === 0) {
-                              setIsEditing(false);
-                              return;
+                            if (!studentId) {
+                              throw new Error("Missing student id");
                             }
-                            const res = await fetch(apiPath, {
-                              method: "PATCH",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify(changed),
-                            });
-                            if (!res.ok) {
-                              let errText: string | undefined;
-                              try {
-                                const json = await res.json();
-                                errText = json?.error ?? JSON.stringify(json);
-                              } catch {
-                                try {
-                                  errText = await res.text();
-                                } catch {
-                                  errText = undefined;
-                                }
-                              }
-                              console.error("Profile save failed:", res.status, res.statusText, errText, changed);
-                              throw new Error(errText ?? `Save failed: ${res.status}`);
-                            }
-                            const data = await res.json();
-                            setDisplayProfile({ ...displayProfile, ...changed, ...data });
+
+                            const data = await saveStudent(studentId, payloadAny as unknown as Partial<StudentProfile>);
+                            setDisplayProfile({ ...displayProfile, ...payloadAny, ...data });
                             setIsEditing(false);
-                          } catch {
-                            alert("Failed to save profile");
+                          } catch (err: unknown) {
+                            console.error('Save profile error', err);
+                            let msg = String(err);
+                            if (typeof err === 'object' && err !== null && 'message' in err) {
+                              const maybeMsg = (err as { message?: unknown }).message;
+                              msg = typeof maybeMsg === 'string' ? maybeMsg : String(maybeMsg);
+                            }
+                            alert("Failed to save profile: " + msg);
                           }
                         }}
-                      >
+                        >
+                        {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                         Save Changes
                       </Button>
                       <Button

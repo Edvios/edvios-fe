@@ -1,16 +1,29 @@
 export interface StudentProfile {
-  userId?: string;
+  id?: string;
+  fullName?: string;
+
   firstName?: string;
   lastName?: string;
+  email?: string;
+  phone?: string;
+
+  dob?: string;
   nationality?: string;
-  currentEducationLevel?: string;
+
+  address?: string;
+  adress?: string; // backend typo safety
+
   currentInstitution?: string;
+  currentEducationLevel?: string;
+
   fieldOfStudy?: string;
   gpa?: number;
-  graduationDate?: string; // ISO string
-  dob?: string; // ISO string for date of birth
-  preferredDestination?: string;
+
   preferredProgram?: string;
+  preferredDestination?: string;
+
+  // Additional fields present in DTO/schema
+  graduationDate?: string;
   preferredStudyLevel?: string;
   preferredIntake?: string;
   englishTest?: string;
@@ -26,11 +39,10 @@ export interface StudentProfile {
   preferredContactMethod?: string;
   bestTimeToContact?: string;
   additionalQuestions?: string;
-  // legacy / display fields
-  // Note: some DB rows may use the misspelled `adress` column — keep both for compatibility
-  adress?: string;
-  fullName?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
+  // New fields to match Student model
+  currentCountry?: string;
+  currentCity?: string;
+  budgetRange?: string;
+  scholarshipInterest?: boolean;
+  marketingConsent?: boolean;
 }
