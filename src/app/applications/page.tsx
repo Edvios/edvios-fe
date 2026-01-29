@@ -7,13 +7,28 @@ import { Card } from '@/components/ui/card'
 import { useApplications } from '@/app/applications/hooks/use-applications'
 import { ApplicationCard } from '@/app/applications/components/ApplicationCard'
 import { ApplicationFilters } from '@/app/applications/components/ApplicationFilters'
+import { Pagination } from '@/app/applications/components/Pagination'
 import { ApplicationStatus } from '@/app/applications/enums/application.enum'
 import { StatsCard } from '@/app/institution-management/components/StatsCard'
 
 export default function AdminPanel() {
   const [filter, setFilter] = useState<'all' | ApplicationStatus>('all')
   
-  const { applications, loading, error, countsLoading, metrics, updateApplicationStatus } = useApplications(
+  const { 
+    applications, 
+    loading, 
+    error, 
+    countsLoading, 
+    metrics, 
+    updateApplicationStatus,
+    paginationParams,
+    totalItems,
+    totalPages,
+    goToPage,
+    nextPage,
+    previousPage,
+    changePageSize
+  } = useApplications(
     filter === 'all' ? undefined : filter
   )
 
@@ -120,15 +135,29 @@ export default function AdminPanel() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-6">
-                {applications.map((application) => (
-                  <ApplicationCard
-                    key={application.id}
-                    application={application}
-                    onStatusUpdate={updateApplicationStatus}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="space-y-6">
+                  {applications.map((application) => (
+                    <ApplicationCard
+                      key={application.id}
+                      application={application}
+                      onStatusUpdate={updateApplicationStatus}
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                <Pagination
+                  currentPage={paginationParams.page || 1}
+                  totalPages={totalPages}
+                  pageSize={paginationParams.size || 10}
+                  totalItems={totalItems}
+                  onPageChange={goToPage}
+                  onPageSizeChange={changePageSize}
+                  onNext={nextPage}
+                  onPrevious={previousPage}
+                />
+              </>
             )}
           </div>
         </Card>

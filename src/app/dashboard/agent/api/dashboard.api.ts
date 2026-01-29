@@ -7,7 +7,7 @@ import { AgentApplicationSchema,DashboardStatsSchema } from '../dtos/dashboard.d
 export const adminDashboardApi = {
     async getAllWithPaginationAndFilters(): Promise<AgentApplication[]> {
         const response = await axiosInstance.get('/applications?page=1&limit=3&status=SUBMITTED');
-        return z.array(AgentApplicationSchema).parse(response.data);
+        return z.array(AgentApplicationSchema).parse(response.data.applications);
     },
 
     async getStats(): Promise<DashboardStats> {

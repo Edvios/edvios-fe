@@ -13,6 +13,7 @@ export interface StatCard {
 
 export interface Application {
   id?: string;
+  programId?: string;
   school?: string;
   program?: string;
   status?: string;
@@ -38,12 +39,43 @@ export interface DocumentItem {
   updatedAt?: string;
 }
 
+
 export interface EnrolledProgram {
   id?: string;
   school?: string;
   program?: string;
   term?: string;
   startDate?: string;
+}
+// API aliases (kept for compatibility with different backend shapes)
+export interface EnrolledProgram {
+  title?: string;
+  university?: string;
+  startedAt?: string;
+  status?: string;
+  raw?: unknown;
+}
+
+export interface ApplicationsCount {
+  count: { [status: string]: number };
+}
+
+export interface StudentDashboardStats {
+  totalPrograms: number;
+  enrolledPrograms: number;
+  applicationCount: number;
+  acceptedCount: number;
+  enrolledCount: number;
+  unreadNotifications?: number;
+  gpa?: number | null;
+}
+
+export interface RecentActivity {
+  id: string;
+  type: string;
+  message: string;
+  createdAt: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface UserData {

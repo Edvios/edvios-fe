@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Application } from '@/app/applications/types/application.types';
+import { Application, PaginationParams } from '@/app/applications/types/application.types';
 import { ApplicationStatus } from '@/app/applications/enums/application.enum';
 import { applicationsApi } from '@/app/applications/api/applications.api';
 import { AppToast } from '@/utils/toast-utils';
@@ -12,13 +12,32 @@ export const useApplications = (status?: ApplicationStatus) => {
   const [error, setError] = useState<string | null>(null);
   const [counts, setCounts] = useState<{ [key in ApplicationStatus]?: number }>({});
   const [countsLoading, setCountsLoading] = useState(true);
+  const [paginationParams, setPaginationParams] = useState<PaginationParams>({
+      page: 1,
+      size: 10,
+      status: status,
+    })
+  const [totalItems, setTotalItems] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+
+  // Update paginationParams when status filter changes
+  useEffect(() => {
+    setPaginationParams(prev => ({
+      ...prev,
+      page: 1, // Reset to first page when status changes
+      status: status
+    }));
+  }, [status]);
 
   const fetchApplications = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await applicationsApi.getByStatus(status);
-      setApplications(data);
+      const response = await applicationsApi.getAll(paginationParams);
+      setApplications(response.data);
+      setTotalItems(response.total);
+      // Calculate total pages from total items and page size
+      setTotalPages(Math.ceil(response.total / (paginationParams.size || 10)));
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load applications';
       setError(message);
@@ -26,7 +45,7 @@ export const useApplications = (status?: ApplicationStatus) => {
     } finally {
       setLoading(false);
     }
-  }, [status]);
+  }, [paginationParams]);
 
   const fetchCounts = useCallback(async () => {
     try {
@@ -51,13 +70,13 @@ export const useApplications = (status?: ApplicationStatus) => {
     fetchCounts();
   }, [fetchCounts]);
 
-  const updateApplicationStatus = async (id: string, status: ApplicationStatus) => {
+  const updateApplicationStatus = async (id: string, newStatus: ApplicationStatus) => {
     try {
-      await applicationsApi.updateStatus(id, status);
+      await applicationsApi.updateStatus(id, newStatus);
       setApplications(prev =>
-        prev.map(app => app.id === id ? { ...app, status } : app)
+        prev.map(app => app.id === id ? { ...app, status: newStatus } : app)
       );
-      AppToast.success(`Application status updated to ${status.toLowerCase()}`);
+      AppToast.success(`Application status updated to ${newStatus.toLowerCase()}`);
       // Refetch counts after status update
       fetchCounts();
     } catch (err) {
@@ -66,6 +85,29 @@ export const useApplications = (status?: ApplicationStatus) => {
       throw err;
     }
   };
+
+  // Pagination actions
+  const goToPage = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setPaginationParams(prev => ({ ...prev, page }));
+    }
+  }, [totalPages]);
+
+  const nextPage = useCallback(() => {
+    if ((paginationParams.page ?? 1) < totalPages) {
+      setPaginationParams(prev => ({ ...prev, page: (prev.page ?? 1) + 1 }));
+    }
+  }, [paginationParams.page, totalPages]);
+
+  const previousPage = useCallback(() => {
+    if ((paginationParams.page ?? 1) > 1) {
+      setPaginationParams(prev => ({ ...prev, page: (prev.page ?? 1) - 1 }));
+    }
+  }, [paginationParams.page]);
+
+  const changePageSize = useCallback((size: number) => {
+    setPaginationParams({ page: 1, size, status });
+  }, [status]);
 
   const metrics = useMemo(() => {
     const total = Object.values(counts).reduce((sum, count) => sum + (count || 0), 0);
@@ -86,5 +128,12 @@ export const useApplications = (status?: ApplicationStatus) => {
     updateApplicationStatus,
     refetch: fetchApplications,
     refetchCounts: fetchCounts,
+    paginationParams,
+    totalItems,
+    totalPages,
+    goToPage,
+    nextPage,
+    previousPage,
+    changePageSize,
   };
 };

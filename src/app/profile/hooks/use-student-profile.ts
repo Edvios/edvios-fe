@@ -1,75 +1,97 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
-import { ProfileTab } from "../enums/profile-tabs.enum";
-import { studentProfileDto } from "../dtos/profile.dto";
+'use client'
+import { useCallback, useEffect, useState } from "react";
 import { StudentProfile } from "../types/profile.types";
+import { getStudent, updateStudent } from "../api/profile.api";
 
-export function useStudentProfile() {
-  const [activeTab, setActiveTab] = useState<ProfileTab>(ProfileTab.OVERVIEW);
-  const initialProfile = useMemo(() => studentProfileDto, []);
-  const [profile, setProfile] = useState<StudentProfile>(initialProfile);
+export const useStudentProfile = (studentId?: string) => {
+  const [data, setData] = useState<StudentProfile | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<unknown>(null);
 
-  useEffect(() => {
-    let mounted = true;
-    const load = async () => {
-      setLoading(true);
-      try {
-        // If a student id is present in sessionStorage, pass it to the API
-        let apiPath = `/profile/api`;
-        // Safely parse session data without using `any`
-        if (typeof window !== "undefined") {
-          const userSession = sessionStorage.getItem("user-session");
-          if (userSession) {
-            try {
-              const parsed: unknown = JSON.parse(userSession);
-              const candidateKeys = ["STUDENTId", "studentId", "student_id", "studentID"];
-
-              const isRecord = (v: unknown): v is Record<string, unknown> =>
-                typeof v === "object" && v !== null;
-
-              if (isRecord(parsed)) {
-                for (const k of candidateKeys) {
-                  const direct = parsed[k];
-                  let val: unknown = direct;
-                  if (val === undefined && isRecord(parsed) && "data" in parsed) {
-                    const maybeData = parsed.data;
-                    if (isRecord(maybeData)) val = maybeData[k];
-                  }
-                  if (val !== undefined && val !== null) {
-                    apiPath = `/profile/api?studentId=${encodeURIComponent(String(val))}`;
-                    break;
-                  }
-                }
-              }
-              } catch {
-              // ignore parse errors
-            }
-          }
-        }
-        const res = await fetch(apiPath);
-        if (!res.ok) throw new Error("Failed to fetch profile");
-        const data = await res.json();
-        if (mounted && data) setProfile((prev) => ({ ...prev, ...data }));
-      } catch (err: unknown) {
-        // keep sample data if fetch fails
-        console.warn("Could not load profile from API", err);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-    load();
-    return () => {
-      mounted = false;
-    };
+  const fetchStudent = useCallback(async (id: string) => {
+    setLoading(true);
+    try {
+      const res = await getStudent(id);
+      setData(res);
+      return res;
+    } catch (err) {
+      setError(err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  const saveStudent = useCallback(
+    async (id: string, dto: Partial<StudentProfile>) => {
+      setLoading(true);
+      try {
+        const res = await updateStudent(id, dto);
+        setData(res);
+        return res;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  
+
+  useEffect(() => {
+    if (studentId) fetchStudent(studentId);
+  }, [studentId, fetchStudent]);
+
   return {
-    profile,
-    activeTab,
-    setActiveTab,
+    data,
     loading,
-    resetProfile: () => setProfile(initialProfile),
-  } as const;
+    error,
+    fetchStudent,
+    saveStudent,
+  };
+};
+
+// compatibility: normalization effect previously provided by use-profile-effects.ts
+
+export function useProfileEffects(params: {
+  profileData?: StudentProfile | Record<string, unknown> | null;
+  displayProfile: StudentProfile;
+  setDisplayProfile: (p: StudentProfile) => void;
+  setFormProfile: (p: StudentProfile) => void;
+  setGpaInput: (v: string) => void;
+}) {
+  const { profileData, displayProfile, setDisplayProfile, setFormProfile, setGpaInput } = params;
+
+  useEffect(() => {
+    // normalize and apply data from API when available
+
+    const firstFromFull = typeof profileData?.fullName === "string" && profileData.fullName.trim().length > 0
+      ? String(profileData.fullName).trim().split(/\s+/)[0]
+      : undefined;
+    const lastFromFull = typeof profileData?.fullName === "string" && profileData.fullName.trim().length > 0
+      ? String(profileData.fullName).trim().split(/\s+/).slice(1).join(" ") || undefined
+      : undefined;
+
+    const normalized = {
+      ...(profileData ?? {}),
+      // rely on API-provided `email` only; remove auth `user_metadata` fallback
+      email: profileData?.email,
+      address: profileData?.address ?? (profileData as Record<string, unknown>)?.adress,
+      firstName: profileData?.firstName ?? firstFromFull,
+      lastName: profileData?.lastName ?? lastFromFull,
+    } as StudentProfile;
+
+    if (profileData) {
+      console.debug('Profile page: received profileData', normalized);
+    } else {
+      console.debug('Profile page: no profileData available');
+    }
+
+    setDisplayProfile(normalized);
+  }, [profileData, setDisplayProfile]);
+
+  useEffect(() => {
+    setFormProfile(displayProfile);
+    setGpaInput(String(displayProfile.gpa ?? ""));
+  }, [displayProfile, setFormProfile, setGpaInput]);
 }

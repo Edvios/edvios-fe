@@ -77,6 +77,14 @@ export const CommentSchema = z.object({
   timestamp: z.string(),
 });
 
+
+export const PreferredIntakeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
 export const ApplicationSchema = z.object({
   id: z.string(),
   studentId: z.string(),
@@ -90,17 +98,13 @@ export const ApplicationSchema = z.object({
   updatedAt: z.string().optional(),
   student: StudentSchema,
   program: ProgramSchema,
-  comments: z.array(CommentSchema).optional().default([]),
+  preferredIntake: PreferredIntakeSchema,
 });
 
 export const UpdateStatusSchema = z.object({
   status: ApplicationStatusEnum,
 });
 
-export const SendCommentSchema = z.object({
-  comment: z.string().min(1, 'Comment is required').max(1000, 'Comment is too long'),
-});
 
 export type ApplicationDto = z.infer<typeof ApplicationSchema>;
 export type UpdateStatusPayload = z.infer<typeof UpdateStatusSchema>;
-export type SendCommentPayload = z.infer<typeof SendCommentSchema>;

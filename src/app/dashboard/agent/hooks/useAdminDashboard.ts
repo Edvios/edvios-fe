@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ApplicationStatus } from '@/app/applications/enums/application.enum';
-import { applicationsApi } from '@/app/applications/api/applications.api';
 import { AppToast } from '@/utils/toast-utils';
 import { adminDashboardApi } from '../api/dashboard.api';
 import { AgentApplication, DashboardStats } from '../types/dashboard.types';
