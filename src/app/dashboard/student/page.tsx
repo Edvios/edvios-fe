@@ -3,19 +3,21 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudentTab, studentTabLabels } from "./enums/student-tabs";
 import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
 import { useStudentDashboard } from "./hooks/use-student-dashboard";
 import {
-  Calendar,
-  CheckCircle,
-  AlertCircle,
-  ClipboardList,
-  FileText,
-  FolderCheck,
-  GraduationCap,
-  type LucideIcon,
+    Calendar,
+    CheckCircle,
+    AlertCircle,
+    ClipboardList,
+    FileText,
+    FolderCheck,
+    GraduationCap,
+    MessageCircle,
+    type LucideIcon,
 } from "lucide-react";
 import { logout } from "@/app/auth/login/api/auth.api";
 //import CountUp from "@/components/ui/count-up";
@@ -26,6 +28,14 @@ const statIcons: Record<string, LucideIcon> = {
   interviews: Calendar,
   documents: ClipboardList,
   programs: FolderCheck,
+};
+
+const statAccentMap: Record<string, string> = {
+  default: "text-slate-700 bg-slate-100",
+  primary: "text-slate-700 bg-slate-100",
+  success: "text-emerald-700 bg-emerald-50",
+  info: "text-blue-700 bg-blue-50",
+  warn: "text-amber-700 bg-amber-50",
 };
 
 function statusTone(status?: string) {
