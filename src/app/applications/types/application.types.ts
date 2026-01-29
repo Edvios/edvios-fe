@@ -68,11 +68,11 @@ export interface Program {
   updatedAt?: string;
 }
 
-export interface Comment {
+export interface PreferredIntake {
   id: string;
-  text: string;
-  author: string;
-  timestamp: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Application {
@@ -88,7 +88,19 @@ export interface Application {
   updatedAt?: string;
   student: Student;
   program: Program;
-  comments: Comment[];
+  preferredIntake?: PreferredIntake;
+}
+
+export interface PaginationParams {
+  page?: number;
+  size?: number;
+  status?: ApplicationStatus;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  currentPage: number;
 }
 
 export interface UserSession {

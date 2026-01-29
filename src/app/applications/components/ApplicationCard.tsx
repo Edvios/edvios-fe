@@ -95,9 +95,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
   const locationText = [application.program.location, application.program.country]
     .filter(Boolean)
     .join(', ');
-  const intakeText =
-    application.program.intake ?? application.program.intakeId ?? application.preferredIntakeId ?? 'N/A';
-
+    
   return (
     <Card className="border-gray-200 hover:shadow-md transition-shadow duration-200">
       <CardHeader className="space-y-3 pb-4">
@@ -186,7 +184,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
               <Calendar className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">Intake</span>
             </div>
-            <p className="font-semibold text-sm text-gray-900">{intakeText}</p>
+            <p className="font-semibold text-sm text-gray-900">{application.preferredIntake?.name ?? 'N/A'}</p>
           </div>
 
           <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
