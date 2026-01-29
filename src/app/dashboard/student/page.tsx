@@ -9,18 +9,15 @@ import { StudentTab, studentTabLabels } from "./enums/student-tabs";
 import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
 import { useStudentDashboard } from "./hooks/use-student-dashboard";
 import {
-    Calendar,
-    CheckCircle,
-    AlertCircle,
-    ClipboardList,
-    FileText,
-    FolderCheck,
-    GraduationCap,
-    MessageCircle,
-    type LucideIcon,
+  Calendar,
+  CheckCircle,
+  ClipboardList,
+  FileText,
+  FolderCheck,
+  GraduationCap,
+  MessageCircle,
+  type LucideIcon,
 } from "lucide-react";
-import { logout } from "@/app/auth/login/api/auth.api";
-//import CountUp from "@/components/ui/count-up";
 
 const statIcons: Record<string, LucideIcon> = {
   applications: FileText,
@@ -28,6 +25,7 @@ const statIcons: Record<string, LucideIcon> = {
   interviews: Calendar,
   documents: ClipboardList,
   programs: FolderCheck,
+  pending: Calendar,
 };
 
 const statAccentMap: Record<string, string> = {
@@ -56,46 +54,91 @@ function statusTone(status?: string) {
   return "bg-slate-100 text-slate-700";
 }
 
+function resolveLabel(value: unknown): string {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (Array.isArray(value)) return value.map(v => resolveLabel(v)).filter(Boolean).join(', ');
+  if (typeof value === 'object' && value !== null) {
+    // common fields to try
+    const keys = ['title', 'name', 'label', 'program', 'programTitle', 'program_name', 'institution', 'institutionName', 'institution_name', 'university'];
+    const obj = value as Record<string, unknown>;
+    for (const k of keys) {
+      if (obj[k]) return resolveLabel(obj[k]);
+    }
+    // fallback to empty string to avoid '[object Object]'
+    return '';
+  }
+  return '';
+}
+
 export default function StudentDashboard() {
   const router = useRouter();
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData] = useState<UserData | null>(() => {
+    try {
+      const s = sessionStorage.getItem('user-session');
+      return s ? (JSON.parse(s) as UserData) : null;
+    } catch {
+      return null;
+    }
+  });
   const [tabValue, setTabValue] = useState<StudentTab>(StudentTab.APPLICATIONS);
-  const { statCards, applications, interviews, documents, programs, refresh } = useStudentDashboard();
+  const { applications } = useStudentDashboard();
 
-  const tabOrder = useMemo(() => Object.values(StudentTab), []);
+  // derive simple stat cards from applications list (students cannot call admin-only count endpoint)
+  const totalApplications = applications.length;
+  const acceptedCount = applications.filter(a => String(a.status ?? '').toLowerCase().includes('accept')).length;
+  const pendingCount = applications.filter((a) => {
+    const s = String(a.status ?? '').toLowerCase();
+    // Count only 'submitted' statuses as pending for the student's view
+    return s.includes('submit');
+  }).length;
+  // program count relevant to the student: prefer number of filtered `programs` fetched, otherwise count unique program IDs from applications
+  const programIdsFromApps = new Set(
+    applications
+      .map((a) => {
+        if (a.programId) return a.programId;
+        if (a.program && typeof a.program === 'object' && a.program !== null) {
+          const p = a.program as Record<string, unknown>;
+          return p.id ?? p.programId ?? undefined;
+        }
+        return undefined;
+      })
+      .filter(Boolean)
+      .map(String),
+  );
+  // Only count programs that are referenced by the student's applications.
+  // Do not fall back to the full `programs` list to avoid showing global counts.
+  const programsCount = programIdsFromApps.size;
+
+  const statCards = [
+    { key: 'applications', label: 'Total Applications', value: totalApplications, accent: 'primary' },
+    { key: 'accepted', label: 'Accepted Applications', value: acceptedCount, accent: 'success' },
+    { key: 'pending', label: 'Pending Applications', value: pendingCount, accent: 'warn' },
+    { key: 'programs', label: 'Total Programs', value: programsCount, accent: 'info' },
+  ];
+
+  // other sections are currently not sourced from backend; keep placeholders
+  const interviews: Record<string, unknown>[] = [];
+  const documents: Record<string, unknown>[] = [];
+
+  const tabOrder = useMemo(() => Object.values(StudentTab).filter((t) => t !== StudentTab.PROGRAMS) as StudentTab[], []);
   const activeTabIndex = useMemo(() => tabOrder.indexOf(tabValue), [tabOrder, tabValue]);
 
 
     useEffect(() => {
-    const userSession = sessionStorage.getItem('user-session');
-    const user = JSON.parse(userSession!);
-    if (!userSession) {
+    if (!userData) {
       router.push('/auth/login');
       return;
     }
-    
-    if (user.role !== 'STUDENT') {
-      router.push(`/dashboard/${user.role.toLowerCase()}`);
+
+    if (userData.role !== 'STUDENT') {
+      router.push(`/dashboard/${userData.role.toLowerCase()}`);
       return;
     }
-    
-     
-    setUserData(user);
-  }, [router]);
+  }, [router, userData]);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-
-    } catch (error) {
-      console.error('Logout failed:', error);
-    } finally {
-      sessionStorage.removeItem('user-session');
-      sessionStorage.removeItem('auth-token');
-      cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
-      router.push('/auth/login');
-    }
-  };
+  // logout handled elsewhere; no-op here to avoid unused function
 
   if (!userData) {
     return <div className="min-h-screen flex items-center justify-center">
@@ -207,10 +250,23 @@ export default function StudentDashboard() {
                           <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
                             <GraduationCap className="h-5 w-5 text-blue-600" />
                           </div>
-                          <div>
-                            <p className="font-medium text-slate-900">{String(app.school ?? '')}</p>
-                            <p className="text-sm text-slate-500">{String(app.program ?? '')}</p>
-                          </div>
+                                <div>
+                                  {(() => {
+                                    // support multiple backend shapes: simple strings or nested program object
+                                    const programField = app.program as unknown;
+                                    const programObj = (typeof programField === 'object' && programField !== null) ? programField as Record<string, unknown> : undefined;
+                                    const programTitle = resolveLabel(typeof programField === 'string' ? programField : (programObj?.title ?? programObj?.program ?? programField));
+
+                                    const schoolField = resolveLabel(app.school ?? (programObj && (programObj?.institution ?? programObj?.school ?? programObj)));
+
+                                    return (
+                                      <>
+                                        <p className="font-medium text-slate-900">{schoolField}</p>
+                                        <p className="text-sm text-slate-500">{programTitle}</p>
+                                      </>
+                                    );
+                                  })()}
+                                </div>
                         </div>
 
                         <div className="flex flex-col text-right sm:mx-4">
@@ -231,12 +287,11 @@ export default function StudentDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Deadlines & Tasks removed */}
+              
             </div>
           </TabsContent>
 
-          {/* Applications tab removed - details moved to pipeline overview if needed */}
-
+          
           <TabsContent value={StudentTab.INTERVIEWS} className="space-y-4">
             <Card className="border border-slate-100">
               <CardHeader>
@@ -247,29 +302,32 @@ export default function StudentDashboard() {
 
                 {interviews.length === 0 ? (
                   <div className="p-6 text-center text-sm text-slate-500">Coming soon.</div>
-                ) : (
-                  interviews.map((interview) => (
+                  ) : (
+                  interviews.map((interview) => {
+                    const item = interview as Record<string, unknown>;
+                    return (
                     <div
-                      key={String(interview.id)}
+                      key={String(item.id ?? '')}
                       className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
                     >
                       <div>
-                        <p className="font-medium text-slate-900">{String(interview.school ?? '')}</p>
-                        <p className="text-sm text-slate-500">{String(interview.contact ?? '')}</p>
+                        <p className="font-medium text-slate-900">{resolveLabel(item.school ?? item.institution ?? item.name)}</p>
+                        <p className="text-sm text-slate-500">{resolveLabel(item.contact ?? item.contactName ?? item.contact_person)}</p>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-4 w-4 text-purple-600" />
-                          {String(interview.date ?? '')}
+                          {resolveLabel(item.date ?? item.scheduledAt)}
                         </span>
-                        <span className="text-slate-400">{String(interview.timezone ?? '')}</span>
-                        <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(String(interview.status ?? ''))}`}>
-                          {String(interview.status ?? '')}
+                        <span className="text-slate-400">{resolveLabel(item.timezone ?? item.tz)}</span>
+                        <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(resolveLabel(item.status))}`}>
+                          {resolveLabel(item.status)}
                         </span>
                       </div>
 
                     </div>
-                  ))
+                    );
+                  })
                 )}
               </CardContent>
             </Card>
@@ -285,52 +343,29 @@ export default function StudentDashboard() {
                 {documents.length === 0 ? (
                   <div className="p-6 text-center text-sm text-slate-500">Coming soon.</div>
                 ) : (
-                  documents.map((doc) => (
+                  documents.map((doc) => {
+                    const item = doc as Record<string, unknown>;
+                    return (
                     <div
-                      key={String(doc.id)}
+                      key={String(item.id ?? '')}
                       className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
                     >
                       <div>
-                        <p className="font-medium text-slate-900">{String(doc.title ?? '')}</p>
-                        <p className="text-sm text-slate-500">Updated {String(doc.updatedAt ?? '')}</p>
+                        <p className="font-medium text-slate-900">{resolveLabel(item.title)}</p>
+                        <p className="text-sm text-slate-500">Updated {resolveLabel(item.updatedAt ?? item.updated)}</p>
                       </div>
-                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(String(doc.status ?? ''))}`}>
-                        {String(doc.status ?? '')}
+                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(resolveLabel(item.status))}`}>
+                        {resolveLabel(item.status)}
                       </span>
                     </div>
-                  ))
+                    );
+                  })
                 )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value={StudentTab.PROGRAMS} className="space-y-4">
-            <Card className="border border-slate-100">
-              <CardHeader>
-                <CardTitle>Enrolled Programs</CardTitle>
-                <CardDescription>Confirmed offers for upcoming terms</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {programs.length === 0 ? (
-                  <div className="p-6 text-center text-sm text-slate-500">No programs found.</div>
-                ) : (
-                  programs.map((program) => (
-                    <div
-                      key={String(program.id)}
-                      className="grid grid-cols-1 md:grid-cols-4 items-start gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
-                    >
-                      <div className="md:col-span-2">
-                        <p className="font-medium text-slate-900">{String(program.school ?? '')}</p>
-                        <p className="text-sm text-slate-500">{String(program.program ?? '')}</p>
-                      </div>
-                      <div className="text-sm text-slate-600">{String(program.term ?? '')}</div>
-                      <div className="text-sm text-slate-500">Starts {String(program.startDate ?? '')}</div>
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {/* Programs tab removed per request */}
         </Tabs>
 
       </main>
@@ -338,4 +373,4 @@ export default function StudentDashboard() {
 
   );
 }
-//<CountUp target={stat.value} trigger={refreshKey} />
+// CountUp removed — keep UI unchanged
