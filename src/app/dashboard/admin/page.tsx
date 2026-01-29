@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Shield, 
@@ -11,10 +11,16 @@ import {
   UserPlus,
   GraduationCapIcon,
   Form,
+  MessageSquare,
+  BookOpen,
+  Building,
 } from "lucide-react";
 import { useAdminDashboard } from "@/app/dashboard/admin/hooks/use-adminDashboard";
+import { useApplications } from "@/app/dashboard/agent/hooks/useAdminDashboard";
+import { useRouter } from "next/navigation";
 
 export default function ADMINDashboard() {
+  const router = useRouter();
   const {
     userData,
     isLoading,
@@ -23,6 +29,8 @@ export default function ADMINDashboard() {
     handleLogout,
     handleSettingsClick,
   } = useAdminDashboard();
+  
+  const { applications } = useApplications();
 
   if (isLoading || !userData) {
     return (
@@ -160,6 +168,77 @@ export default function ADMINDashboard() {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Applications */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Applications</CardTitle>
+                <CardDescription>Latest client interactions</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {applications.slice(0, 5).map((client, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                          {client.student.firstName?.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{client.student.firstName}</p>
+                          <p className="text-sm text-gray-500">{client.student.email}</p>
+                        </div>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        client.status === 'ACCEPTED' ? 'bg-green-100 text-green-800' :
+                        client.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                        client.status === 'UNDER_REVIEW' ? 'bg-blue-100 text-blue-800' :
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {client.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <Button className="w-full mt-4" variant="outline" onClick={() => router.push('/applications')}>
+                  View All Applications
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Actions */}
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Button variant="default" size="sm" onClick={() => router.push('/chat')} className="w-full">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Support Inbox
+                </Button>
+                <Button className="w-full" variant="outline" onClick={() => router.push('/agent-management')}>
+                  <Users className="w-4 h-4 mr-2" />
+                  Manage Agents
+                </Button>
+                <Button className="w-full" variant="outline" onClick={() => router.push('/pending-approval')}>
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Pending Approvals
+                </Button>
+                <Button className="w-full" variant="outline" onClick={() => router.push('/institution-management')}>
+                  <Building className="w-4 h-4 mr-2" />
+                  Institutions
+                </Button>
+                <Button className="w-full" variant="outline" onClick={() => router.push('/program-management')}>
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Programs
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
     </div>
