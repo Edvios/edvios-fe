@@ -13,6 +13,7 @@ export interface StatCard {
 
 export interface Application {
   id?: string;
+  programId?: string;
   school?: string;
   program?: string;
   status?: string;
@@ -53,6 +54,10 @@ export interface EnrolledProgram {
   startedAt?: string;
   status?: string;
   raw?: unknown;
+}
+
+export interface ApplicationsCount {
+  count: { [status: string]: number };
 }
 
 export interface StudentDashboardStats {

@@ -64,14 +64,6 @@ export function useProfileEffects(params: {
 
   useEffect(() => {
     // normalize and apply data from API when available
-    const p = profileData as unknown as Record<string, unknown>;
-    // prefer auth-provided email (may be returned in user_metadata) when profile.email is missing
-    let emailFromMeta: string | undefined;
-    const maybeMeta = p?.user_metadata;
-    if (typeof maybeMeta === "object" && maybeMeta !== null) {
-      const meta = maybeMeta as Record<string, unknown>;
-      if (typeof meta.email === "string") emailFromMeta = meta.email;
-    }
 
     const firstFromFull = typeof profileData?.fullName === "string" && profileData.fullName.trim().length > 0
       ? String(profileData.fullName).trim().split(/\s+/)[0]
@@ -82,7 +74,8 @@ export function useProfileEffects(params: {
 
     const normalized = {
       ...(profileData ?? {}),
-      email: profileData?.email ?? emailFromMeta,
+      // rely on API-provided `email` only; remove auth `user_metadata` fallback
+      email: profileData?.email,
       address: profileData?.address ?? (profileData as Record<string, unknown>)?.adress,
       firstName: profileData?.firstName ?? firstFromFull,
       lastName: profileData?.lastName ?? lastFromFull,
