@@ -7,7 +7,6 @@ import {
   Users, 
   FileText, 
   LogOut, 
-  DollarSign,
   Building,
   MessageSquare,
   Layers,
@@ -32,7 +31,7 @@ export default function AgentDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
 
-  const {applications, loading, error, counts, countsLoading} = useApplications();
+  const {applications, counts} = useApplications();
 
   const totalApplications = counts ?
     counts.totalApplications.count.SUBMITTED +

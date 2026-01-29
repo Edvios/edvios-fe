@@ -135,7 +135,7 @@ export default function StudentProfilePage() {
 
   const studentId = getStudentIdFromSession();
 
-  const { data: profileData, loading, error, fetchStudent, saveStudent } = useStudentProfile(studentId);
+  const { data: profileData, loading, fetchStudent, saveStudent } = useStudentProfile(studentId);
 
   const [activeTab, setActiveTab] = useState<ProfileTab>(ProfileTab.OVERVIEW);
   const resetProfile = () => {
