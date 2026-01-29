@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +35,7 @@ export default function LoginPage() {
         <Card className="shadow-2xl border-gray-200 overflow-hidden p-0">
           {/* Mobile Logo */}
           <div className="md:hidden flex justify-center pt-4">
-            <img src="/logo.png" alt="Edvios Logo" className="h-30 w-auto" />
+            <Image src="/logo.png" alt="Edvios Logo" width={80} height={80} className="h-20 w-auto" />
           </div>
 
           <div className="grid md:grid-cols-2 md:min-h-[600px]">

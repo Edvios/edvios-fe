@@ -1,91 +1,39 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Shield, 
   Users, 
-  Building, 
   LogOut, 
-  TrendingUp,
-  DollarSign,
-  AlertTriangle,
-  CheckCircle,
-  Activity,
-  Database,
   Settings,
-  BarChart3,
+  User,
+  UserPlus,
+  GraduationCapIcon,
+  Form,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import AppToast from "@/utils/toast-utils";
-
-interface UserData {
-  email: string;
-  role: string;
-  name: string;
-  id: string;
-  phone?: string;
-  organization?: string;
-}
+import { useAdminDashboard } from "@/app/dashboard/admin/hooks/use-adminDashboard";
 
 export default function ADMINDashboard() {
-  const router = useRouter();
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error || !session) {
-          router.push('/auth/login');
-          return;
-        }
-        
-        const user = session.user;
-        setUserData({
-          email: user.email || '',
-          role: (user.user_metadata?.role || user.app_metadata?.role || 'admin').toLowerCase(),
-          name: `${user.user_metadata?.firstName || ''} ${user.user_metadata?.lastName || ''}`.trim() || user.email || 'Admin',
-          id: user.id,
-          phone: user.user_metadata?.phone || '',
-          organization: user.user_metadata?.organization || ''
-        });
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        router.push('/auth/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    fetchUser();
-  }, [router, supabase.auth]);
-
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      AppToast.success('Logged out successfully');
-      router.push('/auth/login');
-      router.refresh();
-    } catch (error) {
-      console.error('Error logging out:', error);
-      AppToast.error('Failed to logout');
-    }
-  };
+  const {
+    userData,
+    isLoading,
+    stats,
+    isLoadingStats,
+    handleLogout,
+    handleSettingsClick,
+  } = useAdminDashboard();
 
   if (isLoading || !userData) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
-    </div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-bg-gradient-50 via-white to-bg-gradient-300">
       {/* Header */}
       <header className="bg-white border-b shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -100,7 +48,7 @@ export default function ADMINDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" onClick={handleSettingsClick}>
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
               </Button>
@@ -122,7 +70,7 @@ export default function ADMINDashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -131,11 +79,13 @@ export default function ADMINDashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">2,847</div>
-              <p className="text-xs text-green-600 mt-1 flex items-center">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                +18.2% this month
-              </p>
+              <div className="text-3xl font-bold">
+                {isLoadingStats ? (
+                  <div className="h-9 w-24 bg-gray-200 animate-pulse rounded"></div>
+                ) : (
+                  stats.totalUsers.toLocaleString()
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -143,182 +93,73 @@ export default function ADMINDashboard() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium text-gray-600">Active Agents</CardTitle>
-                <Building className="w-5 h-5 text-green-500" />
+                <User className="w-5 h-5 text-green-500" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">156</div>
-              <p className="text-xs text-gray-500 mt-1">124 active today</p>
+              <div className="text-3xl font-bold">
+                {isLoadingStats ? (
+                  <div className="h-9 w-24 bg-gray-200 animate-pulse rounded"></div>
+                ) : (
+                  stats.activeAgents.toLocaleString()
+                )}
+              </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Applications</CardTitle>
-                <Activity className="w-5 h-5 text-purple-500" />
+                <CardTitle className="text-sm font-medium text-gray-600">Pending Agents</CardTitle>
+                <UserPlus className="w-5 h-5 text-yellow-500" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">8,942</div>
-              <p className="text-xs text-gray-500 mt-1">412 pending review</p>
+              <div className="text-3xl font-bold">
+                {isLoadingStats ? (
+                  <div className="h-9 w-24 bg-gray-200 animate-pulse rounded"></div>
+                ) : (
+                  stats.pendingAgents.toLocaleString()
+                )}
+              </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-gray-600">Revenue</CardTitle>
-                <DollarSign className="w-5 h-5 text-green-500" />
+                <CardTitle className="text-sm font-medium text-gray-600">Students</CardTitle>
+                <GraduationCapIcon className="w-5 h-5 text-purple-500" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">$284K</div>
-              <p className="text-xs text-green-600 mt-1 flex items-center">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                +24.5% vs last month
-              </p>
+              <div className="text-3xl font-bold">
+                {isLoadingStats ? (
+                  <div className="h-9 w-24 bg-gray-200 animate-pulse rounded"></div>
+                ) : (
+                  stats.students.toLocaleString()
+                )}
+              </div>
             </CardContent>
           </Card>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* System Health */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>System Health</CardTitle>
-                <CardDescription>Real-time platform monitoring</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { service: "API Server", status: "Operational", uptime: "99.98%", statusColor: "bg-green-500" },
-                    { service: "Database", status: "Operational", uptime: "99.95%", statusColor: "bg-green-500" },
-                    { service: "Email Service", status: "Operational", uptime: "99.89%", statusColor: "bg-green-500" },
-                    { service: "File Storage", status: "Degraded", uptime: "98.12%", statusColor: "bg-yellow-500" },
-                  ].map((service, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${service.statusColor}`}></div>
-                        <div>
-                          <p className="font-medium text-gray-900">{service.service}</p>
-                          <p className="text-sm text-gray-500">{service.status}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">{service.uptime}</p>
-                        <p className="text-xs text-gray-500">Uptime</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Latest system events and actions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    { action: "New AGENT registered", user: "Global Education Ltd.", time: "2 min ago", icon: Building, color: "text-green-600" },
-                    { action: "Bulk application import", user: "System", time: "15 min ago", icon: Database, color: "text-blue-600" },
-                    { action: "Security alert resolved", user: "Admin", time: "1 hour ago", icon: AlertTriangle, color: "text-green-600" },
-                    { action: "Payment processed", user: "Stripe Gateway", time: "2 hours ago", icon: DollarSign, color: "text-purple-600" },
-                  ].map((activity, idx) => (
-                    <div key={idx} className="flex items-start space-x-3 p-3 border-l-2 border-gray-200 hover:border-primary hover:bg-gray-50 transition-all">
-                      <activity.icon className={`w-5 h-5 mt-0.5 ${activity.color}`} />
-                      <div className="flex-1">
-                        <p className="font-medium text-sm text-gray-900">{activity.action}</p>
-                        <p className="text-xs text-gray-500 mt-1">{activity.user} • {activity.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Quick Stats & Actions */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Stats</CardTitle>
-                <CardDescription>Today&apos;s summary</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                  <div>
-                    <p className="text-sm text-blue-600">New Users</p>
-                    <p className="text-2xl font-bold text-blue-900">47</p>
-                  </div>
-                  <Users className="w-8 h-8 text-blue-500" />
-                </div>
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div>
-                    <p className="text-sm text-green-600">Applications</p>
-                    <p className="text-2xl font-bold text-green-900">183</p>
-                  </div>
-                  <CheckCircle className="w-8 h-8 text-green-500" />
-                </div>
-                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                  <div>
-                    <p className="text-sm text-purple-600">Revenue</p>
-                    <p className="text-2xl font-bold text-purple-900">$9.2K</p>
-                  </div>
-                  <DollarSign className="w-8 h-8 text-purple-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Admin Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Button className="w-full" variant="outline">
-                  <Users className="w-4 h-4 mr-2" />
-                  Manage Users
-                </Button>
-                <Button className="w-full" variant="outline">
-                  <Building className="w-4 h-4 mr-2" />
-                  Manage Agents
-                </Button>
-                <Button className="w-full" variant="outline">
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  View Reports
-                </Button>
-                <Button className="w-full" variant="outline">
-                  <Settings className="w-4 h-4 mr-2" />
-                  System Settings
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-red-50 to-green-50 border-red-200">
-              <CardHeader>
-                <CardTitle className="text-red-900 flex items-center">
-                  <AlertTriangle className="w-5 h-5 mr-2" />
-                  Alerts
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="p-2 bg-white rounded border border-red-200">
-                    <p className="text-sm font-medium text-red-900">2 Pending Reviews</p>
-                    <p className="text-xs text-red-600">Require ADMIN approval</p>
-                  </div>
-                  <div className="p-2 bg-white rounded border border-green-200">
-                    <p className="text-sm font-medium text-green-900">Storage at 78%</p>
-                    <p className="text-xs text-green-600">Consider upgrading</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-gray-600">Pending Applications</CardTitle>
+                <Form className="w-5 h-5 text-orange-500" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">
+                {isLoadingStats ? (
+                  <div className="h-9 w-24 bg-gray-200 animate-pulse rounded"></div>
+                ) : (
+                  stats.applications.toLocaleString()
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
