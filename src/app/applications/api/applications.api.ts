@@ -1,13 +1,29 @@
-import axiosInstance from '@/lib/axios';
-import { Application } from '@/app/applications/types/application.types';
-import { ApplicationStatus } from '@/app/applications/enums/application.enum';
-import { ApplicationSchema, UpdateStatusSchema } from '@/app/applications/dtos/application.dto';
-import { z } from 'zod';
+import axiosInstance from "@/lib/axios";
+import {
+  Application,
+  PaginationParams,
+  PaginatedResponse,
+} from "@/app/applications/types/application.types";
+import { ApplicationStatus } from "@/app/applications/enums/application.enum";
+import {
+  ApplicationSchema,
+  UpdateStatusSchema,
+} from "@/app/applications/dtos/application.dto";
+import { z } from "zod";
 
 export const applicationsApi = {
-  async getAll(): Promise<Application[]> {
-    const response = await axiosInstance.get('/applications');
-    return z.array(ApplicationSchema).parse(response.data);
+  async getAll(
+    params: PaginationParams = { page: 1, size: 10 },
+  ): Promise<PaginatedResponse<Application>> {
+    const response = await axiosInstance.get("/applications", {
+      params: params,
+    });
+
+    return {
+      data: z.array(ApplicationSchema).parse(response.data.applications),
+      total: response.data.total || 0,
+      currentPage: response.data.page || 1,
+    };
   },
 
   async getById(id: string): Promise<Application> {
@@ -20,14 +36,8 @@ export const applicationsApi = {
     await axiosInstance.patch(`/applications/${id}/status`, payload);
   },
 
-  async getByStatus(status?: ApplicationStatus): Promise<Application[]> {
-    const url = status ? `/applications?status=${status}` : '/applications';
-    const response = await axiosInstance.get(url);
-    return z.array(ApplicationSchema).parse(response.data);
-  },
-
   async getCount(): Promise<{ count: { [key in ApplicationStatus]: number } }> {
-    const response = await axiosInstance.get('/applications/count');
+    const response = await axiosInstance.get("/applications/count");
     return response.data;
   },
-}
+};

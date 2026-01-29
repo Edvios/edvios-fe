@@ -1,5 +1,4 @@
 import axiosInstance from "@/lib/axios";
-import { CountResponseSchema } from "@/app/dashboard/admin/dtos/admin.dashboard.dto";
 
 export const adminAPI = {
   /**
