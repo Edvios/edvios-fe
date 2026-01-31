@@ -148,6 +148,37 @@ export class ProgramService {
 
 // ==================== HELPER: MAP BACKEND → FRONTEND ====================
 function mapBackendProgramToFrontend(program: BackendProgram) {
+  // Normalize status to match expected enum values
+  const normalizeStatus = (status?: string | null): "available" | "closed" | "waitlist" | "deadline_passed" => {
+    if (!status) return "available";
+    
+    const normalized = status.toLowerCase().trim();
+    const validStatuses = ["available", "closed", "waitlist", "deadline_passed"];
+    
+    if (validStatuses.includes(normalized)) {
+      return normalized as "available" | "closed" | "waitlist" | "deadline_passed";
+    }
+    
+    // Handle common variations or map backend statuses to frontend equivalents
+    switch (normalized) {
+      case "open":
+      case "active":
+        return "available";
+      case "full":
+      case "inactive":
+        return "closed";
+      case "waiting":
+      case "wait_list":
+        return "waitlist";
+      case "expired":
+      case "deadline_expired":
+        return "deadline_passed";
+      default:
+        console.warn(`Unknown program status "${status}", defaulting to "available"`);
+        return "available";
+    }
+  };
+
   return {
     id: program.id,
     title: program.title,
@@ -160,7 +191,7 @@ function mapBackendProgramToFrontend(program: BackendProgram) {
     tuitionFee: program.tuitionFee ?? "",
     applicationFee: program.applicationFee ?? "",
     englishTestScore: program.englishTestScore ?? "",
-    status: (program.status ?? "available").toLowerCase() as "available" | "closed" | "waitlist" | "deadline_passed",
+    status: normalizeStatus(program.status),
     subject: program.subject?.name ?? "",
     ranking: 0,
     scholarship: program.scholarship ?? false,
