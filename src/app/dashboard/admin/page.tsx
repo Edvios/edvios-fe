@@ -216,17 +216,13 @@ export default function ADMINDashboard() {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="default" size="sm" onClick={() => router.push('/chat')} className="w-full">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Support Inbox
+                <Button className="w-full" variant="outline" onClick={() => router.push('/applications')}>
+                  <Users className="w-4 h-4 mr-2" />
+                  Review Applications
                 </Button>
                 <Button className="w-full" variant="outline" onClick={() => router.push('/agent-management')}>
                   <Users className="w-4 h-4 mr-2" />
                   Manage Agents
-                </Button>
-                <Button className="w-full" variant="outline" onClick={() => router.push('/pending-approval')}>
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Pending Approvals
                 </Button>
                 <Button className="w-full" variant="outline" onClick={() => router.push('/institution-management')}>
                   <Building className="w-4 h-4 mr-2" />
