@@ -701,15 +701,6 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     Previous
                   </Button>
                 )}
-                
-                <Button 
-                  variant="outline" 
-                  onClick={handleAIAssistance}
-                  className="hover:border-green-500 hover:bg-green-500/10 transition-all duration-200"
-                >
-                  <Bot className="h-4 w-4 mr-2" />
-                  AI Help
-                </Button>
               </div>
               
               <div className="order-1 sm:order-2">
