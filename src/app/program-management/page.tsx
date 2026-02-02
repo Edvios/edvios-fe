@@ -20,8 +20,6 @@ import { ProgramPagination } from '../program-finder/components/program-paginati
 
 const asRec = (o: unknown) => o as Record<string, unknown>;
 
-// Use shared Availability enum from types
-
 // Sample data moved to ./dtos/initial-programs
 
 // ────────────────────────────────────────────────
@@ -29,7 +27,7 @@ const asRec = (o: unknown) => o as Record<string, unknown>;
 // ────────────────────────────────────────────────
 
 // program lists are derived from local `programs` data
-import { StudyLevel, ProgramStatus, Availability } from './enums';
+import { StudyLevel, ProgramStatus } from './enums';
 
 function ProgramFormModal({ program, onSave, onClose, programs, intakesList: remoteIntakesList, subjectsList: remoteSubjectsList, institutionsList: remoteInstitutionsList }: ProgramFormProps & { programs: Program[]; intakesList?: Array<{id:string; name:string}>; subjectsList?: Array<{id:string; name:string}>; institutionsList?: Array<{id:string; name:string; country?: string}> }) {
   const isEdit = !!program;
@@ -256,27 +254,7 @@ function ProgramFormModal({ program, onSave, onClose, programs, intakesList: rem
     // resolve intakeId from fetched list (backend expects IDs).
     const selectedIntake = intakesList.find(i => i.name === (form.intake ?? ''));
 
-    const deriveStatus = (): ProgramStatus => {
-      try {
-        // Respect explicit user selection first
-        if (form.status && String(form.status).trim() !== '') return form.status as ProgramStatus;
-        // If a deadline exists and is in the past, mark deadline passed
-        if (form.applicationDeadline) {
-          const maybe = String(form.applicationDeadline);
-          // try parsing ISO or datetime-local strings
-          const d = new Date(maybe);
-          if (!Number.isNaN(d.getTime())) {
-            if (d.getTime() < Date.now()) return ProgramStatus.DEADLINE_PASSED;
-          }
-        }
-        // If availability signals closed, map to FULL
-        if ((asRec(form).availability as string | undefined) === Availability.CLOSED) return ProgramStatus.FULL;
-      } catch {
-        // fall back to AVAILABLE on any error
-      }
-      return ProgramStatus.AVAILABLE;
-    };
-
+    const selectedStatus = (form.status && String(form.status).trim() !== '') ? (form.status as ProgramStatus) : undefined;
     const payload: Record<string, unknown> = {
       title: form.title,
       level: form.level ?? undefined,
@@ -329,8 +307,8 @@ function ProgramFormModal({ program, onSave, onClose, programs, intakesList: rem
       institutionCountry: form.institutionCountry ?? undefined,
       institutionCity: form.institutionCity ?? form.location ?? undefined,
       countryCode: form.countryCode ?? form.institutionCountry ?? undefined,
-      // compute a canonical status: explicit form.status wins, otherwise derive
-      status: form.status ?? deriveStatus(),
+      // send only the user's explicit selection; do not default to AVAILABLE
+      status: selectedStatus,
       // keep some legacy fields for UI but backend DTO covers main columns
     };
     // debug: log payload to help verify IDs are resolved correctly before sending
@@ -421,20 +399,19 @@ function ProgramFormModal({ program, onSave, onClose, programs, intakesList: rem
       // Ensure we do NOT send `updatedAt` — Prisma manages this @updatedAt field server-side.
       if ('updatedAt' in sanitized) delete (sanitized as Record<string, unknown>).updatedAt;
 
-      try {
-        // Ensure `status` is a canonical ProgramStatus before sending
         try {
-          if (sanitized.status !== undefined && sanitized.status !== null) {
-            const raw = String(sanitized.status);
-            const candidates = Object.values(ProgramStatus) as string[];
-            const match = candidates.find(v => v === raw) ?? candidates.find(v => v.toUpperCase() === raw.toUpperCase()) ?? candidates.find(v => v.toLowerCase() === raw.toLowerCase());
-            sanitized.status = match ?? raw.toUpperCase();
-          } else {
-            sanitized.status = deriveStatus();
+          // Ensure `status` is a canonical ProgramStatus before sending
+          try {
+            if (sanitized.status !== undefined && sanitized.status !== null) {
+              const raw = String(sanitized.status);
+              const candidates = Object.values(ProgramStatus) as string[];
+              const match = candidates.find(v => v === raw) ?? candidates.find(v => v.toUpperCase() === raw.toUpperCase()) ?? candidates.find(v => v.toLowerCase() === raw.toLowerCase());
+              sanitized.status = match ?? raw.toUpperCase();
+            }
+            // do NOT assign a derived default here; require explicit user selection
+          } catch {
+            // fall back to leaving sanitized.status as-is
           }
-        } catch {
-          // fall back to leaving sanitized.status as-is
-        }
          
         console.log('Updating program with sanitized payload:', sanitized);
       } catch {}
@@ -786,28 +763,28 @@ export default function ProgramManagementPage() {
           <div className="flex flex-wrap items-center gap-3">
               {/* Institution and country filters removed */}
 
-              <select value={level ?? ''} onChange={e => setLevel(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[140px]">
+              <select value={level ?? ''} onChange={e => setLevel(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-35">
                 <option value="">All Levels</option>
                 {Object.values(StudyLevel).map(v => (<option key={v} value={v}>{v}</option>))}
               </select>
 
-              <select value={intakeId ?? ''} onChange={e => setIntakeId(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[140px]">
+              <select value={intakeId ?? ''} onChange={e => setIntakeId(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-35">
                 <option value="">Any Intake</option>
                 {intakesList.map(i => (<option key={i.id} value={i.id}>{i.name}</option>))}
               </select>
 
-              <select value={subjectId ?? ''} onChange={e => setSubjectId(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-[140px]">
+              <select value={subjectId ?? ''} onChange={e => setSubjectId(e.target.value || undefined)} className="h-12 px-4 rounded-md bg-white text-sm min-w-35">
                 <option value="">All Subject</option>
                 {subjectsList.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
               </select>
 
-              <select value={scholarship ?? 'any'} onChange={e => setScholarship((e.target.value || 'any') as 'any' | 'true' | 'false')} className="h-12 px-4 rounded-md bg-white text-sm min-w-[160px]">
+              <select value={scholarship ?? 'any'} onChange={e => setScholarship((e.target.value || 'any') as 'any' | 'true' | 'false')} className="h-12 px-4 rounded-md bg-white text-sm min-w-40">
                 <option value="any">Scholarship: Any</option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>
               </select>
 
-              <select value={englishWaiver ?? 'any'} onChange={e => setEnglishWaiver((e.target.value || 'any') as 'any' | 'true' | 'false')} className="h-12 px-4 rounded-md bg-white text-sm min-w-[160px]">
+              <select value={englishWaiver ?? 'any'} onChange={e => setEnglishWaiver((e.target.value || 'any') as 'any' | 'true' | 'false')} className="h-12 px-4 rounded-md bg-white text-sm min-w-40">
                 <option value="any">English Waiver: Any</option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>

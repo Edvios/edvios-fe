@@ -366,17 +366,15 @@ export const useProgramsWithRemote = () => {
             if (sanitized.lastUpdated === undefined) sanitized.lastUpdated = new Date().toISOString();
           } catch {}
           if ('updatedAt' in sanitized) delete (sanitized as Record<string, unknown>).updatedAt;
-          // Ensure status is present (derive if missing)
+          // Ensure status is normalized if present; do NOT set a default here
           try {
-            if (sanitized.status === undefined || sanitized.status === null) {
-              // fallback to AVAILABLE when missing
-              sanitized.status = ProgramStatus.AVAILABLE;
-            } else {
+            if (sanitized.status !== undefined && sanitized.status !== null) {
               const raw = String(sanitized.status);
               const candidates = Object.values(ProgramStatus) as string[];
               const match = candidates.find(v => v === raw) ?? candidates.find(v => v.toUpperCase() === raw.toUpperCase()) ?? candidates.find(v => v.toLowerCase() === raw.toLowerCase());
               sanitized.status = match ?? raw.toUpperCase();
             }
+            // if status is missing, leave it absent so the UI/backend can handle validation
           } catch {}
 
           try {

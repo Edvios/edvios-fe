@@ -13,7 +13,7 @@ export type Program = {
   badges: string[];                 // e.g. ["Instant Submission", "Scholarships Available", "Prime", "Popular"]
   tags: string[];                   // e.g. ["Fast Acceptance", "L0V0"]
   intake: string;                   // e.g. "October 2025 intake"
-  availability: Availability;
+  availability?: Availability;
   tuition: string;                  // e.g. "£10,015 GBP" or "£37,380–£62,820"
   tuitionFee?: string;              // optional extra tuition fee field from DB
   englishTestScore?: string;        // e.g. "IELTS 6.5"
