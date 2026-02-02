@@ -14,9 +14,7 @@ export const ProgramPagination: React.FC<ProgramPaginationProps> = ({
     onPageChange
 }) => {
     const { page, size, total } = pagination;
-    const totalPages = Math.ceil(total / size);
-
-    if (totalPages <= 1) return null;
+    const totalPages = Math.max(1, Math.ceil((total || 0) / (size || 1)));
 
     const getVisiblePages = () => {
         const delta = 2;
@@ -74,6 +72,8 @@ export const ProgramPagination: React.FC<ProgramPaginationProps> = ({
                     </React.Fragment>
                 ))}
             </div>
+
+            <div className="text-sm text-muted-foreground px-3">Page {page} of {totalPages}</div>
 
             <Button
                 variant="outline"

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 import type { Program } from '../types';
-import { fetchProgramById } from '../api/program.api.client';
+import programApi from '../api/program.api';
 import {
   Card,
   CardContent,
@@ -72,6 +72,76 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
     return String(val);
   };
 
+  const renderField = (val: unknown) => {
+    if (val == null) return '—';
+    if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') return String(val);
+    if (typeof val === 'object') {
+      try {
+        // Prefer `name` or `title` keys on related objects
+        const o = val as Record<string, unknown>;
+        if (o.name) return String(o.name);
+        if (o.title) return String(o.title);
+        // fallback to JSON string
+        return JSON.stringify(o);
+      } catch {
+        return '—';
+      }
+    }
+    return String(val);
+  };
+
+  const normalizeInstitute = (raw: unknown): {
+    id?: string;
+    name?: string;
+    city?: string;
+    country?: string;
+    location?: string;
+    tuition?: string;
+    tuitionRange?: string;
+    type?: string;
+    ranking?: string;
+    label?: string;
+  } | null => {
+    if (!raw) return null;
+    let obj: unknown = raw;
+    // unwrap common wrappers up to a few levels
+    for (let i = 0; i < 4; i++) {
+      if (obj && typeof obj === 'object' && (obj as Record<string, unknown>).data && typeof (obj as Record<string, unknown>).data === 'object') obj = (obj as Record<string, unknown>).data;
+      else if (obj && typeof obj === 'object' && (obj as Record<string, unknown>).institution && typeof (obj as Record<string, unknown>).institution === 'object') obj = (obj as Record<string, unknown>).institution;
+      else break;
+    }
+    const get = (o: unknown, ...keys: string[]) => {
+      if (o == null || typeof o !== 'object') return undefined;
+      const map = o as Record<string, unknown>;
+      for (const k of keys) {
+        const v = map[k];
+        if (v !== undefined && v !== null) return v;
+      }
+      return undefined;
+    };
+    const nameRaw = get(obj, 'name', 'label', 'title', 'institution_name', 'displayName', 'display_name');
+    const name = nameRaw != null ? String(nameRaw) : undefined;
+    const cityRaw = get(obj, 'city', 'town', 'city_name', 'cityName', 'address?.city');
+    const city = cityRaw != null ? String(cityRaw) : undefined;
+    const countryRaw = get(obj, 'country', 'countryCode', 'country_code', 'nationality');
+    const country = countryRaw != null ? String(countryRaw) : undefined;
+    const locationRaw = get(obj, 'location', 'institution_location', 'address', 'address?.location');
+    const location = locationRaw != null ? String(locationRaw) : (city && country ? `${city}, ${country}` : undefined);
+    const tuitionRaw = get(obj, 'tuition', 'tuitionFee', 'fees', 'fee');
+    const tuition = tuitionRaw != null ? String(tuitionRaw) : undefined;
+    const tuitionRangeRaw = get(obj, 'tuitionRange', 'tuition_range', 'feeRange', 'feesRange');
+    const tuitionRange = tuitionRangeRaw != null ? String(tuitionRangeRaw) : undefined;
+    const typeRaw = get(obj, 'type', 'institution_type', 'kind');
+    const type = typeRaw != null ? String(typeRaw) : undefined;
+    const rankingRaw = get(obj, 'ranking', 'rank', 'ranking_text');
+    const ranking = rankingRaw != null ? String(rankingRaw) : undefined;
+    const labelRaw = get(obj, 'label', 'name', 'title');
+    const label = labelRaw != null ? String(labelRaw) : undefined;
+    const idRaw = get(obj, 'id', '_id', 'institutionId', 'instituteId');
+    const id = idRaw != null ? String(idRaw) : undefined;
+    return { id, name, city, country, location, tuition, tuitionRange, type, ranking, label };
+  };
+
   const renderRanking = (r: unknown) => {
     if (r == null || (typeof r === 'string' && r.trim() === '')) return '—';
     if (typeof r === 'object' && r !== null) {
@@ -108,9 +178,60 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
       setLoadingDetails(true);
       (async () => {
         try {
-          const d = await fetchProgramById(program.id);
+          const d = await programApi.fetchProgramById(program.id);
           if (!mounted) return;
-          if (d) setDetails(d);
+          if (d) {
+            // if program references an institute id, attempt to enrich
+            const dAny = d as unknown as Record<string, unknown>;
+            const instId = dAny.institutionId ?? (dAny.institution as Record<string, unknown> | undefined)?.id ?? dAny.institution_id ?? null;
+            try {
+              const progAny = d as unknown as Record<string, unknown>;
+              const instPromise = instId ? programApi.getInstituteById(String(instId)) : Promise.resolve(null);
+              const subjId = progAny.subjectId ?? progAny.subject_id ?? (progAny.subject as Record<string, unknown> | undefined)?.id ?? null;
+              const intakeIdLocal = progAny.intakeId ?? progAny.intake_id ?? (progAny.intake as Record<string, unknown> | undefined)?.id ?? null;
+              const subjPromise = subjId ? programApi.getSubjectById(String(subjId)) : Promise.resolve(null);
+              const intakePromise = intakeIdLocal ? programApi.getIntakeById(String(intakeIdLocal)) : Promise.resolve(null);
+
+              const [inst, subj, intake] = await Promise.all([instPromise, subjPromise, intakePromise]);
+
+              if (inst) {
+                try {
+                  const n = normalizeInstitute(inst as unknown);
+                    if (n) {
+                      const progTuition = progAny.tuition ?? progAny.tuitionFee ?? progAny.tuition_fee ?? progAny.fees ?? null;
+                      const progTuitionStr = progTuition != null ? String(progTuition) : undefined;
+                      d.university = d.university ?? n.name ?? d.university;
+                      d.institutionName = d.institutionName ?? n.name ?? d.institutionName;
+                      d.institutionLabel = d.institutionLabel ?? n.label ?? d.institutionLabel;
+                      d.institutionLocation = d.institutionLocation ?? n.location ?? d.institutionLocation;
+                      d.institutionCity = d.institutionCity ?? n.city ?? d.institutionCity;
+                      d.institutionCountry = d.institutionCountry ?? n.country ?? d.institutionCountry;
+                      d.institutionType = d.institutionType ?? n.type ?? d.institutionType;
+                      if (!d.ranking && n.ranking) d.ranking = String(n.ranking);
+                      // prefer program tuition, then institute tuition, then institute tuitionRange
+                      d.tuition = d.tuition ?? progTuitionStr ?? n.tuition ?? n.tuitionRange ?? d.tuition;
+                      d.tuitionFee = d.tuitionFee ?? (progAny.tuitionFee != null ? String(progAny.tuitionFee) : undefined) ?? n.tuition ?? n.tuitionRange ?? d.tuitionFee;
+                    }
+                } catch (e) {
+                  // swallow
+                }
+              }
+              if (subj && !d.subjectName) {
+                const subjNameRaw = (subj as unknown as Record<string, unknown>).name;
+                const subjName = subjNameRaw != null ? String(subjNameRaw) : undefined;
+                d.subjectName = d.subjectName ?? subjName ?? d.subjectName;
+              }
+              if (intake && !d.intakeName) {
+                const intakeNameRaw = (intake as unknown as Record<string, unknown>).name;
+                const intakeName = intakeNameRaw != null ? String(intakeNameRaw) : undefined;
+                d.intakeName = d.intakeName ?? intakeName ?? d.intakeName;
+              }
+              setDetails(d);
+            } catch (e) {
+              console.error('[program.card] enrich related fetch failed', e);
+              setDetails(d);
+            }
+          }
         } catch (e) {
           console.error('[program.card] fetchProgramById failed', e);
         } finally {
@@ -162,11 +283,11 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
               <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
                 <div className="flex items-center gap-1.5">
                   <MapPin size={14} />
-                  <div className="text-sm break-words">{p.institutionLocation ?? p.location}</div>
+                  <div className="text-sm break-words">{renderField(p.institutionCity ?? p.institutionLocation ?? p.location)}</div>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Calendar size={14} />
-                  <div className="text-sm break-words">{p.intakeName ?? p.intake}</div>
+                    <div className="text-sm break-words">{renderField(p.intakeName ?? p.intake)}</div>
                 </div>
               </div>
 
@@ -189,7 +310,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
 
                 <div>
                   <div className="text-gray-500">Tuition (1st year)</div>
-                  <div className="font-medium text-sm break-words">{p.tuition ?? '—'}</div>
+                  <div className="font-medium text-sm break-words">{renderField(p.tuition ?? p.tuitionFee ?? pAny.tuitionRange ?? '—')}</div>
                 </div>
 
                 <div>
