@@ -110,12 +110,6 @@ export const useAdminDashboard = () => {
     }
   };
 
-  /**
-   * Navigate to settings page
-   */
-  const handleSettingsClick = () => {
-    router.push('/admin/settings');
-  };
 
   /**
    * Refresh dashboard data
@@ -142,7 +136,6 @@ export const useAdminDashboard = () => {
     
     // Methods
     handleLogout,
-    handleSettingsClick,
     refreshDashboard,
   };
 };
