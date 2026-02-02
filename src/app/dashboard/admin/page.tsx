@@ -6,7 +6,6 @@ import {
   Shield, 
   Users, 
   LogOut, 
-  Settings,
   User,
   UserPlus,
   GraduationCapIcon,
@@ -27,7 +26,6 @@ export default function ADMINDashboard() {
     stats,
     isLoadingStats,
     handleLogout,
-    handleSettingsClick,
   } = useAdminDashboard();
   
   const { applications } = useApplications();
