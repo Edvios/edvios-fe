@@ -55,22 +55,30 @@ export const defaultProgramForm: ProgramFormDto = {
 	tags: [],
 	intake: '',
 	availability: Availability.AVAILABLE,
-	tuitionFee: '',
-	englishTestScore: '',
+	// prefer `tuitionFee` but keep legacy `tuition` in sync to avoid accidental
+	// saves of the wrong key. Keep both undefined for truly-optional fields,
+	// but keep empty strings for form-controlled fields elsewhere.
+	tuitionFee: undefined,
+	tuition: '',
+	englishTestScore: undefined,
 	scholarship: false,
-	lastUpdated: '',
-	applicationDeadline: '',
-	ucasCode: '',
+	applicationDeadline: undefined,
+	ucasCode: undefined,
 	englishWaiver: false,
 	popularityRank: 0,
-	status: ProgramStatus.AVAILABLE,
-	level: undefined,
-	subjectId: undefined,
+	// Do not preselect `status` so the form validation forces user choice.
+	status: undefined,
+	// Use empty strings for form-controlled fields so validation behaves
+	// consistently (the form treats `undefined` as missing).
+	level: '',
+	subjectId: '',
 	subjectName: '',
-	tuition: '',
-	applicationFee: 'Free',
+	applicationFee: '',
 	duration: '',
 	category: '',
 	degree: "Bachelor's Degree",
+	// Keep both `updated` and `lastUpdated` present; backend mapping prefers
+	// `updated` in some places while UI uses `lastUpdated`.
+	lastUpdated: '',
 	updated: new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }),
 };
