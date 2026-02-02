@@ -206,7 +206,7 @@ export function AppSidebar() {
   }, [userData?.role]);
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent>
         {/* User Info Section */}
         <SidebarGroup>
@@ -224,7 +224,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild tooltip={item.title}>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -241,7 +241,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout}>
+            <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
               <LogOut />
               <span>Logout</span>
             </SidebarMenuButton>
