@@ -46,7 +46,6 @@ export const ProgramApplyDialog: React.FC<ProgramApplyDialogProps> = ({
         additionalNotes: "",
     });
 
-    // Reset form and success state when dialog opens
     React.useEffect(() => {
         if (open) {
             setIsSuccess(false);

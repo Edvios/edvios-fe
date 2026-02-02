@@ -1,3 +1,4 @@
+
 import axiosInstance from "@/lib/axios";
 import {
   InitialProgramDataResponse,
@@ -14,7 +15,7 @@ import {
 } from "../dtos/program.dto";
 
 export class ProgramService {
-  // ==================== FETCH INITIAL DATA ====================
+
   static async fetchInitialData(): Promise<InitialProgramDataResponse> {
     try {
       const response = await axiosInstance.get<BackendInitialProgramDataResponse>(
@@ -31,7 +32,6 @@ export class ProgramService {
       const backendData = result.data;
       const programs = backendData.data;
 
-      // ==================== DERIVE FILTERS ====================
       const institutionsMap = new Map<string, { id: string; name: string }>();
       const intakesMap = new Map<string, { id: string; name: string }>();
       const subjectsMap = new Map<string, { id: string; name: string }>();
@@ -72,7 +72,7 @@ export class ProgramService {
     }
   }
 
-  // ==================== FETCH FILTERED PROGRAMS ====================
+
   static async fetchFilteredPrograms(
     filters: ProgramFilterRequest
   ): Promise<FilteredProgramDataResponse> {
@@ -83,7 +83,6 @@ export class ProgramService {
       if (page) queryParams.append("page", page.toString());
       if (size) queryParams.append("size", size.toString());
 
-      // Remove empty/null/undefined values
       const cleanedFilterBody = Object.fromEntries(
         Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
       );
@@ -100,7 +99,6 @@ export class ProgramService {
       console.log('=== FILTER API RESPONSE ===');
       console.log('Response data:', response.data);
 
-      // Safe parse with Zod
       const parsed = backendFilteredProgramResponseSchema.safeParse(response.data);
       if (!parsed.success) {
         console.error("Filtered backend schema validation failed:", parsed.error.format());
@@ -132,7 +130,6 @@ export class ProgramService {
     }
   }
 
-  // ==================== APPLY TO PROGRAM ====================
   static async applyToProgram(data: ProgramApplicationRequest): Promise<{ success: boolean; message: string }> {
     try {
       console.log("Submitting application:", data);
@@ -146,9 +143,7 @@ export class ProgramService {
   }
 }
 
-// ==================== HELPER: MAP BACKEND → FRONTEND ====================
 function mapBackendProgramToFrontend(program: BackendProgram) {
-  // Normalize status to match expected enum values
   const normalizeStatus = (status?: string | null): "available" | "closed" | "waitlist" | "deadline_passed" => {
     if (!status) return "available";
     
@@ -159,7 +154,6 @@ function mapBackendProgramToFrontend(program: BackendProgram) {
       return normalized as "available" | "closed" | "waitlist" | "deadline_passed";
     }
     
-    // Handle common variations or map backend statuses to frontend equivalents
     switch (normalized) {
       case "open":
       case "active":

@@ -46,7 +46,6 @@ export const usePrograms = () => {
         loadInitialData();
     }, []);
 
-    // Debounced search and filter function
     const debouncedFetchFilteredPrograms = useCallback(async (currentFilters: ProgramFilterRequest) => {
         try {
             setLoading(true);
@@ -59,7 +58,6 @@ export const usePrograms = () => {
         }
     }, []);
 
-    // Effect to handle filter changes with debouncing
     useEffect(() => {
         if (!initialData) return;
 
@@ -95,19 +93,16 @@ export const usePrograms = () => {
         setFilters(prev => {
             const newFilters = { ...prev, [key]: value };
 
-            // Reset to page 1 when filters change (except page and size)
             if (key !== 'page' && key !== 'size') {
                 newFilters.page = 1;
             }
 
-            // Convert boolean filter values
             if (key === 'scholarshipAvailable' || key === 'englishWaiver') {
                 if (value === 'yes') newFilters[key] = true;
                 else if (value === 'no') newFilters[key] = false;
                 else newFilters[key] = undefined;
             }
 
-            // Convert empty strings to undefined for other filters
             if (typeof value === 'string' && value === '') {
                 newFilters[key] = undefined;
             }
