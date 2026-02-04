@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Availability, ProgramStatus } from '../enums';
+import { Availability, ProgramStatus, StudyLevel } from '../enums';
 
 // Single Zod schema that also provides sensible form defaults via `.default()`.
 // Use `programSchema.parse({})` to obtain the default form object.
@@ -25,7 +25,7 @@ export const programSchema = z.object({
 	englishWaiver: z.boolean().optional().default(false),
 	popularityRank: z.number().int().optional().default(0),
 	status: z.nativeEnum(ProgramStatus).optional(),
-	level: z.string().optional().default(''),
+	level: z.enum(Object.values(StudyLevel)).optional(),
 	tuition: z.string().default(''),
 	applicationFee: z.string().default(''),
 	duration: z.string().default(''),

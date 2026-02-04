@@ -23,6 +23,25 @@ interface Subject {
   name: string;
 }
 
+interface BackendProgramData {
+  id?: string;
+  title: string;
+  level: string;
+  intakeId: string;
+  duration: string;
+  tuitionFee: string;
+  applicationFee: string;
+  englishTestScore: string;
+  subjectId: string;
+  scholarship: boolean;
+  applicationDeadline: string;
+  ucasCode: string;
+  englishWaiver: boolean;
+  popularityRank: number;
+  institutionId: string;
+  status: string;
+}
+
 interface ProgramFormData {
   id?: string;
   title: string;
@@ -57,7 +76,7 @@ interface CreateProgramFormProps {
   locations: string[];
   intakes: Intake[];
   subjectsList: Subject[];
-  onSubmit: (data: ProgramFormData) => Promise<void>;
+  onSubmit: (data: BackendProgramData) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -111,25 +130,6 @@ const CreateProgramForm: React.FC<CreateProgramFormProps> = ({
     setIsSaving(true);
     try {
       // Transform to backend DTO format
-      interface BackendProgramData {
-        id?: string;
-        title: string;
-        level: string;
-        intakeId: string;
-        duration: string;
-        tuitionFee: string;
-        applicationFee: string;
-        englishTestScore: string;
-        subjectId: string;
-        scholarship: boolean;
-        applicationDeadline: string;
-        ucasCode: string;
-        englishWaiver: boolean;
-        popularityRank: number;
-        institutionId: string;
-        status: string;
-      }
-      
       const backendData: BackendProgramData = {
         title: form.title,
         level: form.level || 'BACHELORS',

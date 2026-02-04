@@ -8,7 +8,7 @@ import ProgramCard from './components/program-card';
 import CreateProgramForm from './components/CreateProgramForm';
 import { usePrograms } from './hooks/use-programs';
 import type { Institution, Intake, Subject, Program } from './types';
-import { StudyLevel, Country } from './enums';
+import { StudyLevel, Country, ProgramStatus } from './enums';
 
 // Debounce hook
 function useDebounce<T>(value: T, delay: number): T {
@@ -290,7 +290,7 @@ export default function ProgramManagementPage() {
             >
               <option value="">All Intakes</option>
               {intakes.map(intake => (
-                <option key={intake.id} value={intake.name}>{intake.name}</option>
+                <option key={intake.id} value={intake.id}>{intake.name}</option>
               ))}
             </select>
 
@@ -411,7 +411,7 @@ export default function ProgramManagementPage() {
                 duration: editingProgram.duration || '',
                 intakeId: typeof editingProgram.intake === 'string' ? '' : (editingProgram.intake?.id || editingProgram.intakeId || ''),
                 intake: typeof editingProgram.intake === 'string' ? editingProgram.intake : (editingProgram.intake?.name || ''),
-                level: editingProgram.level || undefined,
+                level: editingProgram.level as StudyLevel | undefined,
                 englishTestScore: editingProgram.englishTestScore || '',
                 scholarship: editingProgram.scholarshipAvailable || editingProgram.scholarship || false,
                 applicationDeadline: editingProgram.applicationDeadline ? 
@@ -421,7 +421,7 @@ export default function ProgramManagementPage() {
                 ucasCode: editingProgram.ucasCode || '',
                 popularityRank: editingProgram.popularityRank || 0,
                 englishWaiver: editingProgram.englishWaiver || false,
-                status: editingProgram.status || undefined,
+                status: editingProgram.status as ProgramStatus | undefined,
               } : undefined}
               institutions={institutions}
               locations={Object.values(Country)}

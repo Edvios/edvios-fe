@@ -50,7 +50,8 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
     if (typeof val === 'string') return val;
     if (typeof val === 'number') return String(val);
     if (typeof val === 'object' && val !== null) {
-      return val.name || val.label || val.title || JSON.stringify(val);
+      const obj = val as Record<string, unknown>;
+      return (obj.name as string) || (obj.label as string) || (obj.title as string) || JSON.stringify(val);
     }
     return String(val);
   };
