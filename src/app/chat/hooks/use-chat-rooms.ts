@@ -53,13 +53,10 @@ export function useChatRooms(user: ChatUser | null) {
       if (!user) return;
       
       try {
-        console.log("Loading chats for user:", user.email);
         const dbChats = await getUserChats();
-        console.log("Loaded dbChats:", dbChats);
         
         if (dbChats.length > 0) {
           const chatRooms = dbChats.map(chat => dbChatToRoom(chat, user.role as UserTypeEnum));
-          console.log("Mapped ChatRooms:", chatRooms);
           setRooms(chatRooms);
           
           // For students, auto-select their chat
@@ -92,18 +89,12 @@ export function useChatRooms(user: ChatUser | null) {
           
           // Verify this chat belongs to the current agent (Strict check)
           if (!announcedRoom.agentId || announcedRoom.agentId !== user.id) {
-            console.log("Blocked unauthorized room:", {
-              announcedRoomId: announcedRoom.id,
-              announcedAgentId: announcedRoom.agentId,
-              currentAgentId: user.id
-            });
             return;
           }
 
           // Only accept rooms with valid UUID format (from database)
           const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(announcedRoom.id);
           if (!isValidUUID) {
-            console.log("Ignoring broadcast room with invalid ID:", announcedRoom.id);
             return;
           }
           setRooms((current) => {
@@ -132,17 +123,12 @@ export function useChatRooms(user: ChatUser | null) {
 
         if (user.role === UserTypeEnum.AGENT) {
           if (!isValidUUID) {
-            console.log("Ignoring room update with invalid ID:", updatedRoom.id);
             return;
           }
           
           // Verify this chat belongs to the current agent (Strict check)
           if (!updatedRoom.agentId || updatedRoom.agentId !== user.id) {
-            console.log("Blocked unauthorized update:", {
-              roomId: updatedRoom.id,
-              roomAgentId: updatedRoom.agentId,
-              currentAgentId: user.id
-            });
+            
             return;
           }
 

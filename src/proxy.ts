@@ -92,7 +92,8 @@ export async function proxy(request: NextRequest) {
     const roleRoutes: Record<string, string> = {
       'STUDENT': '/dashboard/student',
       'AGENT': '/dashboard/agent',
-      'ADMIN': '/dashboard/admin'
+      'ADMIN': '/dashboard/admin',
+      'SELECTED_AGENT': '/dashboard/agent'
     };
 
     if (userRole) {

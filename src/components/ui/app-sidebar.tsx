@@ -187,6 +187,8 @@ export function AppSidebar() {
         return agentItems;
       case "ADMIN":
         return adminItems;
+      case "SELECTED_AGENT":
+        return agentItems;
       default:
         return [];
     }
@@ -200,6 +202,8 @@ export function AppSidebar() {
         return "Agent Portal";
       case "ADMIN":
         return "Admin Portal";
+      case "SELECTED_AGENT":
+        return "Agent Portal";  
       default:
         return "Portal";
     }

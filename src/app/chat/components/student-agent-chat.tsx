@@ -84,7 +84,7 @@ export function StudentAgentChat({
           console.error("Failed to initialize chat:", error);
           setChatError("Failed to connect to chat service. Please try again.");
         }
-      } else if (user.role === UserTypeEnum.AGENT) {
+      } else if (user.role === UserTypeEnum.AGENT || user.role === UserTypeEnum.SELECTED_AGENT) {
         // For agents, roomId should be the actual chat ID from the database
         // Validate it looks like a UUID before using it
         const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(roomId);
@@ -104,15 +104,9 @@ export function StudentAgentChat({
   useEffect(() => {
     const loadMessages = async () => {
       if (!dbChat?.id) {
-        // Fall back to localStorage if no db chat
-        const storedMessages = localStorage.getItem(`chat-messages-${roomId}`);
-        if (storedMessages) {
-          setMessages(JSON.parse(storedMessages));
-        }
         setIsLoadingMessages(false);
         return;
       }
-
       setIsLoadingMessages(true);
       try {
         const response = await getChatMessages(dbChat.id, { page: 1, size: 100 });
@@ -143,7 +137,7 @@ export function StudentAgentChat({
             user: {
               id: msg.senderId,
               name: senderName,
-              role: msg.senderRole === "STUDENT" ? UserTypeEnum.STUDENT : UserTypeEnum.AGENT,
+              role: msg.senderRole === "STUDENT" ? UserTypeEnum.STUDENT : (msg.senderRole === "AGENT" ? UserTypeEnum.AGENT : UserTypeEnum.SELECTED_AGENT),
             },
             createdAt: msg.createdAt,
             attachmentUrl: msg.attachmentUrl,

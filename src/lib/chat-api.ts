@@ -135,11 +135,4 @@ export const updateMessageStatus = async (
   return response.data;
 };
 
-// Create a chat (for agents/admins)
-export const createChat = async (studentId: string, agentId: string): Promise<Chat> => {
-  const response = await axiosInstance.post<Chat>('/chat', {
-    studentId,
-    agentId,
-  });
-  return response.data;
-};
+
