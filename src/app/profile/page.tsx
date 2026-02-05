@@ -11,13 +11,10 @@ import { StudentProfile } from "./types/profile.types";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
   AlertCircle,
-  Bell,
   BookOpen,
   Edit3,
   FileText,
   GraduationCap,
-  Menu,
-  Search,
   User,
 } from "lucide-react";
 import { Loader2 } from "lucide-react";
@@ -187,42 +184,6 @@ export default function StudentProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-      <header className="bg-white border-b shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <span className="p-2 rounded-full bg-gray-100 border text-gray-600">
-              <Menu className="w-5 h-5" />
-            </span>
-            <h1 className="text-xl font-semibold text-gray-900">Student Profile</h1>
-            <div className="hidden md:flex items-center ml-6 space-x-2">
-              <Search className="w-4 h-4 text-gray-400" />
-              <Input className="w-64" placeholder="Search anything..." />
-            </div>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Button variant="outline" size="sm">Check In</Button>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="w-5 h-5 text-gray-500" />
-              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500" aria-hidden />
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => {
-                if (typeof window !== "undefined") {
-                  sessionStorage.removeItem("user-session");
-                  sessionStorage.removeItem("auth-token");
-                  cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
-                  window.location.href = "/auth/login";
-                }
-              }}
-            >
-              Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ProfileTab)}>
           <Card className="shadow-sm">

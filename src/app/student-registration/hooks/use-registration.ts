@@ -120,7 +120,7 @@ export const useRegistration = (): UseRegistrationReturn => {
       case 3:
         if (!formData.preferredDestination || !formData.preferredProgram || !formData.preferredStudyLevel) {
           AppToast.error('Please fill in all required details');
-          return true;
+          return false;
         }
         break;
       case 5:
