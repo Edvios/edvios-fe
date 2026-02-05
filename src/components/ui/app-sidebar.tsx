@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import {
   Users,
@@ -138,23 +139,31 @@ const adminItems = [
 export function AppSidebar() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      const userSession = sessionStorage.getItem("user-session");
+    
+    const loadUserData = async () => {
+      try {
+        const userSession = sessionStorage.getItem("user-session");
 
-      if (userSession) {
-        setUserData(JSON.parse(userSession));
-      } else {
-        axiosInstance.get("/auth/me").then((response) => {
-        setUserData(response.data);
-        sessionStorage.setItem("user-session", JSON.stringify(response.data));
-        });
+        if (userSession) {
+          setUserData(JSON.parse(userSession));
+          setIsLoading(false);
+        } else {
+          const response = await axiosInstance.get("/auth/me");
+          setUserData(response.data);
+          sessionStorage.setItem("user-session", JSON.stringify(response.data));
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Failed to load user data:", error);
+        setIsLoading(false);
       }
-    } catch {
-      // ignore parse errors
-    }
+    };
+
+    loadUserData();
   }, []);
 
   const handleLogout = async () => {
@@ -197,7 +206,7 @@ export function AppSidebar() {
   }, [userData?.role]);
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent>
         {/* User Info Section */}
         <SidebarGroup>
@@ -215,41 +224,24 @@ export function AppSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {/* Settings Section */}
-        {/* <SidebarGroup>
-          <SidebarGroupLabel>Account</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/dashboard/settings">
-                    <Settings />
-                    <span>Settings</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup> */}
       </SidebarContent>
 
       {/* Footer with Logout */}
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout}>
+            <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
               <LogOut />
               <span>Logout</span>
             </SidebarMenuButton>
