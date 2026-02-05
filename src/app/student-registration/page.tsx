@@ -109,7 +109,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               
               <div className="space-y-2 group">
                 <Label htmlFor="dob" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Date of Birth
+                  Date of Birth <span className="text-destructive">*</span>
                 </Label>
                 <Input 
                   id="dob" 

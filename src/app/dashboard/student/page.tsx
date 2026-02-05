@@ -194,7 +194,7 @@ export default function StudentDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="text-3xl font-semibold text-slate-900">{stat.value}</div>
+                  <div className="text-3xl font-semibold text-slate-900 text-center">{stat.value}</div>
                 </CardContent>
               </Card>
             );
