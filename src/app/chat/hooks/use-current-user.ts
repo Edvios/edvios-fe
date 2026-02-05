@@ -31,31 +31,31 @@ export function useCurrentUser() {
         }
 
         // Fallback to Supabase session (for agents)
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
+        // const {
+        //   data: { session },
+        //   error,
+        // } = await supabase.auth.getSession();
 
-        if (error || !session) {
-          router.push("/auth/login");
-          return;
-        }
+        // if (error || !session) {
+        //   router.push("/auth/login");
+        //   return;
+        // }
 
-        const supabaseUser = session.user;
-        const role =
-          (supabaseUser.user_metadata?.role ||
-            supabaseUser.app_metadata?.role ||
-            "STUDENT") as UserTypeEnum;
+        // const supabaseUser = session.user;
+        // const role =
+        //   (supabaseUser.user_metadata?.role ||
+        //     supabaseUser.app_metadata?.role ||
+        //     "STUDENT") as UserTypeEnum;
 
-        setUser({
-          id: supabaseUser.id,
-          name:
-            `${supabaseUser.user_metadata?.firstName || ""} ${supabaseUser.user_metadata?.lastName || ""}`.trim() ||
-            supabaseUser.email ||
-            "User",
-          email: supabaseUser.email || "",
-          role,
-        });
+        // setUser({
+        //   id: supabaseUser.id,
+        //   name:
+        //     `${supabaseUser.user_metadata?.firstName || ""} ${supabaseUser.user_metadata?.lastName || ""}`.trim() ||
+        //     supabaseUser.email ||
+        //     "User",
+        //   email: supabaseUser.email || "",
+        //   role,
+        // });
       } catch (error) {
         console.error("Error fetching user:", error);
         router.push("/auth/login");

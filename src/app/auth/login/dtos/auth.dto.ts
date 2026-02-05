@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { UserTypeEnum } from "../enums/auth.enum";
+import { User } from "lucide-react";
 
 // Base user schema
 const userSchema = z.object({
@@ -30,6 +31,7 @@ export const loginRequestSchema = z.object({
     UserTypeEnum.AGENT,
     UserTypeEnum.ADMIN,
     UserTypeEnum.PENDING_AGENT,
+    UserTypeEnum.SELECTED_AGENT,
   ]),
 });
 
@@ -57,6 +59,7 @@ export const createUserRequestSchema = z.object({
     UserTypeEnum.AGENT,
     UserTypeEnum.ADMIN,
     UserTypeEnum.PENDING_AGENT,
+    UserTypeEnum.SELECTED_AGENT,
   ]),
   phone: z
     .string()
@@ -82,6 +85,7 @@ export const signUpRequestSchema = z.object({
     UserTypeEnum.AGENT,
     UserTypeEnum.ADMIN,
     UserTypeEnum.PENDING_AGENT,
+    UserTypeEnum.SELECTED_AGENT,
   ]).optional(),
 });
 
