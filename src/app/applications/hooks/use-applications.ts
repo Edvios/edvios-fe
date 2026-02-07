@@ -33,11 +33,28 @@ export const useApplications = (status?: ApplicationStatus) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await applicationsApi.getAll(paginationParams);
-      setApplications(response.data);
-      setTotalItems(response.total);
-      // Calculate total pages from total items and page size
-      setTotalPages(Math.ceil(response.total / (paginationParams.size || 10)));
+
+      const user = sessionStorage.getItem("user-session");
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const userRole = JSON.parse(user).role;
+      let response;
+
+      if (userRole === "ADMIN") {
+        response = await applicationsApi.getAdminApplications(paginationParams);
+      } else if (userRole === "AGENT") {
+        response = await applicationsApi.getAgentApplications(paginationParams);
+      } else {
+        throw new Error("Invalid user role");
+      }
+
+      if (response) {
+        setApplications(response.data);
+        setTotalItems(response.total);
+        setTotalPages(Math.ceil(response.total / (paginationParams.size || 10)));
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load applications';
       setError(message);

@@ -89,29 +89,6 @@ export const useAdminDashboard = () => {
   };
 
   /**
-   * Handle user logout
-   */
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      
-      // Clear session storage
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('auth-token');
-        sessionStorage.removeItem('user-session');
-      }
-      
-      AppToast.success('Logged out successfully');
-      router.push('/auth/login');
-      router.refresh();
-    } catch (error) {
-      console.error('Error logging out:', error);
-      AppToast.error('Failed to logout');
-    }
-  };
-
-
-  /**
    * Refresh dashboard data
    */
   const refreshDashboard = async () => {
@@ -133,9 +110,6 @@ export const useAdminDashboard = () => {
     isLoading,
     stats,
     isLoadingStats,
-    
-    // Methods
-    handleLogout,
     refreshDashboard,
   };
 };
