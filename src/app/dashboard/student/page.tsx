@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudentTab, studentTabLabels } from "./enums/student-tabs";
 import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
@@ -126,7 +127,7 @@ export default function StudentDashboard() {
   const activeTabIndex = useMemo(() => tabOrder.indexOf(tabValue), [tabOrder, tabValue]);
 
 
-    useEffect(() => {
+  useEffect(() => {
     if (!userData) {
       router.push('/auth/login');
       return;
@@ -162,26 +163,27 @@ export default function StudentDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-                <Button className="bg-gradient text-white" size="sm" onClick={() => router.push('/chat')}>
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Chat with Agent
-                </Button>
-                </div>
-              </div>
+              <NotificationBell role="student" />
+              <Button className="bg-gradient text-white" size="sm" onClick={() => router.push('/chat')}>
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Chat with Agent
+              </Button>
             </div>
-        </header>
+          </div>
+        </div>
+      </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
           {statCards.filter((s) => s.key !== "interviews").map((stat) => {
             const Icon = statIcons[stat.key] ?? FileText;
             const accent = statAccentMap[stat.accent as string] ?? "text-slate-700 bg-slate-100";
 
             const displayLabel =
               stat.key === "applications" ? "Total Applications" :
-              stat.key === "accepted" ? "Accepted Applications" :
-              stat.key === "programs" ? "Total Programs" :
-              stat.label;
+                stat.key === "accepted" ? "Accepted Applications" :
+                  stat.key === "programs" ? "Total Programs" :
+                    stat.label;
 
             return (
               <Card key={stat.key} className="border border-slate-100 shadow-sm">
@@ -237,61 +239,61 @@ export default function StudentDashboard() {
                     <div className="p-6 text-center text-sm text-slate-500">No applications found.</div>
                   ) : (
                     applications.slice(0, 3).map((app) => {
-                    const dateObj = new Date(String(app.date ?? ""));
-                    const valid = !isNaN(dateObj.getTime());
-                    const formattedDate = valid ? dateObj.toLocaleDateString() : String(app.date ?? '');
+                      const dateObj = new Date(String(app.date ?? ""));
+                      const valid = !isNaN(dateObj.getTime());
+                      const formattedDate = valid ? dateObj.toLocaleDateString() : String(app.date ?? '');
 
-                    return (
-                      <div
-                        key={String(app.id)}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
-                            <GraduationCap className="h-5 w-5 text-blue-600" />
+                      return (
+                        <div
+                          key={String(app.id)}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
+                              <GraduationCap className="h-5 w-5 text-blue-600" />
+                            </div>
+                            <div>
+                              {(() => {
+                                // support multiple backend shapes: simple strings or nested program object
+                                const programField = app.program as unknown;
+                                const programObj = (typeof programField === 'object' && programField !== null) ? programField as Record<string, unknown> : undefined;
+                                const programTitle = resolveLabel(typeof programField === 'string' ? programField : (programObj?.title ?? programObj?.program ?? programField));
+
+                                const schoolField = resolveLabel(app.school ?? (programObj && (programObj?.institution ?? programObj?.school ?? programObj)));
+
+                                return (
+                                  <>
+                                    <p className="font-medium text-slate-900">{schoolField}</p>
+                                    <p className="text-sm text-slate-500">{programTitle}</p>
+                                  </>
+                                );
+                              })()}
+                            </div>
                           </div>
-                                <div>
-                                  {(() => {
-                                    // support multiple backend shapes: simple strings or nested program object
-                                    const programField = app.program as unknown;
-                                    const programObj = (typeof programField === 'object' && programField !== null) ? programField as Record<string, unknown> : undefined;
-                                    const programTitle = resolveLabel(typeof programField === 'string' ? programField : (programObj?.title ?? programObj?.program ?? programField));
 
-                                    const schoolField = resolveLabel(app.school ?? (programObj && (programObj?.institution ?? programObj?.school ?? programObj)));
+                          <div className="flex flex-col text-right sm:mx-4">
+                            <span className="text-sm text-slate-700">{formattedDate}</span>
+                          </div>
 
-                                    return (
-                                      <>
-                                        <p className="font-medium text-slate-900">{schoolField}</p>
-                                        <p className="text-sm text-slate-500">{programTitle}</p>
-                                      </>
-                                    );
-                                  })()}
-                                </div>
+                          <div className="flex items-center gap-4">
+                            <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(String(app.status ?? ''))}`}>
+                              {String(app.status ?? '')}
+                            </span>
+
+                            <span className="text-xs text-slate-500">{String(app.stage ?? '')}</span>
+                          </div>
                         </div>
-
-                        <div className="flex flex-col text-right sm:mx-4">
-                          <span className="text-sm text-slate-700">{formattedDate}</span>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                          <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(String(app.status ?? ''))}`}>
-                            {String(app.status ?? '')}
-                          </span>
-
-                          <span className="text-xs text-slate-500">{String(app.stage ?? '')}</span>
-                        </div>
-                      </div>
-                    );
+                      );
                     })
                   )}
                 </CardContent>
               </Card>
 
-              
+
             </div>
           </TabsContent>
 
-          
+
           <TabsContent value={StudentTab.INTERVIEWS} className="space-y-4">
             <Card className="border border-slate-100">
               <CardHeader>
@@ -302,30 +304,30 @@ export default function StudentDashboard() {
 
                 {interviews.length === 0 ? (
                   <div className="p-6 text-center text-sm text-slate-500">Coming soon.</div>
-                  ) : (
+                ) : (
                   interviews.map((interview) => {
                     const item = interview as Record<string, unknown>;
                     return (
-                    <div
-                      key={String(item.id ?? '')}
-                      className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
-                    >
-                      <div>
-                        <p className="font-medium text-slate-900">{resolveLabel(item.school ?? item.institution ?? item.name)}</p>
-                        <p className="text-sm text-slate-500">{resolveLabel(item.contact ?? item.contactName ?? item.contact_person)}</p>
-                      </div>
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4 text-purple-600" />
-                          {resolveLabel(item.date ?? item.scheduledAt)}
-                        </span>
-                        <span className="text-slate-400">{resolveLabel(item.timezone ?? item.tz)}</span>
-                        <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(resolveLabel(item.status))}`}>
-                          {resolveLabel(item.status)}
-                        </span>
-                      </div>
+                      <div
+                        key={String(item.id ?? '')}
+                        className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
+                      >
+                        <div>
+                          <p className="font-medium text-slate-900">{resolveLabel(item.school ?? item.institution ?? item.name)}</p>
+                          <p className="text-sm text-slate-500">{resolveLabel(item.contact ?? item.contactName ?? item.contact_person)}</p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4 text-purple-600" />
+                            {resolveLabel(item.date ?? item.scheduledAt)}
+                          </span>
+                          <span className="text-slate-400">{resolveLabel(item.timezone ?? item.tz)}</span>
+                          <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(resolveLabel(item.status))}`}>
+                            {resolveLabel(item.status)}
+                          </span>
+                        </div>
 
-                    </div>
+                      </div>
                     );
                   })
                 )}
@@ -346,18 +348,18 @@ export default function StudentDashboard() {
                   documents.map((doc) => {
                     const item = doc as Record<string, unknown>;
                     return (
-                    <div
-                      key={String(item.id ?? '')}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
-                    >
-                      <div>
-                        <p className="font-medium text-slate-900">{resolveLabel(item.title)}</p>
-                        <p className="text-sm text-slate-500">Updated {resolveLabel(item.updatedAt ?? item.updated)}</p>
+                      <div
+                        key={String(item.id ?? '')}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
+                      >
+                        <div>
+                          <p className="font-medium text-slate-900">{resolveLabel(item.title)}</p>
+                          <p className="text-sm text-slate-500">Updated {resolveLabel(item.updatedAt ?? item.updated)}</p>
+                        </div>
+                        <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(resolveLabel(item.status))}`}>
+                          {resolveLabel(item.status)}
+                        </span>
                       </div>
-                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${statusTone(resolveLabel(item.status))}`}>
-                        {resolveLabel(item.status)}
-                      </span>
-                    </div>
                     );
                   })
                 )}

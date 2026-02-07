@@ -3,10 +3,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  Users, 
-  FileText, 
-  LogOut, 
+import { NotificationBell } from "@/components/notifications/notification-bell";
+import {
+  Users,
+  FileText,
+  LogOut,
   Building,
   MessageSquare,
   Layers,
@@ -31,7 +32,7 @@ export default function AgentDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
 
-  const {applications, counts} = useApplications();
+  const { applications, counts } = useApplications();
 
   const totalApplications = counts ?
     counts.totalApplications.count.SUBMITTED +
@@ -44,12 +45,12 @@ export default function AgentDashboard() {
     const fetchUser = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
-        
+
         if (error || !session) {
           router.push('/auth/login');
           return;
         }
-        
+
         const user = session.user;
         setUserData({
           email: user.email || '',
@@ -66,7 +67,7 @@ export default function AgentDashboard() {
         setIsLoading(false);
       }
     };
-    
+
     fetchUser();
   }, [router, supabase.auth]);
 
@@ -104,7 +105,8 @@ export default function AgentDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              
+
+              <NotificationBell role="agent" />
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -115,7 +117,7 @@ export default function AgentDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Stats Cards */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <Card >
             <CardHeader className="pb-3">
@@ -194,7 +196,7 @@ export default function AgentDashboard() {
 
           {/* Tasks & Quick Actions */}
           <div>
-          
+
 
             <Card className="mt-6">
               <CardHeader>
@@ -202,9 +204,9 @@ export default function AgentDashboard() {
               </CardHeader>
               <CardContent className="space-y-2">
                 <Button variant="default" size="sm" onClick={() => router.push('/chat')} className="w-full">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Support Inbox
-              </Button>
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Support Inbox
+                </Button>
                 <Button className="w-full" variant="outline" onClick={() => router.push('/institution-management')}>
                   <FileText className="w-4 h-4 mr-2" />
                   Add Institutions
