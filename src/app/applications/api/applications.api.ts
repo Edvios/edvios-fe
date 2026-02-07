@@ -10,20 +10,45 @@ import {
   UpdateStatusSchema,
 } from "@/app/applications/dtos/application.dto";
 import { z } from "zod";
+import { AgentApplicationSchema } from "@/app/dashboard/agent/dtos/dashboard.dto";
+import { AgentApplication } from "@/app/dashboard/agent/types/dashboard.types";
 
 export const applicationsApi = {
-  async getAll(
-    params: PaginationParams = { page: 1, size: 10 },
-  ): Promise<PaginatedResponse<Application>> {
-    const response = await axiosInstance.get("/applications", {
-      params: params,
-    });
 
-    return {
-      data: z.array(ApplicationSchema).parse(response.data.applications),
-      total: response.data.total || 0,
-      currentPage: response.data.page || 1,
-    };
+  async getAgentApplications(paginationParams: PaginationParams): Promise<PaginatedResponse<AgentApplication>> {
+    try {
+        const response = await axiosInstance.get('applications/agent', { params: paginationParams });
+        const applications = z.array(AgentApplicationSchema).parse(response.data.applications);
+        return {
+          data: applications,
+          total: response.data.total || applications.length,
+          currentPage: paginationParams.page || 1,
+        };
+    } catch (error) {
+        console.error("Failed to fetch agent applications:", error);
+        if (error instanceof Error) {
+            throw error;
+        }
+        throw new Error("Failed to fetch agent applications. Please try again.");
+    }
+  },
+
+  async getAdminApplications(paginationParams: PaginationParams): Promise<PaginatedResponse<AgentApplication>> {
+    try {
+      const response = await axiosInstance.get("applications/admin", { params: paginationParams });
+      const applications = z.array(AgentApplicationSchema).parse(response.data.applications);
+      return {
+        data: applications,
+        total: response.data.total || applications.length,
+        currentPage: paginationParams.page || 1,
+      };
+    } catch (error) {
+      console.error("Failed to fetch applications:", error);
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error("Failed to fetch applications. Please try again.");
+    }
   },
 
   async getById(id: string): Promise<Application> {

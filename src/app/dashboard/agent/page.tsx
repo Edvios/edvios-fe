@@ -5,16 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { 
   Users, 
-  FileText, 
-  LogOut, 
+  FileText,  
   Building,
   MessageSquare,
   Layers,
   BookOpen
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import AppToast from "@/utils/toast-utils";
-import { useApplications } from "./hooks/useAdminDashboard";
+import { useApplications } from "./hooks/useAgentDashboard";
 
 interface UserData {
   email: string;
@@ -70,18 +68,6 @@ export default function AgentDashboard() {
     fetchUser();
   }, [router, supabase.auth]);
 
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      AppToast.success('Logged out successfully');
-      router.push('/auth/login');
-      router.refresh();
-    } catch (error) {
-      console.error('Error logging out:', error);
-      AppToast.error('Failed to logout');
-    }
-  };
-
   if (isLoading || !userData) {
     return <div className="min-h-screen flex items-center justify-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
@@ -102,13 +88,6 @@ export default function AgentDashboard() {
                 <h1 className="text-xl font-bold text-gray-900">Agent Portal</h1>
                 <p className="text-sm text-gray-500">Welcome, {userData.name}</p>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
             </div>
           </div>
         </div>

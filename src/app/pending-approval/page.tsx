@@ -1,23 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
-import AppToast from "@/utils/toast-utils";
+import { logout } from "@/app/auth/login/api/auth.api";
 
 export default function PendingApprovalPage() {
-  const router = useRouter();
-  const supabase = createClient();
-
   const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      router.replace("/auth/login");
-      router.refresh();
-    } catch (error) {
-      console.error("Failed to sign out:", error);
-      AppToast.error("Failed to sign out. Please try again.");
-    }
+    await logout();
   };
 
   return (

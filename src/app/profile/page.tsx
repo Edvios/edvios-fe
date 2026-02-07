@@ -302,7 +302,8 @@ export default function StudentProfilePage() {
                 </div>
               </div>
 
-              <div className="mt-6">
+              {/* Toggle for desktop, hidden on mobile */}
+              <div className="mt-6 hidden md:block">
                 <div
                   className={`grid gap-2 p-1 rounded-4xl bg-gray-100 relative`}
                   style={{ gridTemplateColumns: `repeat(${toggleOptions.length}, minmax(0, 1fr))` }}
@@ -338,8 +339,10 @@ export default function StudentProfilePage() {
             </CardContent>
           </Card>
 
-          <TabsContent value={ProfileTab.OVERVIEW}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Desktop: show tabs based on activeTab */}
+          <div className="hidden md:block">
+            <TabsContent value={ProfileTab.OVERVIEW}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="shadow-sm">
               <CardHeader>
                 <div className="flex items-center space-x-2">
@@ -524,6 +527,222 @@ export default function StudentProfilePage() {
               </CardContent>
             </Card>
           </TabsContent>
+          </div>
+
+          {/* Mobile: show all sections stacked with headings */}
+          <div className="md:hidden space-y-6">
+            {/* Overview Section */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4 px-2">
+                <User className="w-5 h-5 text-gray-700" />
+                <h2 className="text-lg font-semibold text-gray-900">Overview</h2>
+              </div>
+              <div className="grid grid-cols-1 gap-6">
+                <Card className="shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <User className="w-5 h-5 text-gray-500" />
+                      <CardTitle>Personal Information</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm text-gray-700">
+                    
+                    {/* First / Last name editable fields */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">First Name</p>
+                        {isEditing ? (
+                          <Input
+                            value={formProfile.firstName ?? ""}
+                            onChange={(e) => setFormProfile((prev) => ({ ...prev, firstName: e.target.value }))}
+                          />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.firstName ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Last Name</p>
+                        {isEditing ? (
+                          <Input
+                            value={formProfile.lastName ?? ""}
+                            onChange={(e) => setFormProfile((prev) => ({ ...prev, lastName: e.target.value }))}
+                          />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.lastName ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Email</p>
+                        {isEditing ? (
+                          <Input value={formProfile.email ?? ""} onChange={(e) => setFormProfile({ ...formProfile, email: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.email ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Phone</p>
+                        {isEditing ? (
+                          <Input value={formProfile.phone ?? ""} onChange={(e) => setFormProfile({ ...formProfile, phone: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.phone ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Date of Birth</p>
+                        {isEditing ? (
+                          <Input type="date" value={formProfile.dob ? String(formProfile.dob).slice(0, 10) : ""} onChange={(e) => setFormProfile({ ...formProfile, dob: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.dob ? new Date(displayProfile.dob).toLocaleDateString() : "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Nationality</p>
+                        {isEditing ? (
+                          <Input value={formProfile.nationality ?? ""} onChange={(e) => setFormProfile({ ...formProfile, nationality: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.nationality ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Institution</p>
+                        {isEditing ? (
+                          <Input value={formProfile.currentInstitution ?? ""} onChange={(e) => setFormProfile({ ...formProfile, currentInstitution: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.currentInstitution ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-gray-500">Address</p>
+                      {isEditing ? (
+                        <Input value={formProfile.address ?? formProfile.adress ?? ""} onChange={(e) => setFormProfile({ ...formProfile, address: e.target.value })} />
+                      ) : (
+                        <p className="font-medium text-gray-900">{displayAddress ?? "-"}</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <GraduationCap className="w-5 h-5 text-gray-500" />
+                      <CardTitle>Academic & Preferences</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm text-gray-700">
+                    <div>
+                      <p className="text-xs text-gray-500">Current Education Level</p>
+                      {isEditing ? (
+                        <Input value={formProfile.currentEducationLevel ?? ""} onChange={(e) => setFormProfile({ ...formProfile, currentEducationLevel: e.target.value })} />
+                      ) : (
+                        <p className="font-medium text-gray-900">{displayProfile.currentEducationLevel ?? "-"}</p>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Field Of Study</p>
+                        {isEditing ? (
+                          <Input value={String(formProfile.fieldOfStudy ?? "")} onChange={(e) => setFormProfile({ ...formProfile, fieldOfStudy: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.fieldOfStudy ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">GPA</p>
+                        {isEditing ? (
+                          <Input
+                            value={gpaInput}
+                            onChange={(e) => setGpaInput(e.target.value)}
+                            onBlur={() => setFormProfile({ ...formProfile, gpa: gpaInput === "" ? undefined : Number(gpaInput) })}
+                          />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.gpa ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Preferred Program</p>
+                        {isEditing ? (
+                          <Input value={formProfile.preferredProgram ?? ""} onChange={(e) => setFormProfile({ ...formProfile, preferredProgram: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.preferredProgram ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Preferred Destination</p>
+                        {isEditing ? (
+                          <Input value={formProfile.preferredDestination ?? ""} onChange={(e) => setFormProfile({ ...formProfile, preferredDestination: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.preferredDestination ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-2 bg-blue-50 border border-blue-100 rounded-lg p-3">
+                      <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5" />
+                      <p className="text-xs text-blue-800">Keep your preferences up to date for accurate applications.</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Applications Section */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4 px-2">
+                <BookOpen className="w-5 h-5 text-gray-700" />
+                <h2 className="text-lg font-semibold text-gray-900">Applications</h2>
+              </div>
+              <Card className="shadow-sm">
+                <CardContent className="pt-6">
+                  <p className="text-sm text-gray-700">Applications content coming soon.</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Documents Section */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4 px-2">
+                <FileText className="w-5 h-5 text-gray-700" />
+                <h2 className="text-lg font-semibold text-gray-900">Documents</h2>
+              </div>
+              <Card className="shadow-sm">
+                <CardContent className="pt-6">
+                  <p className="text-sm text-gray-700">Documents content coming soon.</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Progress Section */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4 px-2">
+                <GraduationCap className="w-5 h-5 text-gray-700" />
+                <h2 className="text-lg font-semibold text-gray-900">Progress</h2>
+              </div>
+              <Card className="shadow-sm">
+                <CardContent className="pt-6">
+                  <p className="text-sm text-gray-700">Progress content coming soon.</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Support Section */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4 px-2">
+                <AlertCircle className="w-5 h-5 text-gray-700" />
+                <h2 className="text-lg font-semibold text-gray-900">Support</h2>
+              </div>
+              <Card className="shadow-sm">
+                <CardContent className="pt-6">
+                  <p className="text-sm text-gray-700">Support content coming soon.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
 
         </Tabs>
       </main>

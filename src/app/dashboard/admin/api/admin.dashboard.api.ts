@@ -1,4 +1,7 @@
 import axiosInstance from "@/lib/axios";
+import { AgentApplication } from "../../agent/types/dashboard.types";
+import { AgentApplicationSchema } from "../../agent/dtos/dashboard.dto";
+import z from "zod";
 
 export const adminAPI = {
   /**
@@ -6,9 +9,11 @@ export const adminAPI = {
    */
   async getTotalUsersCount(): Promise<number> {
     try {
-      const response = await axiosInstance.get<{ userCount: number }>("auth/users-count");
+      const response = await axiosInstance.get<{ userCount: number }>(
+        "auth/users-count",
+      );
       if (!response.data) {
-        throw new Error('Error occured while fetching total users count');
+        throw new Error("Error occured while fetching total users count");
       }
 
       return response.data.userCount;
@@ -26,9 +31,11 @@ export const adminAPI = {
    */
   async getAgentsCount(): Promise<number> {
     try {
-      const response = await axiosInstance.get<{ agentCount: number }>("agents/agents-count");
+      const response = await axiosInstance.get<{ agentCount: number }>(
+        "agents/agents-count",
+      );
       if (!response.data) {
-        throw new Error('Error occured while fetching agents count');
+        throw new Error("Error occured while fetching agents count");
       }
 
       return response.data.agentCount;
@@ -43,9 +50,11 @@ export const adminAPI = {
 
   async getPendingAgentsCount(): Promise<number> {
     try {
-      const response = await axiosInstance.get<{ pendingAgentCount: number }>("agents/pending-agents-count");
+      const response = await axiosInstance.get<{ pendingAgentCount: number }>(
+        "agents/pending-agents-count",
+      );
       if (!response.data) {
-        throw new Error('Error occured while fetching pending agents count');
+        throw new Error("Error occured while fetching pending agents count");
       }
 
       return response.data.pendingAgentCount;
@@ -54,7 +63,9 @@ export const adminAPI = {
       if (error instanceof Error) {
         throw error;
       }
-      throw new Error("Failed to fetch pending agents count. Please try again.");
+      throw new Error(
+        "Failed to fetch pending agents count. Please try again.",
+      );
     }
   },
 
@@ -63,9 +74,11 @@ export const adminAPI = {
    */
   async getStudentsCount(): Promise<number> {
     try {
-      const response = await axiosInstance.get<{ studentCount: number }>("students/students-count");
+      const response = await axiosInstance.get<{ studentCount: number }>(
+        "students/students-count",
+      );
       if (!response.data) {
-        throw new Error('Error occured while fetching students count');
+        throw new Error("Error occured while fetching students count");
       }
 
       return response.data.studentCount;
@@ -83,9 +96,16 @@ export const adminAPI = {
    */
   async getApplicationsCount(): Promise<number> {
     try {
-      const response = await axiosInstance.get<{ count: { SUBMITTED: number; UNDER_REVIEW: number; ACCEPTED: number; REJECTED: number } }>("applications/count");
+      const response = await axiosInstance.get<{
+        count: {
+          SUBMITTED: number;
+          UNDER_REVIEW: number;
+          ACCEPTED: number;
+          REJECTED: number;
+        };
+      }>("applications/count");
       if (!response.data) {
-        throw new Error('Error occured while fetching applications count');
+        throw new Error("Error occured while fetching applications count");
       }
 
       return response.data.count.SUBMITTED || 0;
