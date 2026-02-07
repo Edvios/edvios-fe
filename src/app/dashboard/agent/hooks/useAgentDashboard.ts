@@ -13,12 +13,16 @@ export const useApplications = () => {
   const [counts, setCounts] = useState<DashboardStats | null>(null);
   const [countsLoading, setCountsLoading] = useState(true);
 
-  const user = sessionStorage.getItem("user-session");
-
   const fetchApplications = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
+      
+      if (typeof window === "undefined") {
+        return;
+      }
+      
+      const user = sessionStorage.getItem("user-session");
       if (!user) {
         throw new Error("User not found");
       }
