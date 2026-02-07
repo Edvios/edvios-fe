@@ -66,6 +66,41 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
     }
   }, [showAgentList, loadAgents]);
 
+  // Prevent body scroll when popup is open
+  useEffect(() => {
+    if (showAgentList) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showAgentList]);
+
+  // Close agent list when clicking outside
+  useEffect(() => {
+    if (!showAgentList) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      // Check if click is outside the agent list popup
+      if (!target.closest('[data-agent-selector]')) {
+        setShowAgentList(null);
+        resetSearch();
+      }
+    };
+
+    // Add a small delay to prevent immediate closing
+    setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+    }, 100);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showAgentList, resetSearch]);
+
   const handleAgentClick = (assignment: StudentAssignment) => {
     setSelectedAssignment(assignment);
     setShowAgentList(assignment.id);
@@ -80,7 +115,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
 
   const handleConfirm = async () => {
     if (!selectedAssignment || !selectedAgentId) return;
-    await updateAgentAssignment(selectedAssignment.studentId, selectedAgentId);
+    await updateAgentAssignment(selectedAssignment.id, selectedAgentId);
   };
 
   const selectedAgent = agents.find((a) => a.id === selectedAgentId);
@@ -121,10 +156,11 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
           <Button
             variant="outline"
             className={cn(
-              'w-full max-w-[280px] justify-between hover:bg-muted',
+              'w-full max-w-[400px] justify-between hover:bg-muted',
               !row.agent && 'text-muted-foreground'
             )}
             onClick={() => handleAgentClick(row)}
+            data-agent-selector
           >
             {row.agent ? (
               <span className="flex items-center gap-2 truncate">
@@ -145,55 +181,70 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
           </Button>
 
           {showAgentList === row.id && (
-            <div className="absolute top-full left-0 right-0 z-50 mt-1 max-w-[280px] rounded-md border bg-popover shadow-md">
-              {agentsLoading ? (
-                <div className="p-4 space-y-2">
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-10 w-full" />
-                  <Skeleton className="h-10 w-full" />
-                </div>
-              ) : (
-                <Command>
-                  <CommandInput
-                    placeholder="Search agents..."
-                    value={searchQuery}
-                    onValueChange={setSearchQuery}
-                  />
-                  <CommandList>
-                    <CommandEmpty>No agents found.</CommandEmpty>
-                    <CommandGroup>
-                      {filteredAgents.map((agent) => (
-                        <CommandItem
-                          key={agent.id}
-                          value={agent.id}
-                          onSelect={() => handleAgentSelect(agent.id)}
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              row.agent?.id === agent.id ? 'opacity-100' : 'opacity-0'
-                            )}
-                          />
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center text-white text-xs font-semibold">
-                              {agent.firstName[0]}{agent.lastName[0]}
+            <>
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 z-40 bg-black/20" 
+                onClick={() => {
+                  setShowAgentList(null);
+                  resetSearch();
+                }}
+              />
+              
+              {/* Agent List Popup */}
+              <div 
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] max-w-[90vw] rounded-xl bg-white shadow-2xl"
+                data-agent-selector
+              >
+                {agentsLoading ? (
+                  <div className="p-4 space-y-2">
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                ) : (
+                  <Command>
+                    <CommandInput
+                      placeholder="Search agents..."
+                      value={searchQuery}
+                      onValueChange={setSearchQuery}
+                    />
+                    <CommandList className="max-h-[300px]">
+                      <CommandEmpty>No agents found.</CommandEmpty>
+                      <CommandGroup>
+                        {filteredAgents.map((agent) => (
+                          <CommandItem
+                            key={agent.id}
+                            value={`${agent.firstName} ${agent.lastName} ${agent.email}`}
+                            onSelect={() => handleAgentSelect(agent.id)}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4',
+                                row.agent?.id === agent.id ? 'opacity-100' : 'opacity-0'
+                              )}
+                            />
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center text-white text-xs font-semibold">
+                                {agent.firstName[0]}{agent.lastName[0]}
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="font-medium">
+                                  {agent.firstName} {agent.lastName}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {agent.email}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex flex-col">
-                              <span className="font-medium">
-                                {agent.firstName} {agent.lastName}
-                              </span>
-                              <span className="text-xs text-muted-foreground">
-                                {agent.email}
-                              </span>
-                            </div>
-                          </div>
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              )}
-            </div>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                )}
+              </div>
+            </>
           )}
         </div>
       ),

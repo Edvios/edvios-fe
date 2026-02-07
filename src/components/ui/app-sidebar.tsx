@@ -15,6 +15,7 @@ import {
   HelpingHandIcon,
   Building2,
   BookOpen,
+  LucideUserPlus2,
 } from "lucide-react";
 
 import {
@@ -133,6 +134,11 @@ const adminItems = [
     title: "Programs",
     url: "/program-management",
     icon: BookOpen,
+  },
+  {
+    title: "Assignments",
+    url: "/agent-assignment",
+    icon: LucideUserPlus2,
   },
 ];
 

@@ -32,10 +32,10 @@ export const useAgentSelector = (onSuccess?: () => void) => {
       .includes(searchQuery.toLowerCase())
   );
 
-  const updateAgentAssignment = async (studentId: string, agentId: string) => {
+  const updateAgentAssignment = async (assignmentId: string, agentId: string) => {
     try {
       setSubmitting(true);
-      await updateAssignment(studentId, { agentId });
+      await updateAssignment(assignmentId, agentId);
       AppToast.success('Agent assigned successfully');
       onSuccess?.();
     } catch (error) {

@@ -5,17 +5,15 @@ import { Button } from "@/components/ui/button";
 import { 
   Shield, 
   Users, 
-  LogOut, 
   User,
   UserPlus,
   GraduationCapIcon,
   Form,
-  MessageSquare,
   BookOpen,
   Building,
 } from "lucide-react";
 import { useAdminDashboard } from "@/app/dashboard/admin/hooks/use-adminDashboard";
-import { useApplications } from "@/app/dashboard/agent/hooks/useAdminDashboard";
+import { useApplications } from "@/app/dashboard/agent/hooks/useAgentDashboard";
 import { useRouter } from "next/navigation";
 
 export default function ADMINDashboard() {
@@ -25,7 +23,6 @@ export default function ADMINDashboard() {
     isLoading,
     stats,
     isLoadingStats,
-    handleLogout,
   } = useAdminDashboard();
   
   const { applications } = useApplications();
@@ -52,12 +49,6 @@ export default function ADMINDashboard() {
                 <h1 className="text-xl font-bold text-gray-900">Admin Portal</h1>
                 <p className="text-sm text-gray-500">System Administrator</p>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
             </div>
           </div>
         </div>
