@@ -118,7 +118,7 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
         <div className="mt-5 pt-4 border-t grid grid-cols-2 gap-4">
           <MetaItem label="English Score" value={program.englishTestScore} />
           <MetaItem
-            label="Application Deadline"
+            label="Deadline"
             value={formattedDeadline}
           />
         </div>
