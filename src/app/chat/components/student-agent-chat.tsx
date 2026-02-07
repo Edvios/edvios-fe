@@ -337,29 +337,7 @@ export function StudentAgentChat({
   }
 
   return (
-    <div className="flex flex-col h-full w-full bg-background">
-      {/* Connection status */}
-      <div
-        className={cn(
-          "flex items-center gap-2 px-4 py-2 text-xs",
-          isConnected
-            ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-            : "bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
-        )}
-      >
-        {isConnected ? (
-          <>
-            <Wifi className="w-3 h-3" />
-            <span>Connected</span>
-          </>
-        ) : (
-          <>
-            <WifiOff className="w-3 h-3" />
-            <span>Connecting...</span>
-          </>
-        )}
-      </div>
-
+    <div className="flex flex-col h-full w-full bg-background overflow-hidden">
       {/* Messages area */}
       <div ref={containerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
         {isLoadingMessages ? (
@@ -462,7 +440,7 @@ export function StudentAgentChat({
           
           {isConnected && (newMessage.trim() || selectedFile) && (
             <Button
-              className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300 shrink-0"
+              className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300 shrink-0 bg-gradient text-white hover:opacity-90"
               type="submit"
               disabled={!isConnected || isSending || isUploading}
               size="icon"
@@ -497,14 +475,18 @@ function ChatMessageBubble({
     message.user.role === UserTypeEnum.STUDENT
       ? "text-blue-600 dark:text-blue-400"
       : "text-green-600 dark:text-green-400";
+  const hasImageAttachment = Boolean(
+    message.attachmentUrl && message.attachmentType?.startsWith("image/")
+  );
+  const hasOnlyImageAttachment = hasImageAttachment && !message.content;
 
   const renderAttachment = () => {
     if (!message.attachmentUrl) return null;
 
     // Check for image types
-    if (message.attachmentType?.startsWith('image/')) {
+    if (message.attachmentType?.startsWith("image/")) {
       return (
-        <div className="mb-2 relative rounded-md overflow-hidden bg-black/5 dark:bg-white/5 max-w-[240px]">
+        <div className="mb-2 relative rounded-md overflow-hidden max-w-[240px]">
            {/* eslint-disable-next-line @next/next/no-img-element */}
            <img 
              src={message.attachmentUrl} 
@@ -524,9 +506,9 @@ function ChatMessageBubble({
         rel="noopener noreferrer"
         className={cn(
           "flex items-center gap-2 mb-2 p-2 rounded-md transition-colors border border-white/20",
-          isOwnMessage 
-            ? "bg-white/10 hover:bg-white/20" 
-            : "bg-black/5 hover:bg-black/10"
+          isOwnMessage
+            ? "bg-primary/10 hover:bg-primary/20"
+            : "bg-muted/60 hover:bg-muted/80"
         )}
       >
         <FileIcon className="w-5 h-5 shrink-0" />
@@ -571,9 +553,15 @@ function ChatMessageBubble({
         )}
         <div
           className={cn(
-            "py-2 px-3 rounded-xl text-sm w-fit relative",
+            "text-sm w-fit relative",
+            hasOnlyImageAttachment ? "p-0 bg-transparent" : "py-2 px-3",
+            hasOnlyImageAttachment
+              ? "rounded-xl"
+              : "rounded-xl",
             isOwnMessage
-              ? "bg-primary text-primary-foreground"
+              ? hasOnlyImageAttachment
+                ? "text-foreground"
+                : "bg-gradient text-white"
               : "bg-muted text-foreground"
           )}
         >

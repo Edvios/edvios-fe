@@ -56,7 +56,7 @@ export default function ChatPage() {
   const isAgent = user.role === UserTypeEnum.AGENT || user.role === UserTypeEnum.SELECTED_AGENT;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-[calc(100vh-56px)] overflow-hidden bg-background">
       {/* Header */}
       <header className="bg-background border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -74,7 +74,7 @@ export default function ChatPage() {
                 <div
                   className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center",
-                    isAgent ? "bg-green-500" : "bg-blue-500"
+                    "bg-gradient"
                   )}
                 >
                   {isAgent ? (
@@ -85,7 +85,7 @@ export default function ChatPage() {
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold">
-                    {isAgent ? "Support Inbox" : "Chat with Agent"}
+                    {isAgent ? "Inbox" : "Chat with Agent"}
                   </h1>
                   <p className="text-xs text-muted-foreground">
                     {isAgent
@@ -95,35 +95,20 @@ export default function ChatPage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span
-                className={cn(
-                  "text-xs font-medium px-2 py-1 rounded-full",
-                  isAgent
-                    ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
-                    : "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-                )}
-              >
-                {user.role}
-              </span>
-              <span className="text-sm text-muted-foreground hidden sm:inline">
-                {user.name}
-              </span>
-            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto">
+      <main className="max-w-7xl mx-auto h-[calc(100vh-121px)] overflow-hidden">
         {isAgent ? (
           // Agent view: Room list + Chat
-          <div className="flex h-[calc(100vh-65px)]">
+          <div className="flex h-full">
             {/* Room list sidebar */}
             <div className="w-80 border-r shrink-0 hidden md:block">
               <div className="p-3 border-b">
                 <h2 className="font-medium text-sm text-muted-foreground">
-                  Student Conversations
+                  Students
                 </h2>
               </div>
               <ChatRoomList
@@ -158,7 +143,7 @@ export default function ChatPage() {
                   {/* Selected room header */}
                   <div className="p-3 border-b bg-muted/30">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center">
                         <span className="text-white text-sm font-medium">
                           {selectedRoom.studentName.charAt(0).toUpperCase()}
                         </span>
@@ -192,7 +177,7 @@ export default function ChatPage() {
           </div>
         ) : (
           // Student view: Direct chat
-          <div className="h-[calc(100vh-65px)]">
+          <div className="h-full">
             {selectedRoom && (
               <StudentAgentChat
                 roomId={selectedRoom.id}
