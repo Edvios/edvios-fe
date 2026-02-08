@@ -225,7 +225,7 @@ export default function ADMINDashboard() {
                   <BookOpen className="w-4 h-4 mr-2" />
                   Programs
                 </Button>
-                <Button className="w-full" variant="outline" onClick={() => router.push('/dashboard/admin/notifications')}>
+                <Button className="w-full" variant="outline" onClick={() => router.push('/notifications/admin')}>
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Send Notification
                 </Button>

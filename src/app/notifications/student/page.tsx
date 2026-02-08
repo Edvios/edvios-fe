@@ -1,6 +1,6 @@
 "use client";
 
-import { NotificationList } from "@/components/notifications/notification-list";
+import { NotificationList } from "@/app/notifications/components/notification-list";
 
 export default function StudentNotificationsPage() {
     return (

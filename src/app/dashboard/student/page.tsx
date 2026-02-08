@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { NotificationBell } from "@/components/notifications/notification-bell";
+import { NotificationBell } from "@/app/notifications/components/notification-bell";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudentTab, studentTabLabels } from "./enums/student-tabs";
 import type { UserData } from "@/app/dashboard/student/types/dashboard.types";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useNotifications, NotificationWithState } from "@/hooks/use-notifications";
+import { useNotifications, NotificationWithState } from "@/app/notifications/hooks/use-notifications";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Bell, Clock, Mail } from "lucide-react";

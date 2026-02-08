@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { notificationService, Notification } from "@/services/notification.service";
+import { notificationService, Notification } from "@/app/notifications/api/notification.service";
 
 // Just aliasing for now in case we add more client-side state later, or use Notification directly
 export type NotificationWithState = Notification;

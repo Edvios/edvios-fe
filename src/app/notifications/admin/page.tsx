@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { notificationService } from "@/services/notification.service";
+import { notificationService } from "@/app/notifications/api/notification.service";
 import { toast } from "react-hot-toast";
 import { Loader2, Send } from "lucide-react";
 
@@ -46,7 +46,7 @@ export default function CreateNotificationPage() {
         <div className="container mx-auto max-w-2xl py-8">
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Create Notification</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-gradient">Create Notification</CardTitle>
                     <CardDescription>
                         Send a system notification to students or agents.
                     </CardDescription>
@@ -84,7 +84,7 @@ export default function CreateNotificationPage() {
                         </div>
 
                         <div className="flex justify-end pt-4">
-                            <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+                            <Button type="submit" disabled={loading} className="w-full sm:w-auto bg-gradient">
                                 {loading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -92,7 +92,7 @@ export default function CreateNotificationPage() {
                                     </>
                                 ) : (
                                     <>
-                                        <Send className="mr-2 h-4 w-4" />
+                                        <Send className="mr-2 h-4 w-4 " />
                                         Send Notification
                                     </>
                                 )}
