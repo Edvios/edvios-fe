@@ -6,12 +6,16 @@ import { ChatRoomList } from "./components/chat-room-list";
 import { StudentAgentChat } from "./components/student-agent-chat";
 import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
 import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ArrowLeft, MessageSquare, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useState } from "react";
 
 export default function ChatPage() {
   const router = useRouter();
+  const [isRoomsOpen, setIsRoomsOpen] = useState(false);
   const { user, isLoading: userLoading } = useCurrentUser();
   const {
     rooms,
@@ -56,12 +60,20 @@ export default function ChatPage() {
   const isAgent = user.role === UserTypeEnum.AGENT || user.role === UserTypeEnum.SELECTED_AGENT;
 
   return (
-    <div className="h-[calc(100vh-56px)] overflow-hidden bg-background">
+    <div
+      className={cn(
+        "overflow-hidden bg-background min-h-[100svh]",
+        isAgent
+          ? "h-[calc(100svh-0px)] md:h-[calc(100vh-0px)]"
+          : "h-[calc(100svh-12px)] md:h-[calc(100vh-12px)]"
+      )}
+    >
       {/* Header */}
-      <header className="bg-background border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
+      <header className="bg-background sticky top-0 z-10">
+        <div className="w-full px-4 py-1.5">
+          <div className="grid grid-cols-1 md:grid-cols-[20rem_1fr] items-center gap-2">
             <div className="flex items-center gap-3">
+              <SidebarTrigger className="md:hidden" />
               <Button
                 variant="ghost"
                 size="icon"
@@ -95,20 +107,54 @@ export default function ChatPage() {
                 </div>
               </div>
             </div>
+            {isAgent && (
+              <div className="flex items-center gap-2 md:justify-start md:pl-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                  onClick={() => setIsRoomsOpen(true)}
+                >
+                  <Users className="w-5 h-5" />
+                </Button>
+                {selectedRoom && (
+                  <>
+                    <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center">
+                      <span className="text-white text-sm font-medium">
+                        {selectedRoom.studentName.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">
+                        {selectedRoom.studentName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Student</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto h-[calc(100vh-121px)] overflow-hidden">
+      <main
+        className={cn(
+          "w-full max-w-none mx-auto overflow-hidden",
+          isAgent
+            ? "h-[calc(100svh-96px)] md:h-[calc(100vh-60px)]"
+            : "h-[calc(100svh-108px)] md:h-[calc(100vh-72px)]"
+        )}
+      >
         {isAgent ? (
           // Agent view: Room list + Chat
           <div className="flex h-full">
             {/* Room list sidebar */}
-            <div className="w-80 border-r shrink-0 hidden md:block">
-              <div className="p-3 border-b">
+            <div className="w-80 shrink-0 hidden md:block">
+              <div className="p-3">
                 <h2 className="font-medium text-sm text-muted-foreground">
-                  Students
+                  Chats
                 </h2>
               </div>
               <ChatRoomList
@@ -119,44 +165,9 @@ export default function ChatPage() {
             </div>
 
             {/* Chat area */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col bg-sidebar">
               {selectedRoom ? (
                 <>
-                  {/* Mobile room selector */}
-                  <div className="md:hidden p-2 border-b">
-                    <select
-                      className="w-full p-2 border rounded-lg bg-background"
-                      value={selectedRoom.id}
-                      onChange={(e) => {
-                        const room = rooms.find((r) => r.id === e.target.value);
-                        if (room) selectRoom(room);
-                      }}
-                    >
-                      {rooms.map((room) => (
-                        <option key={room.id} value={room.id}>
-                          {room.studentName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Selected room header */}
-                  <div className="p-3 border-b bg-muted/30">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center">
-                        <span className="text-white text-sm font-medium">
-                          {selectedRoom.studentName.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm">
-                          {selectedRoom.studentName}
-                        </p>
-                        <p className="text-xs text-muted-foreground">Student</p>
-                      </div>
-                    </div>
-                  </div>
-
                   <StudentAgentChat
                     roomId={selectedRoom.id}
                     user={user}
@@ -173,11 +184,28 @@ export default function ChatPage() {
                   </p>
                 </div>
               )}
+
+              {/* Mobile rooms drawer */}
+              <Sheet open={isRoomsOpen} onOpenChange={setIsRoomsOpen}>
+                <SheetContent side="left" className="p-0 w-80">
+                  <SheetHeader className="px-4 py-3">
+                    <SheetTitle>Chats</SheetTitle>
+                  </SheetHeader>
+                  <ChatRoomList
+                    rooms={rooms}
+                    selectedRoom={selectedRoom}
+                    onSelectRoom={(room) => {
+                      selectRoom(room);
+                      setIsRoomsOpen(false);
+                    }}
+                  />
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         ) : (
           // Student view: Direct chat
-          <div className="h-full">
+          <div className="h-full bg-sidebar">
             {selectedRoom && (
               <StudentAgentChat
                 roomId={selectedRoom.id}

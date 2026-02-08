@@ -118,11 +118,11 @@ export function StudentAgentChat({
           if (msg.senderRole === "STUDENT") {
             senderName = dbChat.student?.firstName 
               ? `${dbChat.student.firstName} ${dbChat.student.lastName || ''}`.trim()
-              : dbChat.student?.email || "Student";
+              : "Student";
           } else {
             senderName = dbChat.agent?.user?.firstName
               ? `${dbChat.agent.user.firstName} ${dbChat.agent.user.lastName || ''}`.trim()
-              : dbChat.agent?.user?.email || "Agent";
+              : "Agent";
           }
           
           // If we don't have full chat data, use role as name
@@ -336,10 +336,18 @@ export function StudentAgentChat({
     );
   }
 
+  const isAgent = user.role === UserTypeEnum.AGENT || user.role === UserTypeEnum.SELECTED_AGENT;
+
   return (
-    <div className="flex flex-col h-full w-full bg-background overflow-hidden">
+    <div className="flex flex-col h-full w-full bg-transparent overflow-hidden">
       {/* Messages area */}
-      <div ref={containerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div
+        ref={containerRef}
+        className={cn(
+          "flex-1 overflow-y-auto space-y-4 px-4 pb-4",
+          isAgent ? "pt-0" : "pt-4"
+        )}
+      >
         {isLoadingMessages ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <Loader2 className="w-8 h-8 mb-4 animate-spin" />
@@ -382,7 +390,7 @@ export function StudentAgentChat({
       </div>
 
       {/* Input area */}
-      <div className="border-t border-border p-4">
+      <div className="px-4 pt-4 pb-2 md:p-4">
         {/* File Preview */}
         {selectedFile && (
           <div className="flex items-center gap-2 mb-2 p-2 bg-muted rounded-md w-fit animate-in fade-in slide-in-from-bottom-2">
@@ -475,6 +483,9 @@ function ChatMessageBubble({
     message.user.role === UserTypeEnum.STUDENT
       ? "text-blue-600 dark:text-blue-400"
       : "text-green-600 dark:text-green-400";
+  const displayName = message.user.name.includes("@")
+    ? message.user.name.split("@")[0]
+    : message.user.name;
   const hasImageAttachment = Boolean(
     message.attachmentUrl && message.attachmentType?.startsWith("image/")
   );
@@ -505,7 +516,7 @@ function ChatMessageBubble({
         target="_blank" 
         rel="noopener noreferrer"
         className={cn(
-          "flex items-center gap-2 mb-2 p-2 rounded-md transition-colors border border-white/20",
+          "flex items-center gap-2 mb-2 p-2 rounded-md transition-colors",
           isOwnMessage
             ? "bg-primary/10 hover:bg-primary/20"
             : "bg-muted/60 hover:bg-muted/80"
@@ -538,7 +549,7 @@ function ChatMessageBubble({
               "justify-end flex-row-reverse": isOwnMessage,
             })}
           >
-            <span className="font-medium">{message.user.name}</span>
+            <span className="font-medium">{displayName}</span>
             <span className={cn("text-xs font-medium", roleColor)}>
               ({roleLabel})
             </span>

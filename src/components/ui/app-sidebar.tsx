@@ -20,6 +20,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarHeader,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -27,6 +28,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { logout } from "@/app/auth/login/api/auth.api";
 import axiosInstance from "@/lib/axios";
@@ -138,8 +141,13 @@ const adminItems = [
 
 export function AppSidebar() {
   const router = useRouter();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleMobileClose = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -167,6 +175,7 @@ export function AppSidebar() {
   }, []);
 
   const handleLogout = async () => {
+    handleMobileClose();
     try {
       await logout();
     } catch (error) {
@@ -212,14 +221,39 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        {/* User Info Section */}
-        <SidebarGroup>
-          <div className="flex items-center justify-center px-4 py-2">
-            <div className="flex items-center justify-center">
-              <Image src="/logo.png" alt="Logo" width={80} height={80} />
+        {/* Sidebar Top */}
+        <SidebarHeader className="flex items-center gap-2 px-2 py-2">
+          <SidebarTrigger className="shrink-0" />
+          <div className="flex-1">
+            <div
+              className={
+                isMobile
+                  ? "hidden"
+                  : state === "collapsed"
+                  ? "block"
+                  : "hidden"
+              }
+            >
+              <Image src="/logo.png" alt="Logo" width={28} height={28} />
+            </div>
+            <div
+              className={
+                isMobile
+                  ? "block"
+                  : state === "collapsed"
+                  ? "hidden"
+                  : "block"
+              }
+            >
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={isMobile ? 160 : 110}
+                height={isMobile ? 56 : 40}
+              />
             </div>
           </div>
-        </SidebarGroup>
+        </SidebarHeader>
 
         {/* Main Menu */}
         <SidebarGroup>
@@ -229,7 +263,7 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
-                    <Link href={item.url}>
+                    <Link href={item.url} onClick={handleMobileClose}>
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>
