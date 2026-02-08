@@ -26,11 +26,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
     onFilterChange,
     onReset
 }) => {
-    // const getBooleanValue = (value: 'yes' | 'no' | undefined): string => {
-    //     if (value === 'yes') return 'yes';
-    //     if (value === 'no') return 'no';
-    //     return 'all';
-    // };
 
     return (
         <div className="bg-white p-5 rounded-lg  shadow-sm space-y-6">
@@ -48,7 +43,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
             </div>
 
             <div className="space-y-4">
-                {/* Institution */}
                 <div className="space-y-2">
                     <Label>Institution</Label>
                     <Select
@@ -69,7 +63,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     </Select>
                 </div>
 
-                {/* Country */}
                 <div className="space-y-2">
                     <Label>Country</Label>
                     <Select
@@ -90,7 +83,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     </Select>
                 </div>
 
-                {/* Study Level */}
                 <div className="space-y-2">
                     <Label>Study Level</Label>
                     <Select
@@ -111,7 +103,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     </Select>
                 </div>
 
-                {/* Intake */}
                 <div className="space-y-2">
                     <Label>Intake</Label>
                     <Select
@@ -132,7 +123,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     </Select>
                 </div>
 
-                {/* Subject */}
                 <div className="space-y-2">
                     <Label>Subject Area</Label>
                     <Select
@@ -153,7 +143,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     </Select>
                 </div>
 
-                {/* Scholarship Available */}
                 <div className="space-y-2">
                     <Label>Scholarship Available</Label>
                     <Select
@@ -171,7 +160,6 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                     </Select>
                 </div>
 
-                {/* English Waiver */}
                 <div className="space-y-2">
                     <Label>English Waiver</Label>
                     <Select

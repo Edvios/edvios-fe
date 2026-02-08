@@ -14,19 +14,9 @@ import { usePrograms } from '@/app/program-finder/hooks/use-programs';
 import { SearchX, Loader2 } from 'lucide-react';
 
 export default function ProgramFinderPage() {
-    const {
-        initialData,
-        filteredData,
-        filters,
-        loading,
-        updateFilter,
-        resetFilters,
-        changePage,
-    } = usePrograms();
-
+    const { initialData, filteredData, filters, loading, updateFilter, resetFilters, changePage } = usePrograms();
     const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
     const [isApplyOpen, setIsApplyOpen] = useState(false);
     const [programToApply, setProgramToApply] = useState<Program | null>(null);
 
@@ -45,20 +35,6 @@ export default function ProgramFinderPage() {
         await ProgramService.applyToProgram(data);
     };
 
-    // if (error) {
-    //     return (
-    //         <div className="container mx-auto p-4 md:p-6 lg:p-8">
-    //             <div className="flex flex-col items-center justify-center py-20 text-center">
-    //                 <div className="bg-red-100 p-4 rounded-full mb-4">
-    //                     <SearchX className="h-8 w-8 text-red-600" />
-    //                 </div>
-    //                 <h3 className="text-lg font-semibold text-gray-900">Error loading programs</h3>
-    //                 <p className="text-muted-foreground max-w-sm mt-2">{error}</p>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
     return (
         <div className="container mx-auto p-4 md:p-6 lg:p-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -73,7 +49,7 @@ export default function ProgramFinderPage() {
                     </div>
                 )}
             </div>
-
+            
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Sidebar Filters */}
                 <aside className="lg:col-span-1">
