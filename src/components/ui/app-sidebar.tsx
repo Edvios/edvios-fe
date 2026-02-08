@@ -15,6 +15,7 @@ import {
   HelpingHandIcon,
   Building2,
   BookOpen,
+  LucideUserPlus2,
 } from "lucide-react";
 
 import {
@@ -134,6 +135,11 @@ const adminItems = [
     url: "/program-management",
     icon: BookOpen,
   },
+  {
+    title: "Assignments",
+    url: "/agent-assignment",
+    icon: LucideUserPlus2,
+  },
 ];
 
 export function AppSidebar() {
@@ -187,6 +193,8 @@ export function AppSidebar() {
         return agentItems;
       case "ADMIN":
         return adminItems;
+      case "SELECTED_AGENT":
+        return agentItems;
       default:
         return [];
     }
@@ -200,6 +208,8 @@ export function AppSidebar() {
         return "Agent Portal";
       case "ADMIN":
         return "Admin Portal";
+      case "SELECTED_AGENT":
+        return "Agent Portal";  
       default:
         return "Portal";
     }

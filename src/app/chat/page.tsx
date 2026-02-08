@@ -25,7 +25,7 @@ export default function ChatPage() {
   const handleBack = () => {
     if (user?.role === UserTypeEnum.STUDENT) {
       router.push("/dashboard/student");
-    } else if (user?.role === UserTypeEnum.AGENT) {
+    } else if (user?.role === UserTypeEnum.AGENT || user?.role === UserTypeEnum.SELECTED_AGENT) {
       router.push("/dashboard/agent");
     } else {
       router.push("/");
@@ -53,7 +53,7 @@ export default function ChatPage() {
     return null;
   }
 
-  const isAgent = user.role === UserTypeEnum.AGENT;
+  const isAgent = user.role === UserTypeEnum.AGENT || user.role === UserTypeEnum.SELECTED_AGENT;
 
   return (
     <div className="min-h-screen bg-background">

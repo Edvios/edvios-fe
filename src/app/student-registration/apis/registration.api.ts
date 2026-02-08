@@ -6,6 +6,12 @@ import {
 } from '../dtos/registration.dto';
 import type { StudentRegistrationData } from '../types/registration.types';
 
+const capitalizeFirstLetter = (value: string): string => {
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+};
+
 /**
  * Submit student registration
  */
@@ -15,8 +21,8 @@ export const submitStudentRegistration = async (
   try {
     // Transform form data to DTO format (convert empty strings to null)
     const dtoData: CreateStudentDto = {
-      firstName: formData.firstName || null,
-      lastName: formData.lastName || null,
+      firstName: formData.firstName ? capitalizeFirstLetter(formData.firstName) : null,
+      lastName: formData.lastName ? capitalizeFirstLetter(formData.lastName) : null,
       email: formData.email || null,
       phone: formData.phone || null,
       address: formData.address || null, 

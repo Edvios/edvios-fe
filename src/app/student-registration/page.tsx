@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { Users, GraduationCap, Target, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Bot, Loader2 } from 'lucide-react';
+import { Users, GraduationCap, Target, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2 } from 'lucide-react';
 import { useRegistration } from './hooks/use-registration';
 import { StudentRegistrationData } from './types/registration.types';
 
@@ -30,7 +30,6 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
     handleNextStep,
     handlePrevStep,
     handleSubmit,
-    handleAIAssistance,
   } = useRegistration();
 
   const stepIcons = [Users, GraduationCap, Target, FileText, CheckCircle];
@@ -109,7 +108,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               
               <div className="space-y-2 group">
                 <Label htmlFor="dob" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Date of Birth
+                  Date of Birth <span className="text-destructive">*</span>
                 </Label>
                 <Input 
                   id="dob" 
