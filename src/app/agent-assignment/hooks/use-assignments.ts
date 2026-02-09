@@ -49,29 +49,7 @@ export const useAssignments = (filters: AssignmentFilters) => {
       });
       console.log('Fetched assignments:', response);
       
-      const fetchedAssignments = response.map((assignment: AssignmentApiResponse) => ({
-        id: assignment.id,
-        studentId: assignment.student?.id,
-        agentId: assignment.agent?.user?.id || assignment.agent?.id || null,
-        student: {
-          id: assignment.student?.id,
-          firstName: assignment.student?.firstName || '',
-          lastName: assignment.student?.lastName || '',
-          email: assignment.student?.email || '',
-          phone: assignment.student?.phone,
-        },
-        agent: assignment.agent ? {
-          id: assignment.agent.user?.id || assignment.agent.id,
-          firstName: assignment.agent.user?.firstName || assignment.agent.firstName || '',
-          lastName: assignment.agent.user?.lastName || assignment.agent.lastName || '',
-          email: assignment.agent.user?.email || assignment.agent.email || '',
-          phone: assignment.agent.user?.phone || assignment.agent.phone,
-        } : null,
-        createdAt: assignment.createdAt,
-        updatedAt: assignment.updatedAt,
-      }));
-      
-      setAssignments(fetchedAssignments);
+      setAssignments(response);
       setTotal(response.length);
     } catch (err) {
       console.error('Failed to fetch assignments:', err);
