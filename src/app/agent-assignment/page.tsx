@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Search, UserCheck, XCircle, RotateCcw } from 'lucide-react';
 import { useAssignments } from './hooks/use-assignments';
 import { AssignmentsTable } from './components/AssignmentsTable';
+import { SelectedAgentCard } from './components/SelectedAgentCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -51,23 +52,26 @@ const AgentAssignmentPage = () => {
           </div>
         </div>
 
+        {/* Selected Agent Card */}
+        <SelectedAgentCard />
+
         {/* Search Bar */}
-        <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="flex flex-col md:flex-row gap-3 items-center">
           <div className="flex-1 relative w-full group">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-green-500" />
+            <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 transition-colors group-focus-within:text-green-500" />
             <Input
               placeholder="Search by student name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 border-none shadow-md bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-green-500 text-base md:text-lg"
+              className="pl-10 h-11 border-none shadow-md bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-green-500 text-sm"
             />
           </div>
           <Button
             variant="outline"
-            className="w-full md:w-auto h-14 px-8 gap-2 rounded-2xl border-none shadow-md bg-white hover:bg-green-50 hover:text-green-600 transition-all font-semibold"
+            className="w-full md:w-auto h-11 px-6 gap-2 rounded-2xl border-none shadow-md bg-white hover:bg-green-50 hover:text-green-600 transition-all font-semibold text-sm"
             onClick={resetFilters}
           >
-            <RotateCcw className="w-5 h-5" /> Reset
+            <RotateCcw className="w-4 h-4" /> Reset
           </Button>
         </div>
 

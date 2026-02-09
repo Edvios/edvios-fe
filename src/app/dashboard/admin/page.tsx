@@ -11,6 +11,7 @@ import {
   Form,
   BookOpen,
   Building,
+  MessageSquare,
 } from "lucide-react";
 import { useAdminDashboard } from "@/app/dashboard/admin/hooks/use-adminDashboard";
 import { useApplications } from "@/app/dashboard/agent/hooks/useAgentDashboard";
@@ -24,7 +25,7 @@ export default function ADMINDashboard() {
     stats,
     isLoadingStats,
   } = useAdminDashboard();
-  
+
   const { applications } = useApplications();
 
   if (isLoading || !userData) {
@@ -176,12 +177,11 @@ export default function ADMINDashboard() {
                           <p className="text-sm text-gray-500">{client.student.email}</p>
                         </div>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        client.status === 'ACCEPTED' ? 'bg-green-100 text-green-800' :
-                        client.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
-                        client.status === 'UNDER_REVIEW' ? 'bg-blue-100 text-blue-800' :
-                        'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${client.status === 'ACCEPTED' ? 'bg-green-100 text-green-800' :
+                          client.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                            client.status === 'UNDER_REVIEW' ? 'bg-blue-100 text-blue-800' :
+                              'bg-yellow-100 text-yellow-800'
+                        }`}>
                         {client.status}
                       </span>
                     </div>
@@ -216,6 +216,10 @@ export default function ADMINDashboard() {
                 <Button className="w-full" variant="outline" onClick={() => router.push('/program-management')}>
                   <BookOpen className="w-4 h-4 mr-2" />
                   Programs
+                </Button>
+                <Button className="w-full" variant="outline" onClick={() => router.push('/notifications/admin')}>
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Send Notification
                 </Button>
               </CardContent>
             </Card>

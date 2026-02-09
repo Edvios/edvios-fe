@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-/* ===============================
-   Filter Request
-================================ */
+
 export const programFilterRequestSchema = z.object({
   search: z.string().optional(),
   institutionId: z.string().optional(),
@@ -17,9 +15,7 @@ export const programFilterRequestSchema = z.object({
 });
 export type ProgramFilterRequest = z.infer<typeof programFilterRequestSchema>;
 
-/* ===============================
-   Common Schemas
-================================ */
+
 export const institutionSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -31,9 +27,7 @@ export const paginationSchema = z.object({
   total: z.number(),
 });
 
-/* ===============================
-   Frontend Program Schema
-================================ */
+
 export const programSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -57,9 +51,7 @@ export const programSchema = z.object({
   popularityRank: z.number().optional(),
 });
 
-/* ===============================
-   Backend Schemas
-================================ */
+
 export const backendInstitutionSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -105,9 +97,7 @@ export const backendProgramSchema = z.object({
 
 export type BackendProgram = z.infer<typeof backendProgramSchema>;
 
-/* ===============================
-   Backend Responses
-================================ */
+
 export const backendFilteredProgramResponseSchema = z.object({
   data: z.array(backendProgramSchema),
   total: z.number(),
@@ -129,9 +119,7 @@ export type BackendInitialProgramDataResponse = z.infer<
   typeof backendInitialProgramDataResponseSchema
 >;
 
-/* ===============================
-   Frontend Responses
-================================ */
+
 export const initialProgramDataResponseSchema = z.object({
   institutions: z.array(institutionSchema),
   countries: z.array(z.string()),
@@ -164,16 +152,14 @@ export type FilteredProgramDataResponse = z.infer<
   typeof filteredProgramDataResponseSchema
 >;
 
-/* ===============================
-   Application Request
-================================ */
+
 export const programApplicationRequestSchema = z.object({
   programId: z.string(),
-  studentId: z.string().optional(), // In real app, this would come from auth
+  studentId: z.string().optional(), 
   additionalNotes: z.string().optional(),
   preferredIntakeId: z.string().optional(),
   academicYear: z.string().optional(),
-  documents: z.array(z.string()).optional(), // URLs or IDs
+  documents: z.array(z.string()).optional(), 
 });
 
 export type ProgramApplicationRequest = z.infer<typeof programApplicationRequestSchema>;
