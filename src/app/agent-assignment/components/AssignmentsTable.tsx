@@ -165,10 +165,10 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
             {row.agent ? (
               <span className="flex items-center gap-2 truncate">
                 <div className="w-6 h-6 rounded-full bg-gradient flex items-center justify-center text-white text-xs font-semibold shrink-0">
-                  {row.agent.firstName[0]}{row.agent.lastName[0]}
+                  {(row.agent.user.firstName?.[0] || '') + (row.agent.user.lastName?.[0] || '')}
                 </div>
                 <span className="truncate">
-                  {row.agent.firstName} {row.agent.lastName}
+                  {row.agent.user.firstName} {row.agent.user.lastName}
                 </span>
               </span>
             ) : (
@@ -226,7 +226,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                             />
                             <div className="flex items-center gap-2">
                               <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center text-white text-xs font-semibold">
-                                {agent.firstName[0]}{agent.lastName[0]}
+                                {(agent.firstName?.[0] || '') + (agent.lastName?.[0] || '')}
                               </div>
                               <div className="flex flex-col">
                                 <span className="font-medium">
@@ -291,7 +291,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
         }
         currentAgentName={
           selectedAssignment?.agent
-            ? `${selectedAssignment.agent.firstName} ${selectedAssignment.agent.lastName}`
+            ? `${selectedAssignment.agent.user.firstName} ${selectedAssignment.agent.user.lastName}`
             : undefined
         }
         newAgentName={selectedAgent ? `${selectedAgent.firstName} ${selectedAgent.lastName}` : ''}
