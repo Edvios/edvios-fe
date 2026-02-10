@@ -143,9 +143,9 @@ export const useAuth = () => {
       if (registerData.role === UserTypeEnum.STUDENT) {
         router.replace("/student-registration");
       }
-      
-      else if (registerData.role === UserTypeEnum.AGENT) {
-        router.replace("/dashboard/agent");
+
+      else if (roleForRegistration === UserTypeEnum.PENDING_AGENT) {
+        router.replace("/agent-registration");
       }
 
       // Trigger router navigation

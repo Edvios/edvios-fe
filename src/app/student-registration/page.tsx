@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { Users, GraduationCap, Target, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2 } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Users, GraduationCap, Target, Plane, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2 } from 'lucide-react';
 import { useRegistration } from './hooks/use-registration';
 import { StudentRegistrationData } from './types/registration.types';
 
@@ -32,7 +33,17 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
     handleSubmit,
   } = useRegistration();
 
-  const stepIcons = [Users, GraduationCap, Target, FileText, CheckCircle];
+  const stepIcons = [Users, GraduationCap, Target, Plane, FileText, CheckCircle];
+
+  // Helper for multi-select (Countries)
+  const toggleCountry = (country: string) => {
+    const current = formData.preferredDestination || [];
+    if (current.includes(country)) {
+      handleInputChange('preferredDestination', current.filter(c => c !== country));
+    } else {
+      handleInputChange('preferredDestination', [...current, country]);
+    }
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -48,132 +59,169 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <p className="text-sm text-muted-foreground text-black ">Tell us about yourself</p>
               </div>
             </div>
-            
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* Full Name mapped to First/Last */}
               <div className="space-y-2 group">
                 <Label htmlFor="firstName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   First Name <span className="text-destructive">*</span>
                 </Label>
-                <Input 
-                  id="firstName" 
-                  value={formData.firstName} 
-                  onChange={(e) => handleInputChange('firstName', e.target.value)} 
+                <Input
+                  id="firstName"
+                  value={formData.firstName}
+                  onChange={(e) => handleInputChange('firstName', e.target.value)}
                   placeholder="Enter your first name"
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="lastName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Last Name <span className="text-destructive">*</span>
                 </Label>
-                <Input 
-                  id="lastName" 
-                  value={formData.lastName} 
-                  onChange={(e) => handleInputChange('lastName', e.target.value)} 
+                <Input
+                  id="lastName"
+                  value={formData.lastName}
+                  onChange={(e) => handleInputChange('lastName', e.target.value)}
                   placeholder="Enter your last name"
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
-              
-              <div className="space-y-2 group">
-                <Label htmlFor="email" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Email Address <span className="text-destructive">*</span>
-                </Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  value={formData.email} 
-                  onChange={(e) => handleInputChange('email', e.target.value)} 
-                  placeholder="your.email@example.com"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 bg-muted/50 cursor-not-allowed"
-                  readOnly
-                  disabled
-                />
-              </div>
-              
-              <div className="space-y-2 group">
-                <Label htmlFor="phone" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Phone Number <span className="text-destructive">*</span>
-                </Label>
-                <Input 
-                  id="phone" 
-                  value={formData.phone} 
-                  onChange={(e) => handleInputChange('phone', e.target.value)} 
-                  placeholder="+1 234 567 8900"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
-                />
-              </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="dob" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Date of Birth <span className="text-destructive">*</span>
                 </Label>
-                <Input 
-                  id="dob" 
-                  type="date" 
-                  value={formData.dob} 
+                <Input
+                  id="dob"
+                  type="date"
+                  value={formData.dob}
                   onChange={(e) => handleInputChange('dob', e.target.value)}
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="nationality" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Nationality
+                <Label htmlFor="gender" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Gender <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.nationality} onValueChange={(value) => handleInputChange('nationality', value)}>
+                <Select value={formData.gender} onValueChange={(value) => handleInputChange('gender', value)}>
                   <SelectTrigger className="transition-all duration-200">
-                    <SelectValue placeholder="Select your nationality" />
+                    <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="indian">Indian</SelectItem>
-                    <SelectItem value="chinese">Chinese</SelectItem>
-                    <SelectItem value="pakistani">Pakistani</SelectItem>
-                    <SelectItem value="bangladeshi">Bangladeshi</SelectItem>
-                    <SelectItem value="nigerian">Nigerian</SelectItem>
-                    <SelectItem value="nepali">Nepali</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="MALE">Male</SelectItem>
+                    <SelectItem value="FEMALE">Female</SelectItem>
+                    <SelectItem value="OTHER">Other</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2 group">
-                <Label htmlFor="address" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Address
+                <Label htmlFor="nationality" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Nationality <span className="text-destructive">*</span>
                 </Label>
-                <Input 
-                  id="address" 
-                  value={formData.address} 
-                  onChange={(e) => handleInputChange('address', e.target.value)} 
-                  placeholder="Enter your address"
+                <Input
+                  id="nationality"
+                  value={formData.nationality}
+                  onChange={(e) => handleInputChange('nationality', e.target.value)}
+                  placeholder="Enter your nationality"
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Current Country
+                  Country of Residence
                 </Label>
-                <Input 
-                  id="currentCountry" 
-                  value={formData.currentCountry} 
-                  onChange={(e) => handleInputChange('currentCountry', e.target.value)} 
-                  placeholder="Country where you currently live"
+                <Input
+                  id="currentCountry"
+                  value={formData.currentCountry}
+                  onChange={(e) => handleInputChange('currentCountry', e.target.value)}
+                  placeholder="Country where you live"
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
-              
+
+              {/* Passport Info */}
               <div className="space-y-2 group">
-                <Label htmlFor="currentCity" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Current City
+                <Label htmlFor="passportNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Passport Number <span className="text-destructive">*</span>
                 </Label>
-                <Input 
-                  id="currentCity" 
-                  value={formData.currentCity} 
-                  onChange={(e) => handleInputChange('currentCity', e.target.value)} 
-                  placeholder="City where you currently live"
+                <Input
+                  id="passportNumber"
+                  value={formData.passportNumber}
+                  onChange={(e) => handleInputChange('passportNumber', e.target.value)}
+                  placeholder="Enter passport number"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                />
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="passportExpiryDate" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Passport Expiry Date <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="passportExpiryDate"
+                  type="date"
+                  value={formData.passportExpiryDate}
+                  onChange={(e) => handleInputChange('passportExpiryDate', e.target.value)}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                />
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="email" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Email Address <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="your.email@example.com"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 bg-muted/50 cursor-not-allowed"
+                  readOnly
+                  disabled
+                />
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="phone" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Mobile Number (WhatsApp) <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="phone"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  placeholder="+1 234 567 8900"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                />
+              </div>
+
+              {/* Emergency Contact */}
+              <div className="space-y-2 group">
+                <Label htmlFor="emergencyContactName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Emergency Contact Name
+                </Label>
+                <Input
+                  id="emergencyContactName"
+                  value={formData.emergencyContactName}
+                  onChange={(e) => handleInputChange('emergencyContactName', e.target.value)}
+                  placeholder="Contact person name"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                />
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="emergencyContactNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Emergency Contact Number
+                </Label>
+                <Input
+                  id="emergencyContactNumber"
+                  value={formData.emergencyContactNumber}
+                  onChange={(e) => handleInputChange('emergencyContactNumber', e.target.value)}
+                  placeholder="+1 234 567 8900"
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
@@ -193,86 +241,103 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <p className="text-sm text-muted-foreground">Your educational journey</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
                 <Label htmlFor="currentEducationLevel" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Current Education Level <span className="text-destructive">*</span>
+                  Highest Qualification Completed <span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.currentEducationLevel} onValueChange={(value) => handleInputChange('currentEducationLevel', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
-                    <SelectValue placeholder="Select your current education level" />
+                    <SelectValue placeholder="Select qualification" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="high-school">High School</SelectItem>
                     <SelectItem value="diploma">Diploma</SelectItem>
-                    <SelectItem value="bachelor">Bachelor&apos;s Degree</SelectItem>
-                    <SelectItem value="master">Master&apos;s Degree</SelectItem>
+                    <SelectItem value="bachelor">BachelorDegree</SelectItem>
+                    <SelectItem value="master">Master Degree</SelectItem>
                     <SelectItem value="phd">PhD</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2 group">
-                <Label htmlFor="currentInstitution" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Current Institution
+                <Label htmlFor="yearOfCompletion" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Year of Completion <span className="text-destructive">*</span>
                 </Label>
-                <Input 
-                  id="currentInstitution" 
-                  value={formData.currentInstitution} 
-                  onChange={(e) => handleInputChange('currentInstitution', e.target.value)} 
-                  placeholder="Name of your current school/university"
+                <Input
+                  id="yearOfCompletion"
+                  type="number"
+                  value={formData.yearOfCompletion}
+                  onChange={(e) => handleInputChange('yearOfCompletion', e.target.value)}
+                  placeholder="YYYY"
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
-              
+
               <div className="space-y-2 group">
-                <Label htmlFor="fieldOfStudy" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Field of Study <span className="text-destructive">*</span>
+                <Label htmlFor="currentInstitution" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Institution Name <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.fieldOfStudy} onValueChange={(value) => handleInputChange('fieldOfStudy', value)}>
+                <Input
+                  id="currentInstitution"
+                  value={formData.currentInstitution}
+                  onChange={(e) => handleInputChange('currentInstitution', e.target.value)}
+                  placeholder="Name of school/university"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                />
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="mediumOfInstruction" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Medium of Instruction
+                </Label>
+                <Select value={formData.mediumOfInstruction} onValueChange={(value) => handleInputChange('mediumOfInstruction', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
-                    <SelectValue placeholder="Select your field of study" />
+                    <SelectValue placeholder="Select medium" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="computer-science">Computer Science</SelectItem>
-                    <SelectItem value="business">Business Administration</SelectItem>
-                    <SelectItem value="engineering">Engineering</SelectItem>
-                    <SelectItem value="medicine">Medicine</SelectItem>
-                    <SelectItem value="law">Law</SelectItem>
-                    <SelectItem value="arts">Arts & Humanities</SelectItem>
-                    <SelectItem value="sciences">Natural Sciences</SelectItem>
+                    <SelectItem value="english">English</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="gpa" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  GPA/Percentage
+                  Grades / Results Summary
                 </Label>
-                <Input 
-                  id="gpa" 
-                  value={formData.gpa} 
-                  onChange={(e) => handleInputChange('gpa', e.target.value)} 
-                  placeholder="e.g., 3.8 or 85%"
+                <Input
+                  id="gpa"
+                  value={formData.gpa}
+                  onChange={(e) => handleInputChange('gpa', e.target.value)}
+                  placeholder="e.g., 3.8 GPA or 85%"
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
-              
-              <div className="space-y-2 group">
-                <Label htmlFor="graduationDate" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Graduation Date
+
+              <div className="space-y-2 group md:col-span-2">
+                <Label htmlFor="academicCertificates" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Academic Certificates (Upload)
                 </Label>
-                <Input 
-                  id="graduationDate" 
-                  type="date" 
-                  value={formData.graduationDate} 
-                  onChange={(e) => handleInputChange('graduationDate', e.target.value)}
+                <Input
+                  id="academicCertificates"
+                  type="file"
+                  multiple
+                  onChange={(e) => {
+                    // Add file handling logic if needed, currently just logging
+                    console.log(e.target.files);
+                  }}
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
+                <p className="text-xs text-muted-foreground">Upload relevant certificates (placeholder only)</p>
               </div>
-              
+
+              <div className="col-span-1 md:col-span-2">
+                <Separator className="my-2" />
+                <h4 className="text-sm font-medium mt-2 mb-4">English Proficiency</h4>
+              </div>
+
               <div className="space-y-2 group">
                 <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   English Proficiency Test
@@ -290,20 +355,34 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   </SelectContent>
                 </Select>
               </div>
-              
+
               {(formData.englishTest === 'IELTS' || formData.englishTest === 'TOEFL' || formData.englishTest === 'PTE' || formData.englishTest === 'DUOLINGO') && (
-                <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                    {formData.englishTest} Score
-                  </Label>
-                  <Input 
-                    id="englishScore" 
-                    value={formData.englishScore} 
-                    onChange={(e) => handleInputChange('englishScore', e.target.value)} 
-                    placeholder="e.g., 7.0 or 100"
-                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
-                  />
-                </div>
+                <>
+                  <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                      Overall Score
+                    </Label>
+                    <Input
+                      id="englishScore"
+                      value={formData.englishScore}
+                      onChange={(e) => handleInputChange('englishScore', e.target.value)}
+                      placeholder="e.g., 7.0 or 100"
+                      className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                    />
+                  </div>
+                  <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <Label htmlFor="testExpiryDate" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                      Test Expiry Date
+                    </Label>
+                    <Input
+                      id="testExpiryDate"
+                      type="date"
+                      value={formData.testExpiryDate}
+                      onChange={(e) => handleInputChange('testExpiryDate', e.target.value)}
+                      className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                    />
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -318,39 +397,54 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
               <div>
                 <p className="text-xl font-bold secondary-foreground">Study Preferences</p>
-                <p className="text-sm text-muted-foreground">Where do you want to study?</p>
+                <p className="text-sm text-muted-foreground">What and where do you want to study?</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="space-y-2 group">
+
+              <div className="space-y-2 group md:col-span-2">
                 <Label htmlFor="preferredDestination" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Preferred Destination <span className="text-destructive">*</span>
+                  Preferred Countries <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.preferredDestination} onValueChange={(value) => handleInputChange('preferredDestination', value)}>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {['UK', 'USA', 'Canada', 'Australia', 'New Zealand', 'Ireland', 'Germany', 'Netherlands'].map((country) => (
+                    <div key={country} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`country-${country}`}
+                        checked={(formData.preferredDestination || []).includes(country)}
+                        onCheckedChange={() => toggleCountry(country)}
+                      />
+                      <Label htmlFor={`country-${country}`} className="text-sm cursor-pointer">{country}</Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="preferredStudyLevel" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Preferred Study Level <span className="text-destructive">*</span>
+                </Label>
+                <Select value={formData.preferredStudyLevel} onValueChange={(value) => handleInputChange('preferredStudyLevel', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
-                    <SelectValue placeholder="Select preferred country" />
+                    <SelectValue placeholder="Select level" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                    <SelectItem value="australia">Australia</SelectItem>
-                    <SelectItem value="new-zealand">New Zealand</SelectItem>
-                    <SelectItem value="ireland">Ireland</SelectItem>
-                    <SelectItem value="germany">Germany</SelectItem>
-                    <SelectItem value="netherlands">Netherlands</SelectItem>
+                    <SelectItem value="BACHELORS">Bachelor Degree</SelectItem>
+                    <SelectItem value="MASTERS">Master Degree</SelectItem>
+                    <SelectItem value="PHD">PhD</SelectItem>
+                    <SelectItem value="DIPLOMA">Diploma</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="preferredProgram" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Preferred Program <span className="text-destructive">*</span>
+                  Preferred Field of Study <span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.preferredProgram} onValueChange={(value) => handleInputChange('preferredProgram', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
-                    <SelectValue placeholder="Select program type" />
+                    <SelectValue placeholder="Select field" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="computer-science">Computer Science</SelectItem>
@@ -366,69 +460,50 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   </SelectContent>
                 </Select>
               </div>
-              
-              <div className="space-y-2 group">
-                <Label htmlFor="preferredStudyLevel" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Study Level <span className="text-destructive">*</span>
-                </Label>
-                <Select value={formData.preferredStudyLevel} onValueChange={(value) => handleInputChange('preferredStudyLevel', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
-                    <SelectValue placeholder="Select study level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="BACHELORS">Bachelor&apos;s Degree</SelectItem>
-                    <SelectItem value="MASTERS">Master&apos;s Degree</SelectItem>
-                    <SelectItem value="PHD">PhD</SelectItem>
-                    <SelectItem value="DIPLOMA">Diploma</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="preferredIntake" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Preferred Intake
+                  Intended Intake (Month/Year)
                 </Label>
-                <Select value={formData.preferredIntake} onValueChange={(value) => handleInputChange('preferredIntake', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
-                    <SelectValue placeholder="Select intake period" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="september-2024">September 2024</SelectItem>
-                    <SelectItem value="january-2025">January 2025</SelectItem>
-                    <SelectItem value="september-2025">September 2025</SelectItem>
-                    <SelectItem value="flexible">Flexible</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="space-y-2 group md:col-span-2">
-                <Label htmlFor="budgetRange" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Budget Range (per year)
-                </Label>
-                <Select value={formData.budgetRange} onValueChange={(value) => handleInputChange('budgetRange', value)}>
-                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
-                    <SelectValue placeholder="Select budget range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="under-20k">Under $20,000</SelectItem>
-                    <SelectItem value="20k-40k">$20,000 - $40,000</SelectItem>
-                    <SelectItem value="40k-60k">$40,000 - $60,000</SelectItem>
-                    <SelectItem value="60k-80k">$60,000 - $80,000</SelectItem>
-                    <SelectItem value="above-80k">Above $80,000</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="flex items-center space-x-3">
-                  <Checkbox 
-                  id="scholarshipInterest" 
-                  checked={formData.scholarshipInterest} 
-                  onCheckedChange={(checked) => handleInputChange('scholarshipInterest', checked === true)}
-                  className="data-[state=checked]:bg-gradient"
+                <Input
+                  id="preferredIntake"
+                  value={formData.preferredIntake}
+                  onChange={(e) => handleInputChange('preferredIntake', e.target.value)}
+                  placeholder="e.g. September-2024"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                 />
-                <Label htmlFor="scholarshipInterest" className="text-sm font-medium cursor-pointer">
-                  I&apos;m Interested in scholarships
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="estimatedBudget" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Estimated Budget (Tuition + Living) <span className="text-destructive">*</span>
                 </Label>
+                <Input
+                  id="estimatedBudget"
+                  type="number"
+                  value={formData.estimatedBudget}
+                  onChange={(e) => handleInputChange('estimatedBudget', e.target.value)}
+                  placeholder="In USD/GBP"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                />
+              </div>
+
+              <div className="space-y-2 group md:col-span-2">
+                <Label htmlFor="fundingSource" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Funding Source
+                </Label>
+                <Select value={formData.fundingSource} onValueChange={(value) => handleInputChange('fundingSource', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
+                    <SelectValue placeholder="Select funding source" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SELF">Self Funded</SelectItem>
+                    <SelectItem value="PARENTS">Parents/Family</SelectItem>
+                    <SelectItem value="SCHOLARSHIP">Scholarship</SelectItem>
+                    <SelectItem value="LOAN">Bank Loan</SelectItem>
+                    <SelectItem value="SPONSER">Sponsor</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
@@ -439,80 +514,67 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
-                <FileText className="h-6 w-6 text-white" />
+                <Plane className="h-6 w-6 text-white" />
               </div>
               <div>
-                <p className="text-xl font-bold secondary-foreground">Document Readiness</p>
-                <p className="text-sm text-muted-foreground">Tell us about the document preparation</p>
+                <p className="text-xl font-bold secondary-foreground">Visa & Immigration History</p>
+                <p className="text-sm text-muted-foreground">Your travel and visa details</p>
               </div>
             </div>
-            
-            <div className="space-y-4">
-                <Label htmlFor="extracurriculars" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Please indicate which documents you currently have ready. This helps us provide better guidance.
-                </Label>
-              {[
-                { id: 'hasValidPassport', label: 'Valid Passport', field: 'hasValidPassport' },
-                { id: 'hasAcademicTranscripts', label: 'Academic Transcripts', field: 'hasAcademicTranscripts' },
-                { id: 'hasRecommendationLetters', label: 'Recommendation Letters', field: 'hasRecommendationLetters' },
-                { id: 'hasPersonalStatement', label: 'Personal Statement/Essay', field: 'hasPersonalStatement' }
-              ].map((item) => (
-                <div key={item.id} className="flex items-center space-x-3">
-                  <Checkbox 
-                    id={item.id} 
-                    checked={formData[item.field as keyof typeof formData] as boolean} 
-                    onCheckedChange={(checked) => handleInputChange(item.field, checked)}
-                    className="data-[state=checked]:bg-gradient"
-                  />
-                  <Label htmlFor={item.id} className="text-sm font-medium cursor-pointer flex-1">
-                    {item.label}
-                  </Label>
-                </div>
-              ))}
-            </div>
-            
-            <Separator className="my-6" />
-            
+
             <div className="space-y-5">
+              <div className="space-y-3 p-4 border rounded-md">
+                <Label className="text-base font-medium">Have you previously been refused a visa?</Label>
+                <RadioGroup
+                  value={formData.previousVisaRefusal ? "yes" : "no"}
+                  onValueChange={(val) => handleInputChange('previousVisaRefusal', val === "yes")}
+                  className="flex space-x-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="visa-yes" />
+                    <Label htmlFor="visa-yes">Yes</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="visa-no" />
+                    <Label htmlFor="visa-no">No</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {formData.previousVisaRefusal && (
+                <div className="space-y-2 group animate-in fade-in">
+                  <Label htmlFor="visaRefusalDetails" className="text-sm font-medium">
+                    Visa Refusal Details <span className="text-destructive">*</span>
+                  </Label>
+                  <Textarea
+                    id="visaRefusalDetails"
+                    value={formData.visaRefusalDetails}
+                    onChange={(e) => handleInputChange('visaRefusalDetails', e.target.value)}
+                    placeholder="Please explain the reason for refusal, country, and year..."
+                    rows={3}
+                  />
+                </div>
+              )}
+
               <div className="space-y-2 group">
-                <Label htmlFor="workExperience" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Work Experience (if any)
-                </Label>
-                <Textarea 
-                  id="workExperience" 
-                  value={formData.workExperience} 
-                  onChange={(e) => handleInputChange('workExperience', e.target.value)} 
-                  placeholder="Briefly describe your work experience..."
+                <Label htmlFor="travelHistory" className="text-sm font-medium">Travel History</Label>
+                <Textarea
+                  id="travelHistory"
+                  value={formData.travelHistory}
+                  onChange={(e) => handleInputChange('travelHistory', e.target.value)}
+                  placeholder="List countries you have visited in the last 10 years..."
                   rows={3}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
                 />
               </div>
-              
+
               <div className="space-y-2 group">
-                <Label htmlFor="extraCurricular" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Extracurricular Activities
-                </Label>
-                <Textarea 
-                  id="extraCurricular" 
-                  value={formData.extraCurricular} 
-                  onChange={(e) => handleInputChange('extraCurricular', e.target.value)} 
-                  placeholder="Sports, volunteering, leadership roles, etc..."
-                  rows={3}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
-                />
-              </div>
-              
-              <div className="space-y-2 group">
-                <Label htmlFor="careerGoals" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Career Goals
-                </Label>
-                <Textarea 
-                  id="careerGoals" 
-                  value={formData.careerGoals} 
-                  onChange={(e) => handleInputChange('careerGoals', e.target.value)} 
-                  placeholder="What are your career aspirations after graduation?"
-                  rows={3}
-                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
+                <Label htmlFor="ongoingImmigrationApps" className="text-sm font-medium">Ongoing Immigration Applications</Label>
+                <Textarea
+                  id="ongoingImmigrationApps"
+                  value={formData.ongoingImmigrationApps}
+                  onChange={(e) => handleInputChange('ongoingImmigrationApps', e.target.value)}
+                  placeholder="Details of any currently pending visa or immigration applications..."
+                  rows={2}
                 />
               </div>
             </div>
@@ -524,14 +586,99 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+                <FileText className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <p className="text-xl font-bold secondary-foreground">Document Readiness</p>
+                <p className="text-sm text-muted-foreground">Tell us about the document preparation</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Label className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                Please indicate which documents you currently have ready.
+              </Label>
+              {[
+                { id: 'hasValidPassport', label: 'Valid Passport', field: 'hasValidPassport' },
+                { id: 'hasAcademicTranscripts', label: 'Academic Transcripts', field: 'hasAcademicTranscripts' },
+                { id: 'hasRecommendationLetters', label: 'Recommendation Letters', field: 'hasRecommendationLetters' },
+                { id: 'hasPersonalStatement', label: 'Personal Statement/Essay', field: 'hasPersonalStatement' }
+              ].map((item) => (
+                <div key={item.id} className="flex items-center space-x-3">
+                  <Checkbox
+                    id={item.id}
+                    checked={formData[item.field as keyof typeof formData] as boolean}
+                    onCheckedChange={(checked) => handleInputChange(item.field, checked)}
+                    className="data-[state=checked]:bg-gradient"
+                  />
+                  <Label htmlFor={item.id} className="text-sm font-medium cursor-pointer flex-1">
+                    {item.label}
+                  </Label>
+                </div>
+              ))}
+            </div>
+
+            <Separator className="my-6" />
+
+            <div className="space-y-5">
+              <div className="space-y-2 group">
+                <Label htmlFor="workExperience" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Work Experience (if any)
+                </Label>
+                <Textarea
+                  id="workExperience"
+                  value={formData.workExperience}
+                  onChange={(e) => handleInputChange('workExperience', e.target.value)}
+                  placeholder="Briefly describe your work experience..."
+                  rows={3}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
+                />
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="extraCurricular" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Extracurricular Activities
+                </Label>
+                <Textarea
+                  id="extraCurricular"
+                  value={formData.extraCurricular}
+                  onChange={(e) => handleInputChange('extraCurricular', e.target.value)}
+                  placeholder="Sports, volunteering, etc..."
+                  rows={3}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
+                />
+              </div>
+
+              <div className="space-y-2 group">
+                <Label htmlFor="careerGoals" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Career Goals
+                </Label>
+                <Textarea
+                  id="careerGoals"
+                  value={formData.careerGoals}
+                  onChange={(e) => handleInputChange('careerGoals', e.target.value)}
+                  placeholder="What are your career aspirations?"
+                  rows={3}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 6:
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
                 <CheckCircle className="h-6 w-6 text-white" />
               </div>
               <div>
-                <p className="text-xl font-bold secondary-foreground">Communication Preferences & Final Details</p>
+                <p className="text-xl font-bold secondary-foreground">Final Details</p>
                 <p className="text-sm text-muted-foreground">Just a few more things...</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2 group">
                 <Label htmlFor="referralSource" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
@@ -546,13 +693,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     <SelectItem value="social-media">Social Media</SelectItem>
                     <SelectItem value="agent">Education Agent</SelectItem>
                     <SelectItem value="friend">Friend/Family</SelectItem>
-                    <SelectItem value="advertisement">Advertisement</SelectItem>
-                    <SelectItem value="education-fair">Education Fair</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2 group">
                 <Label htmlFor="preferredContactMethod" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Preferred Contact Method
@@ -569,7 +714,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2 group md:col-span-2">
                 <Label htmlFor="bestTimeToContact" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Best Time to Contact
@@ -586,41 +731,41 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2 group md:col-span-2">
                 <Label htmlFor="additionalQuestions" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Additional Requirements or Questions
                 </Label>
-                <Textarea 
-                  id="additionalQuestions" 
-                  value={formData.additionalQuestions} 
-                  onChange={(e) => handleInputChange('additionalQuestions', e.target.value)} 
-                  placeholder="Any specific requirements, questions, or concerns you'd like to discuss..."
+                <Textarea
+                  id="additionalQuestions"
+                  value={formData.additionalQuestions}
+                  onChange={(e) => handleInputChange('additionalQuestions', e.target.value)}
+                  placeholder="Any specific requirements, questions, or concerns..."
                   rows={4}
                   className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20 resize-none"
                 />
               </div>
             </div>
-            
+
             <Separator className="my-6" />
-            
+
             <div className="p-4 rounded-lg border-2 border-green-500/30 bg-green-500/5 hover:border-green-500/50 transition-all duration-200 space-y-4">
               <div className="flex items-start space-x-3">
-                <Checkbox 
-                  id="marketingConsent" 
-                  checked={formData.marketingConsent} 
+                <Checkbox
+                  id="marketingConsent"
+                  checked={formData.marketingConsent}
                   onCheckedChange={(checked) => handleInputChange('marketingConsent', checked === true)}
                   className="mt-1"
                 />
                 <Label htmlFor="marketingConsent" className="text-sm cursor-pointer leading-relaxed">
-                  I agree to receive marketing communications and updates about programs and services
+                  I agree to receive marketing communications and updates
                 </Label>
               </div>
-              
+
               <div className="flex items-start space-x-3">
-                <Checkbox 
-                  id="termsAccepted" 
-                  checked={formData.termsAccepted} 
+                <Checkbox
+                  id="termsAccepted"
+                  checked={formData.termsAccepted}
                   onCheckedChange={(checked) => handleInputChange('termsAccepted', checked === true)}
                   className="mt-1"
                 />
@@ -641,14 +786,14 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-green-500/5 p-4 md:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto">
         <Card className="shadow-2xl border-0 overflow-hidden">
-          
+
           <CardHeader className="text-center relative pb-8 pt-10">
             <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
               <span className="text-black-400">
                 Student Registration
               </span>
             </CardTitle>
-            
+
             <div className="mt-8 space-y-3">
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span className="font-medium">Step {currentStep} of {totalSteps}</span>
@@ -658,20 +803,19 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <div className="h-full bg-gradient rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercentage}%` }} />
               </Progress>
             </div>
-            
+
             <div className="flex justify-center gap-3 mt-6">
-              {[1, 2, 3, 4, 5].map((step) => {
+              {[1, 2, 3, 4, 5, 6].map((step) => {
                 const Icon = stepIcons[step - 1];
                 return (
                   <div
                     key={step}
-                    className={`relative flex items-center justify-center w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                      step < currentStep
+                    className={`relative flex items-center justify-center w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-300 ${step < currentStep
                         ? 'bg-gradient text-white scale-95'
                         : step === currentStep
-                        ? 'bg-gradient text-white scale-110 shadow-lg'
-                        : 'bg-secondary text-muted-foreground scale-90'
-                    }`}
+                          ? 'bg-gradient text-white scale-110 shadow-lg'
+                          : 'bg-secondary text-muted-foreground scale-90'
+                      }`}
                   >
                     {step < currentStep ? (
                       <CheckCircle className="h-5 w-5" />
@@ -683,16 +827,16 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               })}
             </div>
           </CardHeader>
-          
+
           <CardContent className="relative">
-            
+
             {renderStepContent()}
-            
+
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10 pt-4">
               <div className="flex gap-2 order-2 sm:order-1">
                 {currentStep > 1 && (
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={handlePrevStep}
                     className="hover:border-green-500 hover:text-gradient transition-all duration-200"
                   >
@@ -701,18 +845,18 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   </Button>
                 )}
               </div>
-              
+
               <div className="order-1 sm:order-2">
                 {currentStep < totalSteps ? (
-                  <Button 
-                    onClick={handleNextStep} 
+                  <Button
+                    onClick={handleNextStep}
                     className="bg-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px]"
                   >
                     Next Step
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 ) : (
-                  <Button 
+                  <Button
                     onClick={() => handleSubmit(onSubmit, onClose)}
                     disabled={isSubmitting}
                     className="bg-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px] disabled:opacity-50"

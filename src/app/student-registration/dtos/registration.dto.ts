@@ -2,43 +2,57 @@ import { z } from 'zod';
 
 // Create Student DTO schema matching backend
 export const createStudentDtoSchema = z.object({
+  // Personal
   firstName: z.string().nullable().optional(),
   lastName: z.string().nullable().optional(),
+  dob: z.string().nullable().optional(), // ISO string
+  gender: z.string().nullable().optional(),
+  nationality: z.string().nullable().optional(),
+  passportNumber: z.string().nullable().optional(),
+  passportExpiryDate: z.string().nullable().optional(),
+  countryOfResidence: z.string().nullable().optional(),
+
+  // Contact
   email: z.string().email().nullable().optional(),
   phone: z.string().nullable().optional(),
-  dob: z.string().nullable().optional(), // ISO string
+  emergencyContact: z.string().nullable().optional(), // e.g., "Name (Number)"
+
+  // Academic
+  highestQualification: z.string().nullable().optional(),
+  yearOfCompletion: z.number().nullable().optional(),
+  institutionName: z.string().nullable().optional(),
+  mediumOfInstruction: z.string().nullable().optional(),
+  gradesSummary: z.string().nullable().optional(),
+  academicCertificates: z.array(z.string()).nullable().optional(), // File URLs/Refs
+
+  // English
+  englishTestTaken: z.string().nullable().optional(),
+  overallScore: z.number().nullable().optional(),
+  testExpiryDate: z.string().nullable().optional(), // ISO string
+
+  // Study Preferences
+  intendedIntakeMonth: z.number().nullable().optional(),
+  intendedIntakeYear: z.number().nullable().optional(),
+  preferredCountries: z.array(z.string()).nullable().optional(),
+  preferredStudyLevel: z.string().nullable().optional(),
+  preferredFieldOfStudy: z.string().nullable().optional(),
+  estimatedBudget: z.number().nullable().optional(),
+  fundingSource: z.string().nullable().optional(),
+
+  // Visa
+  previousVisaRefusal: z.boolean().optional(),
+  visaRefusalDetails: z.string().nullable().optional(),
+  travelHistory: z.string().nullable().optional(),
+  ongoingImmigrationApps: z.string().nullable().optional(),
+
+  // Internal / Extra
+  notes: z.string().nullable().optional(),
+
+  // Address might be needed but optional if backend doesn't care
   address: z.string().nullable().optional(),
-  nationality: z.string().nullable().optional(),
-  currentEducationLevel: z.string().nullable().optional(),
-  currentInstitution: z.string().nullable().optional(),
-  fieldOfStudy: z.string().nullable().optional(),
-  gpa: z.number().nullable().optional(),
-  graduationDate: z.string().nullable().optional(), // ISO string
-  preferredDestination: z.string().nullable().optional(),
-  preferredProgram: z.string().nullable().optional(),
-  preferredStudyLevel: z.enum(['BACHELORS', 'MASTERS', 'PHD', 'DIPLOMA']).nullable().optional(),
-  preferredIntake: z.string().nullable().optional(),
-  englishTest: z.string().nullable().optional(),
-  englishScore: z.string().nullable().optional(),
-  hasValidPassport: z.boolean().optional(),
-  hasAcademicTranscripts: z.boolean().optional(),
-  hasRecommendationLetters: z.boolean().optional(),
-  hasPersonalStatement: z.boolean().optional(),
-  workExperience: z.string().nullable().optional(),
-  extraCurricular: z.string().nullable().optional(),
-  careerGoals: z.string().nullable().optional(),
-  referralSource: z.string().nullable().optional(),
-  preferredContactMethod: z.string().nullable().optional(),
-  bestTimeToContact: z.string().nullable().optional(),
-  additionalQuestions: z.string().nullable().optional(),
-  currentCountry: z.string().nullable().optional(),
-  currentCity: z.string().nullable().optional(),
-  budgetRange: z.string().nullable().optional(),
-  scholarshipInterest: z.boolean().optional(),
-  marketingConsent: z.boolean().optional(),
 });
 
-// Registration Response schema
+// Registration Response schema (unchanged mostly)
 export const registrationResponseSchema = z.object({
   success: z.boolean(),
   message: z.string(),

@@ -14,7 +14,7 @@ interface UseRegistrationReturn {
   response: RegistrationResponseDto | null;
   totalSteps: number;
   progressPercentage: number;
-  
+
   // Functions
   setCurrentStep: (step: number | ((prev: number) => number)) => void;
   handleInputChange: (field: string, value: unknown) => void;
@@ -33,17 +33,36 @@ const initialFormData: StudentRegistrationData = {
   phone: '',
   address: '',
   nationality: '',
+  gender: '',
+  passportNumber: '',
+  passportExpiryDate: '',
+  emergencyContactName: '',
+  emergencyContactNumber: '',
+
   currentEducationLevel: '',
-  currentInstitution: '',
+  currentInstitution: '', // institutionName
   fieldOfStudy: '',
+  yearOfCompletion: '',
+  mediumOfInstruction: '',
   gpa: '',
-  graduationDate: '',
-  preferredDestination: '',
+  academicCertificates: [],
+
+  englishTest: '',
+  englishScore: '',
+  testExpiryDate: '',
+
+  preferredDestination: [],
   preferredProgram: '',
   preferredStudyLevel: '',
   preferredIntake: '',
-  englishTest: '',
-  englishScore: '',
+  estimatedBudget: '',
+  fundingSource: '',
+
+  previousVisaRefusal: false,
+  visaRefusalDetails: '',
+  travelHistory: '',
+  ongoingImmigrationApps: '',
+
   hasValidPassport: false,
   hasAcademicTranscripts: false,
   hasRecommendationLetters: false,
@@ -58,7 +77,6 @@ const initialFormData: StudentRegistrationData = {
   dob: '',
   currentCountry: '',
   currentCity: '',
-  budgetRange: '',
   scholarshipInterest: false,
   marketingConsent: false,
   termsAccepted: false
@@ -72,7 +90,7 @@ export const useRegistration = (): UseRegistrationReturn => {
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<RegistrationResponseDto | null>(null);
 
-  const totalSteps = 5;
+  const totalSteps = 6;
   const progressPercentage = (currentStep / totalSteps) * 100;
 
   // Autofill user data from session storage on component mount
@@ -106,24 +124,32 @@ export const useRegistration = (): UseRegistrationReturn => {
   const validateCurrentStep = () => {
     switch (currentStep) {
       case 1:
-        if (!formData.firstName || !formData.lastName || !formData.dob || !formData.email || !formData.phone ) {
-          AppToast.error('Please fill in all required details');
+        if (!formData.firstName || !formData.lastName || !formData.dob || !formData.gender ||
+          !formData.email || !formData.phone || !formData.passportNumber || !formData.passportExpiryDate) {
+          AppToast.error('Please fill in all required personal details');
           return false;
         }
         break;
       case 2:
-        if (!formData.currentEducationLevel || !formData.fieldOfStudy) {
-          AppToast.error('Please fill in all required details');
+        if (!formData.currentEducationLevel || !formData.yearOfCompletion || !formData.currentInstitution) {
+          AppToast.error('Please fill in all required academic details');
           return false;
         }
         break;
       case 3:
-        if (!formData.preferredDestination || !formData.preferredProgram || !formData.preferredStudyLevel) {
-          AppToast.error('Please fill in all required details');
+        if (formData.preferredDestination.length === 0 || !formData.preferredProgram || !formData.preferredStudyLevel || !formData.estimatedBudget) {
+          AppToast.error('Please fill in all required study details');
           return false;
         }
         break;
-      case 5:
+      case 4:
+        // Visa History
+        if (formData.previousVisaRefusal && !formData.visaRefusalDetails) {
+          AppToast.error('Please provide details for visa refusal');
+          return false;
+        }
+        break;
+      case 6:
         if (!formData.termsAccepted) {
           AppToast.error('Please accept the terms and conditions');
           return false;
@@ -153,10 +179,10 @@ export const useRegistration = (): UseRegistrationReturn => {
         console.log('Submitting registration with data:', formData);
         const result = await submitStudentRegistration(formData);
         setResponse(result);
-        
+
         if (result) {
           AppToast.success(`Registration successful!`);
-        
+
           if (onSubmit) {
             onSubmit(formData);
           }
@@ -204,7 +230,7 @@ export const useRegistration = (): UseRegistrationReturn => {
     response,
     totalSteps,
     progressPercentage,
-    
+
     // Functions
     setCurrentStep,
     handleInputChange,

@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/axios';
-import { 
+import {
   createStudentDtoSchema,
   type CreateStudentDto,
   type RegistrationResponseDto
@@ -12,6 +12,21 @@ const capitalizeFirstLetter = (value: string): string => {
   return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
 };
 
+const parseIntake = (intake: string) => {
+  if (!intake || intake === 'flexible') return { month: null, year: null };
+  const parts = intake.split('-');
+  if (parts.length === 2) {
+    const monthName = parts[0].toLowerCase();
+    const year = parseInt(parts[1]);
+    const monthMap: Record<string, number> = {
+      january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+      july: 7, august: 8, september: 9, october: 10, november: 11, december: 12
+    };
+    return { month: monthMap[monthName] || null, year: !isNaN(year) ? year : null };
+  }
+  return { month: null, year: null };
+};
+
 /**
  * Submit student registration
  */
@@ -19,42 +34,80 @@ export const submitStudentRegistration = async (
   formData: StudentRegistrationData
 ): Promise<RegistrationResponseDto> => {
   try {
+    const { month: intendedIntakeMonth, year: intendedIntakeYear } = parseIntake(formData.preferredIntake);
+
     // Transform form data to DTO format (convert empty strings to null)
+    // Note: Some legacy fields might be mapped to 'notes' or ignored if not in DTO.
+    // We construct the DTO exactly as defined in createStudentDtoSchema (which matches backend DTO).
+
+    // Construct notes from extra fields
+    const notesParts = [];
+    if (formData.workExperience) notesParts.push(`Work Exp: ${formData.workExperience}`);
+    if (formData.extraCurricular) notesParts.push(`Extra Curricular: ${formData.extraCurricular}`);
+    if (formData.careerGoals) notesParts.push(`Career Goals: ${formData.careerGoals}`);
+    if (formData.referralSource) notesParts.push(`Referral: ${formData.referralSource}`);
+    if (formData.preferredContactMethod) notesParts.push(`Pref Contact: ${formData.preferredContactMethod}`);
+    if (formData.bestTimeToContact) notesParts.push(`Best Time: ${formData.bestTimeToContact}`);
+    if (formData.additionalQuestions) notesParts.push(`Questions: ${formData.additionalQuestions}`);
+    // Document readiness
+    const docsReady = [];
+    if (formData.hasValidPassport) docsReady.push('Passport');
+    if (formData.hasAcademicTranscripts) docsReady.push('Transcripts');
+    if (formData.hasRecommendationLetters) docsReady.push('Rec Letters');
+    if (formData.hasPersonalStatement) docsReady.push('Personal Statement');
+    if (docsReady.length > 0) notesParts.push(`Docs Ready: ${docsReady.join(', ')}`);
+
+    const notes = notesParts.length > 0 ? notesParts.join('\n') : null;
+
     const dtoData: CreateStudentDto = {
+      // Personal
       firstName: formData.firstName ? capitalizeFirstLetter(formData.firstName) : null,
       lastName: formData.lastName ? capitalizeFirstLetter(formData.lastName) : null,
+      dob: formData.dob || null,
+      gender: formData.gender || null, // Assuming backend accepts string/enum value
+      nationality: formData.nationality || null,
+      passportNumber: formData.passportNumber || null,
+      passportExpiryDate: formData.passportExpiryDate || null,
+      countryOfResidence: formData.currentCountry || null,
+
+      // Contact
       email: formData.email || null,
       phone: formData.phone || null,
-      address: formData.address || null, 
-      dob: formData.dob || null,
-      nationality: formData.nationality || null,
-      currentEducationLevel: formData.currentEducationLevel || null,
-      currentInstitution: formData.currentInstitution || null,
-      fieldOfStudy: formData.fieldOfStudy || null,
-      gpa: formData.gpa ? parseFloat(formData.gpa) : null,
-      graduationDate: formData.graduationDate || null,
-      preferredDestination: formData.preferredDestination || null,
-      preferredProgram: formData.preferredProgram || null,
+      emergencyContact: (formData.emergencyContactName || formData.emergencyContactNumber)
+        ? `${formData.emergencyContactName} (${formData.emergencyContactNumber})`
+        : null,
+      address: formData.address || null,
+
+      // Academic
+      highestQualification: formData.currentEducationLevel || null,
+      yearOfCompletion: formData.yearOfCompletion ? parseInt(formData.yearOfCompletion) : null,
+      institutionName: formData.currentInstitution || null,
+      mediumOfInstruction: formData.mediumOfInstruction || null,
+      gradesSummary: formData.gpa || null,
+      academicCertificates: [], // Assuming file upload logic is separate or user provides URLs. For now sending empty array.
+
+      // English
+      englishTestTaken: formData.englishTest || null,
+      overallScore: formData.englishScore ? parseFloat(formData.englishScore) : null,
+      testExpiryDate: formData.testExpiryDate || null,
+
+      // Study Prefs
+      intendedIntakeMonth: intendedIntakeMonth,
+      intendedIntakeYear: intendedIntakeYear,
+      preferredCountries: formData.preferredDestination.length > 0 ? formData.preferredDestination : null,
       preferredStudyLevel: formData.preferredStudyLevel || null,
-      preferredIntake: formData.preferredIntake || null,
-      englishTest: formData.englishTest || null,
-      englishScore: formData.englishScore || null,
-      hasValidPassport: formData.hasValidPassport,
-      hasAcademicTranscripts: formData.hasAcademicTranscripts,
-      hasRecommendationLetters: formData.hasRecommendationLetters,
-      hasPersonalStatement: formData.hasPersonalStatement,
-      workExperience: formData.workExperience || null,
-      extraCurricular: formData.extraCurricular || null,
-      careerGoals: formData.careerGoals || null,
-      referralSource: formData.referralSource || null,
-      preferredContactMethod: formData.preferredContactMethod || null,
-      bestTimeToContact: formData.bestTimeToContact || null,
-      additionalQuestions: formData.additionalQuestions || null,
-      currentCountry: formData.currentCountry || null,
-      currentCity: formData.currentCity || null,
-      budgetRange: formData.budgetRange || null,
-      scholarshipInterest: formData.scholarshipInterest,
-      marketingConsent: formData.marketingConsent,
+      preferredFieldOfStudy: formData.preferredProgram || null, // UI 'preferredProgram' maps to field of study
+      estimatedBudget: formData.estimatedBudget ? parseFloat(formData.estimatedBudget) : null,
+      fundingSource: formData.fundingSource || null,
+
+      // Visa
+      previousVisaRefusal: formData.previousVisaRefusal,
+      visaRefusalDetails: formData.visaRefusalDetails || null,
+      travelHistory: formData.travelHistory || null,
+      ongoingImmigrationApps: formData.ongoingImmigrationApps || null,
+
+      // Internal
+      notes: notes,
     };
 
     // Validate using Zod schema
