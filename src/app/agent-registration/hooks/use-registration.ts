@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { AgentRegistrationData} from '../types/registration.types';
-import { submitAgentRegistration } from '../apis/registration.api';
+import type { AgentRegistrationData } from '../types/registration.types';
 import AppToast from '@/utils/toast-utils';
 import { isAxiosError } from 'axios';
-
-// ... (previous imports)
+import { submitAgentRegistration } from '../apis/registration.api';
 
 interface UseAgentRegistrationReturn {
     // State
@@ -166,16 +164,19 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
             try {
                 console.log('Submitting agent registration with data:', formData);
 
-                // Call API
+                // Call the actual API
+                const response = await submitAgentRegistration(formData);
+
+                console.log('Registration response:', response);
                 AppToast.success('Registration successful! Your account is pending admin approval.');
 
                 if (onSubmit) onSubmit(formData);
                 if (onClose) onClose();
 
-                // Redirect to login or a success page explaining the pending status
+                // Redirect to pending approval page
                 // Using 1.5s delay to match student flow feel
                 setTimeout(() => {
-                    router.push('/auth/login?registered=true');
+                    router.push('/pending-approval');
                 }, 1500);
 
             } catch (err) {
@@ -186,7 +187,7 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 if (isAxiosError(err) && err.response?.data?.message) {
                     AppToast.error(err.response.data.message);
                 } else {
-                setError('An unexpected error occurred while submitting registration.');
+                    setError('An unexpected error occurred while submitting registration.');
                     AppToast.error(errorMessage);
                 }
             } finally {

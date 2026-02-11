@@ -73,7 +73,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="tradingName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Trading Name</Label>
+                                <Label htmlFor="tradingName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Trading Name <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="tradingName"
                                     value={formData.tradingName}
