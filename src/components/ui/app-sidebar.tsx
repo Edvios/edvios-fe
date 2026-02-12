@@ -63,7 +63,7 @@ const studentItems = [
   },
   {
     title: "Profile",
-    url: "/profile",
+    url: "/profiles/student-profile",
     icon: User,
   },
 ];
@@ -99,7 +99,12 @@ const agentItems = [
     title: "Chat",
     url: "/chat",
     icon: MessageCircle,
-  }
+  },
+  {
+    title: "Profile",
+    url: "/profiles/agent-profile",
+    icon: User,
+  },
 
 ];
 
