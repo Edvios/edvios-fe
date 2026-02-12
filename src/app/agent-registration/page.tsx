@@ -382,7 +382,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="typicalStudentProfileStrength" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Typical Student Profile Strength</Label>
+                                <Label htmlFor="typicalStudentProfileStrength" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Typical Student Profile Strength <span className="text-destructive">*</span></Label>
                                 <Select
                                     value={formData.typicalStudentProfileStrength}
                                     onValueChange={(value) => handleInputChange('typicalStudentProfileStrength', value)}
