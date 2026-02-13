@@ -40,7 +40,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
     const getRoleBadge = (role: string) => {
         if (role === 'AGENT') {
             return (
-                <Badge variant="outline" className="bg-gradient text-white border-gradient px-3 py-1 rounded-full text-xs font-bold">
+                <Badge variant="outline" className="bg-edvios-green text-white border-gradient px-3 py-1 rounded-full text-xs font-bold">
                     APPROVED
                 </Badge>
             );
@@ -57,7 +57,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
             header: 'Agent',
             Cell: ({ row }: { row: Agent }) => (
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient flex items-center justify-center text-white font-bold text-lg shadow-md">
+                    <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center text-white font-bold text-lg shadow-md">
                         {(row.firstName?.[0] || '') + (row.lastName?.[0] || '')}
                     </div>
                     <div>
@@ -114,7 +114,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                                     onApprove(row.id);
                                 }
                             }}
-                            className="hover:bg-gradient/10 hover:text-gradient text-gradient rounded-xl transition-all h-10 w-10 p-0"
+                            className="hover:bg-edvios-green/10 hover:text-gradient text-gradient rounded-xl transition-all h-10 w-10 p-0"
                             title="Approve Agent"
                         >
                             <CheckCircle className="w-5 h-5" />

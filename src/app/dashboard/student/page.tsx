@@ -158,13 +158,13 @@ export default function StudentDashboard() {
                 <GraduationCap className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Student Portal</h1>
+                <p className="text-xl font-bold text-edvios-blue">Student Portal</p>
                 <p className="text-sm text-gray-500">Welcome back, {userData.firstName}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <NotificationBell role="student" />
-              <Button className="bg-gradient text-white" size="sm" onClick={() => router.push('/chat')}>
+              <Button className="bg-edvios-green text-white" size="sm" onClick={() => router.push('/chat')}>
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Chat with Agent
               </Button>
@@ -209,7 +209,7 @@ export default function StudentDashboard() {
             style={{ gridTemplateColumns: `repeat(${tabOrder.length}, 1fr)` }}
           >
             <div
-              className="absolute top-1 bottom-1 rounded-4xl transition-all duration-300 ease-in-out bg-gradient"
+              className="absolute top-1 bottom-1 rounded-4xl transition-all duration-300 ease-in-out bg-edvios-green"
               style={{
                 width: `calc(${100 / tabOrder.length}% - 8px)`,
                 left: `calc(${activeTabIndex * (100 / tabOrder.length)}% + 4px)`,

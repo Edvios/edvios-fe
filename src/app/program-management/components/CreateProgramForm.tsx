@@ -541,7 +541,7 @@ const CreateProgramForm: React.FC<CreateProgramFormProps> = ({
         <Button
           type="submit"
           disabled={isSaving}
-          className="flex-1 h-11 bg-gradient hover:opacity-90"
+          className="flex-1 h-11 bg-edvios-green hover:opacity-90"
         >
           {isSaving ? (
             <>

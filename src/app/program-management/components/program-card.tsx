@@ -97,7 +97,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
       )}
     >
       {/* full-height left color stripe */}
-      <div className="absolute left-0 top-0 bottom-0 w-3 md:w-4 bg-gradient rounded-l-md" />
+      <div className="absolute left-0 top-0 bottom-0 w-3 md:w-4 bg-edvios-green rounded-l-md" />
 
       <div className="flex flex-row min-w-0">
         <CardContent
@@ -235,7 +235,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
         <div className="flex justify-end">
           <div className="flex items-center gap-2">
             <Button
-              className="bg-gradient hover:opacity-90 text-xs md:text-sm h-7 md:h-8 px-2 md:px-3"
+              className="bg-edvios-green hover:opacity-90 text-xs md:text-sm h-7 md:h-8 px-2 md:px-3"
               onClick={() => onEdit?.(p)}
             >
               <div className="flex items-center gap-2">
@@ -261,7 +261,7 @@ export default function ProgramCard({ program, onEdit, onDelete }: Props) {
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    className="bg-gradient text-white"
+                    className="bg-edvios-green text-white"
                     onClick={handleDelete}
                     disabled={deleting}
                   >

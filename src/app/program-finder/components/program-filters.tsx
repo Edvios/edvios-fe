@@ -178,7 +178,7 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                 </div>
             </div>
 
-            <Button variant="outline" className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient" onClick={onReset}>
+            <Button variant="outline" className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-edvios-green" onClick={onReset}>
                 <RotateCcw className="h-4 w-4" />
                 Reset Filters
             </Button>

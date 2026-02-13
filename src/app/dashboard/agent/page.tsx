@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { NotificationBell } from "@/app/notifications/components/notification-bell";
 import { 
   Users, 
   FileText,  
@@ -86,7 +85,7 @@ export default function AgentDashboard() {
                 <Building className="w-6 h-6 text-white " />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Agent Portal</h1>
+                <p className="text-xl font-bold text-edvios-blue">Agent Portal</p>
                 <p className="text-sm text-gray-500">Welcome, {userData.name}</p>
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -25,7 +25,6 @@ import {
   SidebarHeader,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -43,7 +42,6 @@ interface UserData {
   id: string;
 }
 
-// Student menu items
 const studentItems = [
   {
     title: "Dashboard",
@@ -72,7 +70,6 @@ const studentItems = [
   },
 ];
 
-// Agent menu items
 const agentItems = [
   {
     title: "Dashboard",
@@ -112,50 +109,23 @@ const agentItems = [
   },
 ];
 
-// Admin menu items
 const adminItems = [
-  {
-    title: "Dashboard",
-    url: "/dashboard/admin",
-    icon: Home,
-  },
-  {
-    title: "Students",
-    url: "/student-management",
-    icon: Users,
-  },
-  {
-    title: "Agents",
-    url: "/agent-management",
-    icon: User,
-  },
-  {
-    title: "Applications",
-    url: "/applications",
-    icon: FileText,
-  },
-  {
-    title: "Institutions",
-    url: "/institution-management",
-    icon: Building2,
-  },
-  {
-    title: "Programs",
-    url: "/program-management",
-    icon: BookOpen,
-  },
-  {
-    title: "Assignments",
-    url: "/agent-assignment",
-    icon: LucideUserPlus2,
-  },
+  { title: "Dashboard", url: "/dashboard/admin", icon: Home },
+  { title: "Students", url: "/student-management", icon: Users },
+  { title: "Agents", url: "/agent-management", icon: User },
+  { title: "Applications", url: "/applications", icon: FileText },
+  { title: "Institutions", url: "/institution-management", icon: Building2 },
+  { title: "Programs", url: "/program-management", icon: BookOpen },
+  { title: "Assignments", url: "/agent-assignment", icon: LucideUserPlus2 },
 ];
 
 export function AppSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   const { state, isMobile, setOpenMobile } = useSidebar();
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const isCollapsed = state === "collapsed";
 
   const handleMobileClose = () => {
     if (isMobile) setOpenMobile(false);
@@ -163,26 +133,20 @@ export function AppSidebar() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
     const loadUserData = async () => {
       try {
         const userSession = sessionStorage.getItem("user-session");
-
         if (userSession) {
           setUserData(JSON.parse(userSession));
-          setIsLoading(false);
         } else {
           const response = await axiosInstance.get("/auth/me");
           setUserData(response.data);
           sessionStorage.setItem("user-session", JSON.stringify(response.data));
-          setIsLoading(false);
         }
       } catch (error) {
         console.error("Failed to load user data:", error);
-        setIsLoading(false);
       }
     };
-
     loadUserData();
   }, []);
 
@@ -190,12 +154,9 @@ export function AppSidebar() {
     handleMobileClose();
     try {
       await logout();
-    } catch (error) {
-      console.error("Logout failed:", error);
     } finally {
       sessionStorage.removeItem("user-session");
       sessionStorage.removeItem("auth-token");
-      cookieStore.delete("sb-jlqamlxzkfmpfisjlzrg-auth-token");
       router.push("/auth/login");
     }
   };
@@ -232,68 +193,76 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent>
-        {/* Sidebar Top */}
-        <SidebarHeader className="flex items-center gap-2 px-2 py-2">
-          <SidebarTrigger className="shrink-0" />
-          <div className="flex-1">
-            <div
-              className={
-                isMobile
-                  ? "hidden"
-                  : state === "collapsed"
-                  ? "block"
-                  : "hidden"
-              }
-            >
-              <Image src="/logo.png" alt="Logo" width={28} height={28} />
-            </div>
-            <div
-              className={
-                isMobile
-                  ? "block"
-                  : state === "collapsed"
-                  ? "hidden"
-                  : "block"
-              }
-            >
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                width={isMobile ? 160 : 110}
-                height={isMobile ? 56 : 40}
-              />
-            </div>
-          </div>
-        </SidebarHeader>
+      <SidebarHeader className="flex flex-col p-0">
+        {/* Centered Trigger Container */}
+        <div className={`flex items-center pt-4 ${isCollapsed ? "justify-center" : "justify-end px-4"}`}>
+          <SidebarTrigger className="opacity-70 hover:opacity-100 transition-opacity scale-110" />
+        </div>
 
-        {/* Main Menu */}
+        {/* Logo area */}
+        <div className="mt-2 flex items-center justify-center min-h-[50px]">
+          {isCollapsed && !isMobile ? (
+            <Image src="/logo.png" alt="Logo" width={36} height={36} className="object-contain" />
+          ) : (
+            <Image src="/logoWithLetters.png" alt="Logo" width={140} height={40} className="object-contain" />
+          )}
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent className="mt-4">
         <SidebarGroup>
-          <SidebarGroupLabel>{roleLabel}</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
-                    <Link href={item.url} onClick={handleMobileClose}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            {/* Tightened vertical gap between items */}
+            <SidebarMenu className={isCollapsed ? "items-center gap-3" : "gap-1 px-3"}>
+              {menuItems.map((item) => {
+                const isActive = pathname === item.url;
+                return (
+                  <SidebarMenuItem key={item.title} className="w-full flex justify-center">
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.title}
+                      className={`
+                        relative transition-all duration-300 ease-in-out
+                        ${isCollapsed ? "h-14 w-14 justify-center" : "h-11 w-full px-4"}
+                        ${isActive 
+                          ? "sidebar-item-active text-white rounded-xl shadow-lg hover:text-white" 
+                          : "text-muted-foreground hover:bg-accent/50 rounded-lg"
+                        }
+                      `}
+                    >
+                      <Link href={item.url} onClick={handleMobileClose} className="flex items-center">
+                        <item.icon 
+                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0`} 
+                          strokeWidth={isActive ? 2.5 : 2} 
+                        />
+                        {!isCollapsed && (
+                          <span className={`ml-3 text-sm tracking-wide ${isActive ? "font-bold" : "font-medium"}`}>
+                            {item.title}
+                          </span>
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Footer with Logout */}
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
-              <LogOut />
-              <span>Logout</span>
+      <SidebarFooter className="p-4 bg-transparent border-none">
+        <SidebarMenu className={isCollapsed ? "items-center" : ""}>
+          <SidebarMenuItem className="w-full flex justify-center">
+            <SidebarMenuButton
+              onClick={handleLogout}
+              tooltip="Logout"
+              className={`
+                transition-all duration-200 text-muted-foreground hover:text-destructive hover:bg-destructive/5
+                ${isCollapsed ? "h-14 w-14 justify-center rounded-xl" : "h-11 w-full px-4 rounded-lg"}
+              `}
+            >
+              <LogOut className={isCollapsed ? "size-10" : "size-7"} strokeWidth={2} />
+              {!isCollapsed && <span className="ml-3 text-sm font-medium">Logout</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

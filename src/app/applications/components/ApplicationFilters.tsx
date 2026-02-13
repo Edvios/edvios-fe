@@ -28,7 +28,7 @@ export const ApplicationFilters: React.FC<ApplicationFiltersProps> = ({
           size="sm"
           className={
             currentFilter === filter.value
-              ? 'bg-gradient hover:opacity-90'
+              ? 'bg-edvios-green hover:opacity-90'
               : 'border-gray-200 hover:bg-gray-50'
           }
         >

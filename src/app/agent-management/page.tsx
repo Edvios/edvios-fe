@@ -54,7 +54,7 @@ const AgentManagementPage = () => {
   // Calculate stats - in a real app these might come from a separate endpoint
   const stats = useMemo(() => {
     return [
-      { label: 'Total Agents', value: total, icon: Users, color: 'bg-gradient' },
+      { label: 'Total Agents', value: total, icon: Users, color: 'bg-edvios-green' },
       { label: 'Pending Review', value: agents.filter(a => a.role === 'PENDING_AGENT').length, icon: Clock, color: 'from-blue-400 to-blue-600' },
     ];
   }, [agents, total]);
@@ -97,16 +97,10 @@ const AgentManagementPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight text-center md:text-left">
-              Agent <span className="text-gradient">Portal Control</span>
-            </h1>
+            <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight text-center md:text-left">
+              Agent Management
+            </p>
             <p className="text-gray-500 mt-2 text-base md:text-lg text-center md:text-left">Approve, manage, and monitor educational consultants.</p>
-          </div>
-          <div className="flex items-center justify-center md:justify-end gap-3">
-            <div className="px-5 py-2.5 bg-gradient/10 rounded-2xl border border-gradient flex items-center gap-3 shadow-sm">
-              <ShieldCheck className="w-5 h-5 text-gradient" />
-              <span className="text-sm font-bold text-gradient uppercase tracking-wider">Admin Verified</span>
-            </div>
           </div>
         </div>
 
@@ -165,7 +159,7 @@ const AgentManagementPage = () => {
 
                 <Button
                   variant="outline"
-                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-gradient/10 text-gradient hover:bg-gradient/20 transition-all font-bold w-full sm:w-auto"
+                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-edvios-green/10 text-gradient hover:bg-edvios-green/20 transition-all font-bold w-full sm:w-auto"
                   onClick={resetFilters}
                 >
                   <RotateCcw className="w-5 h-5" /> Reset

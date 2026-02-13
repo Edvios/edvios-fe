@@ -85,7 +85,7 @@ export default function AdminPanel() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Application Management</h1>
+            <p className="text-3xl font-bold text-edvios-blue">Application Management</p>
             <p className="mt-1 text-gray-600">
               Review and manage student applications
             </p>
@@ -94,17 +94,6 @@ export default function AdminPanel() {
 
         {/* Stats Cards */}
         {statsSection}
-
-        {/* Error Alert */}
-        {error && (
-          <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
-            <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-red-800">Error loading applications</p>
-              <p className="text-sm text-red-700 mt-1">{error}</p>
-            </div>
-          </div>
-        )}
 
         {/* Main Content Card */}
         <Card className="border-gray-200 overflow-hidden">

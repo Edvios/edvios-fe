@@ -1,7 +1,4 @@
 import axiosInstance from "@/lib/axios";
-import { AgentApplication } from "../../agent/types/dashboard.types";
-import { AgentApplicationSchema } from "../../agent/dtos/dashboard.dto";
-import z from "zod";
 
 export const adminAPI = {
   /**
