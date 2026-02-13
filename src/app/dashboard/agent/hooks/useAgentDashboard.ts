@@ -29,7 +29,7 @@ export const useApplications = () => {
       if (JSON.parse(user).role === "ADMIN") {
         const response = await applicationsApi.getAdminApplications({ page: 1, size: 3 });
         setApplications(response.data);
-      } else if (JSON.parse(user).role === "AGENT") {
+      } else if (JSON.parse(user).role === "AGENT" || JSON.parse(user).role === "SELECTED_AGENT") {
         const response = await applicationsApi.getAgentApplications({ page: 1, size: 3 });
         setApplications(response.data);
       }
