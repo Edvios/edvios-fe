@@ -2,33 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { fetchAssignments } from '../api/assignment.api';
 import { StudentAssignment, AssignmentFilters } from '../types/assignment.types';
 
-interface AssignmentApiResponse {
-  id: string;
-  student?: {
-    id: string;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    phone?: string;
-  };
-  agent?: {
-    id?: string;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    phone?: string;
-    user?: {
-      id: string;
-      firstName?: string;
-      lastName?: string;
-      email?: string;
-      phone?: string;
-    };
-  } | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export const useAssignments = (filters: AssignmentFilters) => {
   const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
   const [total, setTotal] = useState<number>(0);

@@ -149,7 +149,7 @@ export const ProgramDetailsDialog: React.FC<ProgramDetailsDialogProps> = ({
           </Button>
 
           <Button
-            className="px-10 bg-gradient text-white shadow-md hover:shadow-lg transition"
+            className="px-10 bg-edvios-green text-white shadow-md hover:shadow-lg transition"
             onClick={() => onApplyClick(program)}
           >
             Apply Now

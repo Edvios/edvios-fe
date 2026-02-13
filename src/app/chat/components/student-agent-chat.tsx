@@ -5,7 +5,7 @@ import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, MessageCircle, Wifi, WifiOff, Loader2, Paperclip, X, File as FileIcon, Image as ImageIcon, Download } from "lucide-react";
+import { Send, MessageCircle, Loader2, Paperclip, X, File as FileIcon, Image as ImageIcon, Download } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { ChatUser, ChatMessageData } from "../types/chat.types";
 import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
@@ -448,7 +448,7 @@ export function StudentAgentChat({
           
           {isConnected && (newMessage.trim() || selectedFile) && (
             <Button
-              className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300 shrink-0 bg-gradient text-white hover:opacity-90"
+              className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300 shrink-0 bg-edvios-green text-white hover:opacity-90"
               type="submit"
               disabled={!isConnected || isSending || isUploading}
               size="icon"
@@ -572,7 +572,7 @@ function ChatMessageBubble({
             isOwnMessage
               ? hasOnlyImageAttachment
                 ? "text-foreground"
-                : "bg-gradient text-white"
+                : "bg-edvios-green text-white"
               : "bg-muted text-foreground"
           )}
         >

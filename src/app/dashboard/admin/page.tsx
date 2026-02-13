@@ -37,17 +37,17 @@ export default function ADMINDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-gradient-50 via-white to-bg-gradient-300">
+    <div className="min-h-screen bg-gradient-to-br from-[#548aff]/10 via-white to-[#95bd2f]/10">
       {/* Header */}
       <header className="bg-white border-b shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-edvios-green rounded-full flex items-center justify-center">
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Admin Portal</h1>
+                <p className="text-xl font-bold text-edvios-blue">Admin Portal</p>
                 <p className="text-sm text-gray-500">System Administrator</p>
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function ADMINDashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">System Overview</h2>
+          <p className="text-3xl font-bold text-edvios-blue mb-2">System Overview</p>
           <p className="text-gray-600">Monitor and manage the entire Edvios platform</p>
         </div>
 
@@ -169,7 +169,7 @@ export default function ADMINDashboard() {
                   {applications.slice(0, 5).map((client, idx) => (
                     <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                        <div className="w-10 h-10 bg-edvios-green rounded-full flex items-center justify-center text-white font-semibold">
                           {client.student.firstName?.split(' ').map(n => n[0]).join('')}
                         </div>
                         <div>

@@ -206,7 +206,7 @@ export default function StudentProfilePage() {
                 </div>
                 <div className="mt-4 md:mt-0 flex items-center space-x-2">
                   {!isEditing ? (
-                      <Button className="bg-gradient text-white hover:opacity-95" size="sm" onClick={() => setIsEditing(true)}>
+                      <Button className="bg-edvios-green text-white hover:opacity-95" size="sm" onClick={() => setIsEditing(true)}>
                       <Edit3 className="w-4 h-4 text-white" />
                       Edit Profile
                     </Button>
@@ -309,7 +309,7 @@ export default function StudentProfilePage() {
                   style={{ gridTemplateColumns: `repeat(${toggleOptions.length}, minmax(0, 1fr))` }}
                 >
                   <div
-                    className="absolute top-1 bottom-1 rounded-4xl shadow-md transition-all duration-300 ease-in-out bg-gradient"
+                    className="absolute top-1 bottom-1 rounded-4xl shadow-md transition-all duration-300 ease-in-out bg-edvios-green"
                     style={getToggleBackground()}
                   />
 

@@ -56,7 +56,7 @@ export const ConfirmAssignmentDialog: React.FC<ConfirmAssignmentDialogProps> = (
               onConfirm();
             }}
             disabled={loading}
-            className="bg-gradient text-white hover:opacity-90"
+            className="bg-edvios-green text-white hover:opacity-90"
           >
             {loading ? 'Assigning...' : 'Confirm'}
           </AlertDialogAction>

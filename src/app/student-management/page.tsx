@@ -45,7 +45,7 @@ const StudentManagementPage = () => {
   // Calculate stats
   const stats = useMemo(() => {
     return [
-      { label: 'Total Students', value: total, icon: GraduationCap, color: 'bg-gradient' },
+      { label: 'Total Students', value: total, icon: GraduationCap, color: 'bg-edvios-green' },
     ];
   }, [total]);
 
@@ -91,9 +91,9 @@ const StudentManagementPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-              Student <span className="text-green-600">Management</span>
-            </h1>
+            <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight">
+              Student Management
+            </p>
             <p className="text-gray-500 mt-2 text-base md:text-lg">Manage and review international student applications and profiles.</p>
           </div>
           <div className="flex items-center gap-3">
