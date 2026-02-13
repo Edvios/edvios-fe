@@ -42,9 +42,9 @@ const AgentAssignmentPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+            <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight">
               Agent <span className="text-green-600">Assignment</span>
-            </h1>
+            </p>
             <p className="text-gray-500 mt-2 text-base md:text-lg">
               Manage and assign agents to students
             </p>

@@ -131,7 +131,7 @@ export const Pagination = React.memo(function Pagination({
                 onClick={() => onPageChange(pageNum)}
                 className={
                   isActive
-                    ? 'bg-gradient hover:opacity-90 text-white border-0'
+                    ? 'bg-edvios-green hover:opacity-90 text-white border-0'
                     : 'border-gray-300'
                 }
               >

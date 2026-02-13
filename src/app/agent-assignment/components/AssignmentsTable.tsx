@@ -124,7 +124,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
       header: 'Student',
       Cell: ({ row }: { row: StudentAssignment }) => (
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient flex items-center justify-center text-white font-bold text-lg shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center text-white font-bold text-lg shadow-md">
             {(row.student.firstName?.[0] || '') + (row.student.lastName?.[0] || '')}
           </div>
           <div>
@@ -163,7 +163,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
           >
             {row.agent ? (
               <span className="flex items-center gap-2 truncate">
-                <div className="w-6 h-6 rounded-full bg-gradient flex items-center justify-center text-white text-xs font-semibold shrink-0">
+                <div className="w-6 h-6 rounded-full bg-edvios-green flex items-center justify-center text-white text-xs font-semibold shrink-0">
                   {(row.agent.user.firstName?.[0] || '') + (row.agent.user.lastName?.[0] || '')}
                 </div>
                 <span className="truncate">
@@ -224,7 +224,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                               )}
                             />
                             <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center text-white text-xs font-semibold">
+                              <div className="w-8 h-8 rounded-full bg-edvios-green flex items-center justify-center text-white text-xs font-semibold">
                                 {(agent.firstName?.[0] || '') + (agent.lastName?.[0] || '')}
                               </div>
                               <div className="flex flex-col">

@@ -50,7 +50,7 @@ export const InstitutionCard = React.memo(function InstitutionCard({ institution
           <div className="mb-3 md:mb-4">
             {/* Icon and Badges Row */}
             <div className="flex items-start justify-between mb-2.5 md:mb-3 gap-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient rounded-xl flex items-center justify-center text-white flex-shrink-0">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-edvios-green rounded-xl flex items-center justify-center text-white flex-shrink-0">
                 {React.createElement(TypeIcon, { className: "w-5 h-5 md:w-6 md:h-6" })}
               </div>
               <div className="flex gap-2 items-start flex-shrink-0">
@@ -153,7 +153,7 @@ export const InstitutionCard = React.memo(function InstitutionCard({ institution
               >
                 View Details
               </Button>
-              <Button className="flex-1 bg-gradient hover:opacity-90 text-xs md:text-sm h-9 md:h-10">
+              <Button className="flex-1 bg-edvios-green hover:opacity-90 text-xs md:text-sm h-9 md:h-10">
                 Contact
               </Button>
             </div>

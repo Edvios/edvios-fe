@@ -66,7 +66,7 @@ export const ProgramPagination: React.FC<ProgramPaginationProps> = ({
                                 variant={pageNum === page ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => onPageChange(pageNum as number)}
-                                className={pageNum === page ? "bg-gradient text-white" : ""}
+                                className={pageNum === page ? "bg-edvios-green text-white" : ""}
                             >
                                 {pageNum}
                             </Button>

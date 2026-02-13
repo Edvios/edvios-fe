@@ -112,7 +112,7 @@ export default function LoginPage() {
 
                   <Button 
                     onClick={onSubmitLogin}
-                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient" 
+                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-edvios-green" 
                     disabled={isLoading}
                   >
                     <LogIn className="w-4 h-4 mr-2" />
@@ -233,7 +233,7 @@ export default function LoginPage() {
 
                   <Button 
                     onClick={onSubmitRegister}
-                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient" 
+                    className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-edvios-green" 
                     disabled={isLoading}
                   >
                     <UserPlus className="w-4 h-4 mr-2" />

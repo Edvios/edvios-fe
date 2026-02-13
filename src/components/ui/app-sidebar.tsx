@@ -151,11 +151,11 @@ export function AppSidebar() {
                       asChild
                       tooltip={item.title}
                       className={`
-                        relative transition-all duration-300 
+                        relative transition-all duration-300 ease-in-out
                         ${isCollapsed ? "h-14 w-14 justify-center" : "h-11 w-full px-4"}
                         ${isActive 
-                          ? "bg-gradient text-white rounded-xl shadow-lg" 
-                          : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground rounded-lg"
+                          ? "sidebar-item-active text-white rounded-xl shadow-lg hover:text-white" 
+                          : "text-muted-foreground hover:bg-accent/50 rounded-lg"
                         }
                       `}
                     >

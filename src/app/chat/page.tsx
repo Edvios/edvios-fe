@@ -86,7 +86,7 @@ export default function ChatPage() {
                 <div
                   className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center",
-                    "bg-gradient"
+                    "bg-edvios-green"
                   )}
                 >
                   {isAgent ? (
@@ -119,7 +119,7 @@ export default function ChatPage() {
                 </Button>
                 {selectedRoom && (
                   <>
-                    <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-edvios-green flex items-center justify-center">
                       <span className="text-white text-sm font-medium">
                         {selectedRoom.studentName.charAt(0).toUpperCase()}
                       </span>

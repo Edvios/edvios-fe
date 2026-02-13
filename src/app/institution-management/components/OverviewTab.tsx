@@ -37,7 +37,7 @@ export function OverviewTab({
           <div className="space-y-4">
             {topInstitutions.map(inst => (
               <div key={inst.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                <div className="w-10 h-10 bg-gradient rounded-lg flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 bg-edvios-green rounded-lg flex items-center justify-center text-white font-bold">
                   #{inst.ranking?.toString() || 'N/A'}
                 </div>
                 <div className="flex-1">

@@ -84,7 +84,7 @@ export default function CreateNotificationPage() {
                         </div>
 
                         <div className="flex justify-end pt-4">
-                            <Button type="submit" disabled={loading} className="w-full sm:w-auto bg-gradient">
+                            <Button type="submit" disabled={loading} className="w-full sm:w-auto bg-edvios-green">
                                 {loading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

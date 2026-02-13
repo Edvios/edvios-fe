@@ -448,7 +448,7 @@ export function StudentAgentChat({
           
           {isConnected && (newMessage.trim() || selectedFile) && (
             <Button
-              className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300 shrink-0 bg-gradient text-white hover:opacity-90"
+              className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300 shrink-0 bg-edvios-green text-white hover:opacity-90"
               type="submit"
               disabled={!isConnected || isSending || isUploading}
               size="icon"
@@ -572,7 +572,7 @@ function ChatMessageBubble({
             isOwnMessage
               ? hasOnlyImageAttachment
                 ? "text-foreground"
-                : "bg-gradient text-white"
+                : "bg-edvios-green text-white"
               : "bg-muted text-foreground"
           )}
         >

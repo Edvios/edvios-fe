@@ -86,7 +86,7 @@ export const SelectedAgentCard: React.FC = () => {
             
             <div className="flex items-center gap-4">
                 
-              <div className="w-12 h-12 rounded-2xl bg-gradient flex items-center justify-center text-white shadow-md">
+              <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center text-white shadow-md">
                 <UserCheck className="w-6 h-6" />
               </div>
               <div>
@@ -122,7 +122,7 @@ export const SelectedAgentCard: React.FC = () => {
                   resetSearch();
                 }}
                 disabled={isSubmitting || isLoading}
-                className="bg-gradient text-white px-6 py-3 rounded-2xl shadow-md transition-all font-semibold"
+                className="bg-edvios-green text-white px-6 py-3 rounded-2xl shadow-md transition-all font-semibold"
                 data-agent-selector
               >
                 <ChevronsUpDown className="w-4 h-4 mr-2" />
@@ -174,7 +174,7 @@ export const SelectedAgentCard: React.FC = () => {
                                   )}
                                 />
                                 <div className="flex items-center gap-2">
-                                  <div className="w-8 h-8 rounded-full bg-gradient flex items-center justify-center text-white text-xs font-semibold">
+                                  <div className="w-8 h-8 rounded-full bg-edvios-green flex items-center justify-center text-white text-xs font-semibold">
                                     {(agent.firstName?.[0] || '') + (agent.lastName?.[0] || '')}
                                   </div>
                                   <div className="flex flex-col">

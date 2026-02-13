@@ -214,12 +214,12 @@ export default function ProgramManagementPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Program Management</h1>
+            <p className="text-3xl font-bold text-edvios-blue">Program Management</p>
             <p className="text-gray-600 mt-1">Manage university degree programs and offerings</p>
           </div>
           <Button
             onClick={handleAddNew}
-            className="bg-gradient hover:from-orange-600 hover:to-green-600 text-white"
+            className="bg-edvios-green hover:from-orange-600 hover:to-green-600 text-white"
           >
             <Plus size={20} className="mr-2" />
             Add New Program

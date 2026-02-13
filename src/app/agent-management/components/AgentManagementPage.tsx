@@ -23,7 +23,7 @@ const AgentManagementPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Agent Management</h1>
+      <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight">Agent Management</p>
 
       <div className="filters">
         <Input

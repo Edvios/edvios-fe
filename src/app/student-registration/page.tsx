@@ -40,7 +40,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <Users className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -185,7 +185,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <GraduationCap className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -313,7 +313,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <Target className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -424,7 +424,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   id="scholarshipInterest" 
                   checked={formData.scholarshipInterest} 
                   onCheckedChange={(checked) => handleInputChange('scholarshipInterest', checked === true)}
-                  className="data-[state=checked]:bg-gradient"
+                  className="data-[state=checked]:bg-edvios-green"
                 />
                 <Label htmlFor="scholarshipInterest" className="text-sm font-medium cursor-pointer">
                   I&apos;m Interested in scholarships
@@ -438,7 +438,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <FileText className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -462,7 +462,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     id={item.id} 
                     checked={formData[item.field as keyof typeof formData] as boolean} 
                     onCheckedChange={(checked) => handleInputChange(item.field, checked)}
-                    className="data-[state=checked]:bg-gradient"
+                    className="data-[state=checked]:bg-edvios-green"
                   />
                   <Label htmlFor={item.id} className="text-sm font-medium cursor-pointer flex-1">
                     {item.label}
@@ -523,7 +523,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         return (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <CheckCircle className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -655,7 +655,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <span className="font-medium">{Math.round(progressPercentage)}% Complete</span>
               </div>
               <Progress value={progressPercentage} className="h-2 bg-secondary">
-                <div className="h-full bg-gradient rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercentage}%` }} />
+                <div className="h-full bg-edvios-green rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercentage}%` }} />
               </Progress>
             </div>
             
@@ -667,9 +667,9 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     key={step}
                     className={`relative flex items-center justify-center w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-300 ${
                       step < currentStep
-                        ? 'bg-gradient text-white scale-95'
+                        ? 'bg-edvios-green text-white scale-95'
                         : step === currentStep
-                        ? 'bg-gradient text-white scale-110 shadow-lg'
+                        ? 'bg-edvios-green text-white scale-110 shadow-lg'
                         : 'bg-secondary text-muted-foreground scale-90'
                     }`}
                   >
@@ -706,7 +706,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 {currentStep < totalSteps ? (
                   <Button 
                     onClick={handleNextStep} 
-                    className="bg-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px]"
+                    className="bg-edvios-green hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px]"
                   >
                     Next Step
                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -715,7 +715,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   <Button 
                     onClick={() => handleSubmit(onSubmit, onClose)}
                     disabled={isSubmitting}
-                    className="bg-gradient hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px] disabled:opacity-50"
+                    className="bg-edvios-green hover:opacity-90 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[140px] disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <>
