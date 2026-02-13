@@ -7,7 +7,7 @@ export async function proxy(request: NextRequest) {
   const isAuthPage = pathname.startsWith("/auth/login");
   const isDashboardPage = pathname.startsWith("/dashboard");
   const isStudentRegistrationPage = pathname.startsWith("/student-registration");
-  const isPendingApprovalPage = pathname.startsWith("/pending-approval");
+  // const isPendingApprovalPage = pathname.startsWith("/pending-approval");
   const isManagementPage = 
     pathname.startsWith("/agent-management") ||
     pathname.startsWith("/institution-management") ||
@@ -22,16 +22,16 @@ export async function proxy(request: NextRequest) {
   }
 
   // If user is pending agent, block all pages except pending approval
-  if (user) {
-    const userRole = user.user_metadata?.role || user.app_metadata?.role;
-    const normalizedRole = typeof userRole === "string" ? userRole.toUpperCase() : undefined;
+  // if (user) {
+  //   const userRole = user.user_metadata?.role || user.app_metadata?.role;
+  //   const normalizedRole = typeof userRole === "string" ? userRole.toUpperCase() : undefined;
 
-    if (normalizedRole === "PENDING_AGENT" && !isPendingApprovalPage) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/pending-approval";
-      return NextResponse.redirect(url);
-    }
-  }
+  //   if (normalizedRole === "PENDING_AGENT" && !isPendingApprovalPage) {
+  //     const url = request.nextUrl.clone();
+  //     url.pathname = "/pending-approval";
+  //     return NextResponse.redirect(url);
+  //   }
+  // }
 
   // Management pages access control - only ADMIN and AGENT roles allowed
   if (user && isManagementPage) {

@@ -1,9 +1,8 @@
 import axiosInstance from '@/lib/axios';
 
-export const applicationsApi = {
-  async getURL(): Promise<string> {
-    const response = await axiosInstance.get('/applications');
+export const bookingsApi = {
+  async getCalendlyLink(): Promise<string> {
+    const response = await axiosInstance.get('/agents/calendly-link-student');
     return response.data;
   },
-
 }

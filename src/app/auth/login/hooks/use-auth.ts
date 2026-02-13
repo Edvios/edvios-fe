@@ -39,6 +39,24 @@ export const useAuth = () => {
         AppToast.error(response.message);
         return false;
       }
+
+      // Check if user is a pending agent
+      const userSession = typeof window !== 'undefined'
+        ? sessionStorage.getItem('user-session')
+        : null;
+
+      if (userSession) {
+        const userData = JSON.parse(userSession);
+
+        // If the user is a pending agent, redirect to pending approval page
+        if (userData.role === UserTypeEnum.PENDING_AGENT) {
+          AppToast.info("Your account is pending admin approval");
+          router.replace("/pending-approval");
+          router.refresh();
+          return true;
+        }
+      }
+
       AppToast.success("Successfully logged in");
 
       if (loginData.role === UserTypeEnum.STUDENT) {
@@ -143,9 +161,9 @@ export const useAuth = () => {
       if (registerData.role === UserTypeEnum.STUDENT) {
         router.replace("/student-registration");
       }
-      
-      else if (registerData.role === UserTypeEnum.AGENT) {
-        router.replace("/dashboard/agent");
+
+      else if (roleForRegistration === UserTypeEnum.PENDING_AGENT) {
+        router.replace("/agent-registration");
       }
 
       // Trigger router navigation
