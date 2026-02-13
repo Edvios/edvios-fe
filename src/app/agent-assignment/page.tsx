@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { Search, UserCheck, XCircle, RotateCcw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, XCircle, RotateCcw } from 'lucide-react';
 import { useAssignments } from './hooks/use-assignments';
 import { AssignmentsTable } from './components/AssignmentsTable';
 import { SelectedAgentCard } from './components/SelectedAgentCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 
 const AgentAssignmentPage = () => {
   const [searchQuery, setSearchQuery] = useState('');

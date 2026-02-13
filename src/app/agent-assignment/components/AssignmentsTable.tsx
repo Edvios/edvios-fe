@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { StudentAssignment } from '../types/assignment.types';
-import { Agent } from '@/app/agent-management/types/agent.types';
 import { Table } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import {

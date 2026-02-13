@@ -29,7 +29,6 @@ export const SelectedAgentCard: React.FC = () => {
   } = useSelectedAgent();
 
   const {
-    agents,
     loading: agentsLoading,
     searchQuery,
     filteredAgents,

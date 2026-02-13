@@ -5,7 +5,7 @@ import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, MessageCircle, Wifi, WifiOff, Loader2, Paperclip, X, File as FileIcon, Image as ImageIcon, Download } from "lucide-react";
+import { Send, MessageCircle, Loader2, Paperclip, X, File as FileIcon, Image as ImageIcon, Download } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { ChatUser, ChatMessageData } from "../types/chat.types";
 import { UserTypeEnum } from "@/app/auth/login/enums/auth.enum";
