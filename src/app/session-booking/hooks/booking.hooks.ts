@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { bookingsApi } from '../api/bookings.api';
 import { AppToast } from '@/utils/toast-utils';
 
 export const useBooking = () => {
@@ -15,10 +16,10 @@ export const useBooking = () => {
     try {
       setLoading(true);
       setError(null);
-    //   const data = await applicationsApi.getURL();
-      setAgentURL("https://calendly.com/ckchamindukavya/30min");
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to load applications';
+      const data = await bookingsApi.getCalendlyLink();
+      setAgentURL(data);
+    } catch (err: any) {
+      const message = err.response?.data?.message || err.message || 'Failed to load booking link';
       setError(message);
       AppToast.error(message);
     } finally {
@@ -44,13 +45,13 @@ export const useBooking = () => {
               setUserName(parsed.firstName);
             }
           }
-            if (parsed.email && typeof parsed.email === "string") {
+          if (parsed.email && typeof parsed.email === "string") {
             setUserEmail(parsed.email);
           }
         }
       } catch {
         // ignore parse errors
-      } 
+      }
     }
   }, []);
 

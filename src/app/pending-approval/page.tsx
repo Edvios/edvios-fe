@@ -2,10 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { logout } from "@/app/auth/login/api/auth.api";
+import { useRouter } from "next/navigation";
 
 export default function PendingApprovalPage() {
+  const router = useRouter();
+
   const handleSignOut = async () => {
     await logout();
+    router.push("/auth/login");
   };
 
   return (

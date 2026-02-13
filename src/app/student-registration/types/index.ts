@@ -5,17 +5,43 @@ export interface StudentRegistrationData {
   phone: string;
   address: string;
   nationality: string;
-  currentEducationLevel: string;
-  currentInstitution: string;
-  fieldOfStudy: string;
-  gpa: string;
-  graduationDate: string;
-  preferredDestination: string;
-  preferredProgram: string;
-  preferredStudyLevel: 'BACHELORS' | 'MASTERS' | 'PHD' | 'DIPLOMA' | '';
-  preferredIntake: string;
+  
+
+  gender: string;
+  passportNumber: string;
+  passportExpiryDate: string;
+  emergencyContactName: string;
+  emergencyContactNumber: string; 
+  // Academic
+  currentEducationLevel: string; 
+  currentInstitution: string; 
+  fieldOfStudy: string; 
+
+  yearOfCompletion: string;
+  mediumOfInstruction: string;
+  gpa: string; 
+  academicCertificates: File[]; 
+  
+    // English
   englishTest: string;
   englishScore: string;
+  testExpiryDate: string;
+
+  // Preferences
+  preferredDestination: string[]; 
+  preferredProgram: string; 
+  preferredStudyLevel: string;
+  preferredIntake: string;
+  estimatedBudget: string; 
+  fundingSource: string;
+
+  // Visa / Immigration
+  previousVisaRefusal: boolean;
+  visaRefusalDetails: string;
+  travelHistory: string;
+  ongoingImmigrationApps: string;
+
+  // Legacy/UI fields
   hasValidPassport: boolean;
   hasAcademicTranscripts: boolean;
   hasRecommendationLetters: boolean;
@@ -30,7 +56,6 @@ export interface StudentRegistrationData {
   dob: string;
   currentCountry: string;
   currentCity: string;
-  budgetRange: string;
   scholarshipInterest: boolean;
   marketingConsent: boolean;
   termsAccepted: boolean;

@@ -16,6 +16,7 @@ import {
   Building2,
   BookOpen,
   LucideUserPlus2,
+  Calendar,
 } from "lucide-react";
 
 import {
@@ -42,20 +43,70 @@ interface UserData {
 }
 
 const studentItems = [
-  { title: "Dashboard", url: "/dashboard/student", icon: Home },
-  { title: "Program Finder", url: "/program-finder", icon: Search },
-  { title: "Communication Hub", url: "/chat", icon: MessageCircle },
-  { title: "Counselling", url: "#", icon: HelpingHandIcon },
-  { title: "Profile", url: "/profile", icon: User },
+  {
+    title: "Dashboard",
+    url: "/dashboard/student",
+    icon: Home,
+  },
+  {
+    title: "Program Finder",
+    url: "/program-finder",
+    icon: Search,
+  },
+  {
+    title: "Communication Hub",
+    url: "/chat",
+    icon: MessageCircle,
+  },
+  {
+    title: "Session Booking",
+    url: "/session-booking",
+    icon: Calendar,
+  },
+  {
+    title: "Profile",
+    url: "/profiles/student-profile",
+    icon: User,
+  },
 ];
 
 const agentItems = [
-  { title: "Dashboard", url: "/dashboard/agent", icon: Home },
-  { title: "Students", url: "/student-management", icon: Users },
-  { title: "Applications", url: "/applications", icon: FileText },
-  { title: "Institutions", url: "/institution-management", icon: Building2 },
-  { title: "Programs", url: "/program-management", icon: BookOpen },
-  { title: "Chat", url: "/chat", icon: MessageCircle },
+  {
+    title: "Dashboard",
+    url: "/dashboard/agent",
+    icon: Home,
+  },
+  {
+    title: "Students",
+    url: "/student-management",
+    icon: Users,
+  },
+  {
+    title: "Applications",
+    url: "/applications",
+    icon: FileText,
+  },
+  {
+    title: "Institutions",
+    url: "/institution-management",
+    icon: Building2,
+  },
+  {
+    title: "Programs",
+    url: "/program-management",
+    icon: BookOpen,
+  },
+  {
+    title: "Chat",
+    url: "/chat",
+    icon: MessageCircle,
+  },
+
+  {
+    title: "Profile",
+    url: "/profiles/agent-profile",
+    icon: User,
+  },
 ];
 
 const adminItems = [
@@ -112,11 +163,31 @@ export function AppSidebar() {
 
   const menuItems = useMemo(() => {
     switch (userData?.role) {
-      case "STUDENT": return studentItems;
-      case "AGENT": 
-      case "SELECTED_AGENT": return agentItems;
-      case "ADMIN": return adminItems;
-      default: return [];
+      case "STUDENT":
+        return studentItems;
+      case "AGENT":
+        return agentItems;
+      case "ADMIN":
+        return adminItems;
+      case "SELECTED_AGENT":
+        return agentItems;
+      default:
+        return [];
+    }
+  }, [userData?.role]);
+
+  const roleLabel = useMemo(() => {
+    switch (userData?.role) {
+      case "STUDENT":
+        return "Student Portal";
+      case "AGENT":
+        return "Agent Portal";
+      case "ADMIN":
+        return "Admin Portal";
+      case "SELECTED_AGENT":
+        return "Agent Portal";
+      default:
+        return "Portal";
     }
   }, [userData?.role]);
 
