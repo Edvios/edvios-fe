@@ -100,8 +100,8 @@ export default function AdminPanel() {
           <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
             <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-red-800">Error loading applications</p>
-              <p className="text-sm text-red-700 mt-1">{error}</p>
+              
+      
             </div>
           </div>
         )}

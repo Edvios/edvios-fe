@@ -339,7 +339,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
               <div className="space-y-2 group">
                 <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  English Proficiency Test
+                  English Proficiency Test<span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.englishTest} onValueChange={(value) => handleInputChange('englishTest', value)}>
                   <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
@@ -347,7 +347,6 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="IELTS">IELTS</SelectItem>
-                    <SelectItem value="TOEFL">TOEFL</SelectItem>
                     <SelectItem value="PTE">PTE</SelectItem>
                     <SelectItem value="DUOLINGO">Duolingo</SelectItem>
                     <SelectItem value="NONE">Not taken yet</SelectItem>
