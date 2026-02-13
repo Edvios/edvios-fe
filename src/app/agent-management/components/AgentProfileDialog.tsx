@@ -63,7 +63,7 @@ export const AgentProfileDialog: React.FC<AgentProfileDialogProps> = ({
     </DialogDescription>
   </VisuallyHidden>
         {/* HEADER */}
-        <div className="bg-gradient py-10 md:h-40 relative">
+        <div className="bg-edvios-green py-10 md:h-40 relative">
           <div
             className="
               relative
@@ -92,7 +92,7 @@ export const AgentProfileDialog: React.FC<AgentProfileDialogProps> = ({
                 <Badge
                   className={
                     agent.role === 'AGENT'
-                      ? 'bg-gradient text-white border-sm text-[10px]'
+                      ? 'bg-edvios-green text-white border-sm text-[10px]'
                       : 'bg-yellow-100 text-yellow-700 border-none text-[10px]'
                   }
                 >
@@ -142,7 +142,7 @@ export const AgentProfileDialog: React.FC<AgentProfileDialogProps> = ({
 
               <div className="p-6 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl text-white">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-edvios-green rounded-xl flex items-center justify-center">
                     <Briefcase className="w-6 h-6" />
                   </div>
                   <p className="text-sm text-gray-300">

@@ -38,7 +38,7 @@ export const StudentsTable: React.FC<StudentsTableProps> = ({
             header: 'Student',
             Cell: ({ row }: { row: Student }) => (
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient flex items-center justify-center text-white font-bold text-lg shadow-md">
+                    <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center text-white font-bold text-lg shadow-md">
                         {(row.firstName?.[0] || '') + (row.lastName?.[0] || '')}
                     </div>
                     <div>

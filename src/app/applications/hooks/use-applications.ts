@@ -58,7 +58,6 @@ export const useApplications = (status?: ApplicationStatus) => {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load applications';
       setError(message);
-      AppToast.error(message);
     } finally {
       setLoading(false);
     }
@@ -73,7 +72,6 @@ export const useApplications = (status?: ApplicationStatus) => {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load counts';
       console.error('Count fetch error:', err);
-      AppToast.error(message);
     } finally {
       setCountsLoading(false);
     }
@@ -98,7 +96,6 @@ export const useApplications = (status?: ApplicationStatus) => {
       fetchCounts();
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to update status';
-      AppToast.error(message);
       throw err;
     }
   };

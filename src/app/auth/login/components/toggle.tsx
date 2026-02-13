@@ -93,7 +93,7 @@ export function UserTypeToggle({
       >
         {/* Sliding background indicator */}
         <div 
-          className="absolute rounded-4xl shadow-md transition-all duration-300 ease-out bg-gradient"
+          className="absolute rounded-4xl shadow-md transition-all duration-300 ease-out bg-edvios-green"
           style={backgroundStyle}
         />
         

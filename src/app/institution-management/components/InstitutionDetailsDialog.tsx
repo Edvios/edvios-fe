@@ -158,7 +158,7 @@ export function InstitutionDetailsDialog({
               {/* Key Information Grid */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-10 h-10 bg-gradient rounded-lg flex items-center justify-center text-white">
+                  <div className="w-10 h-10 bg-edvios-green rounded-lg flex items-center justify-center text-white">
                     <Award size={20} />
                   </div>
                   <div>
@@ -281,7 +281,7 @@ export function InstitutionDetailsDialog({
               <div className="flex gap-3 pt-4 border-t">
                 <Button
                   onClick={handleEdit}
-                  className="flex-1 bg-gradient hover:bg-green-500"
+                  className="flex-1 bg-edvios-green hover:bg-green-500"
                 >
                   <Edit size={18} className="mr-2" />
                   Edit Institution

@@ -586,7 +586,7 @@ export function CreateInstitutionDialog({
                   type="button"
                   onClick={addSpecialty}
                   disabled={isLoading}
-                  className="bg-gradient hover:bg-green-600 text-white px-6"
+                  className="bg-edvios-green hover:bg-green-600 text-white px-6"
                 >
                   Add
                 </Button>
@@ -639,7 +639,7 @@ export function CreateInstitutionDialog({
                   type="button"
                   onClick={addAccreditation}
                   disabled={isLoading}
-                  className="bg-gradient hover:bg-green-600 text-white px-6"
+                  className="bg-edvios-green hover:bg-green-600 text-white px-6"
                 >
                   Add
                 </Button>
@@ -685,7 +685,7 @@ export function CreateInstitutionDialog({
             <Button
               type="submit"
               disabled={isLoading}
-              className="flex-1 h-11 bg-gradient hover:opacity-90 text-base font-medium"
+              className="flex-1 h-11 bg-edvios-green hover:opacity-90 text-base font-medium"
             >
               {isLoading 
                 ? (isEditMode ? 'Saving Changes...' : 'Creating Institute...') 
@@ -713,7 +713,7 @@ export function CreateInstitutionDialog({
           <AlertDialogAction
             onClick={submitForm}
             disabled={isLoading}
-            className="bg-gradient hover:opacity-90"
+            className="bg-edvios-green hover:opacity-90"
           >
             {isLoading ? 'Saving...' : 'Confirm & Save'}
           </AlertDialogAction>

@@ -133,7 +133,7 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
           View Details
         </Button>
         <Button
-          className="w-full sm:w-1/2 bg-gradient text-white shadow-sm hover:shadow-md transition"
+          className="w-full sm:w-1/2 bg-edvios-green text-white shadow-sm hover:shadow-md transition"
           onClick={() => onApplyClick(program)}
         >
           Apply Now

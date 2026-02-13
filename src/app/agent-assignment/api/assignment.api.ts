@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/axios';
-import { AssignmentFilters, AssignmentResponse, UpdateAssignmentRequest } from '../types/assignment.types';
+import { AssignmentFilters } from '../types/assignment.types';
 
 /**
  * Fetch all student-agent assignments with optional filters

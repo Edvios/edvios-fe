@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { Search, UserCheck, XCircle, RotateCcw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, XCircle, RotateCcw } from 'lucide-react';
 import { useAssignments } from './hooks/use-assignments';
 import { AssignmentsTable } from './components/AssignmentsTable';
 import { SelectedAgentCard } from './components/SelectedAgentCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 
 const AgentAssignmentPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,9 +42,9 @@ const AgentAssignmentPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+            <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight">
               Agent <span className="text-green-600">Assignment</span>
-            </h1>
+            </p>
             <p className="text-gray-500 mt-2 text-base md:text-lg">
               Manage and assign agents to students
             </p>
