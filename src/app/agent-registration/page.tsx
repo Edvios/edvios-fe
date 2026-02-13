@@ -13,7 +13,8 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Briefcase, User, Building, Globe, Layers, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2, Settings } from 'lucide-react';
 import { useAgentRegistration } from './hooks/use-registration';
-import { AgentRegistrationData, ServiceType, FeatureType } from './types/registration.types';
+import { AgentRegistrationData } from './types/registation.types';
+import { ServiceType, FeatureType } from './enums/registration.enums';
 
 interface AgentRegistrationFormProps {
     onSubmit?: (data: AgentRegistrationData) => void;
@@ -113,6 +114,17 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     value={formData.websiteUrl}
                                     onChange={(e) => handleInputChange('websiteUrl', e.target.value)}
                                     placeholder="https://www.example.com"
+                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                                />
+                            </div>
+
+                            <div className="space-y-2 group">
+                                <Label htmlFor="calendlyLink" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Calendly Link</Label>
+                                <Input
+                                    id="calendlyLink"
+                                    value={formData.calendlyLink}
+                                    onChange={(e) => handleInputChange('calendlyLink', e.target.value)}
+                                    placeholder="https://calendly.com/example"
                                     className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>

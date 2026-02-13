@@ -1,25 +1,15 @@
-export enum ServiceType {
-    ADMISSIONS = 'ADMISSIONS',
-    VISA = 'VISA',
-    END_TO_END = 'END_TO_END',
-}
+import { ServiceType, FeatureType } from '../enums/registration.enums';
 
-export enum FeatureType {
-    AI_MATCHING = 'AI_MATCHING',
-    VISA_RISK = 'VISA_RISK',
-    CRM = 'CRM',
-    ANALYTICS = 'ANALYTICS',
-    DOCUMENT_MANAGEMENT = 'DOCUMENT_MANAGEMENT',
-}
 
 export interface AgentRegistrationData {
     // Company Info
     legalName: string;
     tradingName: string;
     countryOfRegistration: string;
-    yearEstablished: string; // Input as string, convert to number
+    yearEstablished: string; 
     websiteUrl: string;
     officeAddress: string;
+    calendlyLink: string;
 
     // Contact Info
     contactPersonName: string;
@@ -29,8 +19,8 @@ export interface AgentRegistrationData {
 
     // Business Details
     businessRegistrationNumber: string;
-    businessRegistrationCertificate: string; // URL or File Ref
-    officeAddressProof: string; // URL or File Ref
+    businessRegistrationCertificate: string; 
+    officeAddressProof: string; 
 
     // Credentials
     registeredWithEducationCouncils: boolean;
@@ -40,18 +30,18 @@ export interface AgentRegistrationData {
 
     // Market & Performance
     primaryStudentMarkets: string[];
-    averageStudentsPerYearLast2Years: string; // Input as string, convert to number
+    averageStudentsPerYearLast2Years: string;
     mainDestinations: string[];
     typicalStudentProfileStrength: string;
     inHouseVisaSupport: boolean;
-    numberOfCounsellors: string; // Input as string, convert to number
+    numberOfCounsellors: string; 
 
     // Services & Engagement
     servicesProvided: ServiceType[];
     reasonToUseEdvios: string;
     interestedFeatures: FeatureType[];
 
-    openToPilotUsage: boolean; // Not in backend DTO? Will map to notes.
+    openToPilotUsage: boolean; 
 
     // Legal
     termsAccepted: boolean;

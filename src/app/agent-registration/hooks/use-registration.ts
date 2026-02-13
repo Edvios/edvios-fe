@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { AgentRegistrationData } from '../types/registration.types';
+import type { AgentRegistrationData } from '../types/registation.types';
 import AppToast from '@/utils/toast-utils';
 import { isAxiosError } from 'axios';
 import { submitAgentRegistration } from '../apis/registration.api';
@@ -31,6 +31,7 @@ const initialFormData: AgentRegistrationData = {
     yearEstablished: '',
     websiteUrl: '',
     officeAddress: '',
+    calendlyLink: '',
 
     contactPersonName: '',
     designation: '',
@@ -173,8 +174,6 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 if (onSubmit) onSubmit(formData);
                 if (onClose) onClose();
 
-                // Redirect to pending approval page
-                // Using 1.5s delay to match student flow feel
                 setTimeout(() => {
                     router.push('/pending-approval');
                 }, 1500);

@@ -1,10 +1,10 @@
-import axiosInstance from '@/lib/axios';
+import axiosInstance from '../../../lib/axios';
 import {
   createStudentDtoSchema,
   type CreateStudentDto,
   type RegistrationResponseDto
 } from '../dtos/registration.dto';
-import type { StudentRegistrationData } from '../types/registration.types';
+import type { StudentRegistrationData } from '../types';
 
 const capitalizeFirstLetter = (value: string): string => {
   const trimmed = value.trim();
@@ -27,20 +27,12 @@ const parseIntake = (intake: string) => {
   return { month: null, year: null };
 };
 
-/**
- * Submit student registration
- */
 export const submitStudentRegistration = async (
   formData: StudentRegistrationData
 ): Promise<RegistrationResponseDto> => {
   try {
     const { month: intendedIntakeMonth, year: intendedIntakeYear } = parseIntake(formData.preferredIntake);
 
-    // Transform form data to DTO format (convert empty strings to null)
-    // Note: Some legacy fields might be mapped to 'notes' or ignored if not in DTO.
-    // We construct the DTO exactly as defined in createStudentDtoSchema (which matches backend DTO).
-
-    // Construct notes from extra fields
     const notesParts = [];
     if (formData.workExperience) notesParts.push(`Work Exp: ${formData.workExperience}`);
     if (formData.extraCurricular) notesParts.push(`Extra Curricular: ${formData.extraCurricular}`);
@@ -49,7 +41,6 @@ export const submitStudentRegistration = async (
     if (formData.preferredContactMethod) notesParts.push(`Pref Contact: ${formData.preferredContactMethod}`);
     if (formData.bestTimeToContact) notesParts.push(`Best Time: ${formData.bestTimeToContact}`);
     if (formData.additionalQuestions) notesParts.push(`Questions: ${formData.additionalQuestions}`);
-    // Document readiness
     const docsReady = [];
     if (formData.hasValidPassport) docsReady.push('Passport');
     if (formData.hasAcademicTranscripts) docsReady.push('Transcripts');
@@ -64,7 +55,7 @@ export const submitStudentRegistration = async (
       firstName: formData.firstName ? capitalizeFirstLetter(formData.firstName) : null,
       lastName: formData.lastName ? capitalizeFirstLetter(formData.lastName) : null,
       dob: formData.dob || null,
-      gender: formData.gender || null, // Assuming backend accepts string/enum value
+      gender: formData.gender || null, 
       nationality: formData.nationality || null,
       passportNumber: formData.passportNumber || null,
       passportExpiryDate: formData.passportExpiryDate || null,
@@ -84,7 +75,7 @@ export const submitStudentRegistration = async (
       institutionName: formData.currentInstitution || null,
       mediumOfInstruction: formData.mediumOfInstruction || null,
       gradesSummary: formData.gpa || null,
-      academicCertificates: [], // Assuming file upload logic is separate or user provides URLs. For now sending empty array.
+      academicCertificates: [],
 
       // English
       englishTestTaken: formData.englishTest || null,
@@ -96,7 +87,7 @@ export const submitStudentRegistration = async (
       intendedIntakeYear: intendedIntakeYear,
       preferredCountries: formData.preferredDestination.length > 0 ? formData.preferredDestination : null,
       preferredStudyLevel: formData.preferredStudyLevel || null,
-      preferredFieldOfStudy: formData.preferredProgram || null, // UI 'preferredProgram' maps to field of study
+      preferredFieldOfStudy: formData.preferredProgram || null, 
       estimatedBudget: formData.estimatedBudget ? parseFloat(formData.estimatedBudget) : null,
       fundingSource: formData.fundingSource || null,
 
@@ -110,7 +101,6 @@ export const submitStudentRegistration = async (
       notes: notes,
     };
 
-    // Validate using Zod schema
     const validation = createStudentDtoSchema.safeParse(dtoData);
 
     if (!validation.success) {
@@ -122,7 +112,6 @@ export const submitStudentRegistration = async (
 
     console.log('Submitting registration:', validation.data);
 
-    // Make API call
     const response = await axiosInstance.post<RegistrationResponseDto>(
       '/students',
       validation.data

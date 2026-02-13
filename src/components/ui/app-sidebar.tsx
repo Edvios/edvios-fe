@@ -16,6 +16,7 @@ import {
   Building2,
   BookOpen,
   LucideUserPlus2,
+  Calendar,
 } from "lucide-react";
 
 import {
@@ -57,9 +58,9 @@ const studentItems = [
     icon: MessageCircle,
   },
   {
-    title: "Counselling",
-    url: "#",
-    icon: HelpingHandIcon,
+    title: "Session Booking",
+    url: "/session-booking",
+    icon: Calendar,
   },
   {
     title: "Profile",
@@ -100,12 +101,12 @@ const agentItems = [
     url: "/chat",
     icon: MessageCircle,
   },
+
   {
     title: "Profile",
     url: "/profiles/agent-profile",
     icon: User,
   },
-
 ];
 
 // Admin menu items
@@ -154,7 +155,7 @@ export function AppSidebar() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     const loadUserData = async () => {
       try {
         const userSession = sessionStorage.getItem("user-session");
@@ -214,7 +215,7 @@ export function AppSidebar() {
       case "ADMIN":
         return "Admin Portal";
       case "SELECTED_AGENT":
-        return "Agent Portal";  
+        return "Agent Portal";
       default:
         return "Portal";
     }

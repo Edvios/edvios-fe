@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Users, GraduationCap, Target, Plane, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2 } from 'lucide-react';
 import { useRegistration } from './hooks/use-registration';
-import { StudentRegistrationData } from './types/registration.types';
+import { StudentRegistrationData } from './types';
 
 interface StudentRegistrationFormProps {
   onSubmit?: (data: StudentRegistrationData) => void;
@@ -35,7 +35,6 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
   const stepIcons = [Users, GraduationCap, Target, Plane, FileText, CheckCircle];
 
-  // Helper for multi-select (Countries)
   const toggleCountry = (country: string) => {
     const current = formData.preferredDestination || [];
     if (current.includes(country)) {
@@ -811,10 +810,10 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                   <div
                     key={step}
                     className={`relative flex items-center justify-center w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-300 ${step < currentStep
-                        ? 'bg-gradient text-white scale-95'
-                        : step === currentStep
-                          ? 'bg-gradient text-white scale-110 shadow-lg'
-                          : 'bg-secondary text-muted-foreground scale-90'
+                      ? 'bg-gradient text-white scale-95'
+                      : step === currentStep
+                        ? 'bg-gradient text-white scale-110 shadow-lg'
+                        : 'bg-secondary text-muted-foreground scale-90'
                       }`}
                   >
                     {step < currentStep ? (

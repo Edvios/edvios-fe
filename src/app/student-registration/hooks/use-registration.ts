@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { StudentRegistrationData } from '../types/registration.types';
+import type { StudentRegistrationData } from '../types';
 import type { RegistrationResponseDto } from '../dtos/registration.dto';
-import { submitStudentRegistration } from '../apis/registration.api';
+import { submitStudentRegistration } from '../api/registration.api';
 import AppToast from '@/utils/toast-utils';
 
 interface UseRegistrationReturn {
-  // State
   currentStep: number;
   formData: StudentRegistrationData;
   isSubmitting: boolean;
@@ -15,7 +14,6 @@ interface UseRegistrationReturn {
   totalSteps: number;
   progressPercentage: number;
 
-  // Functions
   setCurrentStep: (step: number | ((prev: number) => number)) => void;
   handleInputChange: (field: string, value: unknown) => void;
   handleNextStep: () => void;
@@ -40,7 +38,7 @@ const initialFormData: StudentRegistrationData = {
   emergencyContactNumber: '',
 
   currentEducationLevel: '',
-  currentInstitution: '', // institutionName
+  currentInstitution: '', 
   fieldOfStudy: '',
   yearOfCompletion: '',
   mediumOfInstruction: '',
@@ -93,7 +91,6 @@ export const useRegistration = (): UseRegistrationReturn => {
   const totalSteps = 6;
   const progressPercentage = (currentStep / totalSteps) * 100;
 
-  // Autofill user data from session storage on component mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const userSession = sessionStorage.getItem('user-session');
@@ -214,7 +211,6 @@ export const useRegistration = (): UseRegistrationReturn => {
     setError(null);
   };
 
-  // Show error toast when error state changes
   useEffect(() => {
     if (error) {
       AppToast.error(error);
@@ -222,7 +218,6 @@ export const useRegistration = (): UseRegistrationReturn => {
   }, [error]);
 
   return {
-    // State
     currentStep,
     formData,
     isSubmitting,
@@ -231,7 +226,6 @@ export const useRegistration = (): UseRegistrationReturn => {
     totalSteps,
     progressPercentage,
 
-    // Functions
     setCurrentStep,
     handleInputChange,
     handleNextStep,
