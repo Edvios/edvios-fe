@@ -44,7 +44,7 @@ export const useApplications = (status?: ApplicationStatus) => {
 
       if (userRole === "ADMIN") {
         response = await applicationsApi.getAdminApplications(paginationParams);
-      } else if (userRole === "AGENT") {
+      } else if (userRole === "AGENT" || userRole === "SELECTED_AGENT") {
         response = await applicationsApi.getAgentApplications(paginationParams);
       } else {
         throw new Error("Invalid user role");

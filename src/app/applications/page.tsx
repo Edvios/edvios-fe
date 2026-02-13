@@ -95,6 +95,7 @@ export default function AdminPanel() {
         {/* Stats Cards */}
         {statsSection}
 
+
         {/* Main Content Card */}
         <Card className="border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200">
