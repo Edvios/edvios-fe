@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useStudentProfile } from "./hooks/use-student-profile";
-import { StudentProfileData, Gender, EnglishTestType, StudyLevel, FundingSource, VisaRiskBand } from "./types/student-profile.types";
+import { StudentProfileData, Gender, EnglishTestType, StudyLevel, FundingSource } from "./types/student-profile.types";
 import {
     User,
     GraduationCap,
