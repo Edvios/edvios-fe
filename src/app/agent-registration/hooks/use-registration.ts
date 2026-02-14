@@ -127,6 +127,7 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
 
                 // 3. Handle verification redirect and autofill
                 if (userData) {
+                    // Redirect if email not verified
                     if (userData.emailVerified === false) {
                         AppToast.info("Please verify your email first");
                         router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
