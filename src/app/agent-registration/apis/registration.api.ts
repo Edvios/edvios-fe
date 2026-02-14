@@ -2,10 +2,9 @@ import axiosInstance from '../../../lib/axios';
 import {
     createAgentDtoSchema,
     RegistrationResponseDto,
-    AgentServiceType,
-    AgentFeatureType
 } from '../dtos/registration.dto';
-import { AgentRegistrationData} from '../types/registation.types';
+import { ServiceType, FeatureType } from '../enums/registration.enums';
+import { AgentRegistrationData } from '../types/registation.types';
 
 export const submitAgentRegistration = async (
     formData: AgentRegistrationData
@@ -16,26 +15,26 @@ export const submitAgentRegistration = async (
         if (formData.openToPilotUsage) notesParts.push('Open to Pilot Usage: YES');
 
 
-        const dtoData: any = {
+        const dtoData = {
             // Identity
             legalName: formData.legalName,
-            tradingName: formData.tradingName || null,
-            agentName: formData.tradingName || formData.legalName, 
+            tradingName: formData.tradingName || undefined,
+            agentName: formData.tradingName || formData.legalName,
             countryOfRegistration: formData.countryOfRegistration,
-            yearEstablished: formData.yearEstablished ? parseInt(formData.yearEstablished) : null,
-            websiteUrl: formData.websiteUrl || null,
+            yearEstablished: formData.yearEstablished ? parseInt(formData.yearEstablished, 10) : undefined,
+            websiteUrl: formData.websiteUrl || undefined,
             officeAddress: formData.officeAddress,
-            calendlyLink: formData.calendlyLink || null,
+            calendlyLink: formData.calendlyLink || undefined,
 
             // Contact
             contactPersonName: formData.contactPersonName,
-            designation: formData.designation || null,
+            designation: formData.designation || undefined,
             officialEmail: formData.officialEmail,
             phoneNumber: formData.phoneNumber,
 
             businessRegistrationNumber: formData.businessRegistrationNumber,
-            businessRegistrationCertificate: formData.businessRegistrationCertificate || null,
-            officeAddressProof: formData.officeAddressProof || null,
+            businessRegistrationCertificate: formData.businessRegistrationCertificate || undefined,
+            officeAddressProof: formData.officeAddressProof || undefined,
 
             registeredWithEducationCouncils: formData.registeredWithEducationCouncils,
             workingWithUkInstitutions: formData.workingWithUkInstitutions,
@@ -43,23 +42,19 @@ export const submitAgentRegistration = async (
             workingWithAustraliaInstitutions: formData.workingWithAustraliaInstitutions,
 
             primaryStudentMarkets: formData.primaryStudentMarkets.length > 0 ? formData.primaryStudentMarkets : [],
-            averageStudentsPerYearLast2Years: formData.averageStudentsPerYearLast2Years ? parseInt(formData.averageStudentsPerYearLast2Years) : null,
+            averageStudentsPerYearLast2Years: formData.averageStudentsPerYearLast2Years ? parseInt(formData.averageStudentsPerYearLast2Years, 10) : undefined,
             mainDestinations: formData.mainDestinations.length > 0 ? formData.mainDestinations : [],
 
-            typicalStudentProfileStrength: formData.typicalStudentProfileStrength || null,
+            typicalStudentProfileStrength: formData.typicalStudentProfileStrength || undefined,
             inHouseVisaSupport: formData.inHouseVisaSupport,
-            numberOfCounsellors: formData.numberOfCounsellors ? parseInt(formData.numberOfCounsellors) : 0,
+            numberOfCounsellors: formData.numberOfCounsellors ? parseInt(formData.numberOfCounsellors, 10) : undefined,
 
-            servicesProvided: formData.servicesProvided.length > 0
-                ? formData.servicesProvided.map(s => s as unknown as AgentServiceType)
-                : [],
-            reasonToUseEdvios: formData.reasonToUseEdvios || null,
-            interestedFeatures: formData.interestedFeatures.length > 0
-                ? formData.interestedFeatures.map(f => f as unknown as AgentFeatureType)
-                : [],
+            servicesProvided: formData.servicesProvided.length > 0 ? formData.servicesProvided : [],
+            reasonToUseEdvios: formData.reasonToUseEdvios || undefined,
+            interestedFeatures: formData.interestedFeatures.length > 0 ? formData.interestedFeatures : [],
 
-            notes: notesParts.length > 0 ? notesParts.join('\n') : null,
-            agentTier: 'BASIC', 
+            notes: notesParts.length > 0 ? notesParts.join('\n') : undefined,
+            agentTier: 'BASIC',
         };
 
         const validation = createAgentDtoSchema.safeParse(dtoData);

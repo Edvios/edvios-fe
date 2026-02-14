@@ -14,6 +14,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Users, GraduationCap, Target, Plane, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2 } from 'lucide-react';
 import { useRegistration } from './hooks/use-registration';
 import { StudentRegistrationData } from './types';
+import { useCloudinaryUpload } from '@/hooks/use-cloudinary-upload';
+import FileUploadField from '@/components/ui/file-upload-field';
 
 interface StudentRegistrationFormProps {
   onSubmit?: (data: StudentRegistrationData) => void;
@@ -32,6 +34,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
     handlePrevStep,
     handleSubmit,
   } = useRegistration();
+
+  const { uploadMultipleFiles, isUploading, uploadProgress } = useCloudinaryUpload();
 
   const stepIcons = [Users, GraduationCap, Target, Plane, FileText, CheckCircle];
 
@@ -101,7 +105,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="gender" className="text-sm font-medium">
                   Gender <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.gender} onValueChange={(value) => handleInputChange('gender', value)}>
+                <Select value={formData.gender || undefined} onValueChange={(value) => handleInputChange('gender', value)}>
                   <SelectTrigger className="transition-all duration-200">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
@@ -126,8 +130,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="currentCountry" className="text-sm font-medium">
-                  Country of Residence
+                <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Country of Residence<span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="currentCountry"
@@ -191,21 +195,10 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               {/* Emergency Contact */}
-              <div className="space-y-2 group">
-                <Label htmlFor="emergencyContactName" className="text-sm font-medium">
-                  Emergency Contact Name
-                </Label>
-                <Input
-                  id="emergencyContactName"
-                  value={formData.emergencyContactName}
-                  onChange={(e) => handleInputChange('emergencyContactName', e.target.value)}
-                  placeholder="Contact person name"
-                />
-              </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="emergencyContactNumber" className="text-sm font-medium">
-                  Emergency Contact Number
+                <Label htmlFor="emergencyContactNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                  Emergency Contact Number<span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="emergencyContactNumber"
@@ -236,8 +229,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="currentEducationLevel" className="text-sm font-medium">
                   Highest Qualification Completed <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.currentEducationLevel} onValueChange={(value) => handleInputChange('currentEducationLevel', value)}>
-                  <SelectTrigger>
+                <Select value={formData.currentEducationLevel || undefined} onValueChange={(value) => handleInputChange('currentEducationLevel', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select qualification" />
                   </SelectTrigger>
                   <SelectContent>
@@ -279,8 +272,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="mediumOfInstruction" className="text-sm font-medium">
                   Medium of Instruction
                 </Label>
-                <Select value={formData.mediumOfInstruction} onValueChange={(value) => handleInputChange('mediumOfInstruction', value)}>
-                  <SelectTrigger>
+                <Select value={formData.mediumOfInstruction || undefined} onValueChange={(value) => handleInputChange('mediumOfInstruction', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select medium" />
                   </SelectTrigger>
                   <SelectContent>
@@ -302,20 +295,31 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 />
               </div>
 
-              <div className="space-y-2 group md:col-span-2">
-                <Label htmlFor="academicCertificates" className="text-sm font-medium">
-                  Academic Certificates (Upload)
-                </Label>
-                <Input
+              <div className="md:col-span-2">
+                <FileUploadField
                   id="academicCertificates"
-                  type="file"
+                  label="Academic Certificates"
                   multiple
-                  onChange={(e) => {
-                    // Add file handling logic if needed, currently just logging
-                    console.log(e.target.files);
+                  isUploading={isUploading}
+                  uploadProgress={uploadProgress}
+                  values={formData.academicCertificates}
+                  hint="Upload transcripts, certificates — PDF, JPG, PNG (max 10MB each)"
+                  onFileSelect={async (files) => {
+                    const fileArray = Array.from(files);
+                    const urls = await uploadMultipleFiles(fileArray, 'edvios/students/academic-certificates');
+                    if (urls.length > 0) {
+                      const existing = formData.academicCertificates || [];
+                      handleInputChange('academicCertificates', [...existing, ...urls]);
+                    }
+                  }}
+                  onRemove={(index) => {
+                    if (index !== undefined) {
+                      const updated = [...formData.academicCertificates];
+                      updated.splice(index, 1);
+                      handleInputChange('academicCertificates', updated);
+                    }
                   }}
                 />
-                <p className="text-xs text-muted-foreground">Upload relevant certificates (placeholder only)</p>
               </div>
 
               <div className="col-span-1 md:col-span-2">
@@ -327,8 +331,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   English Proficiency Test<span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.englishTest} onValueChange={(value) => handleInputChange('englishTest', value)}>
-                  <SelectTrigger>
+                <Select value={formData.englishTest || undefined} onValueChange={(value) => handleInputChange('englishTest', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select test taken" />
                   </SelectTrigger>
                   <SelectContent>
@@ -386,6 +390,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              
 
               <div className="space-y-2 group md:col-span-2">
                 <Label htmlFor="preferredDestination" className="text-sm font-medium">
@@ -409,8 +414,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="preferredStudyLevel" className="text-sm font-medium">
                   Preferred Study Level <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.preferredStudyLevel} onValueChange={(value) => handleInputChange('preferredStudyLevel', value)}>
-                  <SelectTrigger>
+                <Select value={formData.preferredStudyLevel || undefined} onValueChange={(value) => handleInputChange('preferredStudyLevel', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -418,6 +423,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     <SelectItem value="MASTERS">Master Degree</SelectItem>
                     <SelectItem value="PHD">PhD</SelectItem>
                     <SelectItem value="DIPLOMA">Diploma</SelectItem>
+                    <SelectItem value="CERTIFICATE">Certificate</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -426,8 +432,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="preferredProgram" className="text-sm font-medium">
                   Preferred Field of Study <span className="text-destructive">*</span>
                 </Label>
-                <Select value={formData.preferredProgram} onValueChange={(value) => handleInputChange('preferredProgram', value)}>
-                  <SelectTrigger>
+                <Select value={formData.preferredProgram || undefined} onValueChange={(value) => handleInputChange('preferredProgram', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select field" />
                   </SelectTrigger>
                   <SelectContent>
@@ -474,8 +480,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="fundingSource" className="text-sm font-medium">
                   Funding Source
                 </Label>
-                <Select value={formData.fundingSource} onValueChange={(value) => handleInputChange('fundingSource', value)}>
-                  <SelectTrigger>
+                <Select value={formData.fundingSource || undefined} onValueChange={(value) => handleInputChange('fundingSource', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select funding source" />
                   </SelectTrigger>
                   <SelectContent>
@@ -483,7 +489,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     <SelectItem value="PARENTS">Parents/Family</SelectItem>
                     <SelectItem value="SCHOLARSHIP">Scholarship</SelectItem>
                     <SelectItem value="LOAN">Bank Loan</SelectItem>
-                    <SelectItem value="SPONSER">Sponsor</SelectItem>
+                    <SelectItem value="SPONSOR">Sponsor</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -666,8 +672,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="referralSource" className="text-sm font-medium">
                   How did you hear about us?
                 </Label>
-                <Select value={formData.referralSource} onValueChange={(value) => handleInputChange('referralSource', value)}>
-                  <SelectTrigger>
+                <Select value={formData.referralSource || undefined} onValueChange={(value) => handleInputChange('referralSource', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select source" />
                   </SelectTrigger>
                   <SelectContent>
@@ -684,8 +690,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="preferredContactMethod" className="text-sm font-medium">
                   Preferred Contact Method
                 </Label>
-                <Select value={formData.preferredContactMethod} onValueChange={(value) => handleInputChange('preferredContactMethod', value)}>
-                  <SelectTrigger>
+                <Select value={formData.preferredContactMethod || undefined} onValueChange={(value) => handleInputChange('preferredContactMethod', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select contact method" />
                   </SelectTrigger>
                   <SelectContent>
@@ -701,8 +707,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 <Label htmlFor="bestTimeToContact" className="text-sm font-medium">
                   Best Time to Contact
                 </Label>
-                <Select value={formData.bestTimeToContact} onValueChange={(value) => handleInputChange('bestTimeToContact', value)}>
-                  <SelectTrigger>
+                <Select value={formData.bestTimeToContact || undefined} onValueChange={(value) => handleInputChange('bestTimeToContact', value)}>
+                  <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
                     <SelectValue placeholder="Select best time" />
                   </SelectTrigger>
                   <SelectContent>

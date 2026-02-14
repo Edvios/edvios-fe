@@ -4,6 +4,7 @@ import type { StudentRegistrationData } from '../types';
 import type { RegistrationResponseDto } from '../dtos/registration.dto';
 import { submitStudentRegistration } from '../api/registration.api';
 import AppToast from '@/utils/toast-utils';
+import { logout } from '@/app/auth/login/api/auth.api';
 
 interface UseRegistrationReturn {
   currentStep: number;
@@ -38,7 +39,7 @@ const initialFormData: StudentRegistrationData = {
   emergencyContactNumber: '',
 
   currentEducationLevel: '',
-  currentInstitution: '', 
+  currentInstitution: '',
   fieldOfStudy: '',
   yearOfCompletion: '',
   mediumOfInstruction: '',
@@ -179,6 +180,7 @@ export const useRegistration = (): UseRegistrationReturn => {
 
         if (result) {
           AppToast.success(`Registration successful!`);
+          AppToast.info('Please log in again to access your dashboard.');
 
           if (onSubmit) {
             onSubmit(formData);
@@ -186,9 +188,13 @@ export const useRegistration = (): UseRegistrationReturn => {
           if (onClose) {
             onClose();
           }
+
+          // Logout to clear partial registration session and redirect to login
+          logout().catch(console.error);
+
           setTimeout(() => {
-            router.push('/dashboard/student');
-          }, 1500);
+            router.push('/auth/login');
+          }, 2000);
         } else {
           console.error('Registration failed:');
           setError('Registration failed');
