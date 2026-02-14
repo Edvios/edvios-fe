@@ -35,7 +35,16 @@ export enum VisaRiskBand {
     HIGH = 'HIGH',
 }
 
+export interface UserProfile {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+}
+
 export interface StudentProfileData {
+    user?: UserProfile;
     id?: string;
 
     // Personal info

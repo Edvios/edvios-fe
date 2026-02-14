@@ -28,12 +28,12 @@ import {
 
 export default function StudentProfilePage() {
     // Get student ID from session storage
-    const getStudentIdFromSession = () => {
+    const getStudentIdFromSession = (): string | undefined => {
         if (typeof window === "undefined") return undefined;
         const raw = sessionStorage.getItem("user-session");
         if (!raw) return undefined;
         try {
-            const parsed = JSON.parse(raw) as any;
+            const parsed: { id?: string; userId?: string; studentId?: string; data?: { id?: string } } = JSON.parse(raw);
             return parsed?.id || parsed?.userId || parsed?.studentId || parsed?.data?.id;
         } catch {
             return undefined;
@@ -43,23 +43,27 @@ export default function StudentProfilePage() {
     const studentId = getStudentIdFromSession();
     const { data: profileData, loading, saveStudent } = useStudentProfile(studentId);
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState<StudentProfileData>(profileData || {});
-
-    // Update form data when profile data loads
-    useEffect(() => {
-        if (profileData) {
-            // Merge user fields if they are null at the top level
-            const mergedData = {
-                ...profileData,
-                firstName: profileData.firstName || (profileData as any).user?.firstName || "",
-                lastName: profileData.lastName || (profileData as any).user?.lastName || "",
-                email: profileData.email || (profileData as any).user?.email || "",
-                phone: profileData.phone || (profileData as any).user?.phone || "",
-            };
-            setFormData(mergedData);
-        }
+    const mergedProfileData = useMemo(() => {
+        if (!profileData) return {} as StudentProfileData;
+        return {
+            ...profileData,
+            firstName: profileData.firstName || profileData.user?.firstName || "",
+            lastName: profileData.lastName || profileData.user?.lastName || "",
+            email: profileData.email || profileData.user?.email || "",
+            phone: profileData.phone || profileData.user?.phone || "",
+        } as StudentProfileData;
     }, [profileData]);
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState<StudentProfileData>(mergedProfileData);
+
+    const [prevProfileData, setPrevProfileData] = useState(profileData);
+
+    // Sync form data when profile data arrives or changes
+    if (profileData !== prevProfileData) {
+        setPrevProfileData(profileData);
+        setFormData(mergedProfileData);
+    }
 
     const initials = useMemo(() => {
         const firstName = formData.firstName || "";
@@ -86,11 +90,11 @@ export default function StudentProfilePage() {
     };
 
     const handleCancel = () => {
-        setFormData(profileData || {});
+        setFormData(mergedProfileData);
         setIsEditing(false);
     };
 
-    const updateField = (field: keyof StudentProfileData, value: any) => {
+    const updateField = <K extends keyof StudentProfileData>(field: K, value: StudentProfileData[K]) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 

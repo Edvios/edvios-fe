@@ -5,6 +5,7 @@ export interface AgentRegistrationData {
     // Company Info
     legalName: string;
     tradingName: string;
+    agentName: string;
     countryOfRegistration: string;
     yearEstablished: string; 
     websiteUrl: string;
@@ -46,6 +47,8 @@ export interface AgentRegistrationData {
     // Legal
     termsAccepted: boolean;
     marketingConsent: boolean;
+    notes?: string;
+    agentTier?: string;
 }
 
 export interface AgentRegistrationResponse {

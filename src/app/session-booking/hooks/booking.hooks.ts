@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -18,8 +17,8 @@ export const useBooking = () => {
       setError(null);
       const data = await bookingsApi.getCalendlyLink();
       setAgentURL(data);
-    } catch (err: any) {
-      const message = err.response?.data?.message || err.message || 'Failed to load booking link';
+    } catch (err: unknown) {
+      const message = (err as { response?: { data?: { message?: string } }; message?: string }).response?.data?.message || (err as Error).message || 'Failed to load booking link';
       setError(message);
       AppToast.error(message);
     } finally {
