@@ -75,7 +75,7 @@ export const submitStudentRegistration = async (
       institutionName: formData.currentInstitution || null,
       mediumOfInstruction: formData.mediumOfInstruction || null,
       gradesSummary: formData.gpa || null,
-      academicCertificates: [],
+      academicCertificates: formData.academicCertificates.length > 0 ? formData.academicCertificates : [],
 
       // English
       englishTestTaken: formData.englishTest || null,

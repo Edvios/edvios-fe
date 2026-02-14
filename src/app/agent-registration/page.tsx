@@ -15,6 +15,8 @@ import { Briefcase, User, Building, Globe, Layers, CheckCircle, ArrowRight, Arro
 import { useAgentRegistration } from './hooks/use-registration';
 import { AgentRegistrationData } from './types/registation.types';
 import { ServiceType, FeatureType } from './enums/registration.enums';
+import { useCloudinaryUpload } from '@/hooks/use-cloudinary-upload';
+import FileUploadField from '@/components/ui/file-upload-field';
 
 interface AgentRegistrationFormProps {
     onSubmit?: (data: AgentRegistrationData) => void;
@@ -33,6 +35,8 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
         handlePrevStep,
         handleSubmit,
     } = useAgentRegistration();
+
+    const { uploadFile, isUploading, uploadProgress } = useCloudinaryUpload();
 
     const stepIcons = [Briefcase, User, Building, Globe, Layers, Settings];
 
@@ -232,35 +236,45 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="businessRegistrationCertificate" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Upload Registration Certificate</Label>
-                                <Input
+                                <FileUploadField
                                     id="businessRegistrationCertificate"
-                                    type="file"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
+                                    label="Upload Registration Certificate"
+                                    isUploading={isUploading}
+                                    uploadProgress={uploadProgress}
+                                    value={formData.businessRegistrationCertificate}
+                                    hint="PDF, JPG, PNG (max 10MB)"
+                                    onFileSelect={async (files) => {
+                                        const file = files[0];
                                         if (file) {
-                                            handleInputChange('businessRegistrationCertificate', file.name);
+                                            const url = await uploadFile(file, 'edvios/agents/registration-certificates');
+                                            if (url) {
+                                                handleInputChange('businessRegistrationCertificate', url);
+                                            }
                                         }
                                     }}
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                                    onRemove={() => handleInputChange('businessRegistrationCertificate', '')}
                                 />
-                                <p className="text-xs text-muted-foreground">Supported: PDF, JPG, PNG</p>
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="officeAddressProof" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Upload Office Address Proof</Label>
-                                <Input
+                                <FileUploadField
                                     id="officeAddressProof"
-                                    type="file"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
+                                    label="Upload Office Address Proof"
+                                    isUploading={isUploading}
+                                    uploadProgress={uploadProgress}
+                                    value={formData.officeAddressProof}
+                                    hint="Utility Bill, Lease Agreement, etc. (max 10MB)"
+                                    onFileSelect={async (files) => {
+                                        const file = files[0];
                                         if (file) {
-                                            handleInputChange('officeAddressProof', file.name);
+                                            const url = await uploadFile(file, 'edvios/agents/address-proofs');
+                                            if (url) {
+                                                handleInputChange('officeAddressProof', url);
+                                            }
                                         }
                                     }}
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                                    onRemove={() => handleInputChange('officeAddressProof', '')}
                                 />
-                                <p className="text-xs text-muted-foreground">Utility Bill, Lease Agreement, etc.</p>
                             </div>
                         </div>
                     </div>
@@ -396,7 +410,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             <div className="space-y-2 group">
                                 <Label htmlFor="typicalStudentProfileStrength" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Typical Student Profile Strength <span className="text-destructive">*</span></Label>
                                 <Select
-                                    value={formData.typicalStudentProfileStrength}
+                                    value={formData.typicalStudentProfileStrength || undefined}
                                     onValueChange={(value) => handleInputChange('typicalStudentProfileStrength', value)}
                                 >
                                     <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
