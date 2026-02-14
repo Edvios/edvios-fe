@@ -23,7 +23,7 @@
   --ring: #99c12a;
   --radius: 0.625rem;
   --edvios-green: #95bd2f;
-  --edvios-blue: #1c87e2;
+  --edvios-blue: #5389fc;
   --gradient-start: #83a81f;
   --gradient-end: #99c12a;
   /* Brand color for Edvios text/accents */
@@ -75,10 +75,6 @@
     transition: background-color 0.3s ease-in-out;
   }
 
-  .sidebar-item-active:hover {
-    background-color: var(--edvios-green);
-  }
-
   /* Button default with hover effect */
   .btn-default {
     background-color: var(--edvios-blue);
@@ -91,12 +87,11 @@
 
   /* Button outline with hover effect */
   .btn-outline-hover {
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
   }
 
   .btn-outline-hover:hover {
-    background-color: var(--edvios-blue);
-    color: white;
+    background-color: rgba(28, 135, 226, 0.1);
   }
 
 .dark {

@@ -52,7 +52,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Briefcase className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -63,80 +63,74 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="space-y-2 group">
-                                <Label htmlFor="legalName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Agency Legal Name <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="legalName" className="text-sm font-medium">Agency Legal Name <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="legalName"
                                     value={formData.legalName}
                                     onChange={(e) => handleInputChange('legalName', e.target.value)}
                                     placeholder="Official name of the company"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="tradingName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Trading Name <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="tradingName" className="text-sm font-medium">Trading Name <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="tradingName"
                                     value={formData.tradingName}
                                     onChange={(e) => handleInputChange('tradingName', e.target.value)}
                                     placeholder="Marketing/Brand name"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="countryOfRegistration" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Country of Registration <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="countryOfRegistration" className="text-sm font-medium">Country of Registration <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="countryOfRegistration"
                                     value={formData.countryOfRegistration}
                                     onChange={(e) => handleInputChange('countryOfRegistration', e.target.value)}
                                     placeholder="e.g., United Kingdom"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="yearEstablished" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Year Established <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="yearEstablished" className="text-sm font-medium">Year Established <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="yearEstablished"
                                     type="number"
                                     value={formData.yearEstablished}
                                     onChange={(e) => handleInputChange('yearEstablished', e.target.value)}
                                     placeholder="YYYY"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="websiteUrl" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Website URL</Label>
+                                <Label htmlFor="websiteUrl" className="text-sm font-medium">Website URL</Label>
                                 <Input
                                     id="websiteUrl"
                                     value={formData.websiteUrl}
                                     onChange={(e) => handleInputChange('websiteUrl', e.target.value)}
                                     placeholder="https://www.example.com"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="calendlyLink" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Calendly Link</Label>
+                                <Label htmlFor="calendlyLink" className="text-sm font-medium">Calendly Link</Label>
                                 <Input
                                     id="calendlyLink"
                                     value={formData.calendlyLink}
                                     onChange={(e) => handleInputChange('calendlyLink', e.target.value)}
                                     placeholder="https://calendly.com/example"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group md:col-span-2">
-                                <Label htmlFor="officeAddress" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Office Address <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="officeAddress" className="text-sm font-medium">Office Address <span className="text-destructive">*</span></Label>
                                 <Textarea
                                     id="officeAddress"
                                     value={formData.officeAddress}
                                     onChange={(e) => handleInputChange('officeAddress', e.target.value)}
                                     placeholder="Full registered address"
-                                    className="resize-none transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                                    className="resize-none"
                                     rows={2}
                                 />
                             </div>
@@ -148,7 +142,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <User className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -159,47 +153,43 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="space-y-2 group">
-                                <Label htmlFor="contactPersonName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Full Name <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="contactPersonName" className="text-sm font-medium">Full Name <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="contactPersonName"
                                     value={formData.contactPersonName}
                                     onChange={(e) => handleInputChange('contactPersonName', e.target.value)}
                                     placeholder="Name of contact person"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="designation" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Designation</Label>
+                                <Label htmlFor="designation" className="text-sm font-medium">Designation</Label>
                                 <Input
                                     id="designation"
                                     value={formData.designation}
                                     onChange={(e) => handleInputChange('designation', e.target.value)}
                                     placeholder="e.g., Director, Manager"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="officialEmail" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Official Email <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="officialEmail" className="text-sm font-medium">Official Email <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="officialEmail"
                                     type="email"
                                     value={formData.officialEmail}
                                     onChange={(e) => handleInputChange('officialEmail', e.target.value)}
                                     placeholder="email@company.com"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="phoneNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">WhatsApp / Phone Number <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="phoneNumber" className="text-sm font-medium">WhatsApp / Phone Number <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="phoneNumber"
                                     value={formData.phoneNumber}
                                     onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
                                     placeholder="+1 234 567 8900"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
                         </div>
@@ -210,7 +200,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Building className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -221,18 +211,17 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="space-y-2 group md:col-span-2">
-                                <Label htmlFor="businessRegistrationNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Business Registration Number <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="businessRegistrationNumber" className="text-sm font-medium">Business Registration Number <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="businessRegistrationNumber"
                                     value={formData.businessRegistrationNumber}
                                     onChange={(e) => handleInputChange('businessRegistrationNumber', e.target.value)}
                                     placeholder="Registration / License Number"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="businessRegistrationCertificate" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Upload Registration Certificate</Label>
+                                <Label htmlFor="businessRegistrationCertificate" className="text-sm font-medium">Upload Registration Certificate</Label>
                                 <Input
                                     id="businessRegistrationCertificate"
                                     type="file"
@@ -242,13 +231,12 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                             handleInputChange('businessRegistrationCertificate', file.name);
                                         }
                                     }}
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                                 <p className="text-xs text-muted-foreground">Supported: PDF, JPG, PNG</p>
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="officeAddressProof" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Upload Office Address Proof</Label>
+                                <Label htmlFor="officeAddressProof" className="text-sm font-medium">Upload Office Address Proof</Label>
                                 <Input
                                     id="officeAddressProof"
                                     type="file"
@@ -258,7 +246,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                             handleInputChange('officeAddressProof', file.name);
                                         }
                                     }}
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                                 <p className="text-xs text-muted-foreground">Utility Bill, Lease Agreement, etc.</p>
                             </div>
@@ -270,7 +257,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Globe className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -285,7 +272,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     id="registeredWithEducationCouncils"
                                     checked={formData.registeredWithEducationCouncils}
                                     onCheckedChange={(checked) => handleInputChange('registeredWithEducationCouncils', checked === true)}
-                                    className="data-[state=checked]:bg-gradient"
+                                    className="data-[state=checked]:bg-edvios-green"
                                 />
                                 <Label htmlFor="registeredWithEducationCouncils" className="text-sm cursor-pointer font-medium">
                                     Registered with Education Councils (ICEF, etc.)
@@ -295,14 +282,14 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             <Separator />
 
                             <div className="space-y-2">
-                                <Label className="text-sm font-medium transition-colors group-focus-within:text-gradient">Currently working with institutions in:</Label>
+                                <Label className="text-sm font-medium">Currently working with institutions in:</Label>
                                 <div className="flex flex-wrap gap-4">
                                     <div className="flex items-center space-x-2">
                                         <Checkbox
                                             id="workingWithUkInstitutions"
                                             checked={formData.workingWithUkInstitutions}
                                             onCheckedChange={(checked) => handleInputChange('workingWithUkInstitutions', checked === true)}
-                                            className="data-[state=checked]:bg-gradient"
+                                            className="data-[state=checked]:bg-edvios-green"
                                         />
                                         <Label htmlFor="workingWithUkInstitutions" className="text-sm cursor-pointer">United Kingdom</Label>
                                     </div>
@@ -311,7 +298,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                             id="workingWithCanadaInstitutions"
                                             checked={formData.workingWithCanadaInstitutions}
                                             onCheckedChange={(checked) => handleInputChange('workingWithCanadaInstitutions', checked === true)}
-                                            className="data-[state=checked]:bg-gradient"
+                                            className="data-[state=checked]:bg-edvios-green"
                                         />
                                         <Label htmlFor="workingWithCanadaInstitutions" className="text-sm cursor-pointer">Canada</Label>
                                     </div>
@@ -320,7 +307,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                             id="workingWithAustraliaInstitutions"
                                             checked={formData.workingWithAustraliaInstitutions}
                                             onCheckedChange={(checked) => handleInputChange('workingWithAustraliaInstitutions', checked === true)}
-                                            className="data-[state=checked]:bg-gradient"
+                                            className="data-[state=checked]:bg-edvios-green"
                                         />
                                         <Label htmlFor="workingWithAustraliaInstitutions" className="text-sm cursor-pointer">Australia</Label>
                                     </div>
@@ -329,37 +316,34 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
                                 <div className="space-y-2 group">
-                                    <Label htmlFor="averageStudentsPerYearLast2Years" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Avg. Students Sent Per Year (Last 2 Years) <span className="text-destructive">*</span></Label>
+                                    <Label htmlFor="averageStudentsPerYearLast2Years" className="text-sm font-medium">Avg. Students Sent Per Year (Last 2 Years) <span className="text-destructive">*</span></Label>
                                     <Input
                                         id="averageStudentsPerYearLast2Years"
                                         type="number"
                                         value={formData.averageStudentsPerYearLast2Years}
                                         onChange={(e) => handleInputChange('averageStudentsPerYearLast2Years', e.target.value)}
                                         placeholder="e.g. 50"
-                                        className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                     />
                                 </div>
 
                                 <div className="space-y-2 group">
-                                    <Label htmlFor="primaryStudentMarkets" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Primary Student Markets <span className="text-destructive">*</span></Label>
+                                    <Label htmlFor="primaryStudentMarkets" className="text-sm font-medium">Primary Student Markets <span className="text-destructive">*</span></Label>
                                     <Input
                                         id="primaryStudentMarkets"
                                         placeholder="e.g. India, Nigeria (comma separated)"
                                         value={formData.primaryStudentMarkets.join(', ')}
                                         onChange={(e) => handleInputChange('primaryStudentMarkets', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
-                                        className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                     />
                                     <p className="text-xs text-muted-foreground">Enter countries separated by commas</p>
                                 </div>
 
                                 <div className="space-y-2 group">
-                                    <Label htmlFor="mainDestinations" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Main Destinations <span className="text-destructive">*</span></Label>
+                                    <Label htmlFor="mainDestinations" className="text-sm font-medium">Main Destinations <span className="text-destructive">*</span></Label>
                                     <Input
                                         id="mainDestinations"
                                         placeholder="e.g. UK, USA (comma separated)"
                                         value={formData.mainDestinations.join(', ')}
                                         onChange={(e) => handleInputChange('mainDestinations', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
-                                        className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                     />
                                 </div>
                             </div>
@@ -371,7 +355,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Layers className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -382,24 +366,23 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="space-y-2 group">
-                                <Label htmlFor="numberOfCounsellors" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Number of Counsellors <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="numberOfCounsellors" className="text-sm font-medium">Number of Counsellors <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="numberOfCounsellors"
                                     type="number"
                                     value={formData.numberOfCounsellors}
                                     onChange={(e) => handleInputChange('numberOfCounsellors', e.target.value)}
                                     placeholder="Count"
-                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="typicalStudentProfileStrength" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Typical Student Profile Strength <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="typicalStudentProfileStrength" className="text-sm font-medium">Typical Student Profile Strength <span className="text-destructive">*</span></Label>
                                 <Select
                                     value={formData.typicalStudentProfileStrength}
                                     onValueChange={(value) => handleInputChange('typicalStudentProfileStrength', value)}
                                 >
-                                    <SelectTrigger className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20">
+                                    <SelectTrigger>
                                         <SelectValue placeholder="Select Profile Type" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -412,7 +395,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 md:col-span-2 group">
-                                <Label className="text-sm font-medium transition-colors group-focus-within:text-gradient">Services Provided <span className="text-destructive">*</span></Label>
+                                <Label className="text-sm font-medium">Services Provided <span className="text-destructive">*</span></Label>
                                 <div className="flex flex-wrap gap-4 mt-2">
                                     {[
                                         { id: ServiceType.ADMISSIONS, label: 'Admissions' },
@@ -424,7 +407,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                                 id={`service-${service.id}`}
                                                 checked={(formData.servicesProvided || []).includes(service.id)}
                                                 onCheckedChange={() => toggleSelection('servicesProvided', service.id)}
-                                                className="data-[state=checked]:bg-gradient"
+                                                className="data-[state=checked]:bg-edvios-green"
                                             />
                                             <Label htmlFor={`service-${service.id}`} className="text-sm cursor-pointer">{service.label}</Label>
                                         </div>
@@ -433,7 +416,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 md:col-span-2 pt-2 group">
-                                <Label className="text-sm font-medium transition-colors group-focus-within:text-gradient">Do you have In-house Visa Support?</Label>
+                                <Label className="text-sm font-medium">Do you have In-house Visa Support?</Label>
                                 <RadioGroup
                                     value={formData.inHouseVisaSupport ? "yes" : "no"}
                                     onValueChange={(val) => handleInputChange('inHouseVisaSupport', val === "yes")}
@@ -457,7 +440,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 rounded-xl bg-gradient flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Settings className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -468,19 +451,19 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
                         <div className="space-y-5">
                             <div className="space-y-2 group">
-                                <Label htmlFor="reasonToUseEdvios" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Reason to Use Edvios <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="reasonToUseEdvios" className="text-sm font-medium">Reason to Use Edvios <span className="text-destructive">*</span></Label>
                                 <Textarea
                                     id="reasonToUseEdvios"
                                     value={formData.reasonToUseEdvios}
                                     onChange={(e) => handleInputChange('reasonToUseEdvios', e.target.value)}
                                     placeholder="What are your goals with us?"
                                     rows={3}
-                                    className="resize-none transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                                    className="resize-none"
                                 />
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label className="text-sm font-medium transition-colors group-focus-within:text-gradient">Interested Features</Label>
+                                <Label className="text-sm font-medium">Interested Features</Label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
                                     {[
                                         { id: FeatureType.AI_MATCHING, label: 'AI Matching' },
@@ -494,7 +477,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                                 id={`feature-${feature.id}`}
                                                 checked={(formData.interestedFeatures || []).includes(feature.id)}
                                                 onCheckedChange={() => toggleSelection('interestedFeatures', feature.id)}
-                                                className="data-[state=checked]:bg-gradient"
+                                                className="data-[state=checked]:bg-edvios-green"
                                             />
                                             <Label htmlFor={`feature-${feature.id}`} className="text-sm cursor-pointer">{feature.label}</Label>
                                         </div>
@@ -507,16 +490,16 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     id="openToPilotUsage"
                                     checked={formData.openToPilotUsage}
                                     onCheckedChange={(checked) => handleInputChange('openToPilotUsage', checked === true)}
-                                    className="data-[state=checked]:bg-gradient"
+                                    className="data-[state=checked]:bg-edvios-green"
                                 />
-                                <Label htmlFor="openToPilotUsage" className="cursor-pointer font-medium text-gradient">
+                                <Label htmlFor="openToPilotUsage" className="cursor-pointer font-medium">
                                     Are you open to pilot usage (BETA testing)?
                                 </Label>
                             </div>
 
                             <Separator className="my-2" />
 
-                            <div className="p-4 rounded-lg border-2 border-green-500/30 bg-green-500/5 hover:border-green-500/50 transition-all duration-200 space-y-4">
+                            <div className="p-4 rounded-lg border-2 border-edvios-green/30 bg-edvios-green/5 hover:border-edvios-green/50 transition-all duration-200 space-y-4">
                                 <div className="flex items-start space-x-3 mb-2">
                                     <Checkbox
                                         id="marketingConsent"
@@ -534,10 +517,10 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                         id="termsAccepted"
                                         checked={formData.termsAccepted}
                                         onCheckedChange={(checked) => handleInputChange('termsAccepted', checked === true)}
-                                        className="mt-1 data-[state=checked]:bg-gradient"
+                                        className="mt-1 data-[state=checked]:bg-edvios-green"
                                     />
-                                    <Label htmlFor="termsAccepted" className="text-sm cursor-pointer">
-                                        I accept the <span className="text-gradient font-medium underline">Terms and Conditions</span>. <span className="text-destructive">*</span>
+                                    <Label htmlFor="termsAccepted" className="cursor-pointer font-medium text-sm leading-relaxed">
+                                        I accept the <span className="font-medium underline">Terms and Conditions</span>. <span className="text-destructive">*</span>
                                     </Label>
                                 </div>
                             </div>
@@ -551,12 +534,12 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-background via-background to-green-500/5 p-4 md:p-6 lg:p-8">
+        <div className="min-h-screen bg-gradient-to-br from-background via-background to-edvios-green/5 p-4 md:p-6 lg:p-8">
             <div className="max-w-4xl mx-auto">
                 <Card className="shadow-2xl border-0 overflow-hidden bg-white/80 backdrop-blur-sm">
                     <CardHeader className="text-center pb-8 pt-10 border-b border-gray-100/50">
                         <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
-                            <span className="text-gradient text-3xl">
+                            <span className="text-edvios-green text-3xl">
                                 Agent Registration
                             </span>
                         </CardTitle>
@@ -609,7 +592,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             {currentStep < totalSteps ? (
                                 <Button
                                     onClick={handleNextStep}
-                                    className="w-32 bg-gradient text-white shadow-md hover:shadow-lg transition-all duration-300"
                                 >
                                     Next
                                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -618,7 +600,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <Button
                                     onClick={() => handleSubmit(onSubmit, onClose)}
                                     disabled={isSubmitting}
-                                    className="w-40 bg-gradient text-white shadow-md hover:shadow-lg transition-all duration-300"
                                 >
                                     {isSubmitting ? (
                                         <>
