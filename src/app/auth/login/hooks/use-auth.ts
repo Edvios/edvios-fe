@@ -55,6 +55,19 @@ export const useAuth = () => {
           router.refresh();
           return true;
         }
+
+        // If the user is partially registered, redirect to respective registration page
+        if (userData.role === UserTypeEnum.PARTIAL_REGISTER_STUDENT) {
+          router.replace("/student-registration");
+          router.refresh();
+          return true;
+        }
+
+        if (userData.role === UserTypeEnum.PARTIAL_REGISTER_AGENT) {
+          router.replace("/agent-registration");
+          router.refresh();
+          return true;
+        }
       }
 
       AppToast.success("Successfully logged in");
@@ -106,9 +119,9 @@ export const useAuth = () => {
 
     try {
       const roleForRegistration =
-        (registerData.role === UserTypeEnum.AGENT
-          ? UserTypeEnum.PENDING_AGENT
-          : registerData.role) as UserTypeEnum;
+        registerData.role === UserTypeEnum.AGENT
+          ? UserTypeEnum.PARTIAL_REGISTER_AGENT
+          : UserTypeEnum.PARTIAL_REGISTER_STUDENT;
 
       const signUpRequest: SignUpRequestDto = {
         email: registerData.email,
@@ -158,11 +171,9 @@ export const useAuth = () => {
       }
 
       AppToast.success("Registration successful");
-      if (registerData.role === UserTypeEnum.STUDENT) {
+      if (roleForRegistration === UserTypeEnum.PARTIAL_REGISTER_STUDENT) {
         router.replace("/student-registration");
-      }
-
-      else if (roleForRegistration === UserTypeEnum.PENDING_AGENT) {
+      } else if (roleForRegistration === UserTypeEnum.PARTIAL_REGISTER_AGENT) {
         router.replace("/agent-registration");
       }
 

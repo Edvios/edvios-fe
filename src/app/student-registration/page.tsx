@@ -135,7 +135,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
               <div className="space-y-2 group">
                 <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Country of Residence
+                  Country of Residence<span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="currentCountry"
@@ -203,22 +203,10 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               {/* Emergency Contact */}
-              <div className="space-y-2 group">
-                <Label htmlFor="emergencyContactName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Emergency Contact Name
-                </Label>
-                <Input
-                  id="emergencyContactName"
-                  value={formData.emergencyContactName}
-                  onChange={(e) => handleInputChange('emergencyContactName', e.target.value)}
-                  placeholder="Contact person name"
-                  className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
-                />
-              </div>
 
               <div className="space-y-2 group">
                 <Label htmlFor="emergencyContactNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
-                  Emergency Contact Number
+                  Emergency Contact Number<span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="emergencyContactNumber"
@@ -414,6 +402,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              
 
               <div className="space-y-2 group md:col-span-2">
                 <Label htmlFor="preferredDestination" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
@@ -446,6 +435,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     <SelectItem value="MASTERS">Master Degree</SelectItem>
                     <SelectItem value="PHD">PhD</SelectItem>
                     <SelectItem value="DIPLOMA">Diploma</SelectItem>
+                    <SelectItem value="CERTIFICATE">Certificate</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -513,7 +503,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     <SelectItem value="PARENTS">Parents/Family</SelectItem>
                     <SelectItem value="SCHOLARSHIP">Scholarship</SelectItem>
                     <SelectItem value="LOAN">Bank Loan</SelectItem>
-                    <SelectItem value="SPONSER">Sponsor</SelectItem>
+                    <SelectItem value="SPONSOR">Sponsor</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

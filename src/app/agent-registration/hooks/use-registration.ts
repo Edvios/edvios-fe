@@ -4,6 +4,7 @@ import type { AgentRegistrationData } from '../types/registation.types';
 import AppToast from '@/utils/toast-utils';
 import { isAxiosError } from 'axios';
 import { submitAgentRegistration } from '../apis/registration.api';
+import { logout } from '@/app/auth/login/api/auth.api';
 
 interface UseAgentRegistrationReturn {
     // State
@@ -27,6 +28,7 @@ interface UseAgentRegistrationReturn {
 const initialFormData: AgentRegistrationData = {
     legalName: '',
     tradingName: '',
+    agentName: '',
     countryOfRegistration: '',
     yearEstablished: '',
     websiteUrl: '',
@@ -169,14 +171,18 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 const response = await submitAgentRegistration(formData);
 
                 console.log('Registration response:', response);
-                AppToast.success('Registration successful! Your account is pending admin approval.');
+                AppToast.success('Registration successful!');
+                AppToast.info('Please log in again to access your account.');
 
                 if (onSubmit) onSubmit(formData);
                 if (onClose) onClose();
 
+                // Logout to clear partial registration session and redirect to login
+                logout().catch(console.error);
+
                 setTimeout(() => {
-                    router.push('/pending-approval');
-                }, 1500);
+                    router.push('/auth/login');
+                }, 2000);
 
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';

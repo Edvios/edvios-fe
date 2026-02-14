@@ -13,6 +13,9 @@ const userSchema = z.object({
     UserTypeEnum.AGENT,
     UserTypeEnum.ADMIN,
     UserTypeEnum.PENDING_AGENT,
+    UserTypeEnum.SELECTED_AGENT,
+    UserTypeEnum.PARTIAL_REGISTER_STUDENT,
+    UserTypeEnum.PARTIAL_REGISTER_AGENT,
   ]),
 });
 
@@ -32,6 +35,8 @@ export const loginRequestSchema = z.object({
     UserTypeEnum.ADMIN,
     UserTypeEnum.PENDING_AGENT,
     UserTypeEnum.SELECTED_AGENT,
+    UserTypeEnum.PARTIAL_REGISTER_STUDENT,
+    UserTypeEnum.PARTIAL_REGISTER_AGENT,
   ]),
 });
 
@@ -60,6 +65,8 @@ export const createUserRequestSchema = z.object({
     UserTypeEnum.ADMIN,
     UserTypeEnum.PENDING_AGENT,
     UserTypeEnum.SELECTED_AGENT,
+    UserTypeEnum.PARTIAL_REGISTER_STUDENT,
+    UserTypeEnum.PARTIAL_REGISTER_AGENT,
   ]),
   phone: z
     .string()
@@ -86,6 +93,8 @@ export const signUpRequestSchema = z.object({
     UserTypeEnum.ADMIN,
     UserTypeEnum.PENDING_AGENT,
     UserTypeEnum.SELECTED_AGENT,
+    UserTypeEnum.PARTIAL_REGISTER_STUDENT,
+    UserTypeEnum.PARTIAL_REGISTER_AGENT,
   ]).optional(),
 });
 

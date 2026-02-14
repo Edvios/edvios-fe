@@ -7,15 +7,16 @@ export async function proxy(request: NextRequest) {
   const isAuthPage = pathname.startsWith("/auth/login");
   const isDashboardPage = pathname.startsWith("/dashboard");
   const isStudentRegistrationPage = pathname.startsWith("/student-registration");
+  const isAgentRegistrationPage = pathname.startsWith("/agent-registration");
   // const isPendingApprovalPage = pathname.startsWith("/pending-approval");
-  const isManagementPage = 
+  const isManagementPage =
     pathname.startsWith("/agent-management") ||
     pathname.startsWith("/institution-management") ||
     pathname.startsWith("/program-management") ||
     pathname.startsWith("/student-management");
 
   // If user is not authenticated and trying to access protected routes
-  if (!user && (isDashboardPage || isStudentRegistrationPage)) {
+  if (!user && (isDashboardPage || isStudentRegistrationPage || isAgentRegistrationPage)) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
@@ -63,11 +64,13 @@ export async function proxy(request: NextRequest) {
   // If user is authenticated and trying to access login page, redirect to their role-specific dashboard
   if (user && isAuthPage) {
     const userRole = user.user_metadata?.role || user.app_metadata?.role;
-    
+
     const roleRoutes: Record<string, string> = {
       'STUDENT': '/dashboard/student',
       'AGENT': '/dashboard/agent',
-      'ADMIN': '/dashboard/admin'
+      'ADMIN': '/dashboard/admin',
+      'PARTIAL_REGISTER_STUDENT': '/student-registration',
+      'PARTIAL_REGISTER_AGENT': '/agent-registration'
     };
 
     if (userRole) {
@@ -78,7 +81,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(url);
       }
     }
-    
+
     // If no role found, stay on login page to prevent redirect loop
     return supabaseResponse;
   }
@@ -87,18 +90,20 @@ export async function proxy(request: NextRequest) {
   if (user && isDashboardPage) {
     // Extract role from user metadata or app_metadata
     const userRole = user.user_metadata?.role || user.app_metadata?.role;
-    
+
     // Define allowed routes per role
     const roleRoutes: Record<string, string> = {
       'STUDENT': '/dashboard/student',
       'AGENT': '/dashboard/agent',
       'ADMIN': '/dashboard/admin',
-      'SELECTED_AGENT': '/dashboard/agent'
+      'SELECTED_AGENT': '/dashboard/agent',
+      'PARTIAL_REGISTER_STUDENT': '/student-registration',
+      'PARTIAL_REGISTER_AGENT': '/agent-registration'
     };
 
     if (userRole) {
       const allowedRoute = roleRoutes[userRole.toUpperCase()];
-      
+
       // Check if user is trying to access a different role's dashboard
       if (allowedRoute && !pathname.startsWith(allowedRoute)) {
         console.log('Redirecting to allowed route:', allowedRoute);

@@ -89,6 +89,17 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 group">
+                                <Label htmlFor="agentName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Agent Name <span className="text-destructive">*</span></Label>
+                                <Input
+                                    id="agentName"
+                                    value={formData.agentName}
+                                    onChange={(e) => handleInputChange('agentName', e.target.value)}
+                                    placeholder="Enter agent name"
+                                    className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
+                                />
+                            </div>
+
+                            <div className="space-y-2 group">
                                 <Label htmlFor="countryOfRegistration" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Country of Registration <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="countryOfRegistration"
