@@ -8,7 +8,7 @@ import AppToast from "@/utils/toast-utils";
 export const useAdminDashboard = () => {
   const router = useRouter();
   const supabase = createClient();
-  
+
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats>({
@@ -26,12 +26,12 @@ export const useAdminDashboard = () => {
   const fetchUser = async () => {
     try {
       const { data: { session }, error } = await supabase.auth.getSession();
-      
+
       if (error || !session) {
         router.push('/auth/login');
         return;
       }
-      
+
       const user = session.user;
       setUserData({
         email: user.email || '',
@@ -71,7 +71,7 @@ export const useAdminDashboard = () => {
       ]);
 
       const activeAgents = Math.max(totalAgents - pendingAgents, 0);
-      console.log({ totalAgents, pendingAgents, activeAgents });
+
 
       setStats({
         totalUsers,

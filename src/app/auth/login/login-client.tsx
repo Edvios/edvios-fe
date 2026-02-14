@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<string>(AuthTabEnum.LOGIN);
   const { loginData, updateLoginData } = useLoginForm();
   const { registerData, updateRegisterData } = useRegisterForm();
@@ -37,7 +39,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 md:p-8 overflow-x-hidden">
-      
+
       <div className="w-full max-w-6xl flex items-center justify-center">
         <motion.div
           layout
@@ -45,19 +47,19 @@ export default function LoginPage() {
           className="w-full shadow-2xl border border-gray-100 overflow-hidden rounded-2xl bg-white"
         >
           <motion.div layout className="grid md:grid-cols-2 items-stretch md:min-h-[650px]">
-            
+
             {/* Left Side: Solid Edvios Green Background */}
             <div className="hidden md:flex relative w-full h-full items-center justify-center bg-edvios-green">
               {/* Fade In / Fade Out Logo Animation */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeTab} 
+                  key={activeTab}
                   initial={{ opacity: 0, y: 10 }} // Starts slightly lower and invisible
                   animate={{ opacity: 1, y: 0 }}  // Fades in and slides to center
                   exit={{ opacity: 0, y: -10 }}   // Fades out and slides slightly up
-                  transition={{ 
-                    duration: 0.5, 
-                    ease: "easeInOut" 
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeInOut"
                   }}
                   className="relative z-10 w-72 h-36"
                 >
@@ -65,7 +67,7 @@ export default function LoginPage() {
                     src="/logoWithLetters.png"
                     alt="Edvios Logo"
                     fill
-                    className="object-contain brightness-0 invert" 
+                    className="object-contain brightness-0 invert"
                     priority
                   />
                 </motion.div>
@@ -81,8 +83,8 @@ export default function LoginPage() {
                       {activeTab === AuthTabEnum.LOGIN ? "Welcome Back" : "Create Account"}
                     </CardTitle>
                     <CardDescription className="text-gray-500 mt-1">
-                      {activeTab === AuthTabEnum.LOGIN 
-                        ? "Sign in to your account" 
+                      {activeTab === AuthTabEnum.LOGIN
+                        ? "Sign in to your account"
                         : "Join Edvios and start your journey"}
                     </CardDescription>
                   </motion.div>
@@ -90,6 +92,23 @@ export default function LoginPage() {
 
                 <CardContent className="px-0">
                   <div className="space-y-6">
+                    {/* Status Messages */}
+                    <div className="space-y-4 mb-4">
+                      {searchParams.get('registered') === 'true' && (
+                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative text-sm" role="alert">
+                          <strong className="font-bold">Registration Successful!</strong>
+                          <span className="block sm:inline"> Your account is pending admin approval. You will be able to login once approved.</span>
+                        </div>
+                      )}
+
+                      {searchParams.get('verified') === 'true' && (
+                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative text-sm" role="alert">
+                          <strong className="font-bold">Email Verified!</strong>
+                          <span className="block sm:inline"> You can now log in to your account.</span>
+                        </div>
+                      )}
+                    </div>
+
                     <UserTypeToggle
                       options={[AuthTabEnum.LOGIN, AuthTabEnum.REGISTER]}
                       value={activeTab}
@@ -109,27 +128,27 @@ export default function LoginPage() {
                         >
                           <div className="space-y-2">
                             <Label htmlFor="login-email">Email</Label>
-                            <Input 
-                              id="login-email" 
-                              type="email" 
-                              placeholder="Enter your email address" 
-                              value={loginData.email} 
-                              onChange={(e) => updateLoginData("email", e.target.value)} 
+                            <Input
+                              id="login-email"
+                              type="email"
+                              placeholder="Enter your email address"
+                              value={loginData.email}
+                              onChange={(e) => updateLoginData("email", e.target.value)}
                             />
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="login-password">Password</Label>
-                            <Input 
-                              id="login-password" 
-                              type="password" 
-                              placeholder="Enter your password" 
-                              value={loginData.password} 
-                              onChange={(e) => updateLoginData("password", e.target.value)} 
+                            <Input
+                              id="login-password"
+                              type="password"
+                              placeholder="Enter your password"
+                              value={loginData.password}
+                              onChange={(e) => updateLoginData("password", e.target.value)}
                             />
                           </div>
-                          <Button 
-                            onClick={onSubmitLogin} 
-                            className="w-full h-10 mt-2 bg-edvios-blue hover:opacity-90 transition-all"
+                          <Button
+                            onClick={onSubmitLogin}
+                            className="w-full h-10 mt-2 bg-edvios-blue hover:opacity-90 transition-all text-white"
                             disabled={isLoading}
                           >
                             <LogIn className="w-4 h-4 mr-2" /> {isLoading ? "Logging in..." : "Login"}
@@ -153,63 +172,64 @@ export default function LoginPage() {
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                               <Label>First Name</Label>
-                              <Input 
-                                placeholder="Enter your first name" 
-                                value={registerData.firstName} 
-                                onChange={(e) => updateRegisterData("firstName", e.target.value)} 
+                              <Input
+                                placeholder="Enter your first name"
+                                value={registerData.firstName}
+                                onChange={(e) => updateRegisterData("firstName", e.target.value)}
                               />
                             </div>
                             <div className="space-y-2">
                               <Label>Last Name</Label>
-                              <Input 
-                                placeholder="Enter your last name" 
-                                value={registerData.lastName} 
-                                onChange={(e) => updateRegisterData("lastName", e.target.value)} 
+                              <Input
+                                placeholder="Enter your last name"
+                                value={registerData.lastName}
+                                onChange={(e) => updateRegisterData("lastName", e.target.value)}
                               />
                             </div>
                           </div>
                           <div className="space-y-2">
                             <Label>Email Address</Label>
-                            <Input 
-                              type="email" 
-                              placeholder="Enter your email address" 
-                              value={registerData.email} 
-                              onChange={(e) => updateRegisterData("email", e.target.value)} 
+                            <Input
+                              type="email"
+                              placeholder="Enter your email address"
+                              value={registerData.email}
+                              onChange={(e) => updateRegisterData("email", e.target.value)}
                             />
                           </div>
                           <div className="space-y-2">
                             <Label>Phone Number</Label>
-                            <Input 
-                              placeholder="Enter your phone number" 
-                              value={registerData.phone} 
-                              onChange={(e) => updateRegisterData("phone", e.target.value)} 
+                            <Input
+                              placeholder="Enter your phone number"
+                              value={registerData.phone}
+                              onChange={(e) => updateRegisterData("phone", e.target.value)}
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                               <Label>Password</Label>
-                              <Input 
-                                type="password" 
-                                placeholder="Enter your password" 
-                                value={registerData.password} 
-                                onChange={(e) => updateRegisterData("password", e.target.value)} 
+                              <Input
+                                type="password"
+                                placeholder="Enter your password"
+                                value={registerData.password}
+                                onChange={(e) => updateRegisterData("password", e.target.value)}
                               />
                             </div>
                             <div className="space-y-2">
                               <Label>Confirm Password</Label>
-                              <Input 
-                                type="password" 
-                                placeholder="Confirm your password" 
-                                value={registerData.confirmPassword} 
-                                onChange={(e) => updateRegisterData("confirmPassword", e.target.value)} 
+                              <Input
+                                type="password"
+                                placeholder="Confirm your password"
+                                value={registerData.confirmPassword}
+                                onChange={(e) => updateRegisterData("confirmPassword", e.target.value)}
                               />
                             </div>
                           </div>
-                          <Button 
-                            onClick={onSubmitRegister} 
-                            className="w-full h-10 mt-2 bg-edvios-green hover:opacity-90 transition-all"
+                          <Button
+                            onClick={onSubmitRegister}
+                            className="w-full h-10 mt-2 bg-edvios-green hover:opacity-90 transition-all text-white"
+                            disabled={isLoading}
                           >
-                            <UserPlus className="w-4 h-4 mr-2" /> Create Account
+                            <UserPlus className="w-4 h-4 mr-2" /> {isLoading ? "Creating Account..." : "Create Account"}
                           </Button>
                         </motion.div>
                       )}

@@ -13,10 +13,10 @@ export const useApplications = (status?: ApplicationStatus) => {
   const [counts, setCounts] = useState<{ [key in ApplicationStatus]?: number }>({});
   const [countsLoading, setCountsLoading] = useState(true);
   const [paginationParams, setPaginationParams] = useState<PaginationParams>({
-      page: 1,
-      size: 10,
-      status: status,
-    })
+    page: 1,
+    size: 10,
+    status: status,
+  })
   const [totalItems, setTotalItems] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
 
@@ -67,7 +67,7 @@ export const useApplications = (status?: ApplicationStatus) => {
     try {
       setCountsLoading(true);
       const response = await applicationsApi.getCount();
-      console.log('Count API response:', response);
+
       setCounts(response.count);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load counts';
@@ -128,7 +128,7 @@ export const useApplications = (status?: ApplicationStatus) => {
     const pending = counts[ApplicationStatus.SUBMITTED] || 0;
     const approved = counts[ApplicationStatus.ACCEPTED] || 0;
     const rejected = counts[ApplicationStatus.REJECTED] || 0;
-    
+
     return { total, pending, approved, rejected };
   }, [counts]);
 

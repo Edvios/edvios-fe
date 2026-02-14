@@ -174,7 +174,7 @@ export const useRegistration = (): UseRegistrationReturn => {
       setResponse(null);
 
       try {
-        console.log('Submitting registration with data:', formData);
+
         const result = await submitStudentRegistration(formData);
         setResponse(result);
 

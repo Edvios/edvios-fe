@@ -165,12 +165,12 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
             setError(null);
 
             try {
-                console.log('Submitting agent registration with data:', formData);
+
 
                 // Call the actual API
                 const response = await submitAgentRegistration(formData);
 
-                console.log('Registration response:', response);
+
                 AppToast.success('Registration successful!');
                 AppToast.info('Please log in again to access your account.');
 

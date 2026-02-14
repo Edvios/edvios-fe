@@ -66,7 +66,7 @@ export const submitAgentRegistration = async (
             throw new Error(`Validation failed: ${errorMessages}`);
         }
 
-        console.log('Submitting agent registration:', validation.data);
+
 
         const response = await axiosInstance.post<RegistrationResponseDto>(
             '/agents',

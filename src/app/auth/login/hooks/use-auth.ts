@@ -144,7 +144,7 @@ export const useAuth = () => {
         role: roleForRegistration,
         phone: registerData.phone,
       };
-      console.log("Creating user with request:", createUserRequest);
+
 
       const createUserResponse = await createUser(
         createUserRequest,
@@ -158,9 +158,7 @@ export const useAuth = () => {
           if (signOutError) {
             console.error("Failed to sign out during rollback:", signOutError);
           } else {
-            console.log(
-              "Rolled back Supabase session after backend creation failure",
-            );
+
           }
         } catch (rollbackError) {
           console.error("Failed to rollback Supabase session:", rollbackError);
@@ -170,12 +168,8 @@ export const useAuth = () => {
         return false;
       }
 
-      AppToast.success("Registration successful");
-      if (roleForRegistration === UserTypeEnum.PARTIAL_REGISTER_STUDENT) {
-        router.replace("/student-registration");
-      } else if (roleForRegistration === UserTypeEnum.PARTIAL_REGISTER_AGENT) {
-        router.replace("/agent-registration");
-      }
+      AppToast.success("Registration successful. Please verify your email.");
+      router.replace(`/auth/verify-request?email=${encodeURIComponent(registerData.email)}`);
 
       // Trigger router navigation
       router.refresh();
@@ -187,7 +181,7 @@ export const useAuth = () => {
         try {
           const { error: signOutError } = await supabase.auth.signOut();
           if (!signOutError) {
-            console.log("Rolled back Supabase session after unexpected error");
+
           }
         } catch (rollbackError) {
           console.error("Failed to rollback Supabase session:", rollbackError);

@@ -20,8 +20,8 @@ export const useAssignments = (filters: AssignmentFilters) => {
         search,
         pageSize,
       });
-      console.log('Fetched assignments:', response);
-      
+
+
       setAssignments(response);
       setTotal(response.length);
     } catch (err) {

@@ -10,10 +10,13 @@ export default function SidebarLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  
+
   // Pages that should NOT have the sidebar
-  const excludedPaths = ['/auth/login', '/student-registration', '/pending-approval', '/agent-registration'];
-  const shouldShowSidebar = !excludedPaths.some(path => pathname.startsWith(path));
+  const excludedPaths = ['/student-registration', '/pending-approval', '/agent-registration'];
+
+  const isAuthPage = pathname.startsWith('/auth/');
+  const isExcluded = excludedPaths.some(path => pathname.startsWith(path));
+  const shouldShowSidebar = !isAuthPage && !isExcluded;
   const hideMobileTriggerPaths = ["/chat"];
   const shouldShowMobileTrigger =
     shouldShowSidebar && !hideMobileTriggerPaths.some((path) => pathname.startsWith(path));
