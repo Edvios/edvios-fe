@@ -270,7 +270,7 @@ export function CreateInstitutionDialog({
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="border-b pb-4">
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-green-500" />
+            <Building2 className="w-6 h-6 text-edvios-blue" />
             {isEditMode ? 'Edit Institution' : 'Add New Institution'}
           </DialogTitle>
           <DialogDescription className="text-base">

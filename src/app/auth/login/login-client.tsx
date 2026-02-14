@@ -53,7 +53,7 @@ export default function LoginPage() {
             {/* Right Side - Login/Register Form */}
             <div className="p-4 md:p-12 flex flex-col md:justify-center">
               <CardHeader className="text-center pb-4 px-0 pt-0 md:pt-4 md:pb-0">
-                <CardTitle className="text-2xl text-gradient">Welcome Back</CardTitle>
+                <CardTitle className="text-2xl text-edvios-blue">Welcome Back</CardTitle>
                 <CardDescription className="text-gray-600">
                   Sign in to your account or create a new one
                 </CardDescription>
@@ -122,7 +122,7 @@ export default function LoginPage() {
 
                       <Button
                         onClick={onSubmitLogin}
-                        className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient"
+                        className="w-full"
                         disabled={isLoading}
                       >
                         <LogIn className="w-4 h-4 mr-2" />
@@ -243,7 +243,7 @@ export default function LoginPage() {
 
                       <Button
                         onClick={onSubmitRegister}
-                        className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-gradient"
+                        className="w-full"
                         disabled={isLoading}
                       >
                         <UserPlus className="w-4 h-4 mr-2" />
