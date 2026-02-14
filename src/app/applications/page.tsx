@@ -3,6 +3,7 @@
 
 import { useState, useCallback, useMemo } from 'react'
 import { GraduationCap, CheckCircle2, Clock, XCircle } from 'lucide-react'
+
 import { useApplications } from '@/app/applications/hooks/use-applications'
 import { ApplicationCard } from '@/app/applications/components/ApplicationCard'
 import { ApplicationCardSkeleton } from '@/app/applications/components/ApplicationCardSkeleton'

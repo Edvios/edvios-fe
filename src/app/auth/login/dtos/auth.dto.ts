@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { UserTypeEnum } from "../enums/auth.enum";
 
+
 // Base user schema
 const userSchema = z.object({
   id: z.string(),
