@@ -98,6 +98,14 @@ export const useRegistration = (): UseRegistrationReturn => {
       if (userSession) {
         try {
           const userData = JSON.parse(userSession);
+
+          // Redirect if email not verified
+          if (userData.emailVerified === false) {
+            AppToast.info("Please verify your email first");
+            router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
+            return;
+          }
+
           setFormData(prev => ({
             ...prev,
             firstName: userData.firstName || prev.firstName,
@@ -108,9 +116,12 @@ export const useRegistration = (): UseRegistrationReturn => {
         } catch (error) {
           console.error('Failed to parse user session data:', error);
         }
+      } else {
+        // Optional: Redirect to login if no session
+        // router.replace('/auth/login');
       }
     }
-  }, []);
+  }, [router]);
 
   const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({

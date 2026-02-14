@@ -56,6 +56,16 @@ export const useAuth = () => {
           return true;
         }
 
+        // If the user has not verified their email, redirect to verification request page
+        if (!userData.emailVerified &&
+          (userData.role === UserTypeEnum.PARTIAL_REGISTER_STUDENT ||
+            userData.role === UserTypeEnum.PARTIAL_REGISTER_AGENT)) {
+          AppToast.info("Please verify your email before proceeding");
+          router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
+          router.refresh();
+          return true;
+        }
+
         // If the user is partially registered, redirect to respective registration page
         if (userData.role === UserTypeEnum.PARTIAL_REGISTER_STUDENT) {
           router.replace("/student-registration");

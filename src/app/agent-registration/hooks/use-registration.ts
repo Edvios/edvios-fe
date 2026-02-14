@@ -83,6 +83,14 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
             if (userSession) {
                 try {
                     const userData = JSON.parse(userSession);
+
+                    // Redirect if email not verified
+                    if (userData.emailVerified === false) {
+                        AppToast.info("Please verify your email first");
+                        router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
+                        return;
+                    }
+
                     setFormData(prev => ({
                         ...prev,
                         contactPersonName: `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || prev.contactPersonName,
@@ -94,7 +102,7 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 }
             }
         }
-    }, []);
+    }, [router]);
 
     const handleInputChange = (field: string, value: unknown) => {
         setFormData(prev => ({
