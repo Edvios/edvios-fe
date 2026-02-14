@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { adminAPI } from "@/app/dashboard/admin/api/admin.dashboard.api";
@@ -23,7 +23,8 @@ export const useAdminDashboard = () => {
   /**
    * Fetch current user session and profile
    */
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
+    setIsLoading(true);
     try {
       const { data: { session }, error } = await supabase.auth.getSession();
 
@@ -48,12 +49,12 @@ export const useAdminDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [router, supabase.auth]);
 
   /**
    * Fetch all dashboard statistics counts from API
    */
-  const fetchDashboardStats = async () => {
+  const fetchDashboardStats = useCallback(async () => {
     setIsLoadingStats(true);
     try {
       const [
@@ -72,7 +73,6 @@ export const useAdminDashboard = () => {
 
       const activeAgents = Math.max(totalAgents - pendingAgents, 0);
 
-
       setStats({
         totalUsers,
         activeAgents,
@@ -86,7 +86,7 @@ export const useAdminDashboard = () => {
     } finally {
       setIsLoadingStats(false);
     }
-  };
+  }, []);
 
   /**
    * Refresh dashboard data
@@ -102,7 +102,7 @@ export const useAdminDashboard = () => {
   useEffect(() => {
     fetchUser();
     fetchDashboardStats();
-  }, []);
+  }, [fetchUser, fetchDashboardStats]);
 
   return {
     // State

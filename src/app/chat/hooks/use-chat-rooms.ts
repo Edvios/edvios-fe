@@ -9,21 +9,21 @@ import { getUserChats, type Chat } from "@/lib/chat-api";
 const ROOM_CHANNEL = "global-chat-rooms";
 
 // Convert database chat to ChatRoom format
-function dbChatToRoom(chat: Chat, userRole: UserTypeEnum): ChatRoom {
+function dbChatToRoom(chat: Chat): ChatRoom {
   const lastMsg = chat.messages && chat.messages.length > 0 ? chat.messages[0] : undefined;
-  
+
   // Safe access helper for student name
-  const studentName = chat.student 
-    ? (chat.student.firstName 
-        ? `${chat.student.firstName} ${chat.student.lastName || ''}`.trim()
-        : chat.student.email)
+  const studentName = chat.student
+    ? (chat.student.firstName
+      ? `${chat.student.firstName} ${chat.student.lastName || ''}`.trim()
+      : chat.student.email)
     : 'Unknown Student';
 
   // Safe access helper for agent name
   const agentName = chat.agent && chat.agent.user
     ? (chat.agent.user.firstName
-        ? `${chat.agent.user.firstName} ${chat.agent.user.lastName || ''}`.trim()
-        : chat.agent.user.email)
+      ? `${chat.agent.user.firstName} ${chat.agent.user.lastName || ''}`.trim()
+      : chat.agent.user.email)
     : 'Unknown Agent';
 
   return {
@@ -51,14 +51,14 @@ export function useChatRooms(user: ChatUser | null) {
   useEffect(() => {
     const loadDbChats = async () => {
       if (!user) return;
-      
+
       try {
         const dbChats = await getUserChats();
-        
+
         if (dbChats.length > 0) {
-          const chatRooms = dbChats.map(chat => dbChatToRoom(chat, user.role as UserTypeEnum));
+          const chatRooms = dbChats.map(chat => dbChatToRoom(chat));
           setRooms(chatRooms);
-          
+
           // For students, auto-select their chat
           if (user.role === UserTypeEnum.STUDENT && chatRooms.length > 0) {
             setSelectedRoom(chatRooms[0]);
@@ -86,7 +86,7 @@ export function useChatRooms(user: ChatUser | null) {
         // But only if it has a valid UUID (from database) AND the agent is assigned to this chat
         if (user.role === UserTypeEnum.AGENT) {
           const announcedRoom = payload.payload as ChatRoom;
-          
+
           // Verify this chat belongs to the current agent (Strict check)
           if (!announcedRoom.agentId || announcedRoom.agentId !== user.id) {
             return;
@@ -125,10 +125,10 @@ export function useChatRooms(user: ChatUser | null) {
           if (!isValidUUID) {
             return;
           }
-          
+
           // Verify this chat belongs to the current agent (Strict check)
           if (!updatedRoom.agentId || updatedRoom.agentId !== user.id) {
-            
+
             return;
           }
 
@@ -197,7 +197,7 @@ export function useChatRooms(user: ChatUser | null) {
               setRooms([tempRoom]);
               setSelectedRoom(tempRoom);
             }
-            
+
             // Only announce if we have a valid UUID (from database)
             if (studentRoomRef.current && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(studentRoomRef.current.id)) {
               await channel.send({
@@ -287,14 +287,14 @@ export function useChatRooms(user: ChatUser | null) {
   // Update the room with data from the database (called when chat is initialized)
   const updateRoomFromDb = useCallback(async (chat: Chat) => {
     if (!user) return;
-    
-    const chatRoom = dbChatToRoom(chat, user.role as UserTypeEnum);
-    
+
+    const chatRoom = dbChatToRoom(chat);
+
     if (user.role === UserTypeEnum.STUDENT) {
       studentRoomRef.current = chatRoom;
       setRooms([chatRoom]);
       setSelectedRoom(chatRoom);
-      
+
       // Announce the room with valid database ID to agents
       if (channelRef.current) {
         await channelRef.current.send({

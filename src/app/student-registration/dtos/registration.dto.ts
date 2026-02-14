@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { StudentRegistrationData } from '../types';
+
 
 export const createStudentDtoSchema = z.object({
   // Personal
   firstName: z.string().nullable().optional(),
   lastName: z.string().nullable().optional(),
-  dob: z.string().nullable().optional(), 
+  dob: z.string().nullable().optional(),
   gender: z.string().nullable().optional(),
   nationality: z.string().nullable().optional(),
   passportNumber: z.string().nullable().optional(),
@@ -15,7 +15,7 @@ export const createStudentDtoSchema = z.object({
   // Contact
   email: z.string().email().nullable().optional(),
   phone: z.string().nullable().optional(),
-  emergencyContact: z.string().nullable().optional(), 
+  emergencyContact: z.string().nullable().optional(),
 
   // Academic
   highestQualification: z.string().nullable().optional(),
@@ -23,12 +23,12 @@ export const createStudentDtoSchema = z.object({
   institutionName: z.string().nullable().optional(),
   mediumOfInstruction: z.string().nullable().optional(),
   gradesSummary: z.string().nullable().optional(),
-  academicCertificates: z.array(z.string()).nullable().optional(), 
+  academicCertificates: z.array(z.string()).nullable().optional(),
 
   // English
   englishTestTaken: z.string().nullable().optional(),
   overallScore: z.number().nullable().optional(),
-  testExpiryDate: z.string().nullable().optional(), 
+  testExpiryDate: z.string().nullable().optional(),
 
   // Study Preferences
   intendedIntakeMonth: z.number().nullable().optional(),

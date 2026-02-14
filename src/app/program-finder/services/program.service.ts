@@ -83,7 +83,7 @@ export class ProgramService {
       if (size) queryParams.append("size", size.toString());
 
       const cleanedFilterBody = Object.fromEntries(
-        Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
+        Object.entries(filterBody).filter(([, value]) => value !== "" && value !== null && value !== undefined)
       );
 
 

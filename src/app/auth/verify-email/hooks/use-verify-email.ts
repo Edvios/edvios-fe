@@ -35,7 +35,7 @@ export const useVerifyEmail = () => {
                     setStatus("error");
                     setMessage(response.message || "Failed to verify email.");
                 }
-            } catch (error) {
+            } catch {
                 setStatus("error");
                 setMessage("An unexpected error occurred while verifying your email.");
             }

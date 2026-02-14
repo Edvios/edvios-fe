@@ -3,7 +3,7 @@ import {
     createAgentDtoSchema,
     RegistrationResponseDto,
 } from '../dtos/registration.dto';
-import { ServiceType, FeatureType } from '../enums/registration.enums';
+
 import { AgentRegistrationData } from '../types/registation.types';
 
 export const submitAgentRegistration = async (

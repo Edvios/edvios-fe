@@ -12,7 +12,6 @@ import {
   User,
   Search,
   MessageCircle,
-  HelpingHandIcon,
   Building2,
   BookOpen,
   LucideUserPlus2,
@@ -176,20 +175,7 @@ export function AppSidebar() {
     }
   }, [userData?.role]);
 
-  const roleLabel = useMemo(() => {
-    switch (userData?.role) {
-      case "STUDENT":
-        return "Student Portal";
-      case "AGENT":
-        return "Agent Portal";
-      case "ADMIN":
-        return "Admin Portal";
-      case "SELECTED_AGENT":
-        return "Agent Portal";
-      default:
-        return "Portal";
-    }
-  }, [userData?.role]);
+
 
   return (
     <Sidebar collapsible="icon">
@@ -224,16 +210,16 @@ export function AppSidebar() {
                       className={`
                         relative transition-all duration-300 ease-in-out
                         ${isCollapsed ? "h-14 w-14 justify-center" : "h-11 w-full px-4"}
-                        ${isActive 
-                          ? "sidebar-item-active text-white rounded-xl shadow-lg hover:text-white" 
+                        ${isActive
+                          ? "sidebar-item-active text-white rounded-xl shadow-lg hover:text-white"
                           : "text-muted-foreground hover:bg-accent/50 rounded-lg"
                         }
                       `}
                     >
                       <Link href={item.url} onClick={handleMobileClose} className="flex items-center">
-                        <item.icon 
-                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0`} 
-                          strokeWidth={isActive ? 2.5 : 2} 
+                        <item.icon
+                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0`}
+                          strokeWidth={isActive ? 2.5 : 2}
                         />
                         {!isCollapsed && (
                           <span className={`ml-3 text-sm tracking-wide ${isActive ? "font-bold" : "font-medium"}`}>

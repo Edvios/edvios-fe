@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { UserTypeEnum } from "../enums/auth.enum";
-import { User } from "lucide-react";
+
 
 // Base user schema
 const userSchema = z.object({

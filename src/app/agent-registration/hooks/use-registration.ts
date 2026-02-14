@@ -168,7 +168,7 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
 
 
                 // Call the actual API
-                const response = await submitAgentRegistration(formData);
+                await submitAgentRegistration(formData);
 
 
                 AppToast.success('Registration successful!');

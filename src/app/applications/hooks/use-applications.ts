@@ -70,7 +70,7 @@ export const useApplications = (status?: ApplicationStatus) => {
 
       setCounts(response.count);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to load counts';
+
       console.error('Count fetch error:', err);
     } finally {
       setCountsLoading(false);
@@ -95,7 +95,7 @@ export const useApplications = (status?: ApplicationStatus) => {
       // Refetch counts after status update
       fetchCounts();
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to update status';
+
       throw err;
     }
   };

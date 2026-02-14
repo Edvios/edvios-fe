@@ -35,12 +35,12 @@ export function StudentAgentChat({
   const supabase = createClient();
   const { containerRef, scrollToBottom } = useChatScroll();
   const { uploadFile, isUploading } = useFileUpload();
-  
+
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [isConnected, setIsConnected] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(true);
   const [isSending, setIsSending] = useState(false);
@@ -98,7 +98,7 @@ export function StudentAgentChat({
     };
 
     initializeChat();
-  }, [user.role, roomId]);
+  }, [user.role, roomId, onChatInitialized]);
 
   // Load messages from database
   useEffect(() => {
@@ -110,13 +110,13 @@ export function StudentAgentChat({
       setIsLoadingMessages(true);
       try {
         const response = await getChatMessages(dbChat.id, { page: 1, size: 100 });
-        
+
         // Transform db messages to chat format
         const transformedMessages: ChatMessageData[] = response.messages.map((msg) => {
           // Determine user name based on sender role
           let senderName = "Unknown";
           if (msg.senderRole === "STUDENT") {
-            senderName = dbChat.student?.firstName 
+            senderName = dbChat.student?.firstName
               ? `${dbChat.student.firstName} ${dbChat.student.lastName || ''}`.trim()
               : "Student";
           } else {
@@ -124,7 +124,7 @@ export function StudentAgentChat({
               ? `${dbChat.agent.user.firstName} ${dbChat.agent.user.lastName || ''}`.trim()
               : "Agent";
           }
-          
+
           // If we don't have full chat data, use role as name
           if (senderName === "Unknown" || senderName === "") {
             senderName = msg.senderRole === "STUDENT" ? "Student" : "Agent";
@@ -153,13 +153,13 @@ export function StudentAgentChat({
         const unreadIds = response.messages
           .filter((msg) => msg.senderId !== user.id && msg.status !== "READ")
           .map((msg) => msg.id);
-        
+
         if (unreadIds.length > 0) {
           await updateMessageStatus(unreadIds, "READ");
         }
-      }  catch (error) {
+      } catch (error) {
         console.error("Failed to load messages:", error);
-        
+
         // Type guard for axios error response
         if (
           error &&
@@ -181,7 +181,7 @@ export function StudentAgentChat({
     };
 
     loadMessages();
-  }, [dbChat?.id, roomId, user.id]);
+  }, [dbChat?.id, dbChat?.student, dbChat?.agent?.user, roomId, user.id]);
 
   // Setup realtime channel
   useEffect(() => {
@@ -231,17 +231,17 @@ export function StudentAgentChat({
   const handleSendMessage = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      
+
       const hasContent = newMessage.trim().length > 0;
       const hasFile = !!selectedFile;
-      
+
       if ((!hasContent && !hasFile) || !isConnected || !channel || isSending || isUploading) return;
 
       setIsSending(true);
-      
+
       try {
         let uploadedAttachment = undefined;
-        
+
         if (selectedFile) {
           const result = await uploadFile(selectedFile);
           if (result) {
@@ -325,8 +325,8 @@ export function StudentAgentChat({
           <MessageCircle className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
           <h3 className="text-lg font-semibold mb-2">Unable to Start Chat</h3>
           <p className="text-muted-foreground text-sm mb-4">{chatError}</p>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => window.location.reload()}
           >
             Try Again
@@ -421,7 +421,7 @@ export function StudentAgentChat({
             className="hidden"
             accept="image/*,.pdf,.zip,.doc,.docx,.txt"
           />
-          
+
           <Button
             type="button"
             variant="ghost"
@@ -445,7 +445,7 @@ export function StudentAgentChat({
             }
             disabled={!isConnected || isSending || isUploading}
           />
-          
+
           {isConnected && (newMessage.trim() || selectedFile) && (
             <Button
               className="aspect-square rounded-full animate-in fade-in slide-in-from-right-4 duration-300 shrink-0 bg-edvios-green text-white hover:opacity-90"
@@ -498,22 +498,22 @@ function ChatMessageBubble({
     if (message.attachmentType?.startsWith("image/")) {
       return (
         <div className="mb-2 relative rounded-md overflow-hidden max-w-[240px]">
-           {/* eslint-disable-next-line @next/next/no-img-element */}
-           <img 
-             src={message.attachmentUrl} 
-             alt={message.attachmentName || "Attachment"} 
-             className="w-full h-auto object-cover max-h-[300px]"
-             loading="lazy"
-           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={message.attachmentUrl}
+            alt={message.attachmentName || "Attachment"}
+            className="w-full h-auto object-cover max-h-[300px]"
+            loading="lazy"
+          />
         </div>
       );
     }
 
     // Generic file attachment
     return (
-      <a 
-        href={message.attachmentUrl} 
-        target="_blank" 
+      <a
+        href={message.attachmentUrl}
+        target="_blank"
         rel="noopener noreferrer"
         className={cn(
           "flex items-center gap-2 mb-2 p-2 rounded-md transition-colors",
