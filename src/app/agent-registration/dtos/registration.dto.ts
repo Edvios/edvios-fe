@@ -5,7 +5,7 @@ import { AgentServiceType, AgentFeatureType } from '../enums/registration.enums'
 export const createAgentDtoSchema = z.object({
     legalName: z.string().min(1, "Legal Name is required"),
     tradingName: z.string().nullable().optional(),
-    agentName: z.string().optional(), 
+    agentName: z.string().min(1, "Agent Name is required"),
 
     calendlyLink: z.string().nullable().optional(),
     countryOfRegistration: z.string().min(1, "Country is required"),

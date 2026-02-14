@@ -20,7 +20,7 @@ export interface StudentRegistrationData {
   yearOfCompletion: string;
   mediumOfInstruction: string;
   gpa: string; 
-  academicCertificates: File[]; 
+  academicCertificates: string[]; // Cloudinary URLs
   
     // English
   englishTest: string;

@@ -93,8 +93,11 @@ export function UserTypeToggle({
       >
         {/* Sliding background indicator */}
         <div 
-          className="absolute rounded-4xl shadow-md transition-all duration-300 ease-out bg-edvios-green"
-          style={backgroundStyle}
+          className="absolute rounded-4xl shadow-md bg-edvios-blue"
+          style={{
+            ...backgroundStyle,
+            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1), top 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1), height 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
         />
         
         {options.map((option) => (
@@ -105,15 +108,15 @@ export function UserTypeToggle({
             disabled={disabled}
             className={`
               relative z-10 px-2 py-1.5 sm:py-2 rounded-4xl 
-              transition-colors duration-300 ease-out
+              transition-all duration-500 ease-in-out
               text-xs sm:text-sm font-medium
               disabled:opacity-50 disabled:cursor-not-allowed
               focus:outline-none
+              ${value === option ? 'text-white' : 'text-gray-700'}
             `}
             style={{
               border: 'none',
               background: 'transparent',
-              color: value === option ? 'white' : '#374151',
             }}
           >
             <span className="block">

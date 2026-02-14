@@ -12,7 +12,7 @@ export default function SidebarLayout({
   const pathname = usePathname();
   
   // Pages that should NOT have the sidebar
-  const excludedPaths = ['/auth/login', '/student-registration', '/pending-approval'];
+  const excludedPaths = ['/auth/login', '/student-registration', '/pending-approval', '/agent-registration'];
   const shouldShowSidebar = !excludedPaths.some(path => pathname.startsWith(path));
   const hideMobileTriggerPaths = ["/chat"];
   const shouldShowMobileTrigger =

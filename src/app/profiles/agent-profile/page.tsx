@@ -32,12 +32,15 @@ export default function AgentProfilePage() {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState<AgentProfileData>(profileData || {});
 
-    // Update form data when profile data loads
-    useMemo(() => {
+    const [prevProfileData, setPrevProfileData] = useState(profileData);
+
+    // Update form data when profile data arrives or changes
+    if (profileData !== prevProfileData) {
+        setPrevProfileData(profileData);
         if (profileData) {
             setFormData(profileData);
         }
-    }, [profileData]);
+    }
 
     const initials = useMemo(() => {
         const name = formData.agentName || formData.legalName || "";
@@ -69,7 +72,7 @@ export default function AgentProfilePage() {
         setIsEditing(false);
     };
 
-    const updateField = (field: keyof AgentProfileData, value: any) => {
+    const updateField = <K extends keyof AgentProfileData>(field: K, value: AgentProfileData[K]) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
@@ -418,7 +421,7 @@ export default function AgentProfilePage() {
                                 <Checkbox
                                     id="educationCouncils"
                                     checked={formData.registeredWithEducationCouncils || false}
-                                    onCheckedChange={(checked) => updateField("registeredWithEducationCouncils", checked)}
+                                    onCheckedChange={(checked) => updateField("registeredWithEducationCouncils", checked === true)}
                                     disabled={!isEditing}
                                 />
                                 <Label htmlFor="educationCouncils" className="text-sm cursor-pointer">
@@ -430,7 +433,7 @@ export default function AgentProfilePage() {
                                 <Checkbox
                                     id="ukInstitutions"
                                     checked={formData.workingWithUkInstitutions || false}
-                                    onCheckedChange={(checked) => updateField("workingWithUkInstitutions", checked)}
+                                    onCheckedChange={(checked) => updateField("workingWithUkInstitutions", checked === true)}
                                     disabled={!isEditing}
                                 />
                                 <Label htmlFor="ukInstitutions" className="text-sm cursor-pointer">
@@ -442,7 +445,7 @@ export default function AgentProfilePage() {
                                 <Checkbox
                                     id="canadaInstitutions"
                                     checked={formData.workingWithCanadaInstitutions || false}
-                                    onCheckedChange={(checked) => updateField("workingWithCanadaInstitutions", checked)}
+                                    onCheckedChange={(checked) => updateField("workingWithCanadaInstitutions", checked === true)}
                                     disabled={!isEditing}
                                 />
                                 <Label htmlFor="canadaInstitutions" className="text-sm cursor-pointer">
@@ -454,7 +457,7 @@ export default function AgentProfilePage() {
                                 <Checkbox
                                     id="australiaInstitutions"
                                     checked={formData.workingWithAustraliaInstitutions || false}
-                                    onCheckedChange={(checked) => updateField("workingWithAustraliaInstitutions", checked)}
+                                    onCheckedChange={(checked) => updateField("workingWithAustraliaInstitutions", checked === true)}
                                     disabled={!isEditing}
                                 />
                                 <Label htmlFor="australiaInstitutions" className="text-sm cursor-pointer">
@@ -523,7 +526,7 @@ export default function AgentProfilePage() {
                                 <Checkbox
                                     id="visaSupport"
                                     checked={formData.inHouseVisaSupport || false}
-                                    onCheckedChange={(checked) => updateField("inHouseVisaSupport", checked)}
+                                    onCheckedChange={(checked) => updateField("inHouseVisaSupport", checked === true)}
                                     disabled={!isEditing}
                                 />
                                 <Label htmlFor="visaSupport" className="text-sm cursor-pointer">
