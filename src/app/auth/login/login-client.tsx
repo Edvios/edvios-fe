@@ -25,6 +25,16 @@ export default function LoginPage() {
     mass: 1.2
   } as const;
 
+  const onSubmitLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleLogin(loginData);
+  };
+
+  const onSubmitRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleRegister(registerData);
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 md:p-8 overflow-x-hidden">
       
@@ -118,10 +128,11 @@ export default function LoginPage() {
                             />
                           </div>
                           <Button 
-                            onClick={(e) => { e.preventDefault(); handleLogin(loginData); }} 
+                            onClick={onSubmitLogin} 
                             className="w-full h-10 mt-2 bg-edvios-blue hover:opacity-90 transition-all"
+                            disabled={isLoading}
                           >
-                            <LogIn className="w-4 h-4 mr-2" /> Login
+                            <LogIn className="w-4 h-4 mr-2" /> {isLoading ? "Logging in..." : "Login"}
                           </Button>
                         </motion.div>
                       ) : (
@@ -195,7 +206,7 @@ export default function LoginPage() {
                             </div>
                           </div>
                           <Button 
-                            onClick={(e) => { e.preventDefault(); handleRegister(registerData); }} 
+                            onClick={onSubmitRegister} 
                             className="w-full h-10 mt-2 bg-edvios-green hover:opacity-90 transition-all"
                           >
                             <UserPlus className="w-4 h-4 mr-2" /> Create Account
