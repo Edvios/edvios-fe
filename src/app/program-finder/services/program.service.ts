@@ -25,7 +25,6 @@ export class ProgramService {
       const result = backendInitialProgramDataResponseSchema.safeParse(response.data);
       if (!result.success) {
         console.error("Initial backend schema validation failed:", result.error.format());
-        console.log("Received JSON:", response.data);
         throw new Error("Initial backend schema validation failed");
       }
 
@@ -84,32 +83,26 @@ export class ProgramService {
       if (size) queryParams.append("size", size.toString());
 
       const cleanedFilterBody = Object.fromEntries(
-        Object.entries(filterBody).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
+        Object.entries(filterBody).filter(([, value]) => value !== "" && value !== null && value !== undefined)
       );
 
-      console.log('=== FILTER REQUEST ===');
-      console.log('Filter request body:', cleanedFilterBody);
-      console.log('Filter query params:', queryParams.toString());
+
 
       const response = await axiosInstance.post<BackendFilteredProgramResponse>(
         `/pai/programs/filter?${queryParams}`,
         cleanedFilterBody
       );
 
-      console.log('=== FILTER API RESPONSE ===');
-      console.log('Response data:', response.data);
+
 
       const parsed = backendFilteredProgramResponseSchema.safeParse(response.data);
       if (!parsed.success) {
         console.error("Filtered backend schema validation failed:", parsed.error.format());
-        console.log("Received JSON:", response.data);
         throw new Error("Filtered backend schema validation failed");
       }
 
       const backendData = parsed.data;
-      console.log('Parsed backend data:', backendData);
-      console.log('Number of programs in response:', backendData.data.length);
-      console.log('Total programs:', backendData.total);
+
 
       const transformedData: FilteredProgramDataResponse = {
         programs: backendData.data.map(mapBackendProgramToFrontend),
@@ -132,7 +125,7 @@ export class ProgramService {
 
   static async applyToProgram(data: ProgramApplicationRequest): Promise<{ success: boolean; message: string }> {
     try {
-      console.log("Submitting application:", data);
+
 
       const response = await axiosInstance.post("/applications", data);
       return response.data;
@@ -146,14 +139,14 @@ export class ProgramService {
 function mapBackendProgramToFrontend(program: BackendProgram) {
   const normalizeStatus = (status?: string | null): "available" | "closed" | "waitlist" | "deadline_passed" => {
     if (!status) return "available";
-    
+
     const normalized = status.toLowerCase().trim();
     const validStatuses = ["available", "closed", "waitlist", "deadline_passed"];
-    
+
     if (validStatuses.includes(normalized)) {
       return normalized as "available" | "closed" | "waitlist" | "deadline_passed";
     }
-    
+
     switch (normalized) {
       case "open":
       case "active":

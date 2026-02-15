@@ -28,9 +28,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           sessionStorage.removeItem('user-session');
           router.push('/auth/login');
         } else if (event === 'TOKEN_REFRESHED') {
-          console.log('Token refreshed successfully');
+          // Token refreshed successfully
         } else if (event === 'USER_UPDATED') {
-          console.log('User updated');
+          // User updated
         }
       }
     );

@@ -80,75 +80,74 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
     // Load saved form data and restore progress on component mount
     useEffect(() => {
         if (typeof window === 'undefined') return;
-        
-        const loadUserData = async () => {
+
+        const initializeFlow = async () => {
             try {
-                // First, ensure user session is available
-                let userSession = sessionStorage.getItem('user-session');
-                if (!userSession) {
-                    // Fetch from API if not in sessionStorage
+                // 1. Try to restore saved form data and step
+                const savedFormData = sessionStorage.getItem('agent-registration-form');
+                const savedStep = sessionStorage.getItem('agent-registration-step');
+
+                if (savedFormData) {
                     try {
-                        const response = await axiosInstance.get('/auth/me');
-                        sessionStorage.setItem('user-session', JSON.stringify(response.data));
-                        userSession = JSON.stringify(response.data);
-                        console.log('Fetched and saved user session from API');
-                    } catch (error) {
-                        console.error('Failed to fetch user data from API:', error);
+                        const parsedData = JSON.parse(savedFormData);
+                        setFormData(prev => ({ ...prev, ...parsedData }));
+                    } catch (e) {
+                        console.error('Failed to parse saved form data', e);
                     }
                 }
 
-                // Then, try to restore saved form data
-                const savedFormData = sessionStorage.getItem('agent-registration-form');
-                const savedStep = sessionStorage.getItem('agent-registration-step');
-                
-                if (savedFormData) {
-                    try {
-                        const parsedFormData = JSON.parse(savedFormData);
-                        console.log('Restoring saved agent registration form data');
-                        setFormData(parsedFormData);
-                    } catch (error) {
-                        console.error('Failed to parse saved form data:', error);
-                    }
-                }
-                
                 if (savedStep) {
-                    try {
-                        const step = parseInt(savedStep);
-                        if (!isNaN(step) && step >= 1 && step <= totalSteps) {
-                            setCurrentStep(step);
-                        }
-                    } catch (error) {
-                        console.error('Failed to parse saved step:', error);
+                    const step = parseInt(savedStep);
+                    if (!isNaN(step) && step >= 1 && step <= totalSteps) {
+                        setCurrentStep(step);
                     }
                 }
-                
-                // Autofill user data from session storage if no saved form data
-                if (userSession && !savedFormData) {
+
+                // 2. Load/Fetch user session
+                let userSession = sessionStorage.getItem('user-session');
+                let userData = null;
+
+                if (userSession) {
                     try {
-                        const userData = JSON.parse(userSession);
-                        
-                        setFormData(prev => ({
-                            ...prev,
-                            contactPersonName: (
-                                `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 
-                                userData.name || 
-                                userData.fullName || 
-                                prev.contactPersonName
-                            ),
-                            officialEmail: userData.email || prev.officialEmail,
-                            phoneNumber: userData.phone || userData.phoneNumber || prev.phoneNumber,
-                        }));
-                    } catch (error) {
-                        console.error('Failed to parse user session data:', error);
+                        userData = JSON.parse(userSession);
+                    } catch (e) {
+                        console.error('Failed to parse user session', e);
                     }
+                }
+
+                if (!userData) {
+                    try {
+                        const response = await axiosInstance.get('/auth/me');
+                        userData = response.data;
+                        sessionStorage.setItem('user-session', JSON.stringify(userData));
+                    } catch (e) {
+                        console.error('Failed to fetch user data', e);
+                    }
+                }
+
+                // 3. Handle verification redirect and autofill
+                if (userData) {
+                    if (userData.emailVerified === false) {
+                        AppToast.info("Please verify your email first");
+                        router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
+                        return;
+                    }
+
+                    // Autofill contact info if it's currently empty
+                    setFormData(prev => ({
+                        ...prev,
+                        contactPersonName: prev.contactPersonName || `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || userData.name || userData.fullName || '',
+                        officialEmail: prev.officialEmail || userData.email || '',
+                        phoneNumber: prev.phoneNumber || userData.phone || userData.phoneNumber || '',
+                    }));
                 }
             } catch (error) {
-                console.error('Failed to load user data:', error);
+                console.error('Initialization error:', error);
             }
         };
-        
-        loadUserData();
-    }, []);
+
+        initializeFlow();
+    }, [router, totalSteps]);
 
     // Save form data to sessionStorage whenever it changes
     useEffect(() => {
@@ -197,23 +196,23 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 }
                 break;
             case 4: // Operational Profile
-                if (formData.primaryStudentMarkets.length === 0 || !formData.averageStudentsPerYearLast2Years) {
-                    AppToast.error('Please provide market and student details');
+                if (formData.primaryStudentMarkets.length === 0 || !formData.averageStudentsPerYearLast2Years || formData.mainDestinations.length === 0) {
+                    AppToast.error('Please provide market, destination, and student details');
                     return false;
                 }
                 const averageStudentsPerYearLast2Years = parseInt(formData.averageStudentsPerYearLast2Years);
-                    if (isNaN(averageStudentsPerYearLast2Years) || averageStudentsPerYearLast2Years < 0) {
+                if (isNaN(averageStudentsPerYearLast2Years) || averageStudentsPerYearLast2Years < 0) {
                     AppToast.error('Please enter a valid average students per year');
                     return false;
                 }
                 break;
             case 5: // Services
-                if (!formData.numberOfCounsellors || formData.servicesProvided.length === 0) {
-                    AppToast.error('Please specify services provided and team size');
+                if (!formData.numberOfCounsellors || !formData.typicalStudentProfileStrength || formData.servicesProvided.length === 0) {
+                    AppToast.error('Please specify services provided, student profiles, and team size');
                     return false;
                 }
                 const numberOfCounsellors = parseInt(formData.numberOfCounsellors);
-                    if (isNaN(numberOfCounsellors) || numberOfCounsellors < 0) {
+                if (isNaN(numberOfCounsellors) || numberOfCounsellors < 0) {
                     AppToast.error('Please enter a valid number of counsellors');
                     return false;
                 }
@@ -248,9 +247,12 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
             setError(null);
 
             try {
-                const response = await submitAgentRegistration(formData);
 
-                console.log('Registration response:', response);
+
+                // Call the actual API
+                await submitAgentRegistration(formData);
+
+
                 AppToast.success('Registration successful!');
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 AppToast.info('Please log in again to access your account.');

@@ -56,6 +56,16 @@ export const useAuth = () => {
           return true;
         }
 
+        // If the user has not verified their email, redirect to verification request page
+        if (!userData.emailVerified &&
+          (userData.role === UserTypeEnum.PARTIAL_REGISTER_STUDENT ||
+            userData.role === UserTypeEnum.PARTIAL_REGISTER_AGENT)) {
+          AppToast.info("Please verify your email before proceeding");
+          router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
+          router.refresh();
+          return true;
+        }
+
         // If the user is partially registered, redirect to respective registration page
         if (userData.role === UserTypeEnum.PARTIAL_REGISTER_STUDENT) {
           router.replace("/student-registration");
@@ -144,7 +154,7 @@ export const useAuth = () => {
         role: roleForRegistration,
         phone: registerData.phone,
       };
-      console.log("Creating user with request:", createUserRequest);
+
 
       const createUserResponse = await createUser(
         createUserRequest,
@@ -158,9 +168,7 @@ export const useAuth = () => {
           if (signOutError) {
             console.error("Failed to sign out during rollback:", signOutError);
           } else {
-            console.log(
-              "Rolled back Supabase session after backend creation failure",
-            );
+
           }
         } catch (rollbackError) {
           console.error("Failed to rollback Supabase session:", rollbackError);
@@ -170,12 +178,8 @@ export const useAuth = () => {
         return false;
       }
 
-      AppToast.success("Registration successful");
-      if (roleForRegistration === UserTypeEnum.PARTIAL_REGISTER_STUDENT) {
-        router.replace("/student-registration");
-      } else if (roleForRegistration === UserTypeEnum.PARTIAL_REGISTER_AGENT) {
-        router.replace("/agent-registration");
-      }
+      AppToast.success("Registration successful. Please verify your email.");
+      router.replace(`/auth/verify-request?email=${encodeURIComponent(registerData.email)}`);
 
       // Trigger router navigation
       router.refresh();
@@ -187,7 +191,7 @@ export const useAuth = () => {
         try {
           const { error: signOutError } = await supabase.auth.signOut();
           if (!signOutError) {
-            console.log("Rolled back Supabase session after unexpected error");
+
           }
         } catch (rollbackError) {
           console.error("Failed to rollback Supabase session:", rollbackError);

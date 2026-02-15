@@ -1,9 +1,12 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900,1,2&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant data-dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
+  --font-heading: var(--font-inter);
+  --font-body: "Satoshi", sans-serif;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -47,52 +50,52 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-  /* Edvios brand background utility */
-  .bg-edvios {
-    background-color: var(--edvios-text-blue) !important;
-  }
+/* Edvios brand background utility */
+.bg-edvios {
+  background-color: var(--edvios-text-blue) !important;
+}
 
-  /* Graduation cap background utility (uses new brand shade) */
-  .bg-edvios-cap {
-    background-color: var(--edvios-cap-bg) !important;
-  }
+/* Graduation cap background utility (uses new brand shade) */
+.bg-edvios-cap {
+  background-color: var(--edvios-cap-bg) !important;
+}
 
-  /* Edvios blue background utility */
-  .bg-edvios-blue {
-    background-color: var(--edvios-blue);
-    transition: background-color 0.3s ease-in-out;
-  }
+/* Edvios blue background utility */
+.bg-edvios-blue {
+  background-color: var(--edvios-blue);
+  transition: background-color 0.3s ease-in-out;
+}
 
-  /* Edvios green background utility */
-  .bg-edvios-green {
-    background-color: var(--edvios-green);
-    transition: background-color 0.3s ease-in-out;
-  }
+/* Edvios green background utility */
+.bg-edvios-green {
+  background-color: var(--edvios-green);
+  transition: background-color 0.3s ease-in-out;
+}
 
-  /* Sidebar active item with hover effect */
-  .sidebar-item-active {
-    background-color: var(--edvios-blue);
-    transition: background-color 0.3s ease-in-out;
-  }
+/* Sidebar active item with hover effect */
+.sidebar-item-active {
+  background-color: var(--edvios-blue);
+  transition: background-color 0.3s ease-in-out;
+}
 
-  /* Button default with hover effect */
-  .btn-default {
-    background-color: var(--edvios-blue);
-    transition: background-color 0.3s ease-in-out;
-  }
+/* Button default with hover effect */
+.btn-default {
+  background-color: var(--edvios-green);
+  transition: background-color 0.3s ease-in-out;
+}
 
-  .btn-default:hover {
-    background-color: var(--edvios-green);
-  }
+.btn-default:hover {
+  background-color: var(--edvios-blue);
+}
 
-  /* Button outline with hover effect */
-  .btn-outline-hover {
-    transition: all 0.2s ease-in-out;
-  }
+/* Button outline with hover effect */
+.btn-outline-hover {
+  transition: all 0.2s ease-in-out;
+}
 
-  .btn-outline-hover:hover {
-    background-color: rgba(28, 135, 226, 0.1);
-  }
+.btn-outline-hover:hover {
+  background-color: rgba(28, 135, 226, 0.1);
+}
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -129,9 +132,9 @@
 }
 
 body {
-  background-color: rgb(var(--background));
-  color: rgb(var(--foreground));
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
 }
 
 /* green gradient utilities */
@@ -151,14 +154,16 @@ body {
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem; /* larger consistent gap between columns & rows */
+  gap: 1.5rem;
+  /* larger consistent gap between columns & rows */
   align-items: start;
 }
 
 .form-field {
   width: 100%;
   margin: 0;
-  padding: 0.5rem 0; /* consistent vertical spacing inside each field */
+  padding: 0.5rem 0;
+  /* consistent vertical spacing inside each field */
 }
 
 /* Responsive: stack fields on small screens */
@@ -167,15 +172,22 @@ body {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
   .form-field {
     padding: 0.5rem 0;
   }
 }
 
 /* Headline gradient styles */
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 .headline,
 [class*="CardTitle"] {
+  font-family: var(--font-heading);
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
