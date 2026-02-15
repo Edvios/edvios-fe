@@ -14,6 +14,7 @@ interface OverviewTabProps {
   }
   totalStudents: number
   totalInternational: number
+  loading?: boolean
 }
 
 const getPartnershipClasses = (level: string) => {
