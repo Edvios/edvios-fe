@@ -55,7 +55,7 @@ export const submitStudentRegistration = async (
       firstName: formData.firstName ? capitalizeFirstLetter(formData.firstName) : null,
       lastName: formData.lastName ? capitalizeFirstLetter(formData.lastName) : null,
       dob: formData.dob || null,
-      gender: formData.gender || null, 
+      gender: formData.gender || null,
       nationality: formData.nationality || null,
       passportNumber: formData.passportNumber || null,
       passportExpiryDate: formData.passportExpiryDate || null,
@@ -87,7 +87,7 @@ export const submitStudentRegistration = async (
       intendedIntakeYear: intendedIntakeYear,
       preferredCountries: formData.preferredDestination.length > 0 ? formData.preferredDestination : null,
       preferredStudyLevel: formData.preferredStudyLevel || null,
-      preferredFieldOfStudy: formData.preferredProgram || null, 
+      preferredFieldOfStudy: formData.preferredProgram || null,
       estimatedBudget: formData.estimatedBudget ? parseFloat(formData.estimatedBudget) : null,
       fundingSource: formData.fundingSource || null,
 
@@ -110,7 +110,7 @@ export const submitStudentRegistration = async (
       throw new Error(`Validation failed: ${errorMessages}`);
     }
 
-    console.log('Submitting registration:', validation.data);
+
 
     const response = await axiosInstance.post<RegistrationResponseDto>(
       '/students',

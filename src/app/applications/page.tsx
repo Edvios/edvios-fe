@@ -98,9 +98,9 @@ export default function AdminPanel() {
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <h2 className="text-xl font-semibold text-gray-900">Applications</h2>
-              <ApplicationFilters 
-                currentFilter={filter} 
-                onFilterChange={handleFilterChange} 
+              <ApplicationFilters
+                currentFilter={filter}
+                onFilterChange={handleFilterChange}
               />
             </div>
           </div>
@@ -116,8 +116,8 @@ export default function AdminPanel() {
                   No applications found
                 </h3>
                 <p className="text-gray-600">
-                  {filter === 'all' 
-                    ? 'There are no applications to display.' 
+                  {filter === 'all'
+                    ? 'There are no applications to display.'
                     : `No ${filter.toLowerCase()} applications at this time.`}
                 </p>
               </div>

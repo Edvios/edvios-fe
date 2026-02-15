@@ -70,10 +70,10 @@ export const usePrograms = () => {
             clearTimeout(debounceTimer.current);
         }
 
-        console.log('Filters changed:', filters);
+
 
         debounceTimer.current = setTimeout(() => {
-            console.log('Fetching filtered programs with filters:', filters);
+
             lastAppliedFiltersRef.current = currentFiltersStr;
             debouncedFetchFilteredPrograms(filters);
         }, 500);
@@ -89,7 +89,7 @@ export const usePrograms = () => {
 
 
     const updateFilter = useCallback((key: keyof ProgramFilterRequest, value: string | number | undefined) => {
-        console.log(`Updating filter: ${key} = ${value}`);
+
         setFilters(prev => {
             const newFilters = { ...prev, [key]: value };
 
@@ -107,7 +107,7 @@ export const usePrograms = () => {
                 newFilters[key] = undefined;
             }
 
-            console.log('New filters state:', newFilters);
+
             return newFilters;
         });
     }, []);

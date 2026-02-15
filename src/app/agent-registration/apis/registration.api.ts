@@ -18,7 +18,7 @@ export const submitAgentRegistration = async (
             // Identity
             legalName: formData.legalName,
             tradingName: formData.tradingName || undefined,
-            agentName: formData.tradingName || formData.legalName,
+            agentName: formData.agentName || formData.tradingName || formData.legalName,
             countryOfRegistration: formData.countryOfRegistration,
             yearEstablished: formData.yearEstablished ? parseInt(formData.yearEstablished, 10) : undefined,
             websiteUrl: formData.websiteUrl || undefined,
@@ -65,7 +65,7 @@ export const submitAgentRegistration = async (
             throw new Error(`Validation failed: ${errorMessages}`);
         }
 
-        console.log('Submitting agent registration:', validation.data);
+
 
         const response = await axiosInstance.post<RegistrationResponseDto>(
             '/agents',

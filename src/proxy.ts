@@ -106,7 +106,7 @@ export async function proxy(request: NextRequest) {
 
       // Check if user is trying to access a different role's dashboard
       if (allowedRoute && !pathname.startsWith(allowedRoute)) {
-        console.log('Redirecting to allowed route:', allowedRoute);
+
         const url = request.nextUrl.clone();
         url.pathname = allowedRoute;
         return NextResponse.redirect(url);

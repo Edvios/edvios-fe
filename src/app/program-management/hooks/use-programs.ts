@@ -27,8 +27,9 @@ export function usePrograms(initialFilters: ProgramFilters = {}) {
   const [size, setSize] = useState<number>(initialFilters.size ?? 10);
 
   const [filters, setFilters] = useState<Record<string, unknown>>(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { page, size, ...rest } = initialFilters;
+    void page;
+    void size;
     return rest;
   });
 
@@ -41,7 +42,7 @@ export function usePrograms(initialFilters: ProgramFilters = {}) {
 
     try {
       const response: ProgramsResopnseDto = await programApi.fetchPrograms(filters, { page, size });
-      
+
       setPrograms((response.data ?? []) as unknown as Program[]);
       setTotal(response.total ?? 0);
     } catch (err) {
@@ -72,10 +73,10 @@ export function usePrograms(initialFilters: ProgramFilters = {}) {
   const createProgram = useCallback(async (data: Record<string, unknown>) => {
     try {
       const newProgram = await programApi.createProgram(data);
-      
+
       setPrograms(prev => [newProgram, ...prev]);
       setTotal(prev => prev + 1);
-      
+
       AppToast.success('Program created successfully');
       return newProgram;
     } catch (err) {
@@ -88,11 +89,11 @@ export function usePrograms(initialFilters: ProgramFilters = {}) {
   const updateProgram = useCallback(async (id: string, data: Record<string, unknown>) => {
     try {
       const updatedProgram = await programApi.updateProgram(id, data);
-      
-      setPrograms(prev => 
+
+      setPrograms(prev =>
         prev.map(program => program.id === id ? { ...program, ...updatedProgram } : program)
       );
-      
+
       AppToast.success('Program updated successfully');
       return updatedProgram;
     } catch (err) {
@@ -105,11 +106,11 @@ export function usePrograms(initialFilters: ProgramFilters = {}) {
   const deleteProgram = useCallback(async (id: string) => {
     try {
       await programApi.deleteProgram(id);
-      
+
       // Remove from local state
       setPrograms(prev => prev.filter(program => program.id !== id));
       setTotal(prev => Math.max(0, prev - 1));
-      
+
       AppToast.success('Program deleted successfully');
     } catch (err) {
       console.error('Failed to delete program:', err);
