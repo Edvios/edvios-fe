@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { StudentRegistrationData } from '../types';
 
 export const createStudentDtoSchema = z.object({
   // Personal

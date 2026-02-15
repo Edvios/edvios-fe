@@ -12,7 +12,6 @@ import {
   User,
   Search,
   MessageCircle,
-  HelpingHandIcon,
   Building2,
   BookOpen,
   LucideUserPlus2,
@@ -173,21 +172,6 @@ export function AppSidebar() {
         return agentItems;
       default:
         return [];
-    }
-  }, [userData?.role]);
-
-  const roleLabel = useMemo(() => {
-    switch (userData?.role) {
-      case "STUDENT":
-        return "Student Portal";
-      case "AGENT":
-        return "Agent Portal";
-      case "ADMIN":
-        return "Admin Portal";
-      case "SELECTED_AGENT":
-        return "Agent Portal";
-      default:
-        return "Portal";
     }
   }, [userData?.role]);
 

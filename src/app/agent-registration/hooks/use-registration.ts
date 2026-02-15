@@ -248,7 +248,6 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
             setError(null);
 
             try {
-
                 const response = await submitAgentRegistration(formData);
 
                 console.log('Registration response:', response);

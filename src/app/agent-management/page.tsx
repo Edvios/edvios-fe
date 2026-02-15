@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, ShieldCheck, Users, Clock, RotateCcw, XCircle, Filter } from 'lucide-react';
+import { Search, Users, Clock, RotateCcw, XCircle, Filter } from 'lucide-react';
 import { useAgents } from './hooks/use-agents';
 import { Agent, AgentStatus } from './types/agent.types';
 import { approveAgent, deleteAgent } from './api/agent.api';
