@@ -7,7 +7,52 @@ export interface Agent {
   phone?: string;
   createdAt: string;
   updatedAt: string;
-  // Additional fields from the Agent profile (if any, but backend shows User objects)
+
+  // Company information
+  legalName?: string;
+  tradingName?: string | null;
+  agentName?: string;
+  calendlyLink?: string | null;
+  countryOfRegistration?: string;
+  yearEstablished?: number | null;
+  websiteUrl?: string | null;
+
+  // Contact information
+  officeAddress?: string;
+  contactPersonName?: string;
+  designation?: string | null;
+  officialEmail?: string;
+  phoneNumber?: string;
+
+  // Registration documents
+  businessRegistrationNumber?: string;
+  businessRegistrationCertificate?: string | null;
+  officeAddressProof?: string | null;
+
+  // Partnerships & accreditations
+  registeredWithEducationCouncils?: boolean;
+  workingWithUkInstitutions?: boolean;
+  workingWithCanadaInstitutions?: boolean;
+  workingWithAustraliaInstitutions?: boolean;
+
+  // Business details
+  primaryStudentMarkets?: string[];
+  averageStudentsPerYearLast2Years?: number | null;
+  mainDestinations?: string[];
+  typicalStudentProfileStrength?: string | null;
+
+  // Services
+  inHouseVisaSupport?: boolean;
+  numberOfCounsellors?: number;
+  servicesProvided?: string[];
+
+  // Platform usage
+  reasonToUseEdvios?: string | null;
+  interestedFeatures?: string[];
+  agentTier?: string;
+  notes?: string | null;
+
+  // Existing fields
   address?: string;
   city?: string;
   country?: string;
