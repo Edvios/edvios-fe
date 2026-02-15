@@ -17,11 +17,11 @@ export const useApplications = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       if (typeof window === "undefined") {
         return;
       }
-      
+
       const user = sessionStorage.getItem("user-session");
       if (!user) {
         throw new Error("User not found");
@@ -47,7 +47,7 @@ export const useApplications = () => {
     try {
       setCountsLoading(true);
       const data = await agentDashboardApi.getStats();
-      console.log("Count API response:", data);
+
       setCounts(data);
     } catch (err) {
       const message =

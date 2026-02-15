@@ -60,7 +60,7 @@ export function useNotifications(role: Role) {
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [role, tableName]);
+    }, [role, tableName, supabase]);
 
     return {
         notifications,

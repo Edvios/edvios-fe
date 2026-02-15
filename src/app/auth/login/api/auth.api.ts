@@ -79,15 +79,15 @@ export const signUp = async (data: SignUpRequestDto): Promise<SignUpResponseDto>
   const role = data.role;
   try {
     const { data: authData, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            role: role || 'STUDENT'
-          }
+      email,
+      password,
+      options: {
+        data: {
+          role: role || 'STUDENT'
         }
-      })
-    
+      }
+    })
+
     if (error) {
       return {
         success: false,
@@ -124,7 +124,7 @@ export const signUp = async (data: SignUpRequestDto): Promise<SignUpResponseDto>
  * API for user registration - Creates user in backend after Supabase signup
  * @param data - User registration data including token from signUp
  * @param token - Access token from Supabase signUp response
- */ 
+ */
 export const createUser = async (data: CreateUserRequestDto, token: string): Promise<CreateUserResponseDto> => {
   try {
     if (typeof window !== 'undefined') {
@@ -160,12 +160,12 @@ export const logout = async (): Promise<AuthResponseDto> => {
   try {
     // Sign out from Supabase
     const { error } = await supabase.auth.signOut();
-    
+
     if (error) {
       console.error('Supabase signout error:', error);
-      return { 
-        success: false, 
-        message: error.message 
+      return {
+        success: false,
+        message: error.message
       };
     }
 
@@ -176,15 +176,54 @@ export const logout = async (): Promise<AuthResponseDto> => {
       cookieStore.delete('sb-jlqamlxzkfmpfisjlzrg-auth-token');
     }
     AppToast.success("Logged out successfully");
-    return { 
-        success: true, 
-        message: "Successfully logged out" 
-      };
+    return {
+      success: true,
+      message: "Successfully logged out"
+    };
   } catch (error) {
     console.error('Logout error:', error);
-    return { 
-      success: false, 
-      message: 'An error occurred during logout' 
+    return {
+      success: false,
+      message: 'An error occurred during logout'
     };
   }
 };
+
+/**
+ * API call for verifying email
+ */
+export const verifyEmail = async (token: string): Promise<AuthResponseDto> => {
+  try {
+    const response = await axiosInstance.get(`/auth/verify-email?token=${token}`);
+    return {
+      success: true,
+      message: response.data.message || "Email verified successfully"
+    };
+  } catch (error) {
+    console.error('Verify email error:', error);
+    return {
+      success: false,
+      message: axios.isAxiosError(error) ? error.response?.data?.message || "Failed to verify email" : "An error occurred"
+    };
+  }
+};
+
+/**
+ * API call for resending verification email
+ */
+export const resendVerificationEmail = async (email: string): Promise<AuthResponseDto> => {
+  try {
+    const response = await axiosInstance.post('/auth/resend-verification', { email });
+    return {
+      success: true,
+      message: response.data.message || "Verification email sent successfully"
+    };
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    return {
+      success: false,
+      message: axios.isAxiosError(error) ? error.response?.data?.message || "Failed to resend email" : "An error occurred"
+    };
+  }
+};
+

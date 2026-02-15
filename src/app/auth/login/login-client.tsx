@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<string>(AuthTabEnum.LOGIN);
   const { loginData, updateLoginData } = useLoginForm();
   const { registerData, updateRegisterData } = useRegisterForm();
@@ -25,6 +27,24 @@ export default function LoginPage() {
     mass: 1.2
   } as const;
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    }
+  } as any;
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: { opacity: 1, x: 0 }
+  };
+
   const onSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     await handleLogin(loginData);
@@ -36,13 +56,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 md:p-8 overflow-x-hidden">
-      
-      <div className="w-full max-w-6xl flex items-center justify-center">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 md:p-8 overflow-x-hidden relative">
+      {/* Premium Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-edvios-green/5 blur-[120px] rounded-full" />
+        <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-edvios-blue/5 blur-[120px] rounded-full" />
+      </div>
+
+      <div className="w-full max-w-6xl flex items-center justify-center relative z-10">
         <motion.div
           layout
-          transition={slowSmoothTransition}
-          className="w-full shadow-2xl border border-gray-100 overflow-hidden rounded-2xl bg-white"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="w-full shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-white/50 overflow-hidden rounded-3xl bg-white"
         >
           <motion.div layout className="grid md:grid-cols-2 items-stretch md:min-h-[650px]">
             
@@ -122,6 +149,23 @@ export default function LoginPage() {
 
                 <CardContent className="px-0">
                   <div className="space-y-6">
+                    {/* Status Messages */}
+                    <div className="space-y-4 mb-4">
+                      {searchParams.get('registered') === 'true' && (
+                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative text-sm" role="alert">
+                          <strong className="font-bold">Registration Successful!</strong>
+                          <span className="block sm:inline"> Your account is pending admin approval. You will be able to login once approved.</span>
+                        </div>
+                      )}
+
+                      {searchParams.get('verified') === 'true' && (
+                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative text-sm" role="alert">
+                          <strong className="font-bold">Email Verified!</strong>
+                          <span className="block sm:inline"> You can now log in to your account.</span>
+                        </div>
+                      )}
+                    </div>
+
                     <UserTypeToggle
                       options={[AuthTabEnum.LOGIN, AuthTabEnum.REGISTER]}
                       value={activeTab}
@@ -129,15 +173,15 @@ export default function LoginPage() {
                       disabled={isLoading}
                     />
 
-                    <AnimatePresence mode="popLayout" initial={false}>
+                    <AnimatePresence mode="wait" initial={false}>
                       {activeTab === AuthTabEnum.LOGIN ? (
                         <motion.div
                           key="login-form"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 20 }}
-                          transition={slowSmoothTransition}
-                          className="space-y-4"
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          variants={containerVariants}
+                          className="space-y-5"
                         >
                           <div className="space-y-2">
                             <Label htmlFor="login-email" className="text-sm">Email</Label>
@@ -172,11 +216,11 @@ export default function LoginPage() {
                       ) : (
                         <motion.div
                           key="register-form"
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -20 }}
-                          transition={slowSmoothTransition}
-                          className="space-y-4"
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          variants={containerVariants}
+                          className="space-y-5"
                         >
                           <UserTypeToggle
                             options={[UserTypeEnum.STUDENT, UserTypeEnum.AGENT]}
