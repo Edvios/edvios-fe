@@ -125,7 +125,7 @@ export const InstitutionCard = React.memo(function InstitutionCard({ institution
           <div className="mt-auto">
             <div className="grid grid-cols-3 gap-3 md:gap-4 text-center pt-3 md:pt-4 border-t border-gray-200">
               <div>
-                <p className="text-lg md:text-xl lg:text-2xl font-bold text-gradient leading-tight">
+                <p className="text-lg md:text-xl lg:text-2xl font-bold text-edvios-blue leading-tight">
                   #{typeof institution.ranking === 'number' ? institution.ranking : 'N/A'}
                 </p>
                 <p className="text-[10px] md:text-xs text-gray-500 mt-1">Ranking</p>

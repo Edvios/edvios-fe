@@ -14,6 +14,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { useApplications } from "./hooks/useAgentDashboard";
 import { motion } from "framer-motion";
+import { LogoLoading } from "@/components/ui/logo-loading";
 
 interface UserData {
   email: string;
@@ -70,34 +71,27 @@ export default function AgentDashboard() {
   }, [router, supabase.auth]);
 
   if (isLoading || !userData) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-    </div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <LogoLoading />
+      </div>
+    );
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50"
-    >
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50">
       {/* Header */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-[#99c12a] rounded-full flex items-center justify-center">
-                <Building className="w-6 h-6 text-white " />
-              </div>
-              <div>
-                <p className="text-xl font-bold text-edvios-blue">Agent Portal</p>
-                <p className="text-sm text-gray-500">Welcome, {userData.name}</p>
-              </div>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+            <Building className="w-7 h-7 text-white" />
+          </div>
+          <div className="font-heading">
+            <h2 className="text-2xl sm:text-3xl font-bold text-edvios-blue">Agent Portal</h2>
+            <p className="text-gray-600">Welcome back, {userData.name}</p>
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
@@ -204,6 +198,6 @@ export default function AgentDashboard() {
           </div>
         </div>
       </main>
-    </motion.div>
+    </div>
   );
 }

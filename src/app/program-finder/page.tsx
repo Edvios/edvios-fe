@@ -38,8 +38,8 @@ export default function ProgramFinderPage() {
     return (
         <div className="mx-auto w-full max-w-425 p-4 md:p-6 lg:p-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <p className="text-3xl font-bold tracking-tight text-edvios-blue">Find Your Program</p>
+                <div className="font-heading">
+                    <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Find Your Program</h2>
                     <p className="text-muted-foreground mt-1">Discover universities and courses that match your goals.</p>
                 </div>
                 {filteredData && (

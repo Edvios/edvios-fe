@@ -120,7 +120,7 @@ export const useRegistration = (): UseRegistrationReturn => {
         }
 
         // 2. Load/Fetch user session
-        let userSession = sessionStorage.getItem('user-session');
+        const userSession = sessionStorage.getItem('user-session');
         let userData = null;
 
         if (userSession) {

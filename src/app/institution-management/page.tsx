@@ -14,6 +14,7 @@ import { Pagination } from './components/Pagination'
 import { CreateInstitutionDialog } from './components/CreateInstitutionDialog'
 import { TabType } from '@/app/institution-management/enums/institute-managemet.enum'
 import { UserTypeToggle } from '@/app/auth/login/components/toggle'
+import { LogoLoading } from '@/components/ui/logo-loading'
 
 export default function InstitutionManagementPage() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -52,36 +53,36 @@ export default function InstitutionManagementPage() {
         label="Total Institutions"
         value={metrics.totalInstitutions}
         icon={School}
+        loading={isLoading}
       />
       <StatsCard
         label="Active Partners"
         value={metrics.activeCount}
         icon={CheckCircle2}
         valueColor="text-green-600"
+        loading={isLoading}
       />
       <StatsCard
         label="Total Programs"
         value={metrics.totalPrograms.toLocaleString()}
         icon={BookOpen}
         valueColor="text-purple-600"
+        loading={isLoading}
       />
       <StatsCard
         label="Premium Partners"
         value={metrics.premiumCount}
         icon={Award}
         valueColor="text-amber-600"
+        loading={isLoading}
       />
     </div>
-  ), [metrics])
+  ), [metrics, isLoading])
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-12">
-            <p className="text-gray-600">Loading institutions...</p>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <LogoLoading />
       </div>
     )
   }
@@ -104,10 +105,10 @@ export default function InstitutionManagementPage() {
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-3xl font-bold text-edvios-blue">Institution Management</p>
+          <div className="font-heading">
+            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Institution Management</h2>
             <p className="mt-1 text-gray-600">
-              Manage partnerships with educational institutions worldwide
+              Manage partner universities and institutions
             </p>
           </div>
           <Button 
@@ -139,6 +140,7 @@ export default function InstitutionManagementPage() {
                 partnershipDistribution={partnershipDistribution}
                 totalStudents={metrics.totalStudents}
                 totalInternational={metrics.totalInternational}
+                loading={isLoading}
               />
             )}
 
@@ -156,7 +158,7 @@ export default function InstitutionManagementPage() {
                   onTypeChange={handleTypeChange}
                 />
 
-                <InstitutionList institutions={institutions} />
+                <InstitutionList institutions={institutions} loading={isLoading} />
 
                 {/* Pagination */}
                 {institutions.length > 0 && (

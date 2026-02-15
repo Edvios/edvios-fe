@@ -46,7 +46,7 @@ export default function CreateNotificationPage() {
         <div className="container mx-auto max-w-2xl py-8">
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold text-gradient">Create Notification</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-edvios-blue">Create Notification</CardTitle>
                     <CardDescription>
                         Send a system notification to students or agents.
                     </CardDescription>

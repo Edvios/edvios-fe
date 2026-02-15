@@ -1,9 +1,8 @@
-// app/institutions/components/OverviewTab.tsx
-
 import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import type { Institution } from '@/app/institution-management/types/institute-managemet.types'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface OverviewTabProps {
   topInstitutions: Institution[]
@@ -14,6 +13,7 @@ interface OverviewTabProps {
   }
   totalStudents: number
   totalInternational: number
+  loading?: boolean
 }
 
 const getPartnershipClasses = (level: string) => {
@@ -26,8 +26,53 @@ export function OverviewTab({
   topInstitutions,
   partnershipDistribution,
   totalStudents,
-  totalInternational
+  totalInternational,
+  loading = false
 }: OverviewTabProps) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="border-gray-200">
+          <CardContent className="p-6">
+            <Skeleton className="h-7 w-48 mb-6" />
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  <Skeleton className="h-10 w-10 rounded-lg" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/4" />
+                  </div>
+                  <div className="space-y-2 text-right">
+                    <Skeleton className="h-4 w-16 ml-auto" />
+                    <Skeleton className="h-5 w-20 ml-auto rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-gray-200">
+          <CardContent className="p-6 space-y-6">
+            <div>
+              <Skeleton className="h-7 w-48 mb-6" />
+              <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-3 w-3 rounded-full" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                    <Skeleton className="h-4 w-8" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Top Institutions */}

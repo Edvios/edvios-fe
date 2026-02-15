@@ -65,7 +65,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
     const getRoleBadge = (role: string) => {
         if (role === 'AGENT') {
             return (
-                <Badge variant="outline" className="bg-edvios-green text-white border-gradient px-3 py-1 rounded-full text-xs font-bold">
+                <Badge variant="outline" className="bg-edvios-green text-white border-none px-3 py-1 rounded-full text-xs font-bold">
                     APPROVED
                 </Badge>
             );
@@ -87,7 +87,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                     </div>
                     <div>
                         <div className="font-bold text-gray-900 text-base">{row.firstName} {row.lastName}</div>
-                        <div className="flex items-center gap-2 text-xs text-gradient font-mono">
+                        <div className="flex items-center gap-2 text-xs text-edvios-blue font-mono">
                             <Clock className="w-3 h-3" />
                             Joined {new Date(row.createdAt).toLocaleDateString()}
                         </div>
@@ -100,12 +100,12 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
             Cell: ({ row }: { row: Agent }) => (
                 <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Mail className="w-4 h-4 text-gradient" />
+                        <Mail className="w-4 h-4 text-edvios-blue" />
                         {row.email}
                     </div>
                     {row.phone && (
                         <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
-                            <Phone className="w-4 h-4 text-gradient" />
+                            <Phone className="w-4 h-4 text-edvios-blue" />
                             {row.phone}
                         </div>
                     )}
@@ -135,7 +135,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                             variant="ghost"
                             size="sm"
                             onClick={() => setApproveDialog({ open: true, agentId: row.id })}
-                            className="hover:bg-edvios-green/10 hover:text-gradient text-gradient rounded-xl transition-all h-10 w-10 p-0"
+                            className="hover:bg-edvios-green/10 hover:text-edvios-blue text-edvios-blue rounded-xl transition-all h-10 w-10 p-0"
                             title="Approve Agent"
                         >
                             <CheckCircle className="w-5 h-5" />

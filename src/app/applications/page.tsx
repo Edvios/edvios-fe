@@ -6,10 +6,12 @@ import { GraduationCap, CheckCircle2, Clock, XCircle } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { useApplications } from '@/app/applications/hooks/use-applications'
 import { ApplicationCard } from '@/app/applications/components/ApplicationCard'
+import { ApplicationCardSkeleton } from '@/app/applications/components/ApplicationCardSkeleton'
 import { ApplicationFilters } from '@/app/applications/components/ApplicationFilters'
 import { Pagination } from '@/app/applications/components/Pagination'
 import { ApplicationStatus } from '@/app/applications/enums/application.enum'
 import { StatsCard } from '@/app/institution-management/components/StatsCard'
+import { LogoLoading } from '@/components/ui/logo-loading'
 
 export default function AdminPanel() {
   const [filter, setFilter] = useState<'all' | ApplicationStatus>('all')
@@ -67,12 +69,8 @@ export default function AdminPanel() {
 
   if (loading || countsLoading) {
     return (
-      <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-12">
-            <p className="text-gray-600">Loading applications...</p>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <LogoLoading/>
       </div>
     )
   }
@@ -83,8 +81,8 @@ export default function AdminPanel() {
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-3xl font-bold text-edvios-blue">Application Management</p>
+          <div className="font-heading">
+            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Application Management</h2>
             <p className="mt-1 text-gray-600">
               Review and manage student applications
             </p>
@@ -126,13 +124,19 @@ export default function AdminPanel() {
             ) : (
               <>
                 <div className="space-y-6">
-                  {applications.map((application) => (
-                    <ApplicationCard
-                      key={application.id}
-                      application={application}
-                      onStatusUpdate={updateApplicationStatus}
-                    />
-                  ))}
+                  {loading ? (
+                    [...Array(3)].map((_, i) => (
+                      <ApplicationCardSkeleton key={i} />
+                    ))
+                  ) : (
+                    applications.map((application) => (
+                      <ApplicationCard
+                        key={application.id}
+                        application={application}
+                        onStatusUpdate={updateApplicationStatus}
+                      />
+                    ))
+                  )}
                 </div>
 
                 {/* Pagination */}

@@ -29,8 +29,43 @@ export function Table<T extends { id: string }>({
 }: TableProps<T>) {
   if (loading) {
     return (
-      <div className="flex justify-center py-10 text-muted-foreground">
-        Loading data...
+      <div className="space-y-4">
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-muted">
+              <tr>
+                {columns.map((col, index) => (
+                  <th key={index} className="px-4 py-3 text-left font-medium">
+                    <div className="h-4 w-24 bg-gray-200 animate-pulse rounded" />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, i) => (
+                <tr key={i} className="border-b border-gray-100 last:border-0">
+                  {columns.map((_, j) => (
+                    <td key={j} className="px-4 py-4">
+                      <div className="h-4 w-full bg-gray-100 animate-pulse rounded" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="md:hidden space-y-4 p-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+              {[...Array(3)].map((_, j) => (
+                <div key={j} className="space-y-2">
+                  <div className="h-3 w-16 bg-gray-100 animate-pulse rounded" />
+                  <div className="h-4 w-full bg-gray-50 animate-pulse rounded" />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

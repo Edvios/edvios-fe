@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, startTransition } from 'react';
-import { Search, Loader2, X, Plus } from 'lucide-react';
+import { Search, X, Plus } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
 import ProgramCard from './components/program-card';
@@ -9,6 +9,7 @@ import CreateProgramForm from './components/CreateProgramForm';
 import { usePrograms } from './hooks/use-programs';
 import type { Institution, Intake, Subject, Program } from './types';
 import { StudyLevel, Country, ProgramStatus } from './enums';
+import { LogoLoading } from '@/components/ui/logo-loading';
 
 // Debounce hook
 function useDebounce<T>(value: T, delay: number): T {
@@ -213,9 +214,9 @@ export default function ProgramManagementPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-          <div>
-            <p className="text-3xl font-bold text-edvios-blue">Program Management</p>
-            <p className="text-gray-600 mt-1">Manage university degree programs and offerings</p>
+          <div className="font-heading">
+            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Program Management</h2>
+            <p className="mt-1 text-gray-600">Explore and manage educational programs globally</p>
           </div>
           <Button
             onClick={handleAddNew}
@@ -337,15 +338,11 @@ export default function ProgramManagementPage() {
             )}
           </div>
         </div>
-
         {/* Main content */}
-        <section className="relative">
+        <section className="relative min-h-[400px]">
           {loading && (
             <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
-              <div className="flex flex-col items-center gap-3">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-                <p className="text-sm text-gray-600">Loading programs...</p>
-              </div>
+              <LogoLoading size="sm" />
             </div>
           )}
           
