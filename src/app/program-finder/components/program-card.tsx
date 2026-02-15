@@ -76,35 +76,38 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
   // ──────────────────────────────────────────────────────────────────
 
   return (
-    <Card className="h-full flex flex-col rounded-2xl bg-background hover:shadow-xl transition-all duration-300 shadow-neutral-600">
-      <CardHeader className="space-y-3 pb-4">
-        <div className="min-w-0">
-          <h3 className="text-base font-semibold leading-snug line-clamp-3 break-words">
+    <Card className="relative overflow-hidden w-full rounded-2xl bg-background hover:shadow-md transition-all duration-300 shadow-neutral-500">
+      <div className="absolute left-0 top-0 bottom-0 w-2 bg-edvios-green" />
+
+      <CardHeader className="pb-2 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 items-start md:items-center gap-2 md:gap-4">
+          <h3 className="text-base font-semibold truncate min-w-0">
             {program.title}
           </h3>
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+
+          <p className="text-sm text-muted-foreground truncate min-w-0">
             {program.institution}
           </p>
-        </div>
 
-        {program.scholarship && (
-          <div>
-            <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
-              Scholarship
+          <div className="min-w-0">
+            {program.scholarship && (
+              <span className="inline-block rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800">
+                Scholarship
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1.5 text-sm text-muted-foreground truncate min-w-0">
+            <MapPin className="h-4 w-4 shrink-0" />
+            <span className="truncate">
+              {program.location}, {program.country}
             </span>
           </div>
-        )}
-
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <MapPin className="h-4 w-4 shrink-0" />
-          <span className="truncate">
-            {program.location}, {program.country}
-          </span>
         </div>
       </CardHeader>
 
-      <CardContent className="flex-grow pt-0">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+      <CardContent className="pt-0 pb-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
           <InfoItem icon={GraduationCap} label={program.level} />
           <InfoItem icon={Calendar} label={program.intake} />
           <InfoItem icon={Clock} label={program.duration} />
@@ -115,25 +118,29 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
           />
         </div>
 
-        <div className="mt-5 pt-4 border-t grid grid-cols-2 gap-4">
+        <div className="mt-2 pt-2 grid grid-cols-2 md:grid-cols-4 gap-2">
           <MetaItem label="English Score" value={program.englishTestScore} />
           <MetaItem
             label="Deadline"
             value={formattedDeadline}
           />
+          <MetaItem label="Country" value={program.country} />
+          <MetaItem label="Location" value={program.location} />
         </div>
       </CardContent>
 
-      <CardFooter className="gap-3 flex flex-col sm:flex-row">
+      <CardFooter className="gap-2 flex flex-row pt-0 pb-4">
         <Button
           variant="outline"
-          className="w-full sm:w-1/2"
+          size="sm"
+          className="w-1/2"
           onClick={() => onDetailClick(program)}
         >
           View Details
         </Button>
         <Button
-          className="w-full sm:w-1/2 bg-edvios-green text-white shadow-sm hover:shadow-md transition"
+          size="sm"
+          className="w-1/2 bg-edvios-green text-white shadow-sm hover:shadow-md transition"
           onClick={() => onApplyClick(program)}
         >
           Apply Now

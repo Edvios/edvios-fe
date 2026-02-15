@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Briefcase, User, Building, Globe, Layers, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2, Settings } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
 import { useAgentRegistration } from './hooks/use-registration';
 import { AgentRegistrationData } from './types/registation.types';
 import { ServiceType, FeatureType } from './enums/registration.enums';
@@ -54,7 +55,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
         switch (currentStep) {
             case 1:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Briefcase className="h-6 w-6 text-white" />
@@ -111,7 +112,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <Label htmlFor="yearEstablished" className="text-sm font-medium">Year Established <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="yearEstablished"
-                                    type="number"
                                     value={formData.yearEstablished}
                                     onChange={(e) => handleInputChange('yearEstablished', e.target.value)}
                                     placeholder="YYYY"
@@ -155,7 +155,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 2:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <User className="h-6 w-6 text-white" />
@@ -195,6 +195,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     value={formData.officialEmail}
                                     onChange={(e) => handleInputChange('officialEmail', e.target.value)}
                                     placeholder="email@company.com"
+                                    disabled
                                 />
                             </div>
 
@@ -213,7 +214,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 3:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Building className="h-6 w-6 text-white" />
@@ -282,7 +283,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 4:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Globe className="h-6 w-6 text-white" />
@@ -346,7 +347,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     <Label htmlFor="averageStudentsPerYearLast2Years" className="text-sm font-medium">Avg. Students Sent Per Year (Last 2 Years) <span className="text-destructive">*</span></Label>
                                     <Input
                                         id="averageStudentsPerYearLast2Years"
-                                        type="number"
                                         value={formData.averageStudentsPerYearLast2Years}
                                         onChange={(e) => handleInputChange('averageStudentsPerYearLast2Years', e.target.value)}
                                         placeholder="e.g. 50"
@@ -380,7 +380,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 5:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Layers className="h-6 w-6 text-white" />
@@ -396,7 +396,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <Label htmlFor="numberOfCounsellors" className="text-sm font-medium">Number of Counsellors <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="numberOfCounsellors"
-                                    type="number"
                                     value={formData.numberOfCounsellors}
                                     onChange={(e) => handleInputChange('numberOfCounsellors', e.target.value)}
                                     placeholder="Count"
@@ -465,7 +464,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 6:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Settings className="h-6 w-6 text-white" />
@@ -530,9 +529,9 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <div className="flex items-start space-x-3 mb-2">
                                     <Checkbox
                                         id="marketingConsent"
-                                        checked={formData.marketingConsent}
-                                        onCheckedChange={(checked) => handleInputChange('marketingConsent', checked === true)}
-                                        className="mt-1 data-[state=checked]:bg-gradient"
+                                        checked={formData.marketingConsent || false}
+                                        onCheckedChange={(checked) => handleInputChange('marketingConsent', !!checked)}
+                                        className="mt-1 data-[state=checked]:bg-edvios-green"
                                     />
                                     <Label htmlFor="marketingConsent" className="text-sm cursor-pointer">
                                         I agree to receive communications and updates.
@@ -542,8 +541,8 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <div className="flex items-start space-x-3">
                                     <Checkbox
                                         id="termsAccepted"
-                                        checked={formData.termsAccepted}
-                                        onCheckedChange={(checked) => handleInputChange('termsAccepted', checked === true)}
+                                        checked={formData.termsAccepted || false}
+                                        onCheckedChange={(checked) => handleInputChange('termsAccepted', !!checked)}
                                         className="mt-1 data-[state=checked]:bg-edvios-green"
                                     />
                                     <Label htmlFor="termsAccepted" className="cursor-pointer font-medium text-sm leading-relaxed">
@@ -566,7 +565,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 <Card className="shadow-2xl border-0 overflow-hidden bg-white/80 backdrop-blur-sm">
                     <CardHeader className="text-center pb-8 pt-10 border-b border-gray-100/50">
                         <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
-                            <span className="text-edvios-green text-3xl">
+                            <span className="text-edvios-blue text-3xl">
                                 Agent Registration
                             </span>
                         </CardTitle>
@@ -591,7 +590,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                         className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${isActive
                                             ? 'bg-gradient text-white shadow-lg scale-110'
                                             : isCompleted
-                                                ? 'bg-green-500 text-white'
+                                                ? 'bg-edvios-blue text-white'
                                                 : 'bg-muted text-muted-foreground'
                                             }`}
                                     >
@@ -603,7 +602,18 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                     </CardHeader>
 
                     <CardContent className="p-6 md:p-10 relative min-h-[500px]">
-                        {renderStepContent()}
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentStep}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                transition={{ duration: 0.3 }}
+                                className="w-full"
+                            >
+                                {renderStepContent()}
+                            </motion.div>
+                        </AnimatePresence>
 
                         <div className="flex justify-between items-center mt-12 pt-6 border-t border-gray-100">
                             <Button

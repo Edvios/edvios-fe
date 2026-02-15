@@ -5,6 +5,7 @@ import type { RegistrationResponseDto } from '../dtos/registration.dto';
 import { submitStudentRegistration } from '../api/registration.api';
 import AppToast from '@/utils/toast-utils';
 import { logout } from '@/app/auth/login/api/auth.api';
+import axiosInstance from '@/lib/axios';
 
 interface UseRegistrationReturn {
   currentStep: number;
@@ -92,6 +93,7 @@ export const useRegistration = (): UseRegistrationReturn => {
   const totalSteps = 6;
   const progressPercentage = (currentStep / totalSteps) * 100;
 
+  // Load saved form data and restore progress on component mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const userSession = sessionStorage.getItem('user-session');
@@ -122,6 +124,86 @@ export const useRegistration = (): UseRegistrationReturn => {
       }
     }
   }, [router]);
+    if (typeof window === 'undefined') return;
+    
+    const loadUserData = async () => {
+      try {
+        // First, ensure user session is available
+        let userSession = sessionStorage.getItem('user-session');
+        if (!userSession) {
+          // Fetch from API if not in sessionStorage
+          try {
+            const response = await axiosInstance.get('/auth/me');
+            sessionStorage.setItem('user-session', JSON.stringify(response.data));
+            userSession = JSON.stringify(response.data);
+            console.log('Fetched and saved user session from API');
+          } catch (error) {
+            console.error('Failed to fetch user data from API:', error);
+          }
+        }
+
+        // Then, try to restore saved form data
+        const savedFormData = sessionStorage.getItem('student-registration-form');
+        const savedStep = sessionStorage.getItem('student-registration-step');
+        
+        if (savedFormData) {
+          try {
+            const parsedFormData = JSON.parse(savedFormData);
+            console.log('Restoring saved student registration form data');
+            setFormData(parsedFormData);
+          } catch (error) {
+            console.error('Failed to parse saved form data:', error);
+          }
+        }
+        
+        if (savedStep) {
+          try {
+            const step = parseInt(savedStep);
+            if (!isNaN(step) && step >= 1 && step <= totalSteps) {
+              setCurrentStep(step);
+            }
+          } catch (error) {
+            console.error('Failed to parse saved step:', error);
+          }
+        }
+        
+        // Autofill user data from session storage if no saved form data
+        if (userSession && !savedFormData) {
+          try {
+            const userData = JSON.parse(userSession);
+            console.log('Found user session for prefill:', userData);
+            setFormData(prev => ({
+              ...prev,
+              firstName: userData.firstName || prev.firstName,
+              lastName: userData.lastName || prev.lastName,
+              email: userData.email || prev.email,
+              phone: userData.phone || prev.phone,
+            }));
+          } catch (error) {
+            console.error('Failed to parse user session data:', error);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load user data:', error);
+      }
+    };
+    
+    loadUserData();
+  }, []);
+
+  // Save form data to sessionStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && formData !== initialFormData) {
+      sessionStorage.setItem('student-registration-form', JSON.stringify(formData));
+    }
+  }, [formData]);
+
+  // Save current step to sessionStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('student-registration-step', currentStep.toString());
+    }
+  }, [currentStep]);
 
   const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
@@ -144,10 +226,25 @@ export const useRegistration = (): UseRegistrationReturn => {
           AppToast.error('Please fill in all required academic details');
           return false;
         }
+        const englishScore = parseInt(formData.englishScore);
+        if (isNaN(englishScore) || englishScore < 0 || englishScore > 100) {
+          AppToast.error('Please enter a valid English score (0-100)');
+          return false;
+        }
+        const yearOfCompletion = parseInt(formData.yearOfCompletion);
+        if (isNaN(yearOfCompletion) || yearOfCompletion < 1900 || yearOfCompletion > new Date().getFullYear() + 10) {
+          AppToast.error('Please enter a valid completion year');
+          return false;
+        }
         break;
       case 3:
         if (formData.preferredDestination.length === 0 || !formData.preferredProgram || !formData.preferredStudyLevel || !formData.estimatedBudget) {
           AppToast.error('Please fill in all required study details');
+          return false;
+        }
+        const estimatedBudget = parseInt(formData.estimatedBudget);
+        if (isNaN(estimatedBudget) || estimatedBudget < 0) {
+          AppToast.error('Please enter a valid estimated budget');
           return false;
         }
         break;
@@ -191,7 +288,14 @@ export const useRegistration = (): UseRegistrationReturn => {
 
         if (result) {
           AppToast.success(`Registration successful!`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
           AppToast.info('Please log in again to access your dashboard.');
+
+          // Clear saved form data from sessionStorage
+          if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('student-registration-form');
+            sessionStorage.removeItem('student-registration-step');
+          }
 
           if (onSubmit) {
             onSubmit(formData);

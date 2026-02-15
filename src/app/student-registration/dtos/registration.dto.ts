@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-
 export const createStudentDtoSchema = z.object({
   // Personal
   firstName: z.string().nullable().optional(),

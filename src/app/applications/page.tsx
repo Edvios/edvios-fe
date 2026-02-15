@@ -13,12 +13,12 @@ import { StatsCard } from '@/app/institution-management/components/StatsCard'
 
 export default function AdminPanel() {
   const [filter, setFilter] = useState<'all' | ApplicationStatus>('all')
-
-  const {
-    applications,
-    loading,
-    countsLoading,
-    metrics,
+  
+  const { 
+    applications, 
+    loading, 
+    countsLoading, 
+    metrics, 
     updateApplicationStatus,
     paginationParams,
     totalItems,

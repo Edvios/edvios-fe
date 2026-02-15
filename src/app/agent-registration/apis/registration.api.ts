@@ -3,7 +3,6 @@ import {
     createAgentDtoSchema,
     RegistrationResponseDto,
 } from '../dtos/registration.dto';
-
 import { AgentRegistrationData } from '../types/registation.types';
 
 export const submitAgentRegistration = async (
