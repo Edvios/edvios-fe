@@ -346,7 +346,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
               {(formData.englishTest === 'IELTS' || formData.englishTest === 'TOEFL' || formData.englishTest === 'PTE' || formData.englishTest === 'DUOLINGO') && (
                 <>
-                  <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="space-y-2 group transition-opacity duration-200">
                     <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                       Overall Score
                     </Label>
@@ -358,7 +358,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                       className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                     />
                   </div>
-                  <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="space-y-2 group transition-opacity duration-200">
                     <Label htmlFor="testExpiryDate" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                       Test Expiry Date
                     </Label>
@@ -390,7 +390,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              
+
 
               <div className="space-y-2 group md:col-span-2">
                 <Label htmlFor="preferredDestination" className="text-sm font-medium">
@@ -529,7 +529,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               {formData.previousVisaRefusal && (
-                <div className="space-y-2 group animate-in fade-in">
+                <div className="space-y-2 group transition-opacity duration-200">
                   <Label htmlFor="visaRefusalDetails" className="text-sm font-medium">
                     Visa Refusal Details <span className="text-destructive">*</span>
                   </Label>
@@ -843,7 +843,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
               <div className="order-1 sm:order-2">
                 {currentStep < totalSteps ? (
-                  <Button 
+                  <Button
                     onClick={handleNextStep}
                   >
                     Next Step

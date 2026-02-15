@@ -123,16 +123,13 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
     {
       header: 'Student',
       Cell: ({ row }: { row: StudentAssignment }) => (
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center text-white font-bold text-lg shadow-md">
-            {(row.student.firstName?.[0] || '') + (row.student.lastName?.[0] || '')}
-          </div>
+        <div className="flex items-center gap-2">
           <div>
-            <div className="font-bold text-gray-900 text-base">
+            <div className="font-bold text-gray-900 text-sm">
               {row.student.firstName} {row.student.lastName}
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Mail className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+              <Mail className="w-3 h-3" />
               {row.student.email}
             </div>
           </div>
@@ -142,8 +139,8 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
     {
       header: 'Contact',
       Cell: ({ row }: { row: StudentAssignment }) => (
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Phone className="w-3.5 h-3.5 text-edvios-blue" />
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <Phone className="w-3.5 h-3.5 text-edvios-green" />
           {row.student.phone || 'N/A'}
         </div>
       ),
@@ -155,44 +152,41 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
           <Button
             variant="outline"
             className={cn(
-              'w-full max-w-[400px] justify-between hover:bg-muted',
-              !row.agent && 'text-muted-foreground'
+              'w-full max-w-[400px] justify-between h-9 text-xs rounded-md border-gray-100 font-medium',
+              !row.agent && 'text-gray-400'
             )}
             onClick={() => handleAgentClick(row)}
             data-agent-selector
           >
             {row.agent ? (
               <span className="flex items-center gap-2 truncate">
-                <div className="w-6 h-6 rounded-full bg-edvios-green flex items-center justify-center text-white text-xs font-semibold shrink-0">
-                  {(row.agent.user.firstName?.[0] || '') + (row.agent.user.lastName?.[0] || '')}
-                </div>
                 <span className="truncate">
                   {row.agent.user.firstName} {row.agent.user.lastName}
                 </span>
               </span>
             ) : (
               <span className="flex items-center gap-2">
-                <UserX className="w-4 h-4" />
+                <UserX className="w-3.5 h-3.5" />
                 Not Assigned
               </span>
             )}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
           </Button>
 
           {showAgentList === row.id && (
             <>
               {/* Backdrop */}
-              <div 
-                className="fixed inset-0 z-40 bg-black/20" 
+              <div
+                className="fixed inset-0 z-40 bg-black/20"
                 onClick={() => {
                   setShowAgentList(null);
                   resetSearch();
                 }}
               />
-              
+
               {/* Agent List Popup */}
-              <div 
-                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] max-w-[90vw] rounded-xl bg-white shadow-[0_25px_60px_-15px_rgba(149,189,47,0.3)] overflow-hidden border-none p-4"
+              <div
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] max-w-[90vw] rounded-lg bg-white border border-gray-100 p-2 shadow-2xl"
                 data-agent-selector
               >
                 {agentsLoading ? (
@@ -208,7 +202,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                         placeholder="Search agents..."
                         value={searchQuery}
                         onValueChange={setSearchQuery}
-                        className="border-none bg-gray-50 rounded-lg px-4 h-12"
+                        className="border-none bg-gray-50 rounded-md px-4 h-10 text-sm"
                       />
                     </div>
                     <CommandList className="max-h-[300px]">
@@ -219,7 +213,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                             key={agent.id}
                             value={`${agent.firstName} ${agent.lastName} ${agent.email}`}
                             onSelect={() => handleAgentSelect(agent.id)}
-                            className="rounded-xl py-3 px-4 aria-selected:bg-green-50 transition-colors"
+                            className="rounded-md py-2 px-3 aria-selected:bg-green-50 transition-colors"
                           >
                             <Check
                               className={cn(
@@ -228,14 +222,11 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                               )}
                             />
                             <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-edvios-green flex items-center justify-center text-white text-xs font-semibold">
-                                {(agent.firstName?.[0] || '') + (agent.lastName?.[0] || '')}
-                              </div>
                               <div className="flex flex-col">
-                                <span className="font-medium">
+                                <span className="text-sm font-bold text-gray-900">
                                   {agent.firstName} {agent.lastName}
                                 </span>
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
                                   {agent.email}
                                 </span>
                               </div>
@@ -255,13 +246,13 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
     {
       header: 'Last Updated',
       Cell: ({ row }: { row: StudentAssignment }) => (
-        <div className="text-sm text-gray-500">
+        <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
           {row.updatedAt
             ? new Date(row.updatedAt).toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
             : 'N/A'}
         </div>
       ),
@@ -270,7 +261,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
 
   return (
     <>
-      <div className="bg-white rounded-[2.5rem] border-none shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden">
+      <div className="bg-white rounded-lg border border-gray-100 overflow-hidden">
         <Table
           data={assignments}
           columns={columns}
