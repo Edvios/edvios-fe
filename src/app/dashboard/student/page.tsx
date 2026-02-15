@@ -16,7 +16,7 @@ import {
   GraduationCap,
   type LucideIcon,
 } from "lucide-react";
-import LogoLoading from "@/components/ui/logo-loading";
+import { LogoLoading } from "@/components/ui/logo-loading";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { UserTypeToggle } from "@/app/auth/login/components/toggle";
 
@@ -31,28 +31,28 @@ const statIcons: Record<string, LucideIcon> = {
 
 const statAccentMap: Record<string, string> = {
   default: "text-slate-700 bg-slate-100",
-  primary: "text-slate-700 bg-slate-100",
-  success: "text-emerald-700 bg-emerald-50",
-  info: "text-blue-700 bg-blue-50",
-  warn: "text-amber-700 bg-amber-50",
+  primary: "text-black bg-gray-100",
+  success: "text-edvios-green bg-edvios-green/10",
+  info: "text-black bg-gray-100",
+  warn: "text-black bg-gray-100",
 };
 
 function statusTone(status?: string) {
   const normalized = (status ?? "").toLowerCase();
 
   if (normalized.includes("accepted") || normalized.includes("approved")) {
-    return "bg-emerald-50 text-emerald-700";
+    return "bg-edvios-green/10 text-edvios-green border border-edvios-green/20";
   }
   if (normalized.includes("interview")) {
-    return "bg-purple-50 text-purple-700";
+    return "bg-black text-white px-2 py-0.5";
   }
-  if (normalized.includes("pending") || normalized.includes("await")) {
-    return "bg-amber-50 text-amber-700";
+  if (normalized.includes("pending") || normalized.includes("submit") || normalized.includes("await")) {
+    return "bg-gray-100 text-gray-600 border border-gray-200";
   }
-  if (normalized.includes("review")) {
-    return "bg-blue-50 text-blue-700";
+  if (normalized.includes("reject")) {
+    return "bg-black text-white px-2 py-0.5";
   }
-  return "bg-slate-100 text-slate-700";
+  return "bg-slate-50 text-slate-500 border border-slate-100";
 }
 
 function resolveLabel(value: unknown): string {

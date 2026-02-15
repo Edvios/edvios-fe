@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { AppToast } from '@/utils/toast-utils';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { StatsCard } from '@/components/shared/stats-card';
 
 const StudentManagementPage = () => {
   const router = useRouter();
@@ -69,13 +70,17 @@ const StudentManagementPage = () => {
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="w-full space-y-4">
-        <div className="flex items-center justify-between">
-          <Breadcrumb items={[{ label: "Student Management", active: true }]} className="mb-0" />
-          <div className="flex items-center gap-2 bg-edvios-green/10 px-3 py-1.5 rounded-full border border-edvios-green/20">
-            <GraduationCap className="w-4 h-4 text-edvios-green" />
-            <span className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">Total Students:</span>
-            <span className="text-sm font-black text-edvios-green">{loading ? '...' : total}</span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="w-full sm:w-auto min-w-[200px]">
+            <StatsCard
+              label="Total Registered Students"
+              value={total}
+              icon={GraduationCap}
+              loading={loading}
+              valueColor="text-edvios-green"
+            />
           </div>
+          <Breadcrumb items={[{ label: "Student Management", active: true }]} className="mb-0" />
         </div>
 
         {/* Search & Action Bar - Highly Compact */}
