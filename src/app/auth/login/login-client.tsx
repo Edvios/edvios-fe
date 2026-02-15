@@ -72,56 +72,76 @@ export default function LoginPage() {
           className="w-full shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-white/50 overflow-hidden rounded-3xl bg-white"
         >
           <motion.div layout className="grid md:grid-cols-2 items-stretch md:min-h-[650px]">
-
-            {/* Left Side: Solid Edvios Green Background with subtle animation */}
-            <div className="hidden md:flex relative w-full h-full items-center justify-center bg-edvios-green overflow-hidden">
+            
+            {/* Left Side: Animated Background & Logo */}
+            <div className="hidden md:flex relative w-full h-full items-center justify-center overflow-hidden">
+              {/* Background Layer */}
               <motion.div
-                animate={{
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, 0]
+                animate={{ 
+                  scale: activeTab === AuthTabEnum.LOGIN ? 1.15 : 1.0 
                 }}
-                transition={{
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: "linear"
+                transition={{ 
+                  duration: 1.2, 
+                  ease: [0.4, 0, 0.2, 1] 
                 }}
-                className="absolute inset-0 bg-[url('/grid.svg')] opacity-10 bg-center"
-              />
-              {/* Fade In / Fade Out Logo Animation */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 1.1, y: -20 }}
-                  transition={{
-                    duration: 0.6,
-                    ease: [0.22, 1, 0.36, 1]
-                  }}
-                  className="relative z-10 w-72 h-36 drop-shadow-2xl"
-                >
+                className="absolute inset-0"
+              >
+                <Image
+                  src="/loginbg.png"
+                  alt="Login Background"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </motion.div>
+
+              {/* Logo Layer: Animates independently with a slight delay */}
+              <motion.div
+                animate={{ 
+                  scale: activeTab === AuthTabEnum.LOGIN ? 1.2 : 1.0,
+                  opacity: 1
+                }}
+                transition={{ 
+                  duration: 1.0, 
+                  delay: 0.2, // Logo starts its transition slightly after the background
+                  ease: "easeOut"
+                }}
+                className="relative z-10 w-72 h-36"
+              >
+                <Image
+                  src="/logoWithLetters.png"
+                  alt="Edvios Logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </motion.div>
+            </div>
+
+            {/* Right Side: Form Content */}
+            <div className="p-6 sm:p-8 md:p-10 lg:p-14 flex flex-col justify-center bg-white">
+              {/* Mobile-only Logo */}
+              <div className="flex md:hidden justify-center mb-8">
+                <div className="relative w-48 h-20">
                   <Image
                     src="/logoWithLetters.png"
                     alt="Edvios Logo"
                     fill
-                    className="object-contain brightness-0 invert"
+                    className="object-contain"
                     priority
                   />
-                </motion.div>
-              </AnimatePresence>
-            </div>
+                </div>
+              </div>
 
-            {/* Right Side: Form Content */}
-            <div className="p-6 md:p-10 lg:p-14 flex flex-col justify-center bg-white">
               <motion.div layout="position" transition={slowSmoothTransition}>
-                <CardHeader className="text-center pb-6 px-0 pt-0">
+                <CardHeader className="text-center pb-4 sm:pb-6 px-0 pt-0">
                   <motion.div layout="position" transition={slowSmoothTransition}>
-                    <CardTitle className="text-2xl text-edvios-blue font-bold">
+                    <CardTitle className="text-xl sm:text-2xl text-edvios-green font-bold">
                       {activeTab === AuthTabEnum.LOGIN ? "Welcome Back" : "Create Account"}
                     </CardTitle>
-                    <CardDescription className="text-gray-500 mt-1">
-                      {activeTab === AuthTabEnum.LOGIN
-                        ? "Sign in to your account"
+                    <CardDescription className="text-sm text-gray-500 mt-1">
+                      {activeTab === AuthTabEnum.LOGIN 
+                        ? "Sign in to your account" 
                         : "Join Edvios and start your journey"}
                     </CardDescription>
                   </motion.div>
@@ -163,40 +183,35 @@ export default function LoginPage() {
                           variants={containerVariants}
                           className="space-y-5"
                         >
-                          <motion.div variants={itemVariants} className="space-y-2.5">
-                            <Label htmlFor="login-email" className="text-sm font-semibold text-slate-700 ml-1">Email</Label>
-                            <Input
-                              id="login-email"
-                              type="email"
-                              placeholder="Enter your email address"
-                              value={loginData.email}
-                              onChange={(e) => updateLoginData("email", e.target.value)}
-                              className="focus:ring-edvios-blue/20"
+                          <div className="space-y-2">
+                            <Label htmlFor="login-email" className="text-sm">Email</Label>
+                            <Input 
+                              id="login-email" 
+                              type="email" 
+                              className="text-sm placeholder:text-sm"
+                              placeholder="Enter your email address" 
+                              value={loginData.email} 
+                              onChange={(e) => updateLoginData("email", e.target.value)} 
                             />
-                          </motion.div>
-                          <motion.div variants={itemVariants} className="space-y-2.5">
-                            <div className="flex justify-between items-center">
-                              <Label htmlFor="login-password" silver-700 className="text-sm font-semibold text-slate-700 ml-1">Password</Label>
-                              <button type="button" className="text-xs font-medium text-edvios-blue hover:underline">Forgot password?</button>
-                            </div>
-                            <Input
-                              id="login-password"
-                              type="password"
-                              placeholder="Enter your password"
-                              value={loginData.password}
-                              onChange={(e) => updateLoginData("password", e.target.value)}
-                              className="focus:ring-edvios-blue/20"
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="login-password" className="text-sm">Password</Label>
+                            <Input 
+                              id="login-password" 
+                              type="password" 
+                              className="text-sm placeholder:text-sm"
+                              placeholder="Enter your password" 
+                              value={loginData.password} 
+                              onChange={(e) => updateLoginData("password", e.target.value)} 
                             />
-                          </motion.div>
-                          <motion.div variants={itemVariants}>
-                            <Button
-                              onClick={onSubmitLogin}
-                              className="w-full h-12 mt-4 bg-edvios-blue hover:bg-edvios-blue/90 shadow-lg shadow-edvios-blue/20 hover:shadow-xl hover:-translate-y-0.5 transition-all text-white font-bold rounded-xl"
-                              disabled={isLoading}
-                            >
-                              <LogIn className="w-5 h-5 mr-2" /> {isLoading ? "Logging in..." : "Login to Dashboard"}
-                            </Button>
-                          </motion.div>
+                          </div>
+                          <Button 
+                            onClick={onSubmitLogin} 
+                            className="w-full h-10 mt-2"
+                            disabled={isLoading}
+                          >
+                            <LogIn className="w-4 h-4 mr-2" /> {isLoading ? "Logging in..." : "Login"}
+                          </Button>
                         </motion.div>
                       ) : (
                         <motion.div
@@ -207,78 +222,80 @@ export default function LoginPage() {
                           variants={containerVariants}
                           className="space-y-5"
                         >
-                          <motion.div variants={itemVariants}>
-                            <UserTypeToggle
-                              options={[UserTypeEnum.STUDENT, UserTypeEnum.AGENT]}
-                              value={registerData.role}
-                              onChange={(value) => updateRegisterData("role", value)}
-                              disabled={isLoading}
+                          <UserTypeToggle
+                            options={[UserTypeEnum.STUDENT, UserTypeEnum.AGENT]}
+                            value={registerData.role}
+                            onChange={(value) => updateRegisterData("role", value)}
+                            disabled={isLoading}
+                          />
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label className="text-sm">First Name</Label>
+                              <Input 
+                                className="text-sm placeholder:text-sm"
+                                placeholder="Enter your first name" 
+                                value={registerData.firstName} 
+                                onChange={(e) => updateRegisterData("firstName", e.target.value)} 
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-sm">Last Name</Label>
+                              <Input 
+                                className="text-sm placeholder:text-sm"
+                                placeholder="Enter your last name" 
+                                value={registerData.lastName} 
+                                onChange={(e) => updateRegisterData("lastName", e.target.value)} 
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm">Email Address</Label>
+                            <Input 
+                              className="text-sm placeholder:text-sm"
+                              type="email" 
+                              placeholder="Enter your email address" 
+                              value={registerData.email} 
+                              onChange={(e) => updateRegisterData("email", e.target.value)} 
                             />
-                          </motion.div>
-                          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2.5">
-                              <Label className="text-sm font-semibold text-slate-700 ml-1">First Name</Label>
-                              <Input
-                                placeholder="First name"
-                                value={registerData.firstName}
-                                onChange={(e) => updateRegisterData("firstName", e.target.value)}
-                              />
-                            </div>
-                            <div className="space-y-2.5">
-                              <Label className="text-sm font-semibold text-slate-700 ml-1">Last Name</Label>
-                              <Input
-                                placeholder="Last name"
-                                value={registerData.lastName}
-                                onChange={(e) => updateRegisterData("lastName", e.target.value)}
-                              />
-                            </div>
-                          </motion.div>
-                          <motion.div variants={itemVariants} className="space-y-2.5">
-                            <Label className="text-sm font-semibold text-slate-700 ml-1">Email Address</Label>
-                            <Input
-                              type="email"
-                              placeholder="your@email.com"
-                              value={registerData.email}
-                              onChange={(e) => updateRegisterData("email", e.target.value)}
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm">Phone Number</Label>
+                            <Input 
+                              className="text-sm placeholder:text-sm"
+                              placeholder="Enter your phone number" 
+                              value={registerData.phone} 
+                              onChange={(e) => updateRegisterData("phone", e.target.value)} 
                             />
-                          </motion.div>
-                          <motion.div variants={itemVariants} className="space-y-2.5">
-                            <Label className="text-sm font-semibold text-slate-700 ml-1">Phone Number</Label>
-                            <Input
-                              placeholder="+1 (555) 000-0000"
-                              value={registerData.phone}
-                              onChange={(e) => updateRegisterData("phone", e.target.value)}
-                            />
-                          </motion.div>
-                          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2.5">
-                              <Label className="text-sm font-semibold text-slate-700 ml-1">Password</Label>
-                              <Input
-                                type="password"
-                                placeholder="Min. 8 chars"
-                                value={registerData.password}
-                                onChange={(e) => updateRegisterData("password", e.target.value)}
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label className="text-sm">Password</Label>
+                              <Input 
+                                className="text-sm placeholder:text-sm"
+                                type="password" 
+                                placeholder="Enter your password" 
+                                value={registerData.password} 
+                                onChange={(e) => updateRegisterData("password", e.target.value)} 
                               />
                             </div>
-                            <div className="space-y-2.5">
-                              <Label className="text-sm font-semibold text-slate-700 ml-1">Confirm</Label>
-                              <Input
-                                type="password"
-                                placeholder="Repeat password"
-                                value={registerData.confirmPassword}
-                                onChange={(e) => updateRegisterData("confirmPassword", e.target.value)}
+                            <div className="space-y-2">
+                              <Label className="text-sm">Confirm Password</Label>
+                              <Input 
+                                className="text-sm placeholder:text-sm"
+                                type="password" 
+                                placeholder="Confirm your password" 
+                                value={registerData.confirmPassword} 
+                                onChange={(e) => updateRegisterData("confirmPassword", e.target.value)} 
                               />
                             </div>
-                          </motion.div>
-                          <motion.div variants={itemVariants}>
-                            <Button
-                              onClick={onSubmitRegister}
-                              className="w-full h-12 mt-4 bg-edvios-green hover:bg-edvios-green/90 shadow-lg shadow-edvios-green/20 hover:shadow-xl hover:-translate-y-0.5 transition-all text-white font-bold rounded-xl"
-                              disabled={isLoading}
-                            >
-                              <UserPlus className="w-5 h-5 mr-2" /> {isLoading ? "Creating Account..." : "Start Your Journey"}
-                            </Button>
-                          </motion.div>
+                          </div>
+                          <Button 
+                            onClick={onSubmitRegister} 
+                            className="w-full h-10 mt-2"
+                            disabled={isLoading}
+                          >
+                            <UserPlus className="w-4 h-4 mr-2" /> {isLoading ? "Creating Account..." : "Create Account"}
+                          </Button>
                         </motion.div>
                       )}
                     </AnimatePresence>
