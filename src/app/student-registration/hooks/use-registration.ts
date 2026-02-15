@@ -95,101 +95,76 @@ export const useRegistration = (): UseRegistrationReturn => {
 
   // Load saved form data and restore progress on component mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const userSession = sessionStorage.getItem('user-session');
-      if (userSession) {
-        try {
-          const userData = JSON.parse(userSession);
+    if (typeof window === 'undefined') return;
 
-          // Redirect if email not verified
+    const initializeFlow = async () => {
+      try {
+        // 1. Try to restore saved form data and step
+        const savedFormData = sessionStorage.getItem('student-registration-form');
+        const savedStep = sessionStorage.getItem('student-registration-step');
+
+        if (savedFormData) {
+          try {
+            const parsedData = JSON.parse(savedFormData);
+            setFormData(prev => ({ ...prev, ...parsedData }));
+          } catch (e) {
+            console.error('Failed to parse saved form data', e);
+          }
+        }
+
+        if (savedStep) {
+          const step = parseInt(savedStep);
+          if (!isNaN(step) && step >= 1 && step <= totalSteps) {
+            setCurrentStep(step);
+          }
+        }
+
+        // 2. Load/Fetch user session
+        let userSession = sessionStorage.getItem('user-session');
+        let userData = null;
+
+        if (userSession) {
+          try {
+            userData = JSON.parse(userSession);
+          } catch (e) {
+            console.error('Failed to parse user session', e);
+          }
+        }
+
+        if (!userData) {
+          try {
+            const response = await axiosInstance.get('/auth/me');
+            userData = response.data;
+            sessionStorage.setItem('user-session', JSON.stringify(userData));
+          } catch (e) {
+            console.error('Failed to fetch user data', e);
+          }
+        }
+
+        // 3. Handle verification redirect and autofill
+        if (userData) {
           if (userData.emailVerified === false) {
             AppToast.info("Please verify your email first");
             router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
             return;
           }
 
+          // Autofill profile info if it's currently empty
           setFormData(prev => ({
             ...prev,
-            firstName: userData.firstName || prev.firstName,
-            lastName: userData.lastName || prev.lastName,
-            email: userData.email || prev.email,
-            phone: userData.phone || prev.phone,
+            firstName: prev.firstName || userData.firstName || '',
+            lastName: prev.lastName || userData.lastName || '',
+            email: prev.email || userData.email || '',
+            phone: prev.phone || userData.phone || '',
           }));
-        } catch (error) {
-          console.error('Failed to parse user session data:', error);
-        }
-      } else {
-        // Optional: Redirect to login if no session
-        // router.replace('/auth/login');
-      }
-    }
-  }, [router]);
-    if (typeof window === 'undefined') return;
-    
-    const loadUserData = async () => {
-      try {
-        // First, ensure user session is available
-        let userSession = sessionStorage.getItem('user-session');
-        if (!userSession) {
-          // Fetch from API if not in sessionStorage
-          try {
-            const response = await axiosInstance.get('/auth/me');
-            sessionStorage.setItem('user-session', JSON.stringify(response.data));
-            userSession = JSON.stringify(response.data);
-            console.log('Fetched and saved user session from API');
-          } catch (error) {
-            console.error('Failed to fetch user data from API:', error);
-          }
-        }
-
-        // Then, try to restore saved form data
-        const savedFormData = sessionStorage.getItem('student-registration-form');
-        const savedStep = sessionStorage.getItem('student-registration-step');
-        
-        if (savedFormData) {
-          try {
-            const parsedFormData = JSON.parse(savedFormData);
-            console.log('Restoring saved student registration form data');
-            setFormData(parsedFormData);
-          } catch (error) {
-            console.error('Failed to parse saved form data:', error);
-          }
-        }
-        
-        if (savedStep) {
-          try {
-            const step = parseInt(savedStep);
-            if (!isNaN(step) && step >= 1 && step <= totalSteps) {
-              setCurrentStep(step);
-            }
-          } catch (error) {
-            console.error('Failed to parse saved step:', error);
-          }
-        }
-        
-        // Autofill user data from session storage if no saved form data
-        if (userSession && !savedFormData) {
-          try {
-            const userData = JSON.parse(userSession);
-            console.log('Found user session for prefill:', userData);
-            setFormData(prev => ({
-              ...prev,
-              firstName: userData.firstName || prev.firstName,
-              lastName: userData.lastName || prev.lastName,
-              email: userData.email || prev.email,
-              phone: userData.phone || prev.phone,
-            }));
-          } catch (error) {
-            console.error('Failed to parse user session data:', error);
-          }
         }
       } catch (error) {
-        console.error('Failed to load user data:', error);
+        console.error('Initialization error:', error);
       }
     };
-    
-    loadUserData();
-  }, []);
+
+    initializeFlow();
+  }, [router, totalSteps]);
 
   // Save form data to sessionStorage whenever it changes
   useEffect(() => {
@@ -216,25 +191,35 @@ export const useRegistration = (): UseRegistrationReturn => {
     switch (currentStep) {
       case 1:
         if (!formData.firstName || !formData.lastName || !formData.dob || !formData.gender ||
-          !formData.email || !formData.phone || !formData.passportNumber || !formData.passportExpiryDate) {
+          !formData.nationality || !formData.currentCountry || !formData.email ||
+          !formData.phone || !formData.passportNumber || !formData.passportExpiryDate || !formData.emergencyContactNumber) {
           AppToast.error('Please fill in all required personal details');
           return false;
         }
         break;
       case 2:
-        if (!formData.currentEducationLevel || !formData.yearOfCompletion || !formData.currentInstitution) {
+        if (!formData.currentEducationLevel || !formData.yearOfCompletion || !formData.currentInstitution || !formData.englishTest) {
           AppToast.error('Please fill in all required academic details');
           return false;
         }
-        const englishScore = parseInt(formData.englishScore);
-        if (isNaN(englishScore) || englishScore < 0 || englishScore > 100) {
-          AppToast.error('Please enter a valid English score (0-100)');
-          return false;
-        }
+
         const yearOfCompletion = parseInt(formData.yearOfCompletion);
         if (isNaN(yearOfCompletion) || yearOfCompletion < 1900 || yearOfCompletion > new Date().getFullYear() + 10) {
           AppToast.error('Please enter a valid completion year');
           return false;
+        }
+
+        // Only validate score if a test other than 'NONE' is selected
+        if (['IELTS', 'PTE', 'DUOLINGO', 'TOEFL'].includes(formData.englishTest)) {
+          if (!formData.englishScore) {
+            AppToast.error('Please enter your English proficiency score');
+            return false;
+          }
+          const englishScore = parseFloat(formData.englishScore);
+          if (isNaN(englishScore) || englishScore < 0) {
+            AppToast.error('Please enter a valid English score');
+            return false;
+          }
         }
         break;
       case 3:

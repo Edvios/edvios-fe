@@ -196,8 +196,8 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 }
                 break;
             case 4: // Operational Profile
-                if (formData.primaryStudentMarkets.length === 0 || !formData.averageStudentsPerYearLast2Years) {
-                    AppToast.error('Please provide market and student details');
+                if (formData.primaryStudentMarkets.length === 0 || !formData.averageStudentsPerYearLast2Years || formData.mainDestinations.length === 0) {
+                    AppToast.error('Please provide market, destination, and student details');
                     return false;
                 }
                 const averageStudentsPerYearLast2Years = parseInt(formData.averageStudentsPerYearLast2Years);
@@ -207,8 +207,8 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 }
                 break;
             case 5: // Services
-                if (!formData.numberOfCounsellors || formData.servicesProvided.length === 0) {
-                    AppToast.error('Please specify services provided and team size');
+                if (!formData.numberOfCounsellors || !formData.typicalStudentProfileStrength || formData.servicesProvided.length === 0) {
+                    AppToast.error('Please specify services provided, student profiles, and team size');
                     return false;
                 }
                 const numberOfCounsellors = parseInt(formData.numberOfCounsellors);
