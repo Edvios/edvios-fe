@@ -36,7 +36,7 @@ export default function ProgramFinderPage() {
     };
 
     return (
-        <div className="container mx-auto p-4 md:p-6 lg:p-8">
+        <div className="mx-auto w-full max-w-425 p-4 md:p-6 lg:p-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
                     <p className="text-3xl font-bold tracking-tight text-edvios-blue">Find Your Program</p>
@@ -50,19 +50,16 @@ export default function ProgramFinderPage() {
                 )}
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                {/* Sidebar Filters */}
-                <aside className="lg:col-span-1">
-                    <ProgramFiltersSidebar
-                        filters={filters}
-                        initialData={initialData}
-                        onFilterChange={updateFilter}
-                        onReset={resetFilters}
-                    />
-                </aside>
+            <div className="mb-8">
+                <ProgramFiltersSidebar
+                    filters={filters}
+                    initialData={initialData}
+                    onFilterChange={updateFilter}
+                    onReset={resetFilters}
+                />
+            </div>
 
-                {/* Main Content */}
-                <main className="lg:col-span-3">
+            <main>
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-20">
                             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-4" />
@@ -70,7 +67,7 @@ export default function ProgramFinderPage() {
                         </div>
                     ) : filteredData && filteredData.programs.length > 0 ? (
                         <>
-                            <div className="flex flex-col gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {filteredData.programs.map(program => (
                                     <ProgramCard
                                         key={program.id}
@@ -102,8 +99,7 @@ export default function ProgramFinderPage() {
                             </button>
                         </div>
                     )}
-                </main>
-            </div>
+            </main>
 
             <ProgramDetailsDialog
                 program={selectedProgram}

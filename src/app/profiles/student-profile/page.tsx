@@ -19,9 +19,8 @@ import {
     Loader2,
     Mail,
     Phone,
-    MapPin,
-    Calendar,
-    BookOpen,
+    Save,
+    X,
     Award,
     Plane,
 } from "lucide-react";
@@ -99,365 +98,349 @@ export default function StudentProfilePage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-                {/* Header Card */}
-                <Card className="shadow-lg border-0 bg-gradient text-white">
-                    <CardContent className="pt-6 pb-6">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div className="flex items-center space-x-4">
-                                <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-2xl font-bold border-2 border-white/30">
-                                    {initials}
-                                </div>
-                                <div>
-                                    <p className="text-3xl font-bold text-white">
-                                        {formData.firstName && formData.lastName
-                                            ? `${formData.firstName} ${formData.lastName}`
-                                            : formData.email || "Student Profile"}
-                                    </p>
-                                    <p className="text-blue-100 mt-1">
-                                        {formData.nationality || "International Student"}
-                                    </p>
-                                </div>
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <div className="bg-white border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-6 py-8">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-6">
+                            <div className="w-16 h-16 rounded-lg bg-edvios-blue text-white flex items-center justify-center text-xl font-semibold">
+                                {initials}
                             </div>
-                            <div className="mt-4 md:mt-0 flex items-center space-x-2">
-                                {!isEditing ? (
-                                    <Button
-                                        className="bg-white text-black hover:bg-blue-50"
-                                        size="sm"
-                                        onClick={() => setIsEditing(true)}
-                                    >
-                                        <Edit3 className="w-4 h-4 mr-2" />
-                                        Edit Profile
-                                    </Button>
-                                ) : (
-                                    <>
-                                        <Button
-                                            size="sm"
-                                            disabled={loading}
-                                            onClick={handleSave}
-                                            className="bg-white text-blue-600 hover:bg-blue-50"
-                                        >
-                                            {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-                                            Save Changes
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={handleCancel}
-                                            className="bg-white/10 text-white border-white/30 hover:bg-white/20"
-                                        >
-                                            Cancel
-                                        </Button>
-                                    </>
-                                )}
+                            <div>
+                                <h1 className="text-2xl font-semibold text-gray-900">
+                                    {formData.firstName && formData.lastName
+                                        ? `${formData.firstName} ${formData.lastName}`
+                                        : formData.email || "Student Profile"}
+                                </h1>
+                                <p className="text-sm text-gray-600 mt-1">
+                                    {formData.nationality || "International Student"}
+                                </p>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
+                        <div className="flex items-center gap-3">
+                            {!isEditing ? (
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setIsEditing(true)}
+                                    className="border-gray-300"
+                                >
+                                    <Edit3 className="w-4 h-4 mr-2" />
+                                    Edit Profile
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button
+                                        variant="outline"
+                                        onClick={handleCancel}
+                                        className="border-gray-300"
+                                    >
+                                        <X className="w-4 h-4 mr-2" />
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        disabled={loading}
+                                        onClick={handleSave}
+                                        className="bg-slate-700 hover:bg-slate-800"
+                                    >
+                                        {loading ? (
+                                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        ) : (
+                                            <Save className="w-4 h-4 mr-2" />
+                                        )}
+                                        Save Changes
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                {/* Profile Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Main Content */}
+            <main className="max-w-7xl mx-auto px-6 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Personal Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
-                        <CardHeader className="bg-gradient p-1">
-                            <div className="flex items-center space-x-2">
-                                <User className="w-5 h-5 text-blue-600" />
-                                <CardTitle className="text-gray-800">Personal Information</CardTitle>
-                            </div>
+                    <Card className="border-gray-200 shadow-sm lg:col-span-2">
+                        <CardHeader className="border-b border-gray-100 pb-4">
+                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                                <User className="w-5 h-5 text-gray-600" />
+                                Personal Information
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 pt-6">
-                            <div className="grid grid-cols-2 gap-4">
+                        <CardContent className="pt-6 space-y-5">
+                            <div className="grid grid-cols-2 gap-5">
                                 <div>
-                                    <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                        <User className="w-3 h-3" /> First Name
-                                    </Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">First Name</Label>
                                     {isEditing ? (
                                         <Input
                                             value={formData.firstName || ""}
                                             onChange={(e) => updateField("firstName", e.target.value)}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.firstName || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.firstName || "—"}</p>
                                     )}
                                 </div>
                                 <div>
-                                    <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                        <User className="w-3 h-3" /> Last Name
-                                    </Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Last Name</Label>
                                     {isEditing ? (
                                         <Input
                                             value={formData.lastName || ""}
                                             onChange={(e) => updateField("lastName", e.target.value)}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.lastName || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.lastName || "—"}</p>
                                     )}
                                 </div>
                             </div>
 
-                            <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <Calendar className="w-3 h-3" /> Date of Birth
-                                </Label>
-                                {isEditing ? (
-                                    <Input
-                                        type="date"
-                                        value={formData.dob ? formData.dob.split("T")[0] : ""}
-                                        onChange={(e) => updateField("dob", e.target.value)}
-                                        className="mt-1"
-                                    />
-                                ) : (
-                                    <p className="font-medium text-gray-900 mt-1">
-                                        {formData.dob ? new Date(formData.dob).toLocaleDateString() : "-"}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div>
-                                <Label className="text-xs text-gray-500">Gender</Label>
-                                {isEditing ? (
-                                    <Select
-                                        value={formData.gender || ""}
-                                        onValueChange={(value) => updateField("gender", value as Gender)}
-                                    >
-                                        <SelectTrigger className="mt-1">
-                                            <SelectValue placeholder="Select gender" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value={Gender.MALE}>Male</SelectItem>
-                                            <SelectItem value={Gender.FEMALE}>Female</SelectItem>
-                                            <SelectItem value={Gender.OTHER}>Other</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.gender || "-"}</p>
-                                )}
-                            </div>
-
-                            <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <Globe className="w-3 h-3" /> Nationality
-                                </Label>
-                                {isEditing ? (
-                                    <Input
-                                        value={formData.nationality || ""}
-                                        onChange={(e) => updateField("nationality", e.target.value)}
-                                        className="mt-1"
-                                    />
-                                ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.nationality || "-"}</p>
-                                )}
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-5">
                                 <div>
-                                    <Label className="text-xs text-gray-500">Passport Number</Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Date of Birth</Label>
+                                    {isEditing ? (
+                                        <Input
+                                            type="date"
+                                            value={formData.dob ? formData.dob.split("T")[0] : ""}
+                                            onChange={(e) => updateField("dob", e.target.value)}
+                                            className="border-gray-300"
+                                        />
+                                    ) : (
+                                        <p className="text-sm text-gray-900">
+                                            {formData.dob ? new Date(formData.dob).toLocaleDateString() : "—"}
+                                        </p>
+                                    )}
+                                </div>
+                                <div>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Gender</Label>
+                                    {isEditing ? (
+                                        <Select
+                                            value={formData.gender || ""}
+                                            onValueChange={(value) => updateField("gender", value as Gender)}
+                                        >
+                                            <SelectTrigger className="border-gray-300">
+                                                <SelectValue placeholder="Select gender" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value={Gender.MALE}>Male</SelectItem>
+                                                <SelectItem value={Gender.FEMALE}>Female</SelectItem>
+                                                <SelectItem value={Gender.OTHER}>Other</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    ) : (
+                                        <p className="text-sm text-gray-900">{formData.gender || "—"}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Nationality</Label>
+                                    {isEditing ? (
+                                        <Input
+                                            value={formData.nationality || ""}
+                                            onChange={(e) => updateField("nationality", e.target.value)}
+                                            className="border-gray-300"
+                                        />
+                                    ) : (
+                                        <p className="text-sm text-gray-900">{formData.nationality || "—"}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Country of Residence</Label>
+                                    {isEditing ? (
+                                        <Input
+                                            value={formData.countryOfResidence || ""}
+                                            onChange={(e) => updateField("countryOfResidence", e.target.value)}
+                                            className="border-gray-300"
+                                        />
+                                    ) : (
+                                        <p className="text-sm text-gray-900">{formData.countryOfResidence || "—"}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Passport Number</Label>
                                     {isEditing ? (
                                         <Input
                                             value={formData.passportNumber || ""}
                                             onChange={(e) => updateField("passportNumber", e.target.value)}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.passportNumber || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.passportNumber || "—"}</p>
                                     )}
                                 </div>
                                 <div>
-                                    <Label className="text-xs text-gray-500">Passport Expiry</Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Passport Expiry</Label>
                                     {isEditing ? (
                                         <Input
                                             type="date"
                                             value={formData.passportExpiryDate ? formData.passportExpiryDate.split("T")[0] : ""}
                                             onChange={(e) => updateField("passportExpiryDate", e.target.value)}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">
+                                        <p className="text-sm text-gray-900">
                                             {formData.passportExpiryDate
                                                 ? new Date(formData.passportExpiryDate).toLocaleDateString()
-                                                : "-"}
+                                                : "—"}
                                         </p>
                                     )}
                                 </div>
-                            </div>
-
-                            <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <MapPin className="w-3 h-3" /> Country of Residence
-                                </Label>
-                                {isEditing ? (
-                                    <Input
-                                        value={formData.countryOfResidence || ""}
-                                        onChange={(e) => updateField("countryOfResidence", e.target.value)}
-                                        className="mt-1"
-                                    />
-                                ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.countryOfResidence || "-"}</p>
-                                )}
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Contact Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
-                        <CardHeader className="bg-gradient p-1">
-                            <div className="flex items-center space-x-2">
-                                <Mail className="w-5 h-5 text-green-600" />
-                                <CardTitle className="text-gray-800">Contact Information</CardTitle>
-                            </div>
+                    <Card className="border-gray-200 shadow-sm">
+                        <CardHeader className="border-b border-gray-100 pb-4">
+                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                                <Mail className="w-5 h-5 text-gray-600" />
+                                Contact Information
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 pt-6">
+                        <CardContent className="pt-6 space-y-5">
                             <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <Mail className="w-3 h-3" /> Email
-                                </Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Email</Label>
                                 {isEditing ? (
                                     <Input
                                         type="email"
                                         value={formData.email || ""}
                                         onChange={(e) => updateField("email", e.target.value)}
-                                        className="mt-1"
+                                        className="border-gray-300"
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.email || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.email || "—"}</p>
                                 )}
                             </div>
 
                             <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <Phone className="w-3 h-3" /> Phone
-                                </Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Phone</Label>
                                 {isEditing ? (
                                     <Input
                                         value={formData.phone || ""}
                                         onChange={(e) => updateField("phone", e.target.value)}
-                                        className="mt-1"
+                                        className="border-gray-300"
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.phone || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.phone || "—"}</p>
                                 )}
                             </div>
 
                             <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <Phone className="w-3 h-3" /> Emergency Contact
-                                </Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Emergency Contact</Label>
                                 {isEditing ? (
                                     <Input
                                         value={formData.emergencyContact || ""}
                                         onChange={(e) => updateField("emergencyContact", e.target.value)}
-                                        className="mt-1"
+                                        className="border-gray-300"
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.emergencyContact || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.emergencyContact || "—"}</p>
                                 )}
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Academic Background */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
-                        <CardHeader className="bg-gradient p-1">
-                            <div className="flex items-center space-x-2">
-                                <GraduationCap className="w-5 h-5 text-purple-600" />
-                                <CardTitle className="text-gray-800">Academic Background</CardTitle>
-                            </div>
+                    <Card className="border-gray-200 shadow-sm lg:col-span-2">
+                        <CardHeader className="border-b border-gray-100 pb-4">
+                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                                <GraduationCap className="w-5 h-5 text-gray-600" />
+                                Academic Background
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 pt-6">
+                        <CardContent className="pt-6 space-y-5">
                             <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <Award className="w-3 h-3" /> Highest Qualification
-                                </Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Highest Qualification</Label>
                                 {isEditing ? (
                                     <Input
                                         value={formData.highestQualification || ""}
                                         onChange={(e) => updateField("highestQualification", e.target.value)}
-                                        className="mt-1"
+                                        className="border-gray-300"
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.highestQualification || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.highestQualification || "—"}</p>
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-3 gap-5">
                                 <div>
-                                    <Label className="text-xs text-gray-500">Year of Completion</Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Institution Name</Label>
+                                    {isEditing ? (
+                                        <Input
+                                            value={formData.institutionName || ""}
+                                            onChange={(e) => updateField("institutionName", e.target.value)}
+                                            className="border-gray-300"
+                                        />
+                                    ) : (
+                                        <p className="text-sm text-gray-900">{formData.institutionName || "—"}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Year of Completion</Label>
                                     {isEditing ? (
                                         <Input
                                             type="number"
                                             value={formData.yearOfCompletion || ""}
                                             onChange={(e) => updateField("yearOfCompletion", parseInt(e.target.value))}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.yearOfCompletion || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.yearOfCompletion || "—"}</p>
                                     )}
                                 </div>
                                 <div>
-                                    <Label className="text-xs text-gray-500">Medium of Instruction</Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Medium of Instruction</Label>
                                     {isEditing ? (
                                         <Input
                                             value={formData.mediumOfInstruction || ""}
                                             onChange={(e) => updateField("mediumOfInstruction", e.target.value)}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.mediumOfInstruction || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.mediumOfInstruction || "—"}</p>
                                     )}
                                 </div>
                             </div>
 
                             <div>
-                                <Label className="text-xs text-gray-500 flex items-center gap-1">
-                                    <BookOpen className="w-3 h-3" /> Institution Name
-                                </Label>
-                                {isEditing ? (
-                                    <Input
-                                        value={formData.institutionName || ""}
-                                        onChange={(e) => updateField("institutionName", e.target.value)}
-                                        className="mt-1"
-                                    />
-                                ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.institutionName || "-"}</p>
-                                )}
-                            </div>
-
-                            <div>
-                                <Label className="text-xs text-gray-500">Grades Summary</Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Grades Summary</Label>
                                 {isEditing ? (
                                     <Textarea
                                         value={formData.gradesSummary || ""}
                                         onChange={(e) => updateField("gradesSummary", e.target.value)}
-                                        className="mt-1"
+                                        className="border-gray-300"
                                         rows={3}
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.gradesSummary || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.gradesSummary || "—"}</p>
                                 )}
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* English Test */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
-                        <CardHeader className="bg-gradient p-1">
-                            <div className="flex items-center space-x-2">
-                                <FileText className="w-5 h-5 text-orange-600" />
-                                <CardTitle className="text-gray-800">English Proficiency</CardTitle>
-                            </div>
+                    {/* English Proficiency */}
+                    <Card className="border-gray-200 shadow-sm">
+                        <CardHeader className="border-b border-gray-100 pb-4">
+                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                                <FileText className="w-5 h-5 text-gray-600" />
+                                English Proficiency
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 pt-6">
+                        <CardContent className="pt-6 space-y-5">
                             <div>
-                                <Label className="text-xs text-gray-500">Test Type</Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Test Type</Label>
                                 {isEditing ? (
                                     <Select
                                         value={formData.englishTestTaken || ""}
                                         onValueChange={(value) => updateField("englishTestTaken", value as EnglishTestType)}
                                     >
-                                        <SelectTrigger className="mt-1">
+                                        <SelectTrigger className="border-gray-300">
                                             <SelectValue placeholder="Select test type" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -468,58 +451,57 @@ export default function StudentProfilePage() {
                                         </SelectContent>
                                     </Select>
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.englishTestTaken || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.englishTestTaken || "—"}</p>
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label className="text-xs text-gray-500">Overall Score</Label>
-                                    {isEditing ? (
-                                        <Input
-                                            type="number"
-                                            step="0.5"
-                                            value={formData.overallScore || ""}
-                                            onChange={(e) => updateField("overallScore", parseFloat(e.target.value))}
-                                            className="mt-1"
-                                        />
-                                    ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.overallScore || "-"}</p>
-                                    )}
-                                </div>
-                                <div>
-                                    <Label className="text-xs text-gray-500">Test Expiry Date</Label>
-                                    {isEditing ? (
-                                        <Input
-                                            type="date"
-                                            value={formData.testExpiryDate ? formData.testExpiryDate.split("T")[0] : ""}
-                                            onChange={(e) => updateField("testExpiryDate", e.target.value)}
-                                            className="mt-1"
-                                        />
-                                    ) : (
-                                        <p className="font-medium text-gray-900 mt-1">
-                                            {formData.testExpiryDate
-                                                ? new Date(formData.testExpiryDate).toLocaleDateString()
-                                                : "-"}
-                                        </p>
-                                    )}
-                                </div>
+                            <div>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Overall Score</Label>
+                                {isEditing ? (
+                                    <Input
+                                        type="number"
+                                        step="0.5"
+                                        value={formData.overallScore || ""}
+                                        onChange={(e) => updateField("overallScore", parseFloat(e.target.value))}
+                                        className="border-gray-300"
+                                    />
+                                ) : (
+                                    <p className="text-sm text-gray-900">{formData.overallScore || "—"}</p>
+                                )}
+                            </div>
+
+                            <div>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Test Expiry Date</Label>
+                                {isEditing ? (
+                                    <Input
+                                        type="date"
+                                        value={formData.testExpiryDate ? formData.testExpiryDate.split("T")[0] : ""}
+                                        onChange={(e) => updateField("testExpiryDate", e.target.value)}
+                                        className="border-gray-300"
+                                    />
+                                ) : (
+                                    <p className="text-sm text-gray-900">
+                                        {formData.testExpiryDate
+                                            ? new Date(formData.testExpiryDate).toLocaleDateString()
+                                            : "—"}
+                                    </p>
+                                )}
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Study Preferences */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow lg:col-span-2 bg-blue-100">
-                        <CardHeader className="bg-gradient p-1">
-                            <div className="flex items-center space-x-2">
-                                <Globe className="w-5 h-5 text-indigo-600" />
-                                <CardTitle className="text-gray-800">Study Preferences</CardTitle>
-                            </div>
+                    <Card className="border-gray-200 shadow-sm lg:col-span-2">
+                        <CardHeader className="border-b border-gray-100 pb-4">
+                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                                <Globe className="w-5 h-5 text-gray-600" />
+                                Study Preferences
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 pt-6">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <CardContent className="pt-6 space-y-5">
+                            <div className="grid grid-cols-3 gap-5">
                                 <div>
-                                    <Label className="text-xs text-gray-500">Intended Intake Month</Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Intake Month</Label>
                                     {isEditing ? (
                                         <Input
                                             type="number"
@@ -527,97 +509,97 @@ export default function StudentProfilePage() {
                                             max="12"
                                             value={formData.intendedIntakeMonth || ""}
                                             onChange={(e) => updateField("intendedIntakeMonth", parseInt(e.target.value))}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.intendedIntakeMonth || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.intendedIntakeMonth || "—"}</p>
                                     )}
                                 </div>
                                 <div>
-                                    <Label className="text-xs text-gray-500">Intended Intake Year</Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Intake Year</Label>
                                     {isEditing ? (
                                         <Input
                                             type="number"
                                             value={formData.intendedIntakeYear || ""}
                                             onChange={(e) => updateField("intendedIntakeYear", parseInt(e.target.value))}
-                                            className="mt-1"
+                                            className="border-gray-300"
                                         />
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.intendedIntakeYear || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.intendedIntakeYear || "—"}</p>
                                     )}
                                 </div>
                                 <div>
-                                    <Label className="text-xs text-gray-500">Preferred Study Level</Label>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Study Level</Label>
                                     {isEditing ? (
                                         <Select
                                             value={formData.preferredStudyLevel || ""}
                                             onValueChange={(value) => updateField("preferredStudyLevel", value as StudyLevel)}
                                         >
-                                            <SelectTrigger className="mt-1">
+                                            <SelectTrigger className="border-gray-300">
                                                 <SelectValue placeholder="Select level" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value={StudyLevel.BACHELORS}>Bachelor</SelectItem>
-                                                <SelectItem value={StudyLevel.PHD}>PHD</SelectItem>
+                                                <SelectItem value={StudyLevel.MASTERS}>Masters</SelectItem>
+                                                <SelectItem value={StudyLevel.PHD}>PhD</SelectItem>
                                                 <SelectItem value={StudyLevel.DIPLOMA}>Diploma</SelectItem>
                                                 <SelectItem value={StudyLevel.CERTIFICATE}>Certificate</SelectItem>
-                                                <SelectItem value={StudyLevel.MASTERS}>Masters</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.preferredStudyLevel || "-"}</p>
+                                        <p className="text-sm text-gray-900">{formData.preferredStudyLevel || "—"}</p>
                                     )}
                                 </div>
                             </div>
 
                             <div>
-                                <Label className="text-xs text-gray-500">Preferred Field of Study</Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Preferred Field of Study</Label>
                                 {isEditing ? (
                                     <Input
                                         value={formData.preferredFieldOfStudy || ""}
                                         onChange={(e) => updateField("preferredFieldOfStudy", e.target.value)}
-                                        className="mt-1"
+                                        className="border-gray-300"
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.preferredFieldOfStudy || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.preferredFieldOfStudy || "—"}</p>
                                 )}
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Financial Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100" >
-                        <CardHeader className="bg-gradient p-1">
-                            <div className="flex items-center space-x-2">
-                                <DollarSign className="w-5 h-5 text-green-600" />
-                                <CardTitle className="text-gray-800">Financial Information</CardTitle>
-                            </div>
+                    <Card className="border-gray-200 shadow-sm">
+                        <CardHeader className="border-b border-gray-100 pb-4">
+                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                                <DollarSign className="w-5 h-5 text-gray-600" />
+                                Financial Information
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 pt-6">
+                        <CardContent className="pt-6 space-y-5">
                             <div>
-                                <Label className="text-xs text-gray-500">Estimated Budget (USD)</Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Estimated Budget (USD)</Label>
                                 {isEditing ? (
                                     <Input
                                         type="number"
                                         value={formData.estimatedBudget || ""}
                                         onChange={(e) => updateField("estimatedBudget", parseFloat(e.target.value))}
-                                        className="mt-1"
+                                        className="border-gray-300"
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">
-                                        {formData.estimatedBudget ? `$${formData.estimatedBudget.toLocaleString()}` : "-"}
+                                    <p className="text-sm text-gray-900">
+                                        {formData.estimatedBudget ? `$${formData.estimatedBudget.toLocaleString()}` : "—"}
                                     </p>
                                 )}
                             </div>
 
                             <div>
-                                <Label className="text-xs text-gray-500">Funding Source</Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Funding Source</Label>
                                 {isEditing ? (
                                     <Select
                                         value={formData.fundingSource || ""}
                                         onValueChange={(value) => updateField("fundingSource", value as FundingSource)}
                                     >
-                                        <SelectTrigger className="mt-1">
+                                        <SelectTrigger className="border-gray-300">
                                             <SelectValue placeholder="Select funding source" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -629,8 +611,8 @@ export default function StudentProfilePage() {
                                         </SelectContent>
                                     </Select>
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">
-                                        {formData.fundingSource?.replace(/_/g, " ") || "-"}
+                                    <p className="text-sm text-gray-900">
+                                        {formData.fundingSource?.replace(/_/g, " ") || "—"}
                                     </p>
                                 )}
                             </div>
@@ -638,63 +620,65 @@ export default function StudentProfilePage() {
                     </Card>
 
                     {/* Visa & Immigration */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
-                        <CardHeader className="bg-gradient p-1">
-                            <div className="flex items-center space-x-2">
-                                <Plane className="w-5 h-5 text-red-600" />
-                                <CardTitle className="text-gray-800">Visa & Immigration</CardTitle>
-                            </div>
+                    <Card className="border-gray-200 shadow-sm lg:col-span-3">
+                        <CardHeader className="border-b border-gray-100 pb-4">
+                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                                <Plane className="w-5 h-5 text-gray-600" />
+                                Visa & Immigration
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 pt-6">
-                            <div>
-                                <Label className="text-xs text-gray-500">Previous Visa Refusal</Label>
-                                {isEditing ? (
-                                    <Select
-                                        value={formData.previousVisaRefusal ? "true" : "false"}
-                                        onValueChange={(value) => updateField("previousVisaRefusal", value === "true")}
-                                    >
-                                        <SelectTrigger className="mt-1">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="false">No</SelectItem>
-                                            <SelectItem value="true">Yes</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                ) : (
-                                    <p className="font-medium text-gray-900 mt-1">
-                                        {formData.previousVisaRefusal ? "Yes" : "No"}
-                                    </p>
+                        <CardContent className="pt-6 space-y-5">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div>
+                                    <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Previous Visa Refusal</Label>
+                                    {isEditing ? (
+                                        <Select
+                                            value={formData.previousVisaRefusal ? "true" : "false"}
+                                            onValueChange={(value) => updateField("previousVisaRefusal", value === "true")}
+                                        >
+                                            <SelectTrigger className="border-gray-300">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="false">No</SelectItem>
+                                                <SelectItem value="true">Yes</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    ) : (
+                                        <p className="text-sm text-gray-900">
+                                            {formData.previousVisaRefusal ? "Yes" : "No"}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {formData.previousVisaRefusal && (
+                                    <div className="md:col-span-2">
+                                        <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Refusal Details</Label>
+                                        {isEditing ? (
+                                            <Textarea
+                                                value={formData.visaRefusalDetails || ""}
+                                                onChange={(e) => updateField("visaRefusalDetails", e.target.value)}
+                                                className="border-gray-300"
+                                                rows={3}
+                                            />
+                                        ) : (
+                                            <p className="text-sm text-gray-900">{formData.visaRefusalDetails || "—"}</p>
+                                        )}
+                                    </div>
                                 )}
                             </div>
 
-                            {formData.previousVisaRefusal && (
-                                <div>
-                                    <Label className="text-xs text-gray-500">Refusal Details</Label>
-                                    {isEditing ? (
-                                        <Textarea
-                                            value={formData.visaRefusalDetails || ""}
-                                            onChange={(e) => updateField("visaRefusalDetails", e.target.value)}
-                                            className="mt-1"
-                                            rows={3}
-                                        />
-                                    ) : (
-                                        <p className="font-medium text-gray-900 mt-1">{formData.visaRefusalDetails || "-"}</p>
-                                    )}
-                                </div>
-                            )}
-
                             <div>
-                                <Label className="text-xs text-gray-500">Travel History</Label>
+                                <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Travel History</Label>
                                 {isEditing ? (
                                     <Textarea
                                         value={formData.travelHistory || ""}
                                         onChange={(e) => updateField("travelHistory", e.target.value)}
-                                        className="mt-1"
-                                        rows={2}
+                                        className="border-gray-300"
+                                        rows={3}
                                     />
                                 ) : (
-                                    <p className="font-medium text-gray-900 mt-1">{formData.travelHistory || "-"}</p>
+                                    <p className="text-sm text-gray-900">{formData.travelHistory || "—"}</p>
                                 )}
                             </div>
                         </CardContent>
