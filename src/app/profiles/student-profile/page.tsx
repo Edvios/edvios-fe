@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -27,13 +27,29 @@ import {
 } from "lucide-react";
 
 export default function StudentProfilePage() {
+    type SessionUser = {
+        id?: string;
+        userId?: string;
+        studentId?: string;
+        data?: { id?: string };
+    };
+
+    type StudentProfileWithUser = StudentProfileData & {
+        user?: {
+            firstName?: string | null;
+            lastName?: string | null;
+            email?: string | null;
+            phone?: string | null;
+        };
+    };
+
     // Get student ID from session storage
     const getStudentIdFromSession = () => {
         if (typeof window === "undefined") return undefined;
         const raw = sessionStorage.getItem("user-session");
         if (!raw) return undefined;
         try {
-            const parsed = JSON.parse(raw) as any;
+            const parsed = JSON.parse(raw) as SessionUser;
             return parsed?.id || parsed?.userId || parsed?.studentId || parsed?.data?.id;
         } catch {
             return undefined;
@@ -44,22 +60,23 @@ export default function StudentProfilePage() {
     const { data: profileData, loading, saveStudent } = useStudentProfile(studentId);
 
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState<StudentProfileData>(profileData || {});
+    const [draftData, setDraftData] = useState<StudentProfileData>({});
 
-    // Update form data when profile data loads
-    useEffect(() => {
-        if (profileData) {
-            // Merge user fields if they are null at the top level
-            const mergedData = {
-                ...profileData,
-                firstName: profileData.firstName || (profileData as any).user?.firstName || "",
-                lastName: profileData.lastName || (profileData as any).user?.lastName || "",
-                email: profileData.email || (profileData as any).user?.email || "",
-                phone: profileData.phone || (profileData as any).user?.phone || "",
-            };
-            setFormData(mergedData);
-        }
+    const normalizedProfileData = useMemo<StudentProfileData>(() => {
+        if (!profileData) return {};
+
+        const data = profileData as StudentProfileWithUser;
+
+        return {
+            ...data,
+            firstName: data.firstName || data.user?.firstName || "",
+            lastName: data.lastName || data.user?.lastName || "",
+            email: data.email || data.user?.email || "",
+            phone: data.phone || data.user?.phone || "",
+        };
     }, [profileData]);
+
+    const formData = isEditing ? draftData : normalizedProfileData;
 
     const initials = useMemo(() => {
         const firstName = formData.firstName || "";
@@ -77,7 +94,7 @@ export default function StudentProfilePage() {
         }
 
         try {
-            await saveStudent(studentId, formData);
+            await saveStudent(studentId, draftData);
             setIsEditing(false);
         } catch (err) {
             console.error("Failed to save profile:", err);
@@ -86,12 +103,12 @@ export default function StudentProfilePage() {
     };
 
     const handleCancel = () => {
-        setFormData(profileData || {});
+        setDraftData(normalizedProfileData);
         setIsEditing(false);
     };
 
-    const updateField = (field: keyof StudentProfileData, value: any) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
+    const updateField = (field: keyof StudentProfileData, value: StudentProfileData[keyof StudentProfileData]) => {
+        setDraftData((prev) => ({ ...prev, [field]: value }));
     };
 
     return (
@@ -121,7 +138,10 @@ export default function StudentProfilePage() {
                                     <Button
                                         className="bg-white text-blue-600 hover:bg-blue-50"
                                         size="sm"
-                                        onClick={() => setIsEditing(true)}
+                                        onClick={() => {
+                                            setDraftData(normalizedProfileData);
+                                            setIsEditing(true);
+                                        }}
                                     >
                                         <Edit3 className="w-4 h-4 mr-2" />
                                         Edit Profile

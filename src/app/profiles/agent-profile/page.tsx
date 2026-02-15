@@ -30,14 +30,8 @@ export default function AgentProfilePage() {
     const { data: profileData, loading, saveAgent } = useAgentProfile();
 
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState<AgentProfileData>(profileData || {});
-
-    // Update form data when profile data loads
-    useMemo(() => {
-        if (profileData) {
-            setFormData(profileData);
-        }
-    }, [profileData]);
+    const [draftData, setDraftData] = useState<AgentProfileData>({});
+    const formData = isEditing ? draftData : (profileData || {});
 
     const initials = useMemo(() => {
         const name = formData.agentName || formData.legalName || "";
@@ -56,7 +50,7 @@ export default function AgentProfilePage() {
         }
 
         try {
-            await saveAgent(profileData.id, formData);
+            await saveAgent(profileData.id, draftData);
             setIsEditing(false);
         } catch (err) {
             console.error("Failed to save profile:", err);
@@ -65,12 +59,12 @@ export default function AgentProfilePage() {
     };
 
     const handleCancel = () => {
-        setFormData(profileData || {});
+        setDraftData(profileData || {});
         setIsEditing(false);
     };
 
-    const updateField = (field: keyof AgentProfileData, value: any) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
+    const updateField = (field: keyof AgentProfileData, value: AgentProfileData[keyof AgentProfileData]) => {
+        setDraftData((prev) => ({ ...prev, [field]: value }));
     };
 
     const toggleArrayItem = (field: keyof AgentProfileData, item: string) => {
@@ -106,7 +100,10 @@ export default function AgentProfilePage() {
                                     <Button
                                         className="bg-white text-[rgba(37,130,235,1)] hover:bg-blue-50"
                                         size="sm"
-                                        onClick={() => setIsEditing(true)}
+                                        onClick={() => {
+                                            setDraftData(profileData || {});
+                                            setIsEditing(true);
+                                        }}
                                     >
                                         <Edit3 className="w-4 h-4 mr-2" />
                                         Edit Profile

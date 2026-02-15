@@ -4,6 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { bookingsApi } from '../api/bookings.api';
 import { AppToast } from '@/utils/toast-utils';
+import { AxiosError } from 'axios';
 
 export const useBooking = () => {
   const [agentURL, setAgentURL] = useState<string>();
@@ -18,8 +19,10 @@ export const useBooking = () => {
       setError(null);
       const data = await bookingsApi.getCalendlyLink();
       setAgentURL(data);
-    } catch (err: any) {
-      const message = err.response?.data?.message || err.message || 'Failed to load booking link';
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<{ message?: string }>;
+      const message = axiosError.response?.data?.message
+        || (err instanceof Error ? err.message : 'Failed to load booking link');
       setError(message);
       AppToast.error(message);
     } finally {

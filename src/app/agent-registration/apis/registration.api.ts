@@ -16,7 +16,7 @@ export const submitAgentRegistration = async (
         if (formData.openToPilotUsage) notesParts.push('Open to Pilot Usage: YES');
 
 
-        const dtoData: any = {
+        const dtoData: Record<string, unknown> = {
             // Identity
             legalName: formData.legalName,
             tradingName: formData.tradingName || null,
