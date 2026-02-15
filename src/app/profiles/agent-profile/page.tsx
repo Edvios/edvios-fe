@@ -107,7 +107,7 @@ export default function AgentProfilePage() {
                             <div className="mt-4 md:mt-0 flex items-center space-x-2">
                                 {!isEditing ? (
                                     <Button
-                                        className="bg-white text-[rgba(37,130,235,1)] hover:bg-blue-50"
+                                        className="bg-white text-black hover:bg-blue-50"
                                         size="sm"
                                         onClick={() => setIsEditing(true)}
                                     >
@@ -143,8 +143,8 @@ export default function AgentProfilePage() {
                 {/* Profile Content */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Company Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
-                        <CardHeader className="bg-gradient p-1">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
+                        <CardHeader className=" p-1">
                             <div className="flex items-center space-x-2">
                                 <Building2 className="w-5 h-5 text-indigo-600" />
                                 <CardTitle className="text-gray-800">Company Information</CardTitle>
@@ -273,7 +273,7 @@ export default function AgentProfilePage() {
                     </Card>
 
                     {/* Contact Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <Mail className="w-5 h-5 text-green-600" />
@@ -357,7 +357,7 @@ export default function AgentProfilePage() {
                     </Card>
 
                     {/* Registration Documents */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <FileText className="w-5 h-5 text-purple-600" />
@@ -409,7 +409,7 @@ export default function AgentProfilePage() {
                     </Card>
 
                     {/* Partnerships & Accreditations */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <Award className="w-5 h-5 text-orange-600" />
@@ -468,7 +468,7 @@ export default function AgentProfilePage() {
                     </Card>
 
                     {/* Business Details */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow lg:col-span-2">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow lg:col-span-2 bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <TrendingUp className="w-5 h-5 text-blue-600" />
@@ -537,7 +537,7 @@ export default function AgentProfilePage() {
                     </Card>
 
                     {/* Services Provided */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <Briefcase className="w-5 h-5 text-teal-600" />
@@ -562,7 +562,7 @@ export default function AgentProfilePage() {
                     </Card>
 
                     {/* Platform Usage */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <Award className="w-5 h-5 text-pink-600" />

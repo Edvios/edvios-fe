@@ -12,7 +12,8 @@ import {
     CheckCircle,
     Mail,
     Building2,
-    Clock
+    Clock,
+    Phone
 } from 'lucide-react';
 
 interface AgentsTableProps {
@@ -102,10 +103,10 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                         <Mail className="w-4 h-4 text-gradient" />
                         {row.email}
                     </div>
-                    {row.organization && (
+                    {row.phone && (
                         <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
-                            <Building2 className="w-4 h-4 text-gradient" />
-                            {row.organization}
+                            <Phone className="w-4 h-4 text-gradient" />
+                            {row.phone}
                         </div>
                     )}
                 </div>

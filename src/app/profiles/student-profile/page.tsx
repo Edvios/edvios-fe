@@ -123,7 +123,7 @@ export default function StudentProfilePage() {
                             <div className="mt-4 md:mt-0 flex items-center space-x-2">
                                 {!isEditing ? (
                                     <Button
-                                        className="bg-white text-blue-600 hover:bg-blue-50"
+                                        className="bg-white text-black hover:bg-blue-50"
                                         size="sm"
                                         onClick={() => setIsEditing(true)}
                                     >
@@ -159,7 +159,7 @@ export default function StudentProfilePage() {
                 {/* Profile Content */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Personal Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <User className="w-5 h-5 text-blue-600" />
@@ -302,7 +302,7 @@ export default function StudentProfilePage() {
                     </Card>
 
                     {/* Contact Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <Mail className="w-5 h-5 text-green-600" />
@@ -359,7 +359,7 @@ export default function StudentProfilePage() {
                     </Card>
 
                     {/* Academic Background */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <GraduationCap className="w-5 h-5 text-purple-600" />
@@ -442,7 +442,7 @@ export default function StudentProfilePage() {
                     </Card>
 
                     {/* English Test */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <FileText className="w-5 h-5 text-orange-600" />
@@ -509,7 +509,7 @@ export default function StudentProfilePage() {
                     </Card>
 
                     {/* Study Preferences */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow lg:col-span-2">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow lg:col-span-2 bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <Globe className="w-5 h-5 text-indigo-600" />
@@ -586,7 +586,7 @@ export default function StudentProfilePage() {
                     </Card>
 
                     {/* Financial Information */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100" >
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <DollarSign className="w-5 h-5 text-green-600" />
@@ -638,7 +638,7 @@ export default function StudentProfilePage() {
                     </Card>
 
                     {/* Visa & Immigration */}
-                    <Card className="shadow-md hover:shadow-lg transition-shadow">
+                    <Card className="shadow-md hover:shadow-lg transition-shadow bg-blue-100">
                         <CardHeader className="bg-gradient p-1">
                             <div className="flex items-center space-x-2">
                                 <Plane className="w-5 h-5 text-red-600" />

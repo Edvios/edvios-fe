@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Users, Clock, RotateCcw, XCircle, Filter } from 'lucide-react';
+import { Search, ShieldCheck, Users, Clock, RotateCcw, XCircle, Filter } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAgents } from './hooks/use-agents';
 import { Agent, AgentStatus } from './types/agent.types';
 import { approveAgent, deleteAgent } from './api/agent.api';
 import { AgentsTable } from './components/AgentsTable';
-import { AgentProfileDialog } from './components/AgentProfileDialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,6 +21,8 @@ import {
 import { AppToast } from '@/utils/toast-utils';
 
 const AgentManagementPage = () => {
+  const router = useRouter();
+
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -30,8 +33,6 @@ const AgentManagementPage = () => {
   const pageSize = 10;
 
   // Dialog states
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
-  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
   // Debounce search
@@ -51,7 +52,7 @@ const AgentManagementPage = () => {
     pageSize,
   });
 
-  // Calculate stats - in a real app these might come from a separate endpoint
+  // Calculate stats
   const stats = useMemo(() => {
     return [
       { label: 'Total Agents', value: total, icon: Users, color: 'bg-edvios-green' },
@@ -83,6 +84,10 @@ const AgentManagementPage = () => {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleViewProfile = (agent: Agent) => {
+    router.push(`/agent-management/${agent.id}`);
   };
 
   const resetFilters = () => {
@@ -191,19 +196,11 @@ const AgentManagementPage = () => {
             page={currentPage}
             pageSize={pageSize}
             onPageChange={setCurrentPage}
-            onViewProfile={(agent) => { setSelectedAgent(agent); setProfileDialogOpen(true); }}
+            onViewProfile={handleViewProfile}
             onApprove={handleApprove}
             onDelete={handleDelete}
           />
         </div>
-
-        {/* Dialog */}
-        <AgentProfileDialog
-          agent={selectedAgent}
-          open={profileDialogOpen}
-          onClose={() => { setProfileDialogOpen(false); setSelectedAgent(null); }}
-          onApprove={handleApprove}
-        />
       </div>
     </div>
   );
