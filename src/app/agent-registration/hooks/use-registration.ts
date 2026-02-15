@@ -127,7 +127,6 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
 
                 // 3. Handle verification redirect and autofill
                 if (userData) {
-                    // Redirect if email not verified
                     if (userData.emailVerified === false) {
                         AppToast.info("Please verify your email first");
                         router.replace(`/auth/verify-request?email=${encodeURIComponent(userData.email)}`);
@@ -248,8 +247,11 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
             setError(null);
 
             try {
+
+
                 // Call the actual API
                 await submitAgentRegistration(formData);
+
 
                 AppToast.success('Registration successful!');
                 await new Promise(resolve => setTimeout(resolve, 2000));
@@ -265,7 +267,7 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
                 if (onClose) onClose();
 
                 // Logout to clear partial registration session and redirect to login
-                await logout().catch(() => { });
+                logout().catch(console.error);
 
                 setTimeout(() => {
                     router.push('/auth/login');
