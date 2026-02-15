@@ -80,7 +80,7 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
       <div className="absolute left-0 top-0 bottom-0 w-2 bg-edvios-green" />
 
       <CardHeader className="pb-2 pt-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 items-start md:items-center gap-2 md:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-2 md:gap-4">
           <h3 className="text-base font-semibold truncate min-w-0">
             {program.title}
           </h3>
