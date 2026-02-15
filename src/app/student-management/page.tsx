@@ -2,17 +2,19 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { Search, GraduationCap, XCircle, RotateCcw } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useStudents } from './hooks/use-students';
 import { Student } from './types/student.types';
-import { deleteStudent, getStudent } from './api/student.api';
+import { deleteStudent } from './api/student.api';
 import { StudentsTable } from './components/StudentsTable';
-import { StudentProfileDialog } from './components/StudentProfileDialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AppToast } from '@/utils/toast-utils';
 
 const StudentManagementPage = () => {
+  const router = useRouter();
+
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -22,8 +24,6 @@ const StudentManagementPage = () => {
   const pageSize = 10;
 
   // Dialog states
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
   // Debounce search
@@ -49,21 +49,8 @@ const StudentManagementPage = () => {
     ];
   }, [total]);
 
-  const handleViewProfile = async (student: Student) => {
-    try {
-      setActionLoading(true);
-      const fullStudent = await getStudent(student.id);
-      setSelectedStudent(fullStudent);
-      setProfileDialogOpen(true);
-    } catch {
-      AppToast.error(
-        'Student not registered successfully, Student data may be incomplete.'
-      );
-      setSelectedStudent(student);
-      setProfileDialogOpen(false);
-    } finally {
-      setActionLoading(false);
-    }
+  const handleViewProfile = (student: Student) => {
+    router.push(`/student-management/${student.id}`);
   };
 
   const handleDeleteStudent = async (userId: string) => {
@@ -89,33 +76,33 @@ const StudentManagementPage = () => {
     <div className="min-h-screen bg-[#FDFCFB] p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <h1 className="text-3xl md:text-5xl font-black tracking-tight text-edvios-blue">
               Student Management
+            </h1>
+            <p className="text-gray-500 text-sm md:text-lg font-medium max-w-2xl">
+              Efficiently track and manage international student applications, academic records, and documentation.
             </p>
-            <p className="text-gray-500 mt-2 text-base md:text-lg">Manage and review international student applications and profiles.</p>
-          </div>
-          <div className="flex items-center gap-3">
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <Card key={index} className="border-none shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500">
+              <Card key={index} className="border-none shadow-xl overflow-hidden group hover:scale-[1.02] transition-all duration-300">
                 <CardContent className="p-0">
-                  <div className={`bg-gradient-to-br ${stat.color} p-4 md:p-6 text-white flex items-center justify-between`}>
+                  <div className={`bg-white p-6 flex items-center justify-between border-l-4 ${index === 0 ? 'border-edvios-green' : 'border-edvios-blue'}`}>
                     <div>
-                      <p className="text-green-100 font-medium mb-1 opacity-90 text-sm md:text-base">{stat.label}</p>
-                      <p className="text-3xl md:text-4xl font-bold">
+                      <p className="text-gray-400 font-bold text-[10px] uppercase tracking-widest mb-1">{stat.label}</p>
+                      <p className="text-3xl font-black text-gray-900">
                         {loading ? '...' : stat.value}
                       </p>
                     </div>
-                    <div className="bg-white/20 p-3 md:p-4 rounded-xl md:rounded-2xl backdrop-blur-sm group-hover:scale-110 transition-transform duration-500">
-                      <Icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                    <div className={`${stat.color} p-4 rounded-2xl group-hover:rotate-12 transition-transform duration-500 shadow-lg shadow-edvios-green/20`}>
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
                 </CardContent>
@@ -124,25 +111,26 @@ const StudentManagementPage = () => {
           })}
         </div>
 
-        {/* Search Bar */}
-        <div className="flex flex-col md:flex-row gap-4 items-center">
-          <div className="flex-1 relative w-full group">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-green-500" />
+        {/* Search & Filters */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative group">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-edvios-green" />
             <Input
-              placeholder="Search by name, email or ID..."
+              placeholder="Search by name, email, or student ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 border-none shadow-md bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-green-500 text-base md:text-lg"
+              className="pl-12 h-14 border-none shadow-lg bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-edvios-green transition-all text-sm md:text-base font-medium"
             />
           </div>
           <Button
             variant="outline"
-            className="w-full md:w-auto h-14 px-8 gap-2 rounded-2xl border-none shadow-md bg-white hover:bg-green-50 hover:text-green-600 transition-all font-semibold"
+            className="h-14 px-8 gap-2 rounded-2xl border-2 border-gray-100 bg-white hover:bg-edvios-green hover:text-white hover:border-edvios-green transition-all font-bold shadow-md"
             onClick={resetFilters}
           >
-            <RotateCcw className="w-5 h-5" /> Reset
+            <RotateCcw className="w-5 h-5" /> Reset Filters
           </Button>
         </div>
+
 
         {/* Error */}
         {error && (
@@ -170,13 +158,6 @@ const StudentManagementPage = () => {
             onDelete={handleDeleteStudent}
           />
         </div>
-
-        {/* Profile Dialog */}
-        <StudentProfileDialog
-          student={selectedStudent}
-          open={profileDialogOpen}
-          onClose={() => { setProfileDialogOpen(false); setSelectedStudent(null); }}
-        />
       </div>
     </div>
   );

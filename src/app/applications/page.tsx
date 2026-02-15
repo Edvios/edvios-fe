@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useCallback, useMemo } from 'react'
-import { GraduationCap, AlertCircle, CheckCircle2, Clock, XCircle } from 'lucide-react'
+import { GraduationCap, CheckCircle2, Clock, XCircle } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { useApplications } from '@/app/applications/hooks/use-applications'
 import { ApplicationCard } from '@/app/applications/components/ApplicationCard'
@@ -17,7 +17,6 @@ export default function AdminPanel() {
   const { 
     applications, 
     loading, 
-    error, 
     countsLoading, 
     metrics, 
     updateApplicationStatus,

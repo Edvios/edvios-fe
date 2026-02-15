@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Users, GraduationCap, Target, Plane, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
 import { useRegistration } from './hooks/use-registration';
 import { StudentRegistrationData } from './types';
 import { useCloudinaryUpload } from '@/hooks/use-cloudinary-upload';
@@ -52,7 +53,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="space-y-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <Users className="h-6 w-6 text-white" />
@@ -213,7 +214,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
       case 2:
         return (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="space-y-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <GraduationCap className="h-6 w-6 text-white" />
@@ -249,7 +250,6 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 </Label>
                 <Input
                   id="yearOfCompletion"
-                  type="number"
                   value={formData.yearOfCompletion}
                   onChange={(e) => handleInputChange('yearOfCompletion', e.target.value)}
                   placeholder="YYYY"
@@ -378,7 +378,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
       case 3:
         return (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="space-y-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <Target className="h-6 w-6 text-white" />
@@ -469,7 +469,6 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                 </Label>
                 <Input
                   id="estimatedBudget"
-                  type="number"
                   value={formData.estimatedBudget}
                   onChange={(e) => handleInputChange('estimatedBudget', e.target.value)}
                   placeholder="In USD/GBP"
@@ -499,7 +498,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
       case 4:
         return (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="space-y-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <Plane className="h-6 w-6 text-white" />
@@ -571,7 +570,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
       case 5:
         return (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="space-y-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <FileText className="h-6 w-6 text-white" />
@@ -656,7 +655,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
       case 6:
         return (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="space-y-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                 <CheckCircle className="h-6 w-6 text-white" />
@@ -818,7 +817,18 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
           <CardContent className="relative">
 
-            {renderStepContent()}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="w-full"
+              >
+                {renderStepContent()}
+              </motion.div>
+            </AnimatePresence>
 
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10 pt-4">
               <div className="flex gap-2 order-2 sm:order-1">

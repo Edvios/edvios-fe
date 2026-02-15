@@ -16,6 +16,7 @@ import {
 import { useAdminDashboard } from "@/app/dashboard/admin/hooks/use-adminDashboard";
 import { useApplications } from "@/app/dashboard/agent/hooks/useAgentDashboard";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function ADMINDashboard() {
   const router = useRouter();
@@ -37,9 +38,14 @@ export default function ADMINDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#548aff]/10 via-white to-[#95bd2f]/10">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gradient-to-br from-[#548aff]/10 via-white to-[#95bd2f]/10"
+    >
       {/* Header */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-10">
+      <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -226,6 +232,6 @@ export default function ADMINDashboard() {
           </div>
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }
