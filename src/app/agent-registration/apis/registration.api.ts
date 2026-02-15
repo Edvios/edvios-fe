@@ -18,7 +18,7 @@ export const submitAgentRegistration = async (
             // Identity
             legalName: formData.legalName,
             tradingName: formData.tradingName || undefined,
-            agentName: formData.tradingName || formData.legalName,
+            agentName: formData.agentName || formData.tradingName || formData.legalName,
             countryOfRegistration: formData.countryOfRegistration,
             yearEstablished: formData.yearEstablished ? parseInt(formData.yearEstablished, 10) : undefined,
             websiteUrl: formData.websiteUrl || undefined,
