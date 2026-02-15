@@ -111,7 +111,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <Label htmlFor="yearEstablished" className="text-sm font-medium">Year Established <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="yearEstablished"
-                                    type="number"
                                     value={formData.yearEstablished}
                                     onChange={(e) => handleInputChange('yearEstablished', e.target.value)}
                                     placeholder="YYYY"
@@ -195,6 +194,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     value={formData.officialEmail}
                                     onChange={(e) => handleInputChange('officialEmail', e.target.value)}
                                     placeholder="email@company.com"
+                                    disabled
                                 />
                             </div>
 
@@ -346,7 +346,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     <Label htmlFor="averageStudentsPerYearLast2Years" className="text-sm font-medium">Avg. Students Sent Per Year (Last 2 Years) <span className="text-destructive">*</span></Label>
                                     <Input
                                         id="averageStudentsPerYearLast2Years"
-                                        type="number"
                                         value={formData.averageStudentsPerYearLast2Years}
                                         onChange={(e) => handleInputChange('averageStudentsPerYearLast2Years', e.target.value)}
                                         placeholder="e.g. 50"
@@ -396,7 +395,6 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <Label htmlFor="numberOfCounsellors" className="text-sm font-medium">Number of Counsellors <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="numberOfCounsellors"
-                                    type="number"
                                     value={formData.numberOfCounsellors}
                                     onChange={(e) => handleInputChange('numberOfCounsellors', e.target.value)}
                                     placeholder="Count"
@@ -530,9 +528,9 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <div className="flex items-start space-x-3 mb-2">
                                     <Checkbox
                                         id="marketingConsent"
-                                        checked={formData.marketingConsent}
-                                        onCheckedChange={(checked) => handleInputChange('marketingConsent', checked === true)}
-                                        className="mt-1 data-[state=checked]:bg-gradient"
+                                        checked={formData.marketingConsent || false}
+                                        onCheckedChange={(checked) => handleInputChange('marketingConsent', !!checked)}
+                                        className="mt-1 data-[state=checked]:bg-edvios-green"
                                     />
                                     <Label htmlFor="marketingConsent" className="text-sm cursor-pointer">
                                         I agree to receive communications and updates.
@@ -542,8 +540,8 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                 <div className="flex items-start space-x-3">
                                     <Checkbox
                                         id="termsAccepted"
-                                        checked={formData.termsAccepted}
-                                        onCheckedChange={(checked) => handleInputChange('termsAccepted', checked === true)}
+                                        checked={formData.termsAccepted || false}
+                                        onCheckedChange={(checked) => handleInputChange('termsAccepted', !!checked)}
                                         className="mt-1 data-[state=checked]:bg-edvios-green"
                                     />
                                     <Label htmlFor="termsAccepted" className="cursor-pointer font-medium text-sm leading-relaxed">
@@ -566,7 +564,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                 <Card className="shadow-2xl border-0 overflow-hidden bg-white/80 backdrop-blur-sm">
                     <CardHeader className="text-center pb-8 pt-10 border-b border-gray-100/50">
                         <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
-                            <span className="text-edvios-green text-3xl">
+                            <span className="text-edvios-blue text-3xl">
                                 Agent Registration
                             </span>
                         </CardTitle>
@@ -591,7 +589,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                         className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${isActive
                                             ? 'bg-gradient text-white shadow-lg scale-110'
                                             : isCompleted
-                                                ? 'bg-green-500 text-white'
+                                                ? 'bg-edvios-blue text-white'
                                                 : 'bg-muted text-muted-foreground'
                                             }`}
                                     >

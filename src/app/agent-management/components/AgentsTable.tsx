@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Agent } from '../types/agent.types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table } from '@/components/ui/table';
+import { ConfirmDialog } from './ConfirmDialog';
 import {
     Eye,
     Trash2,
@@ -37,6 +38,29 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
     onApprove,
     onDelete,
 }) => {
+    const [approveDialog, setApproveDialog] = useState<{ open: boolean; agentId: string | null }>({
+        open: false,
+        agentId: null,
+    });
+    const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; agentId: string | null }>({
+        open: false,
+        agentId: null,
+    });
+
+    const handleApproveConfirm = () => {
+        if (approveDialog.agentId) {
+            onApprove(approveDialog.agentId);
+            setApproveDialog({ open: false, agentId: null });
+        }
+    };
+
+    const handleDeleteConfirm = () => {
+        if (deleteDialog.agentId) {
+            onDelete(deleteDialog.agentId);
+            setDeleteDialog({ open: false, agentId: null });
+        }
+    };
+
     const getRoleBadge = (role: string) => {
         if (role === 'AGENT') {
             return (
@@ -109,11 +133,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => {
-                                if (window.confirm('Approve this agent? They will gain access to the agent portal.')) {
-                                    onApprove(row.id);
-                                }
-                            }}
+                            onClick={() => setApproveDialog({ open: true, agentId: row.id })}
                             className="hover:bg-edvios-green/10 hover:text-gradient text-gradient rounded-xl transition-all h-10 w-10 p-0"
                             title="Approve Agent"
                         >
@@ -124,11 +144,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => {
-                            if (window.confirm('Are you sure you want to delete this agent? This will permanently remove their access.')) {
-                                onDelete(row.id);
-                            }
-                        }}
+                        onClick={() => setDeleteDialog({ open: true, agentId: row.id })}
                         className="hover:bg-red-50 hover:text-red-600 text-red-400 rounded-xl transition-all h-10 w-10 p-0"
                         title="Delete Agent"
                     >
@@ -140,18 +156,41 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
     ];
 
     return (
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden">
-            <Table
-                data={agents}
-                columns={columns}
-                loading={loading}
-                pagination={{
-                    currentPage: page,
-                    totalItems: total,
-                    pageSize: pageSize,
-                    onPageChange: onPageChange,
-                }}
+        <>
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden">
+                <Table
+                    data={agents}
+                    columns={columns}
+                    loading={loading}
+                    pagination={{
+                        currentPage: page,
+                        totalItems: total,
+                        pageSize: pageSize,
+                        onPageChange: onPageChange,
+                    }}
+                />
+            </div>
+
+            <ConfirmDialog
+                open={approveDialog.open}
+                onClose={() => setApproveDialog({ open: false, agentId: null })}
+                onConfirm={handleApproveConfirm}
+                title="Approve Agent"
+                description="Approve this agent? They will gain access to the agent portal."
+                confirmText="Approve"
+                cancelText="Cancel"
             />
-        </div>
+
+            <ConfirmDialog
+                open={deleteDialog.open}
+                onClose={() => setDeleteDialog({ open: false, agentId: null })}
+                onConfirm={handleDeleteConfirm}
+                title="Delete Agent"
+                description="Are you sure you want to delete this agent? This will permanently remove their access."
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="destructive"
+            />
+        </>
     );
 };
