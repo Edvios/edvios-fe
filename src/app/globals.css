@@ -178,7 +178,7 @@ body {
   }
 }
 
-/* Headline gradient styles */
+/* Heading styles */
 h1,
 h2,
 h3,
@@ -188,10 +188,24 @@ h6,
 .headline,
 [class*="CardTitle"] {
   font-family: var(--font-heading);
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--edvios-blue);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: 2.25rem;
+  /* text-4xl */
+  line-height: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 3rem;
+    /* text-5xl */
+    line-height: 1;
+  }
 }
 
 @theme inline {

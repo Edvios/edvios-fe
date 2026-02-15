@@ -11,7 +11,7 @@ import { UserTypeToggle } from "@/app/auth/login/components/toggle";
 import { LogIn, UserPlus } from "lucide-react";
 import { useAuth, useLoginForm, useRegisterForm } from "./hooks/use-auth";
 import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
@@ -38,12 +38,7 @@ export default function LoginPage() {
         ease: [0.22, 1, 0.36, 1]
       }
     }
-  } as any;
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: { opacity: 1, x: 0 }
-  };
+  } as unknown as Variants;
 
   const onSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,7 +131,7 @@ export default function LoginPage() {
               <motion.div layout="position" transition={slowSmoothTransition}>
                 <CardHeader className="text-center pb-4 sm:pb-6 px-0 pt-0">
                   <motion.div layout="position" transition={slowSmoothTransition}>
-                    <CardTitle className="text-xl sm:text-2xl text-edvios-green font-bold">
+                    <CardTitle className="text-xl sm:text-2xl text-edvios-blue font-bold">
                       {activeTab === AuthTabEnum.LOGIN ? "Welcome Back" : "Create Account"}
                     </CardTitle>
                     <CardDescription className="text-sm text-gray-500 mt-1">

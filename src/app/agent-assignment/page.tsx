@@ -37,17 +37,13 @@ const AgentAssignmentPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB] p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFCFB] via-white to-green-50/30 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight">
-              Agent <span className="text-green-600">Assignment</span>
-            </p>
-            <p className="text-gray-500 mt-2 text-base md:text-lg">
-              Manage and assign agents to students
-            </p>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
+          <div className="font-heading">
+            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Agent Assignment</h2>
+            <p className="mt-1 text-gray-600">Assign students to recruitment agents</p>
           </div>
         </div>
 

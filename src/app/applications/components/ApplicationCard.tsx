@@ -30,19 +30,19 @@ const statusVariants: Record<ApplicationStatus, { className: string; label: stri
     label: 'Draft',
   },
   [ApplicationStatus.SUBMITTED]: {
-    className: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0',
+    className: 'bg-blue-500 text-white border-0',
     label: 'Submitted',
   },
   [ApplicationStatus.UNDER_REVIEW]: {
-    className: 'bg-gradient-to-r from-amber-500 to-orange-600 text-white border-0',
+    className: 'bg-orange-600 text-white border-0',
     label: 'Under Review',
   },
   [ApplicationStatus.ACCEPTED]: {
-    className: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0',
+    className: 'bg-green-600 text-white border-0',
     label: 'Accepted',
   },
   [ApplicationStatus.REJECTED]: {
-    className: 'bg-gradient-to-r from-red-500 to-rose-600 text-white border-0',
+    className: 'bg-red-600 text-white border-0',
     label: 'Rejected',
   },
   [ApplicationStatus.WITHDRAWN]: {
@@ -125,7 +125,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <span>{locationText || 'Location to be confirmed'}</span>
           </div>
           {application.program.scholarship && (
-            <Badge className="bg-gradient-50 text-gradient-700 border-gradient-200 border">
+            <Badge className="bg-blue-50 text-edvios-blue border-blue-200 border">
               <Award className="w-3 h-3 mr-1" />
               Scholarship Available
             </Badge>
@@ -134,7 +134,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
       </CardHeader>
 
       <CardContent className="space-y-5">
-        <div className="bg-gradient-50 rounded-lg p-4 border border-green-100">
+        <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
           <div className="flex items-center gap-2 mb-3">
             <div className="p-1.5 bg-edvios-green rounded-md">
               <User className="w-4 h-4 text-white" />
@@ -203,7 +203,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <p className="font-semibold text-sm text-gray-900">{application.program.tuitionFee ?? 'N/A'}</p>
           </div>
 
-          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <DollarSign className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">App. Fee</span>
@@ -211,7 +211,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
             <p className="font-semibold text-sm text-gray-900">{application.program.applicationFee ?? 'N/A'}</p>
           </div>
 
-          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
             <div className="flex items-center gap-1.5 text-gray-600 mb-1">
               <Calendar className="w-3.5 h-3.5" />
               <span className="text-xs font-medium">Deadline</span>
@@ -224,7 +224,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
           </div>
         </div>
 
-        <div className="bg-gradient-50 rounded-lg p-3 ">
+        <div className="bg-gray-50 rounded-lg p-3 ">
           <p className="text-xs text-gray-600 font-medium mb-1">English Requirements</p>
           <p className="font-semibold text-sm text-gray-900">{application.program.englishTestScore ?? 'Not specified'}</p>
           {application.program.englishWaiver && (
@@ -233,7 +233,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
         </div>
 
         <div className="flex items-center justify-between text-sm pt-3">
-          <span className="text-gradient-600">Application submitted:</span>
+          <span className="text-edvios-blue">Application submitted:</span>
           <span className="font-medium text-gray-900">{formatDate(submittedAt)}</span>
         </div>
       </CardContent>

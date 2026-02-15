@@ -11,7 +11,6 @@ import {
     Calendar,
     User,
     GraduationCap,
-    Clock,
     FileText,
     Globe,
     Building2,

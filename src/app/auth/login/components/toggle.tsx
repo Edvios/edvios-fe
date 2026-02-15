@@ -78,10 +78,10 @@ export function UserTypeToggle({
             className={`
               relative z-10 px-1 py-2.5 sm:px-2 sm:py-2 rounded-4xl 
               transition-all duration-500 ease-in-out
-              text-[12px] sm:text-sm font-medium
+              text-[12px] sm:text-sm
               disabled:opacity-50 disabled:cursor-not-allowed
               focus:outline-none
-              ${value === option ? 'text-primary font-semibold' : 'text-primary font-medium'}
+              ${value === option ? 'text-edvios-blue font-semibold' : 'text-gray-500 font-medium'}
             `}
             style={{
               border: 'none',

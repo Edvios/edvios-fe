@@ -99,12 +99,12 @@ const AgentManagementPage = () => {
     <div className="min-h-screen bg-[#FDFCFB] p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-edvios-blue tracking-tight text-center md:text-left">
-              Agent Management
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 font-heading">
+          <div className="font-heading">
+            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Agent Management</h2>
+            <p className="mt-1 text-gray-600">
+              Manage and monitor recruitment agents
             </p>
-            <p className="text-gray-500 mt-2 text-base md:text-lg text-center md:text-left">Approve, manage, and monitor educational consultants.</p>
           </div>
         </div>
 
@@ -142,15 +142,15 @@ const AgentManagementPage = () => {
                   placeholder="Search by agent name, email or organization..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-14 border-none bg-gray-50/50 rounded-2xl focus-visible:ring-2 focus-visible:ring-gradient text-sm md:text-base"
+                  className="pl-12 h-14 border-none bg-gray-50/50 rounded-2xl focus-visible:ring-2 focus-visible:ring-edvios-green text-sm md:text-base"
                 />
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                 <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v as AgentStatus); setCurrentPage(1); }}>
-                  <SelectTrigger className="h-14 w-full lg:w-48 border-none bg-gray-50/50 rounded-2xl font-semibold focus:ring-2 focus:ring-gradient">
+                  <SelectTrigger className="h-14 w-full lg:w-48 border-none bg-gray-50/50 rounded-2xl font-semibold focus:ring-2 focus:ring-edvios-green">
                     <div className="flex items-center gap-2">
-                      <Filter className="w-4 h-4 text-gradient" />
+                      <Filter className="w-4 h-4 text-edvios-blue" />
                       <SelectValue placeholder="Status" />
                     </div>
                   </SelectTrigger>
@@ -163,7 +163,7 @@ const AgentManagementPage = () => {
 
                 <Button
                   variant="outline"
-                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-edvios-green/10 text-gradient hover:bg-edvios-green/20 transition-all font-bold w-full sm:w-auto"
+                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-edvios-green/10 text-edvios-blue hover:bg-edvios-green/20 transition-all font-bold w-full sm:w-auto"
                   onClick={resetFilters}
                 >
                   <RotateCcw className="w-5 h-5" /> Reset

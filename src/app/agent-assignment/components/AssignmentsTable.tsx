@@ -143,7 +143,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
       header: 'Contact',
       Cell: ({ row }: { row: StudentAssignment }) => (
         <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Phone className="w-3.5 h-3.5 text-gradient" />
+          <Phone className="w-3.5 h-3.5 text-edvios-blue" />
           {row.student.phone || 'N/A'}
         </div>
       ),
@@ -192,7 +192,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
               
               {/* Agent List Popup */}
               <div 
-                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] max-w-[90vw] rounded-xl bg-white shadow-2xl"
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] max-w-[90vw] rounded-xl bg-white shadow-[0_25px_60px_-15px_rgba(149,189,47,0.3)] overflow-hidden border-none p-4"
                 data-agent-selector
               >
                 {agentsLoading ? (
@@ -202,12 +202,15 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                     <Skeleton className="h-10 w-full" />
                   </div>
                 ) : (
-                  <Command>
-                    <CommandInput
-                      placeholder="Search agents..."
-                      value={searchQuery}
-                      onValueChange={setSearchQuery}
-                    />
+                  <Command className="border-none">
+                    <div className="px-2 mb-2">
+                      <CommandInput
+                        placeholder="Search agents..."
+                        value={searchQuery}
+                        onValueChange={setSearchQuery}
+                        className="border-none bg-gray-50 rounded-lg px-4 h-12"
+                      />
+                    </div>
                     <CommandList className="max-h-[300px]">
                       <CommandEmpty>No agents found.</CommandEmpty>
                       <CommandGroup>
@@ -216,10 +219,11 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                             key={agent.id}
                             value={`${agent.firstName} ${agent.lastName} ${agent.email}`}
                             onSelect={() => handleAgentSelect(agent.id)}
+                            className="rounded-xl py-3 px-4 aria-selected:bg-green-50 transition-colors"
                           >
                             <Check
                               className={cn(
-                                'mr-2 h-4 w-4',
+                                'mr-2 h-5 w-5 text-edvios-green',
                                 row.agent?.id === agent.id ? 'opacity-100' : 'opacity-0'
                               )}
                             />
@@ -266,7 +270,7 @@ export const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
 
   return (
     <>
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden">
+      <div className="bg-white rounded-[2.5rem] border-none shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] overflow-hidden">
         <Table
           data={assignments}
           columns={columns}
