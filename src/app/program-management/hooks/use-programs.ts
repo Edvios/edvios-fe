@@ -27,7 +27,8 @@ export function usePrograms(initialFilters: ProgramFilters = {}) {
   const [size, setSize] = useState<number>(initialFilters.size ?? 10);
 
   const [filters, setFilters] = useState<Record<string, unknown>>(() => {
-    const { page: _, size: __, ...rest } = initialFilters;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { page, size, ...rest } = initialFilters;
     return rest;
   });
 

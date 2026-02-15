@@ -7,7 +7,6 @@ import { Table } from '@/components/ui/table';
 import {
     Eye,
     Trash2,
-    MapPin,
     Mail,
     Phone
 } from 'lucide-react';

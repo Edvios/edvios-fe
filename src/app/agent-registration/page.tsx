@@ -88,7 +88,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="agentName" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Agent Name <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="agentName" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">Agent Name <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="agentName"
                                     value={formData.agentName}
@@ -99,7 +99,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                             </div>
 
                             <div className="space-y-2 group">
-                                <Label htmlFor="countryOfRegistration" className="text-sm font-medium transition-colors group-focus-within:text-gradient">Country of Registration <span className="text-destructive">*</span></Label>
+                                <Label htmlFor="countryOfRegistration" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">Country of Registration <span className="text-destructive">*</span></Label>
                                 <Input
                                     id="countryOfRegistration"
                                     value={formData.countryOfRegistration}
@@ -564,10 +564,8 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
             <div className="max-w-4xl mx-auto">
                 <Card className="shadow-2xl border-0 overflow-hidden bg-white/80 backdrop-blur-sm">
                     <CardHeader className="text-center pb-8 pt-10 border-b border-gray-100/50">
-                        <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
-                            <span className="text-edvios-blue text-3xl">
-                                Agent Registration
-                            </span>
+                        <CardTitle className="mb-2">
+                            <h2 className="text-3xl md:text-4xl">Agent Registration</h2>
                         </CardTitle>
 
                         <div className="mt-8 space-y-3">
@@ -588,7 +586,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                                     <div
                                         key={step}
                                         className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${isActive
-                                            ? 'bg-gradient text-white shadow-lg scale-110'
+                                            ? 'bg-edvios-blue text-white shadow-lg scale-110'
                                             : isCompleted
                                                 ? 'bg-edvios-blue text-white'
                                                 : 'bg-muted text-muted-foreground'

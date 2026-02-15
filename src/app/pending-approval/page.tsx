@@ -18,9 +18,9 @@ export default function PendingApprovalPage() {
         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mx-auto mb-6">
           <span className="text-2xl font-bold">!</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 text-center">
           Your agent account is pending approval
-        </h1>
+        </h2>
         <p className="text-gray-600 text-center mt-3">
           Thanks for registering. An administrator will review your details and
           activate your account soon. You’ll get access once you’re approved.

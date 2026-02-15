@@ -131,7 +131,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                   Country of Residence<span className="text-destructive">*</span>
                 </Label>
                 <Input
@@ -198,7 +198,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               {/* Emergency Contact */}
 
               <div className="space-y-2 group">
-                <Label htmlFor="emergencyContactNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                <Label htmlFor="emergencyContactNumber" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                   Emergency Contact Number<span className="text-destructive">*</span>
                 </Label>
                 <Input
@@ -328,7 +328,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                   English Proficiency Test<span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.englishTest || undefined} onValueChange={(value) => handleInputChange('englishTest', value)}>
@@ -347,7 +347,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               {(formData.englishTest === 'IELTS' || formData.englishTest === 'TOEFL' || formData.englishTest === 'PTE' || formData.englishTest === 'DUOLINGO') && (
                 <>
                   <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                    <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                       Overall Score
                     </Label>
                     <Input
@@ -359,7 +359,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                     />
                   </div>
                   <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <Label htmlFor="testExpiryDate" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
+                    <Label htmlFor="testExpiryDate" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                       Test Expiry Date
                     </Label>
                     <Input
@@ -775,10 +775,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         <Card className="shadow-2xl border-0 overflow-hidden">
 
           <CardHeader className="text-center relative pb-8 pt-10">
-            <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
-              <span className="text-black-400">
-                Student Registration
-              </span>
+            <CardTitle className="mb-2">
+              <h2 className="text-3xl md:text-4xl">Student Registration</h2>
             </CardTitle>
 
             <div className="mt-8 space-y-3">

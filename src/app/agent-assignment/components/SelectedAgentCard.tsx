@@ -79,9 +79,9 @@ export const SelectedAgentCard: React.FC = () => {
 
   return (
     <>
-      <Card className="border-none shadow-md bg-white rounded-3xl">
-        <CardContent className="p-6">
-            <p className="text-xl font-bold text-gradient mb-4">Default Agent</p>
+      <Card className="border-none shadow-[0_15px_50px_-10px_rgba(149,189,47,0.1)] bg-white rounded-lg">
+        <CardContent className="p-8">
+            <h2 className="text-2xl font-bold text-edvios-blue mb-6">Default Assignee</h2>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             
             <div className="flex items-center gap-4">
@@ -122,7 +122,7 @@ export const SelectedAgentCard: React.FC = () => {
                   resetSearch();
                 }}
                 disabled={isSubmitting || isLoading}
-                className="bg-edvios-green text-white px-6 py-3 rounded-2xl shadow-md transition-all font-semibold"
+                className="bg-edvios-green text-white px-6 py-3 rounded-full shadow-md transition-all font-semibold"
                 data-agent-selector
               >
                 <ChevronsUpDown className="w-4 h-4 mr-2" />
@@ -142,7 +142,7 @@ export const SelectedAgentCard: React.FC = () => {
                   
                   {/* Agent List Popup */}
                   <div 
-                    className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] max-w-[90vw] rounded-xl bg-white shadow-2xl"
+                    className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] max-w-[90vw] rounded-xl bg-white shadow-[0_25px_60px_-15px_rgba(149,189,47,0.3)] overflow-hidden border-none p-4"
                     data-agent-selector
                   >
                     {agentsLoading ? (
@@ -152,12 +152,15 @@ export const SelectedAgentCard: React.FC = () => {
                         <Skeleton className="h-10 w-full" />
                       </div>
                     ) : (
-                      <Command>
-                        <CommandInput
-                          placeholder="Search agents..."
-                          value={searchQuery}
-                          onValueChange={setSearchQuery}
-                        />
+                      <Command className="border-none">
+                        <div className="px-2 mb-2">
+                          <CommandInput
+                            placeholder="Search agents..."
+                            value={searchQuery}
+                            onValueChange={setSearchQuery}
+                            className="border-none bg-gray-50 rounded-lg px-4 h-12"
+                          />
+                        </div>
                         <CommandList className="max-h-[300px]">
                           <CommandEmpty>No agents found.</CommandEmpty>
                           <CommandGroup>
@@ -166,10 +169,11 @@ export const SelectedAgentCard: React.FC = () => {
                                 key={agent.id}
                                 value={`${agent.firstName} ${agent.lastName} ${agent.email}`}
                                 onSelect={() => handleAgentSelect(agent)}
+                                className="rounded-lg py-3 px-4 aria-selected:bg-green-50 transition-colors"
                               >
                                 <Check
                                   className={cn(
-                                    'mr-2 h-4 w-4',
+                                    'mr-2 h-5 w-5 text-edvios-green',
                                     selectedAgent?.id === agent.id ? 'opacity-100' : 'opacity-0'
                                   )}
                                 />

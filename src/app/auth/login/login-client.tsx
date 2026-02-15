@@ -109,7 +109,7 @@ export default function LoginPage() {
               <motion.div layout="position" transition={slowSmoothTransition}>
                 <CardHeader className="text-center pb-4 sm:pb-6 px-0 pt-0">
                   <motion.div layout="position" transition={slowSmoothTransition}>
-                    <CardTitle className="text-xl sm:text-2xl text-edvios-green font-bold">
+                    <CardTitle className="text-xl sm:text-2xl text-edvios-blue font-bold">
                       {activeTab === AuthTabEnum.LOGIN ? "Welcome Back" : "Create Account"}
                     </CardTitle>
                     <CardDescription className="text-sm text-gray-500 mt-1">

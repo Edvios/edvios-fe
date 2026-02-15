@@ -2,15 +2,27 @@
 
 import React from 'react'
 import { InstitutionCard } from './InstitutionCard'
+import { InstitutionCardSkeleton } from './InstitutionCardSkeleton'
 import type { Institution } from '@/app/institution-management/types/institute-managemet.types'
 
 interface InstitutionListProps {
   institutions: Institution[]
+  loading?: boolean
 }
 
 export const InstitutionList = React.memo(function InstitutionList({ 
-  institutions 
+  institutions,
+  loading = false
 }: InstitutionListProps) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, i) => (
+          <InstitutionCardSkeleton key={i} />
+        ))}
+      </div>
+    )
+  }
   if (institutions.length === 0) {
     return (
       <div className="text-center py-12 text-gray-500">

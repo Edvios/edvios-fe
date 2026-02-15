@@ -69,82 +69,59 @@ export default function ChatPage() {
       )}
     >
       {/* Header */}
-      <header className="bg-background sticky top-0 z-10">
-        <div className="w-full px-4 py-1.5">
-          <div className="grid grid-cols-1 md:grid-cols-[20rem_1fr] items-center gap-2">
-            <div className="flex items-center gap-3">
-              <SidebarTrigger className="md:hidden" />
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleBack}
-                className="rounded-full"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-              <div className="flex items-center gap-2">
-                <div
-                  className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center",
-                    "bg-edvios-green"
-                  )}
-                >
-                  {isAgent ? (
-                    <Users className="w-5 h-5 text-white" />
-                  ) : (
-                    <MessageSquare className="w-5 h-5 text-white" />
-                  )}
-                </div>
-                <div>
-                  <h1 className="text-lg font-semibold">
-                    {isAgent ? "Inbox" : "Chat with Agent"}
-                  </h1>
-                  <p className="text-xs text-muted-foreground">
-                    {isAgent
-                      ? `${rooms.length} conversation${rooms.length !== 1 ? "s" : ""}`
-                      : "Ask your questions here"}
-                  </p>
-                </div>
+      <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleBack}
+              className="rounded-full h-12 w-12 hover:bg-gray-100 shrink-0"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+            <div className="w-12 h-12 rounded-2xl bg-edvios-blue flex items-center justify-center shadow-lg shrink-0 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+              {isAgent ? (
+                <Users className="w-7 h-7 text-white" />
+              ) : (
+                <MessageSquare className="w-7 h-7 text-white" />
+              )}
+            </div>
+            <div className="font-heading min-w-0">
+              <h2 className="text-2xl sm:text-3xl font-bold text-edvios-blue truncate">
+                {isAgent ? "Inbox" : "Chat with Agent"}
+              </h2>
+              <p className="text-gray-600 truncate">
+                {isAgent
+                  ? `${rooms.length} active conversations`
+                  : "How can we help you today?"}
+              </p>
+            </div>
+          </div>
+
+          {isAgent && selectedRoom && (
+            <div className="flex items-center gap-3 md:pl-4 border-l md:border-l-gray-200">
+              <div className="w-10 h-10 rounded-full bg-edvios-green flex items-center justify-center shrink-0">
+                <span className="text-white font-medium">
+                  {selectedRoom.studentName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm text-gray-900 truncate">
+                  {selectedRoom.studentName}
+                </p>
+                <p className="text-xs text-gray-500">Student</p>
               </div>
             </div>
-            {isAgent && (
-              <div className="flex items-center gap-2 md:justify-start md:pl-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
-                  onClick={() => setIsRoomsOpen(true)}
-                >
-                  <Users className="w-5 h-5" />
-                </Button>
-                {selectedRoom && (
-                  <>
-                    <div className="w-8 h-8 rounded-full bg-edvios-green flex items-center justify-center">
-                      <span className="text-white text-sm font-medium">
-                        {selectedRoom.studentName.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">
-                        {selectedRoom.studentName}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Student</p>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </header>
 
       {/* Main Content */}
       <main
         className={cn(
-          "w-full max-w-none mx-auto overflow-hidden",
-          isAgent
-            ? "h-[calc(100svh-96px)] md:h-[calc(100vh-60px)]"
-            : "h-[calc(100svh-108px)] md:h-[calc(100vh-72px)]"
+          "w-full max-w-7xl mx-auto overflow-hidden bg-white rounded-3xl shadow-xl border border-gray-100",
+          "h-[calc(100svh-220px)] md:h-[calc(100vh-220px)]"
         )}
       >
         {isAgent ? (

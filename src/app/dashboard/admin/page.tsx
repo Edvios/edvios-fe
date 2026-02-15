@@ -17,6 +17,7 @@ import { useAdminDashboard } from "@/app/dashboard/admin/hooks/use-adminDashboar
 import { useApplications } from "@/app/dashboard/agent/hooks/useAgentDashboard";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { LogoLoading } from "@/components/ui/logo-loading";
 
 export default function ADMINDashboard() {
   const router = useRouter();
@@ -31,42 +32,21 @@ export default function ADMINDashboard() {
 
   if (isLoading || !userData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <LogoLoading/>
       </div>
     );
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-br from-[#548aff]/10 via-white to-[#95bd2f]/10"
-    >
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-edvios-green rounded-full flex items-center justify-center">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-xl font-bold text-edvios-blue">Admin Portal</p>
-                <p className="text-sm text-gray-500">System Administrator</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-[#548aff]/10 via-white to-[#95bd2f]/10">
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <p className="text-3xl font-bold text-edvios-blue mb-2">System Overview</p>
-          <p className="text-gray-600">Monitor and manage the entire Edvios platform</p>
+        <div className="mb-8 font-heading">
+          <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Admin Dashboard</h2>
+          <p className="text-gray-600 text-lg">Monitor and manage the entire Edvios platform</p>
         </div>
 
         {/* Stats Cards */}
@@ -232,6 +212,6 @@ export default function ADMINDashboard() {
           </div>
         </div>
       </main>
-    </motion.div>
+    </div>
   );
 }

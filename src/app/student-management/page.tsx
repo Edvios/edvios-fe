@@ -77,11 +77,9 @@ const StudentManagementPage = () => {
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl md:text-5xl font-black tracking-tight text-edvios-blue">
-              Student Management
-            </h1>
-            <p className="text-gray-500 text-sm md:text-lg font-medium max-w-2xl">
+          <div className="font-heading">
+            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Student Management</h2>
+            <p className="mt-1 text-gray-600">
               Efficiently track and manage international student applications, academic records, and documentation.
             </p>
           </div>
