@@ -28,21 +28,23 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
 }) => {
 
     return (
-        <div className="bg-white p-5 rounded-lg  shadow-sm space-y-6">
-            <div>
-                <h3 className="font-semibold text-lg mb-4">Filters</h3>
-                <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                        placeholder="Search programs..."
-                        className="pl-9"
-                        value={filters.search || ''}
-                        onChange={(e) => onFilterChange('search', e.target.value)}
-                    />
-                </div>
-            </div>
+        <div className="bg-white p-5 rounded-lg shadow-sm space-y-6">
+            <h3 className="font-semibold text-lg">Filters</h3>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                    <Label>Search</Label>
+                    <div className="relative">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            placeholder="Search programs..."
+                            className="pl-9"
+                            value={filters.search || ''}
+                            onChange={(e) => onFilterChange('search', e.target.value)}
+                        />
+                    </div>
+                </div>
+
                 <div className="space-y-2">
                     <Label>Institution</Label>
                     <Select
@@ -176,12 +178,14 @@ export const ProgramFiltersSidebar: React.FC<ProgramFiltersProps> = ({
                         </SelectContent>
                     </Select>
                 </div>
-            </div>
 
-            <Button variant="outline" className="w-full text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-edvios-green" onClick={onReset}>
-                <RotateCcw className="h-4 w-4" />
-                Reset Filters
-            </Button>
+                <div className="md:col-span-3 flex justify-end pt-2">
+                    <Button variant="outline" className="text-white shadow-lg hover:shadow-xl transition-all duration-200 bg-edvios-green" onClick={onReset}>
+                        <RotateCcw className="h-4 w-4" />
+                        Reset Filters
+                    </Button>
+                </div>
+            </div>
         </div>
     );
 };
