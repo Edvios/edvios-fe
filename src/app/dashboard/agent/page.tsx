@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useApplications } from "./hooks/useAgentDashboard";
+import { motion } from "framer-motion";
 
 interface UserData {
   email: string;
@@ -75,7 +76,12 @@ export default function AgentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50"
+    >
       {/* Header */}
       <header className="bg-white border-b shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -198,6 +204,6 @@ export default function AgentDashboard() {
           </div>
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }

@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Briefcase, User, Building, Globe, Layers, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2, Settings } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
 import { useAgentRegistration } from './hooks/use-registration';
 import { AgentRegistrationData } from './types/registation.types';
 import { ServiceType, FeatureType } from './enums/registration.enums';
@@ -54,7 +55,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
         switch (currentStep) {
             case 1:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Briefcase className="h-6 w-6 text-white" />
@@ -154,7 +155,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 2:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <User className="h-6 w-6 text-white" />
@@ -213,7 +214,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 3:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Building className="h-6 w-6 text-white" />
@@ -282,7 +283,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 4:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Globe className="h-6 w-6 text-white" />
@@ -379,7 +380,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 5:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Layers className="h-6 w-6 text-white" />
@@ -463,7 +464,7 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
 
             case 6:
                 return (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 rounded-xl bg-edvios-green flex items-center justify-center">
                                 <Settings className="h-6 w-6 text-white" />
@@ -601,7 +602,18 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                     </CardHeader>
 
                     <CardContent className="p-6 md:p-10 relative min-h-[500px]">
-                        {renderStepContent()}
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentStep}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                transition={{ duration: 0.3 }}
+                                className="w-full"
+                            >
+                                {renderStepContent()}
+                            </motion.div>
+                        </AnimatePresence>
 
                         <div className="flex justify-between items-center mt-12 pt-6 border-t border-gray-100">
                             <Button

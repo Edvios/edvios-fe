@@ -17,6 +17,7 @@ import {
   LucideUserPlus2,
   Calendar,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 import {
   Sidebar,
@@ -188,7 +189,7 @@ export function AppSidebar() {
           {isCollapsed && !isMobile ? (
             <Image src="/logo.png" alt="Logo" width={36} height={36} className="object-contain" />
           ) : (
-            <Image src="/logoWithLetters.png" alt="Logo" width={140} height={40} className="object-contain" />
+            <Image src="/logoWithLetters.png" alt="Logo" width={180} height={40} className="object-contain" />
           )}
         </div>
       </SidebarHeader>
@@ -206,21 +207,33 @@ export function AppSidebar() {
                       asChild
                       tooltip={item.title}
                       className={`
-                        relative transition-all duration-300 ease-in-out
+                        relative transition-all duration-300 ease-in-out group/menu-item
                         ${isCollapsed ? "h-14 w-14 justify-center" : "h-11 w-full px-4"}
                         ${isActive 
-                          ? "sidebar-item-active text-white rounded-xl shadow-lg hover:text-white" 
-                          : "text-muted-foreground hover:bg-accent/50 rounded-lg"
+                          ? "text-white hover:text-white" 
+                          : "text-muted-foreground hover:bg-transparent hover:text-foreground"
                         }
                       `}
                     >
-                      <Link href={item.url} onClick={handleMobileClose} className="flex items-center">
+                      <Link href={item.url} onClick={handleMobileClose} className="flex items-center relative z-10 w-full h-full">
+                        {isActive && (
+                          <motion.div
+                            layoutId="active-sidebar-item"
+                            className="absolute inset-0 bg-edvios-blue rounded-xl shadow-lg -z-10"
+                            initial={false}
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 30
+                            }}
+                          />
+                        )}
                         <item.icon 
-                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0`} 
+                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0 relative z-20`} 
                           strokeWidth={isActive ? 2.5 : 2} 
                         />
                         {!isCollapsed && (
-                          <span className={`ml-3 text-sm tracking-wide ${isActive ? "font-bold" : "font-medium"}`}>
+                          <span className={`ml-3 text-sm tracking-wide relative z-20 ${isActive ? "font-bold" : "font-medium"}`}>
                             {item.title}
                           </span>
                         )}

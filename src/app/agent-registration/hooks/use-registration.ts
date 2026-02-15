@@ -252,6 +252,7 @@ export const useAgentRegistration = (): UseAgentRegistrationReturn => {
 
                 console.log('Registration response:', response);
                 AppToast.success('Registration successful!');
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 AppToast.info('Please log in again to access your account.');
 
                 // Clear saved form data from sessionStorage

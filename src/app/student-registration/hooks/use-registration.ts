@@ -197,10 +197,25 @@ export const useRegistration = (): UseRegistrationReturn => {
           AppToast.error('Please fill in all required academic details');
           return false;
         }
+        const englishScore = parseInt(formData.englishScore);
+        if (isNaN(englishScore) || englishScore < 0 || englishScore > 100) {
+          AppToast.error('Please enter a valid English score (0-100)');
+          return false;
+        }
+        const yearOfCompletion = parseInt(formData.yearOfCompletion);
+        if (isNaN(yearOfCompletion) || yearOfCompletion < 1900 || yearOfCompletion > new Date().getFullYear() + 10) {
+          AppToast.error('Please enter a valid completion year');
+          return false;
+        }
         break;
       case 3:
         if (formData.preferredDestination.length === 0 || !formData.preferredProgram || !formData.preferredStudyLevel || !formData.estimatedBudget) {
           AppToast.error('Please fill in all required study details');
+          return false;
+        }
+        const estimatedBudget = parseInt(formData.estimatedBudget);
+        if (isNaN(estimatedBudget) || estimatedBudget < 0) {
+          AppToast.error('Please enter a valid estimated budget');
           return false;
         }
         break;
@@ -244,7 +259,7 @@ export const useRegistration = (): UseRegistrationReturn => {
 
         if (result) {
           AppToast.success(`Registration successful!`);
-          delay(2000);
+          await new Promise(resolve => setTimeout(resolve, 2000));
           AppToast.info('Please log in again to access your dashboard.');
 
           // Clear saved form data from sessionStorage

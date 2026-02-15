@@ -208,8 +208,9 @@ export default function LoginPage() {
                           <Button 
                             onClick={onSubmitRegister} 
                             className="w-full h-10 mt-2 bg-edvios-green hover:opacity-90 transition-all"
+                            disabled={isLoading}
                           >
-                            <UserPlus className="w-4 h-4 mr-2" /> Create Account
+                            <UserPlus className="w-4 h-4 mr-2" /> {isLoading ? "Creating Account..." : "Create Account"}
                           </Button>
                         </motion.div>
                       )}
