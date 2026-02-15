@@ -27,50 +27,19 @@ export function UserTypeToggle({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Responsive grid columns
-  const gridCols = options.length === 4 
-    ? 'grid-cols-2 sm:grid-cols-4' 
-    : options.length === 3 
-    ? 'grid-cols-1 sm:grid-cols-3' 
-    : 'grid-cols-1 sm:grid-cols-2';
+  // Force horizontal layout on all screens
+  const gridCols = `grid-cols-${options.length}`;
   
   // Calculate sliding background position and width
   const getBackgroundPosition = () => {
     const index = options.findIndex(opt => opt === value);
-    
-    // Mobile: Stack vertically (1 column)
-    if (isMobile && options.length <= 3) {
-      const itemHeight = 100 / options.length;
-      
-      return {
-        width: 'calc(100% - 8px)',
-        height: `calc(${itemHeight}% - ${8 / options.length}px)`,
-        left: '4px',
-        top: index === 0 ? '4px' : `calc(${itemHeight * index}% + ${(8 * index) / options.length}px)`,
-      };
-    }
-    
-    // Mobile with 4 options: 2x2 grid
-    if (isMobile && options.length === 4) {
-      const col = index % 2;
-      const row = Math.floor(index / 2);
-      
-      return {
-        width: 'calc(50% - 6px)',
-        height: 'calc(50% - 6px)',
-        left: col === 0 ? '4px' : 'calc(50% + 2px)',
-        top: row === 0 ? '4px' : 'calc(50% + 2px)',
-      };
-    }
-    
-    // Desktop: Horizontal layout
     const percentage = 100 / options.length;
-    const gapAdjustment = options.length === 2 ? 4 : options.length === 3 ? 5.33 : 6;
     
+    // Consistent horizontal calculation for all screens
     return {
-      width: `calc(${percentage}% - ${gapAdjustment}px)`,
+      width: `calc(${percentage}% - 8px)`,
       height: 'calc(100% - 8px)',
-      left: index === 0 ? '4px' : `calc(${percentage * index}% + ${(8 * index) / options.length - gapAdjustment}px)`,
+      left: `calc(${percentage * index}% + 4px)`,
       top: '4px',
     };
   };
@@ -78,7 +47,7 @@ export function UserTypeToggle({
   const backgroundStyle = getBackgroundPosition();
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       {label && (
         <label className="text-gray-700 font-medium text-sm">
           {label}
@@ -86,17 +55,17 @@ export function UserTypeToggle({
       )}
       
       <div 
-        className={`grid ${gridCols} gap-2 p-1 rounded-4xl bg-gray-100 relative`}
+        className="grid gap-1 p-1 rounded-4xl bg-gray-100 relative"
         style={{
-          minHeight: isMobile && options.length <= 3 ? `${options.length * 44}px` : 'auto',
+          gridTemplateColumns: `repeat(${options.length}, 1fr)`,
         }}
       >
         {/* Sliding background indicator */}
         <div 
-          className="absolute rounded-4xl shadow-md bg-edvios-blue"
+          className="absolute rounded-4xl shadow-sm border-[1px] border-edvios-green "
           style={{
             ...backgroundStyle,
-            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1), top 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1), height 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         />
         
@@ -107,19 +76,19 @@ export function UserTypeToggle({
             onClick={() => !disabled && onChange(option)}
             disabled={disabled}
             className={`
-              relative z-10 px-2 py-1.5 sm:py-2 rounded-4xl 
+              relative z-10 px-1 py-2.5 sm:px-2 sm:py-2 rounded-4xl 
               transition-all duration-500 ease-in-out
-              text-xs sm:text-sm font-medium
+              text-[12px] sm:text-sm font-medium
               disabled:opacity-50 disabled:cursor-not-allowed
               focus:outline-none
-              ${value === option ? 'text-white' : 'text-gray-700'}
+              ${value === option ? 'text-primary font-semibold' : 'text-primary font-medium'}
             `}
             style={{
               border: 'none',
               background: 'transparent',
             }}
           >
-            <span className="block">
+            <span className="block truncate">
               {option.charAt(0).toUpperCase() + option.slice(1).toLowerCase()}
             </span>
           </button>

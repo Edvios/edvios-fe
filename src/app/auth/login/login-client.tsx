@@ -46,41 +46,73 @@ export default function LoginPage() {
         >
           <motion.div layout className="grid md:grid-cols-2 items-stretch md:min-h-[650px]">
             
-            {/* Left Side: Solid Edvios Green Background */}
-            <div className="hidden md:flex relative w-full h-full items-center justify-center bg-edvios-green">
-              {/* Fade In / Fade Out Logo Animation */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab} 
-                  initial={{ opacity: 0, y: 10 }} // Starts slightly lower and invisible
-                  animate={{ opacity: 1, y: 0 }}  // Fades in and slides to center
-                  exit={{ opacity: 0, y: -10 }}   // Fades out and slides slightly up
-                  transition={{ 
-                    duration: 0.5, 
-                    ease: "easeInOut" 
-                  }}
-                  className="relative z-10 w-72 h-36"
-                >
+            {/* Left Side: Animated Background & Logo */}
+            <div className="hidden md:flex relative w-full h-full items-center justify-center overflow-hidden">
+              {/* Background Layer */}
+              <motion.div
+                animate={{ 
+                  scale: activeTab === AuthTabEnum.LOGIN ? 1.15 : 1.0 
+                }}
+                transition={{ 
+                  duration: 1.2, 
+                  ease: [0.4, 0, 0.2, 1] 
+                }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src="/loginbg.png"
+                  alt="Login Background"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </motion.div>
+
+              {/* Logo Layer: Animates independently with a slight delay */}
+              <motion.div
+                animate={{ 
+                  scale: activeTab === AuthTabEnum.LOGIN ? 1.2 : 1.0,
+                  opacity: 1
+                }}
+                transition={{ 
+                  duration: 1.0, 
+                  delay: 0.2, // Logo starts its transition slightly after the background
+                  ease: "easeOut"
+                }}
+                className="relative z-10 w-72 h-36"
+              >
+                <Image
+                  src="/logoWithLetters.png"
+                  alt="Edvios Logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </motion.div>
+            </div>
+
+            {/* Right Side: Form Content */}
+            <div className="p-6 sm:p-8 md:p-10 lg:p-14 flex flex-col justify-center bg-white">
+              {/* Mobile-only Logo */}
+              <div className="flex md:hidden justify-center mb-8">
+                <div className="relative w-48 h-20">
                   <Image
                     src="/logoWithLetters.png"
                     alt="Edvios Logo"
                     fill
-                    className="object-contain brightness-0 invert" 
+                    className="object-contain"
                     priority
                   />
-                </motion.div>
-              </AnimatePresence>
-            </div>
+                </div>
+              </div>
 
-            {/* Right Side: Form Content */}
-            <div className="p-6 md:p-10 lg:p-14 flex flex-col justify-center bg-white">
               <motion.div layout="position" transition={slowSmoothTransition}>
-                <CardHeader className="text-center pb-6 px-0 pt-0">
+                <CardHeader className="text-center pb-4 sm:pb-6 px-0 pt-0">
                   <motion.div layout="position" transition={slowSmoothTransition}>
-                    <CardTitle className="text-2xl text-edvios-blue font-bold">
+                    <CardTitle className="text-xl sm:text-2xl text-edvios-green font-bold">
                       {activeTab === AuthTabEnum.LOGIN ? "Welcome Back" : "Create Account"}
                     </CardTitle>
-                    <CardDescription className="text-gray-500 mt-1">
+                    <CardDescription className="text-sm text-gray-500 mt-1">
                       {activeTab === AuthTabEnum.LOGIN 
                         ? "Sign in to your account" 
                         : "Join Edvios and start your journey"}
@@ -108,20 +140,22 @@ export default function LoginPage() {
                           className="space-y-4"
                         >
                           <div className="space-y-2">
-                            <Label htmlFor="login-email">Email</Label>
+                            <Label htmlFor="login-email" className="text-sm">Email</Label>
                             <Input 
                               id="login-email" 
                               type="email" 
+                              className="text-sm placeholder:text-sm"
                               placeholder="Enter your email address" 
                               value={loginData.email} 
                               onChange={(e) => updateLoginData("email", e.target.value)} 
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="login-password">Password</Label>
+                            <Label htmlFor="login-password" className="text-sm">Password</Label>
                             <Input 
                               id="login-password" 
                               type="password" 
+                              className="text-sm placeholder:text-sm"
                               placeholder="Enter your password" 
                               value={loginData.password} 
                               onChange={(e) => updateLoginData("password", e.target.value)} 
@@ -129,7 +163,7 @@ export default function LoginPage() {
                           </div>
                           <Button 
                             onClick={onSubmitLogin} 
-                            className="w-full h-10 mt-2 bg-edvios-blue hover:opacity-90 transition-all"
+                            className="w-full h-10 mt-2"
                             disabled={isLoading}
                           >
                             <LogIn className="w-4 h-4 mr-2" /> {isLoading ? "Logging in..." : "Login"}
@@ -150,18 +184,20 @@ export default function LoginPage() {
                             onChange={(value) => updateRegisterData("role", value)}
                             disabled={isLoading}
                           />
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                              <Label>First Name</Label>
+                              <Label className="text-sm">First Name</Label>
                               <Input 
+                                className="text-sm placeholder:text-sm"
                                 placeholder="Enter your first name" 
                                 value={registerData.firstName} 
                                 onChange={(e) => updateRegisterData("firstName", e.target.value)} 
                               />
                             </div>
                             <div className="space-y-2">
-                              <Label>Last Name</Label>
+                              <Label className="text-sm">Last Name</Label>
                               <Input 
+                                className="text-sm placeholder:text-sm"
                                 placeholder="Enter your last name" 
                                 value={registerData.lastName} 
                                 onChange={(e) => updateRegisterData("lastName", e.target.value)} 
@@ -169,8 +205,9 @@ export default function LoginPage() {
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <Label>Email Address</Label>
+                            <Label className="text-sm">Email Address</Label>
                             <Input 
+                              className="text-sm placeholder:text-sm"
                               type="email" 
                               placeholder="Enter your email address" 
                               value={registerData.email} 
@@ -178,17 +215,19 @@ export default function LoginPage() {
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label>Phone Number</Label>
+                            <Label className="text-sm">Phone Number</Label>
                             <Input 
+                              className="text-sm placeholder:text-sm"
                               placeholder="Enter your phone number" 
                               value={registerData.phone} 
                               onChange={(e) => updateRegisterData("phone", e.target.value)} 
                             />
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                              <Label>Password</Label>
+                              <Label className="text-sm">Password</Label>
                               <Input 
+                                className="text-sm placeholder:text-sm"
                                 type="password" 
                                 placeholder="Enter your password" 
                                 value={registerData.password} 
@@ -196,8 +235,9 @@ export default function LoginPage() {
                               />
                             </div>
                             <div className="space-y-2">
-                              <Label>Confirm Password</Label>
+                              <Label className="text-sm">Confirm Password</Label>
                               <Input 
+                                className="text-sm placeholder:text-sm"
                                 type="password" 
                                 placeholder="Confirm your password" 
                                 value={registerData.confirmPassword} 
@@ -207,7 +247,7 @@ export default function LoginPage() {
                           </div>
                           <Button 
                             onClick={onSubmitRegister} 
-                            className="w-full h-10 mt-2 bg-edvios-green hover:opacity-90 transition-all"
+                            className="w-full h-10 mt-2"
                             disabled={isLoading}
                           >
                             <UserPlus className="w-4 h-4 mr-2" /> {isLoading ? "Creating Account..." : "Create Account"}
