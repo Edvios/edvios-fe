@@ -6,10 +6,11 @@ import type { Institution } from '@/app/institution-management/types/institute-m
 
 interface InstitutionListProps {
   institutions: Institution[]
+  loading?: boolean
 }
 
-export const InstitutionList = React.memo(function InstitutionList({ 
-  institutions 
+export const InstitutionList = React.memo(function InstitutionList({
+  institutions
 }: InstitutionListProps) {
   if (institutions.length === 0) {
     return (
