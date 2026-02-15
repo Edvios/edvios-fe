@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useApplications } from "./hooks/useAgentDashboard";
-import LogoLoading from "@/components/ui/logo-loading";
+import { LogoLoading } from "@/components/ui/logo-loading";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 interface UserData {
@@ -99,7 +99,7 @@ export default function AgentDashboard() {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium text-gray-600">Total Applications</CardTitle>
-                <FileText className="w-5 h-5 text-blue-500" />
+                <FileText className="w-5 h-5 text-black" />
               </div>
             </CardHeader>
             <CardContent>
@@ -143,8 +143,12 @@ export default function AgentDashboard() {
                           <p className="text-sm text-gray-500">{client.student.email}</p>
                         </div>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800`}>
-                        {client.status}
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${client.status === 'ACCEPTED' ? 'bg-edvios-green/10 text-edvios-green border-edvios-green/20' :
+                        client.status === 'REJECTED' ? 'bg-black text-white border-black' :
+                          client.status === 'UNDER_REVIEW' ? 'bg-gray-100 text-gray-600 border-gray-200' :
+                            'bg-gray-50 text-gray-500 border-gray-100'
+                        }`}>
+                        {client.status.replace('_', ' ')}
                       </span>
                     </div>
                   ))}

@@ -14,7 +14,7 @@ import {
 import { useAdminDashboard } from "@/app/dashboard/admin/hooks/use-adminDashboard";
 import { useApplications } from "@/app/dashboard/agent/hooks/useAgentDashboard";
 import { useRouter } from "next/navigation";
-import LogoLoading from "@/components/ui/logo-loading";
+import { LogoLoading } from "@/components/ui/logo-loading";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { StatsCard } from "@/components/shared/stats-card";
 
@@ -49,35 +49,35 @@ export default function ADMINDashboard() {
             label="Total Users"
             value={stats.totalUsers.toLocaleString()}
             icon={Users}
-            valueColor="text-blue-600"
+            valueColor="text-black"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Active Agents"
             value={stats.activeAgents.toLocaleString()}
             icon={User}
-            valueColor="text-green-600"
+            valueColor="text-edvios-green"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Pending Agents"
             value={stats.pendingAgents.toLocaleString()}
             icon={UserPlus}
-            valueColor="text-yellow-600"
+            valueColor="text-black"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Students"
             value={stats.students.toLocaleString()}
             icon={GraduationCapIcon}
-            valueColor="text-purple-600"
+            valueColor="text-edvios-green"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Pending Applications"
             value={stats.applications.toLocaleString()}
             icon={Form}
-            valueColor="text-orange-600"
+            valueColor="text-black"
             loading={isLoadingStats}
           />
         </div>
@@ -97,7 +97,7 @@ export default function ADMINDashboard() {
                 {applications.slice(0, 5).map((client, idx) => (
                   <div key={idx} className="flex items-center justify-between p-4 bg-white hover:bg-gray-50 transition-colors group">
                     <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-gray-900 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
+                      <div className="w-10 h-10 bg-edvios-green text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
                         {client.student.firstName?.split(' ').map(n => n[0]).join('')}
                       </div>
                       <div>
@@ -105,10 +105,10 @@ export default function ADMINDashboard() {
                         <p className="text-xs text-gray-500">{client.student.email}</p>
                       </div>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${client.status === 'ACCEPTED' ? 'bg-green-50 text-green-700 border-green-100' :
-                      client.status === 'REJECTED' ? 'bg-red-50 text-red-700 border-red-100' :
-                        client.status === 'UNDER_REVIEW' ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                          'bg-yellow-50 text-yellow-700 border-yellow-100'
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${client.status === 'ACCEPTED' ? 'bg-edvios-green/10 text-edvios-green border-edvios-green/20' :
+                      client.status === 'REJECTED' ? 'bg-black text-white border-black' :
+                        client.status === 'UNDER_REVIEW' ? 'bg-gray-100 text-gray-600 border-gray-200' :
+                          'bg-gray-50 text-gray-500 border-gray-100'
                       }`}>
                       {client.status.replace('_', ' ')}
                     </span>
@@ -172,7 +172,7 @@ export default function ADMINDashboard() {
 
                 <Button
                   variant="ghost"
-                  className="col-span-2 h-auto py-3 flex flex-row items-center justify-center gap-2 bg-gray-900 text-white hover:bg-gray-800 transition-all shadow-sm"
+                  className="col-span-2 h-auto py-3 flex flex-row items-center justify-center gap-2 bg-black text-white hover:bg-gray-800 transition-all shadow-sm rounded-lg"
                   onClick={() => router.push('/notifications/admin')}
                 >
                   <MessageSquare className="w-4 h-4" />
