@@ -1,20 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   Check,
   X,
-  User,
   GraduationCap,
   MapPin,
   Calendar,
   DollarSign,
   Clock,
   Award,
-  Globe,
+  Mail,
 } from 'lucide-react';
 import { Application } from '@/app/applications/types/application.types';
 import { ApplicationStatus } from '@/app/applications/enums/application.enum';
@@ -26,27 +25,27 @@ interface ApplicationCardProps {
 
 const statusVariants: Record<ApplicationStatus, { className: string; label: string }> = {
   [ApplicationStatus.DRAFT]: {
-    className: 'bg-gray-100 text-gray-700 border-0',
+    className: 'bg-gray-100 text-gray-500 border-gray-200',
     label: 'Draft',
   },
   [ApplicationStatus.SUBMITTED]: {
-    className: 'bg-blue-500 text-white border-0',
+    className: 'bg-blue-50 text-blue-600 border-blue-100',
     label: 'Submitted',
   },
   [ApplicationStatus.UNDER_REVIEW]: {
-    className: 'bg-orange-600 text-white border-0',
+    className: 'bg-yellow-50 text-yellow-700 border-yellow-100',
     label: 'Under Review',
   },
   [ApplicationStatus.ACCEPTED]: {
-    className: 'bg-green-600 text-white border-0',
+    className: 'bg-edvios-green/10 text-edvios-green border-edvios-green/20',
     label: 'Accepted',
   },
   [ApplicationStatus.REJECTED]: {
-    className: 'bg-red-600 text-white border-0',
+    className: 'bg-red-50 text-red-600 border-red-100',
     label: 'Rejected',
   },
   [ApplicationStatus.WITHDRAWN]: {
-    className: 'bg-gray-100 text-gray-700 border-0',
+    className: 'bg-gray-100 text-gray-400 border-gray-200',
     label: 'Withdrawn',
   },
 };
@@ -66,27 +65,14 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
     }
   };
 
-  const getStatusBadge = (status: ApplicationStatus) => {
-    const variant = statusVariants[status];
-    return (
-      <Badge 
-        className={`${variant.className} font-semibold px-4 py-1.5 text-sm rounded-md shadow-sm`}
-      >
-        {variant.label}
-      </Badge>
-    );
-  };
-
   const formatDate = (dateString?: string | null) => {
-    if (!dateString) return 'Not available';
+    if (!dateString) return 'N/A';
     const parsed = new Date(dateString);
-    if (Number.isNaN(parsed.getTime())) return 'Not available';
+    if (Number.isNaN(parsed.getTime())) return 'N/A';
     return parsed.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
     });
   };
 
@@ -95,174 +81,126 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
   const locationText = [application.program.location, application.program.country]
     .filter(Boolean)
     .join(', ');
-    
-  return (
-    <Card className="border-gray-200 hover:shadow-md transition-shadow duration-200">
-      <CardHeader className="space-y-3 pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-1 flex-1">
-            <CardTitle className="text-xl font-semibold text-gray-900">
-              {application.program.title}
-            </CardTitle>
-            <CardDescription className="text-sm flex items-center gap-2 text-gray-600">
-              <GraduationCap className="w-4 h-4" />
-              <span className="font-medium">
-                {application.program.institution ?? 'Institution to be confirmed'}
-              </span>
-            </CardDescription>
-          </div>
-          <div className="flex flex-col gap-2 items-end">
-            {getStatusBadge(application.status)}
-            <Badge variant="outline" className="text-xs border-gray-200">
-              #{programRanking} Ranked
-            </Badge>
-          </div>
-        </div>
+  const variant = statusVariants[application.status];
 
-        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600">
-          <div className="flex items-center gap-1">
-            <MapPin className="w-4 h-4" />
-            <span>{locationText || 'Location to be confirmed'}</span>
+  return (
+    <Card className="border border-gray-100 rounded-lg bg-white hover:border-gray-200 transition-colors duration-150 overflow-hidden">
+      {/* Header: Program + Status */}
+      <CardHeader className="p-5 pb-0">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-base font-bold text-gray-900 leading-snug truncate">
+              {application.program.title}
+            </h3>
+            <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5 text-edvios-green shrink-0" />
+              <span className="truncate">{application.program.institution ?? 'Institution TBD'}</span>
+            </p>
           </div>
-          {application.program.scholarship && (
-            <Badge className="bg-blue-50 text-edvios-blue border-blue-200 border">
-              <Award className="w-3 h-3 mr-1" />
-              Scholarship Available
-            </Badge>
-          )}
+          <Badge
+            variant="outline"
+            className={`${variant.className} font-semibold px-2.5 py-0.5 text-[10px] uppercase tracking-wider rounded-full shrink-0`}
+          >
+            {variant.label}
+          </Badge>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-5">
-        <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="p-1.5 bg-edvios-green rounded-md">
-              <User className="w-4 h-4 text-white" />
-            </div>
-            <h3 className="font-semibold text-base text-gray-900">Applicant Details</h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="space-y-0.5">
-              <span className="text-xs text-gray-500 font-medium">Full Name</span>
-              <p className="font-medium text-sm text-gray-900">
-                {application.student.firstName} {application.student.lastName}
-              </p>
-            </div>
-            <div className="space-y-0.5">
-              <span className="text-xs text-gray-500 font-medium">Email</span>
-              <p className="text-sm text-gray-900">{application.student.email}</p>
-            </div>
-            {application.student.phone && (
-              <div className="space-y-0.5">
-                <span className="text-xs text-gray-500 font-medium">Phone</span>
-                <p className="text-sm text-gray-900">{application.student.phone}</p>
-              </div>
-            )}
-            {application.student.nationality && (
-              <div className="space-y-0.5">
-                <span className="text-xs text-gray-500 font-medium">Nationality</span>
-                <p className="text-sm text-gray-900 flex items-center gap-1">
-                  <Globe className="w-3 h-3" />
-                  {application.student.nationality}
-                </p>
-              </div>
-            )}
-          </div>
+      {/* Content: Flat list of details — no nested boxes */}
+      <CardContent className="p-5 pt-4">
+        {/* Applicant row */}
+        <div className="flex items-center gap-4 text-xs text-gray-600 pb-3 border-b border-gray-50">
+          <span className="font-semibold text-gray-900">
+            {application.student.firstName} {application.student.lastName}
+          </span>
+          <span className="flex items-center gap-1 text-gray-400">
+            <Mail className="w-3 h-3" />
+            <span className="truncate max-w-[180px]">{application.student.email}</span>
+          </span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
-            <div className="flex items-center gap-1.5 text-gray-600 mb-1">
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span className="text-xs font-medium">Level</span>
-            </div>
-            <p className="font-semibold text-sm text-gray-900">{application.program.level ?? 'N/A'}</p>
+        {/* Key metrics — flat inline grid, no cards-in-cards */}
+        <div className="grid grid-cols-3 gap-x-4 gap-y-3 pt-3 text-xs">
+          <div>
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-0.5">Level</p>
+            <p className="text-gray-900 font-semibold flex items-center gap-1">
+              <GraduationCap className="w-3 h-3 text-edvios-green" />
+              {application.program.level ?? 'N/A'}
+            </p>
           </div>
-
-          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
-            <div className="flex items-center gap-1.5 text-gray-600 mb-1">
-              <Calendar className="w-3.5 h-3.5" />
-              <span className="text-xs font-medium">Intake</span>
-            </div>
-            <p className="font-semibold text-sm text-gray-900">{application.preferredIntake?.name ?? 'N/A'}</p>
+          <div>
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-0.5">Intake</p>
+            <p className="text-gray-900 font-semibold flex items-center gap-1">
+              <Calendar className="w-3 h-3 text-edvios-green" />
+              {application.preferredIntake?.name ?? 'N/A'}
+            </p>
           </div>
-
-          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
-            <div className="flex items-center gap-1.5 text-gray-600 mb-1">
-              <Clock className="w-3.5 h-3.5" />
-              <span className="text-xs font-medium">Duration</span>
-            </div>
-            <p className="font-semibold text-sm text-gray-900">{application.program.duration ?? 'N/A'}</p>
+          <div>
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-0.5">Duration</p>
+            <p className="text-gray-900 font-semibold flex items-center gap-1">
+              <Clock className="w-3 h-3 text-edvios-green" />
+              {application.program.duration ?? 'N/A'}
+            </p>
           </div>
-
-          <div className="bg-gradient-50 rounded-lg p-3 border border-gray-100">
-            <div className="flex items-center gap-1.5 text-gray-600 mb-1">
-              <DollarSign className="w-3.5 h-3.5" />
-              <span className="text-xs font-medium">Tuition</span>
-            </div>
-            <p className="font-semibold text-sm text-gray-900">{application.program.tuitionFee ?? 'N/A'}</p>
+          <div>
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-0.5">Tuition</p>
+            <p className="text-gray-900 font-semibold flex items-center gap-1">
+              <DollarSign className="w-3 h-3 text-edvios-green" />
+              {application.program.tuitionFee ?? 'N/A'}
+            </p>
           </div>
-
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-            <div className="flex items-center gap-1.5 text-gray-600 mb-1">
-              <DollarSign className="w-3.5 h-3.5" />
-              <span className="text-xs font-medium">App. Fee</span>
-            </div>
-            <p className="font-semibold text-sm text-gray-900">{application.program.applicationFee ?? 'N/A'}</p>
+          <div>
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-0.5">Location</p>
+            <p className="text-gray-900 font-semibold flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-edvios-green" />
+              <span className="truncate">{locationText || 'N/A'}</span>
+            </p>
           </div>
-
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-            <div className="flex items-center gap-1.5 text-gray-600 mb-1">
-              <Calendar className="w-3.5 h-3.5" />
-              <span className="text-xs font-medium">Deadline</span>
-            </div>
-            <p className="font-semibold text-xs text-gray-900">
-              {application.program.applicationDeadline
-                ? formatDate(application.program.applicationDeadline)
-                : 'Not available'}
+          <div>
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-0.5">Ranking</p>
+            <p className="text-gray-900 font-semibold flex items-center gap-1">
+              <Award className="w-3 h-3 text-edvios-blue" />
+              #{programRanking}
             </p>
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-3 ">
-          <p className="text-xs text-gray-600 font-medium mb-1">English Requirements</p>
-          <p className="font-semibold text-sm text-gray-900">{application.program.englishTestScore ?? 'Not specified'}</p>
-          {application.program.englishWaiver && (
-            <Badge variant="outline" className="mt-2 text-xs border-gradient-200">Waiver Available</Badge>
+        {/* Footer meta */}
+        <div className="flex items-center justify-between pt-3 mt-3 border-t border-gray-50 text-[10px] font-medium uppercase tracking-wider">
+          <span className="text-gray-400">Submitted {formatDate(submittedAt)}</span>
+          {application.program.scholarship && (
+            <span className="text-edvios-green flex items-center gap-1">
+              <Check className="w-3 h-3" />
+              Scholarship
+            </span>
           )}
-        </div>
-
-        <div className="flex items-center justify-between text-sm pt-3">
-          <span className="text-edvios-blue">Application submitted:</span>
-          <span className="font-medium text-gray-900">{formatDate(submittedAt)}</span>
         </div>
       </CardContent>
 
-      <CardFooter className="flex justify-between items-center pt-4">
-        {application.status === ApplicationStatus.SUBMITTED && (
-          <div className="flex gap-2">
-            <Button
-              onClick={() => handleStatusUpdate(ApplicationStatus.ACCEPTED)}
-              disabled={updating}
-              size="sm"
-              className="bg-green-600 hover:bg-green-700 text-white font-medium"
-            >
-              <Check className="w-4 h-4 mr-1" />
-              Accept
-            </Button>
-            <Button
-              onClick={() => handleStatusUpdate(ApplicationStatus.REJECTED)}
-              disabled={updating}
-              size="sm"
-              variant="destructive"
-              className="font-medium"
-            >
-              <X className="w-4 h-4 mr-1" />
-              Reject
-            </Button>
-          </div>
-        )}
-      </CardFooter>
+      {/* Actions */}
+      {application.status === ApplicationStatus.SUBMITTED && (
+        <CardFooter className="px-5 pb-4 pt-0 flex justify-end gap-2">
+          <Button
+            onClick={() => handleStatusUpdate(ApplicationStatus.ACCEPTED)}
+            disabled={updating}
+            size="sm"
+            className="bg-edvios-green hover:bg-edvios-green/90 text-white font-semibold text-xs h-8 px-3 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5 mr-1" />
+            Accept
+          </Button>
+          <Button
+            onClick={() => handleStatusUpdate(ApplicationStatus.REJECTED)}
+            disabled={updating}
+            size="sm"
+            variant="outline"
+            className="border-red-200 text-red-600 hover:bg-red-50 font-semibold text-xs h-8 px-3 rounded-md"
+          >
+            <X className="w-3.5 h-3.5 mr-1" />
+            Reject
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };

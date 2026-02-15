@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,19 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useStudentProfile } from "./hooks/use-student-profile";
 import { StudentProfileData, Gender, EnglishTestType, StudyLevel, FundingSource } from "./types/student-profile.types";
 import {
-    User,
-    GraduationCap,
-    Globe,
-    DollarSign,
-    FileText,
     Edit3,
     Loader2,
-    Mail,
-    Phone,
     Save,
     X,
-    Award,
-    Plane,
 } from "lucide-react";
 
 export default function StudentProfilePage() {
@@ -64,14 +54,7 @@ export default function StudentProfilePage() {
         setFormData(mergedProfileData);
     }
 
-    const initials = useMemo(() => {
-        const firstName = formData.firstName || "";
-        const lastName = formData.lastName || "";
-        if (firstName || lastName) {
-            return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-        }
-        return (formData.email?.slice(0, 2).toUpperCase()) || "ST";
-    }, [formData.firstName, formData.lastName, formData.email]);
+
 
     const handleSave = async () => {
         if (!studentId) {
@@ -98,15 +81,12 @@ export default function StudentProfilePage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-background">
             {/* Header */}
-            <div className="bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-6 py-8">
+            <div className="bg-white border-b border-gray-100">
+                <div className="w-full px-6 py-8">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 rounded-lg bg-edvios-blue text-white flex items-center justify-center text-xl font-semibold">
-                                {initials}
-                            </div>
+                        <div className="flex flex-col">
                             <div>
                                 <h1 className="text-2xl font-semibold text-gray-900">
                                     {formData.firstName && formData.lastName
@@ -158,17 +138,16 @@ export default function StudentProfilePage() {
             </div>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-6 py-8">
+            <main className="w-full px-6 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Personal Information */}
-                    <Card className="border-gray-200 shadow-sm lg:col-span-2">
-                        <CardHeader className="border-b border-gray-100 pb-4">
-                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                                <User className="w-5 h-5 text-gray-600" />
+                    <div className="border border-gray-100 rounded-lg lg:col-span-2">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                            <h3 className="text-sm font-bold text-black uppercase tracking-wider">
                                 Personal Information
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-5">
+                            </h3>
+                        </div>
+                        <div className="p-6 space-y-5">
                             <div className="grid grid-cols-2 gap-5">
                                 <div>
                                     <Label className="text-xs font-medium text-gray-700 mb-1.5 block">First Name</Label>
@@ -292,18 +271,17 @@ export default function StudentProfilePage() {
                                     )}
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
                     {/* Contact Information */}
-                    <Card className="border-gray-200 shadow-sm">
-                        <CardHeader className="border-b border-gray-100 pb-4">
-                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                                <Mail className="w-5 h-5 text-gray-600" />
+                    <div className="border border-gray-100 rounded-lg">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                            <h3 className="text-sm font-bold text-black uppercase tracking-wider">
                                 Contact Information
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-5">
+                            </h3>
+                        </div>
+                        <div className="p-6 space-y-5">
                             <div>
                                 <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Email</Label>
                                 {isEditing ? (
@@ -343,18 +321,17 @@ export default function StudentProfilePage() {
                                     <p className="text-sm text-gray-900">{formData.emergencyContact || "—"}</p>
                                 )}
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
                     {/* Academic Background */}
-                    <Card className="border-gray-200 shadow-sm lg:col-span-2">
-                        <CardHeader className="border-b border-gray-100 pb-4">
-                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                                <GraduationCap className="w-5 h-5 text-gray-600" />
+                    <div className="border border-gray-100 rounded-lg lg:col-span-2">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                            <h3 className="text-sm font-bold text-black uppercase tracking-wider">
                                 Academic Background
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-5">
+                            </h3>
+                        </div>
+                        <div className="p-6 space-y-5">
                             <div>
                                 <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Highest Qualification</Label>
                                 {isEditing ? (
@@ -421,18 +398,17 @@ export default function StudentProfilePage() {
                                     <p className="text-sm text-gray-900">{formData.gradesSummary || "—"}</p>
                                 )}
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
                     {/* English Proficiency */}
-                    <Card className="border-gray-200 shadow-sm">
-                        <CardHeader className="border-b border-gray-100 pb-4">
-                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                                <FileText className="w-5 h-5 text-gray-600" />
+                    <div className="border border-gray-100 rounded-lg">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                            <h3 className="text-sm font-bold text-black uppercase tracking-wider">
                                 English Proficiency
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-5">
+                            </h3>
+                        </div>
+                        <div className="p-6 space-y-5">
                             <div>
                                 <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Test Type</Label>
                                 {isEditing ? (
@@ -487,18 +463,17 @@ export default function StudentProfilePage() {
                                     </p>
                                 )}
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
                     {/* Study Preferences */}
-                    <Card className="border-gray-200 shadow-sm lg:col-span-2">
-                        <CardHeader className="border-b border-gray-100 pb-4">
-                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                                <Globe className="w-5 h-5 text-gray-600" />
+                    <div className="border border-gray-100 rounded-lg lg:col-span-2">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                            <h3 className="text-sm font-bold text-black uppercase tracking-wider">
                                 Study Preferences
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-5">
+                            </h3>
+                        </div>
+                        <div className="p-6 space-y-5">
                             <div className="grid grid-cols-3 gap-5">
                                 <div>
                                     <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Intake Month</Label>
@@ -564,18 +539,17 @@ export default function StudentProfilePage() {
                                     <p className="text-sm text-gray-900">{formData.preferredFieldOfStudy || "—"}</p>
                                 )}
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
                     {/* Financial Information */}
-                    <Card className="border-gray-200 shadow-sm">
-                        <CardHeader className="border-b border-gray-100 pb-4">
-                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                                <DollarSign className="w-5 h-5 text-gray-600" />
+                    <div className="border border-gray-100 rounded-lg">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                            <h3 className="text-sm font-bold text-black uppercase tracking-wider">
                                 Financial Information
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-5">
+                            </h3>
+                        </div>
+                        <div className="p-6 space-y-5">
                             <div>
                                 <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Estimated Budget (USD)</Label>
                                 {isEditing ? (
@@ -616,18 +590,17 @@ export default function StudentProfilePage() {
                                     </p>
                                 )}
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
                     {/* Visa & Immigration */}
-                    <Card className="border-gray-200 shadow-sm lg:col-span-3">
-                        <CardHeader className="border-b border-gray-100 pb-4">
-                            <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                                <Plane className="w-5 h-5 text-gray-600" />
+                    <div className="border border-gray-100 rounded-lg lg:col-span-3">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                            <h3 className="text-sm font-bold text-black uppercase tracking-wider">
                                 Visa & Immigration
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-5">
+                            </h3>
+                        </div>
+                        <div className="p-6 space-y-5">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div>
                                     <Label className="text-xs font-medium text-gray-700 mb-1.5 block">Previous Visa Refusal</Label>
@@ -681,8 +654,8 @@ export default function StudentProfilePage() {
                                     <p className="text-sm text-gray-900">{formData.travelHistory || "—"}</p>
                                 )}
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>

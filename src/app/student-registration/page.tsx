@@ -131,7 +131,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
+                <Label htmlFor="currentCountry" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Country of Residence<span className="text-destructive">*</span>
                 </Label>
                 <Input
@@ -198,7 +198,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               {/* Emergency Contact */}
 
               <div className="space-y-2 group">
-                <Label htmlFor="emergencyContactNumber" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
+                <Label htmlFor="emergencyContactNumber" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   Emergency Contact Number<span className="text-destructive">*</span>
                 </Label>
                 <Input
@@ -328,7 +328,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               <div className="space-y-2 group">
-                <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
+                <Label htmlFor="englishTest" className="text-sm font-medium transition-colors group-focus-within:text-gradient">
                   English Proficiency Test<span className="text-destructive">*</span>
                 </Label>
                 <Select value={formData.englishTest || undefined} onValueChange={(value) => handleInputChange('englishTest', value)}>
@@ -346,7 +346,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
               {(formData.englishTest === 'IELTS' || formData.englishTest === 'TOEFL' || formData.englishTest === 'PTE' || formData.englishTest === 'DUOLINGO') && (
                 <>
-                  <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="space-y-2 group transition-opacity duration-200">
                     <Label htmlFor="englishScore" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                       Overall Score
                     </Label>
@@ -358,7 +358,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
                       className="transition-all duration-200 focus:ring-2 focus:ring-green-500/20"
                     />
                   </div>
-                  <div className="space-y-2 group animate-in fade-in slide-in-from-bottom-2 duration-300">
+
+                  <div className="space-y-2 group transition-opacity duration-200">
                     <Label htmlFor="testExpiryDate" className="text-sm font-medium transition-colors group-focus-within:text-edvios-blue">
                       Test Expiry Date
                     </Label>
@@ -390,7 +391,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              
+
 
               <div className="space-y-2 group md:col-span-2">
                 <Label htmlFor="preferredDestination" className="text-sm font-medium">
@@ -529,7 +530,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
               </div>
 
               {formData.previousVisaRefusal && (
-                <div className="space-y-2 group animate-in fade-in">
+                <div className="space-y-2 group transition-opacity duration-200">
                   <Label htmlFor="visaRefusalDetails" className="text-sm font-medium">
                     Visa Refusal Details <span className="text-destructive">*</span>
                   </Label>
@@ -775,8 +776,10 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
         <Card className="shadow-2xl border-0 overflow-hidden">
 
           <CardHeader className="text-center relative pb-8 pt-10">
-            <CardTitle className="mb-2">
-              <h2 className="text-3xl md:text-4xl">Student Registration</h2>
+            <CardTitle className="text-3xl md:text-4xl font-bold mb-2">
+              <span className="text-black-400">
+                Student Registration
+              </span>
             </CardTitle>
 
             <div className="mt-8 space-y-3">
@@ -843,7 +846,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
               <div className="order-1 sm:order-2">
                 {currentStep < totalSteps ? (
-                  <Button 
+                  <Button
                     onClick={handleNextStep}
                   >
                     Next Step

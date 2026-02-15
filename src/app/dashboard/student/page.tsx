@@ -3,10 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { NotificationBell } from "@/app/notifications/components/notification-bell";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StudentTab, studentTabLabels } from "./enums/student-tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { StudentTab } from "./enums/student-tabs";
 import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
 import { useStudentDashboard } from "./hooks/use-student-dashboard";
 import {
@@ -16,11 +14,10 @@ import {
   FileText,
   FolderCheck,
   GraduationCap,
-  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { LogoLoading } from "@/components/ui/logo-loading";
+import LogoLoading from "@/components/ui/logo-loading";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { UserTypeToggle } from "@/app/auth/login/components/toggle";
 
 const statIcons: Record<string, LucideIcon> = {
@@ -146,27 +143,16 @@ export default function StudentDashboard() {
   if (!userData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <LogoLoading/>
+        <LogoLoading />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-edvios-cap flex items-center justify-center shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300" style={{ backgroundColor: '#1c87e2' }}>
-            <GraduationCap className="w-7 h-7 text-white" />
-          </div>
-          <div className="font-heading">
-            <h2 className="text-2xl sm:text-3xl font-bold text-edvios-blue">Student Portal</h2>
-            <p className="text-gray-600">Welcome back, {userData.firstName}</p>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-6">
+        <Breadcrumb items={[{ label: "Student Portal", active: true }]} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
           {statCards.filter((s) => s.key !== "interviews").map((stat) => {
             const Icon = statIcons[stat.key] ?? FileText;
@@ -225,8 +211,8 @@ export default function StudentDashboard() {
                           className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
                         >
                           <div className="flex items-start gap-3">
-                            <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
-                              <GraduationCap className="h-5 w-5 text-blue-600" />
+                            <div className="h-10 w-10 rounded-full bg-edvios-green/10 flex items-center justify-center">
+                              <GraduationCap className="h-5 w-5 text-edvios-green" />
                             </div>
                             <div>
                               {(() => {
@@ -346,7 +332,7 @@ export default function StudentDashboard() {
           {/* Programs tab removed per request */}
         </Tabs>
 
-      </main>
+      </div>
     </div>
   );
 }

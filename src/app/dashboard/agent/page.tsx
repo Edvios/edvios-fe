@@ -3,18 +3,17 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  Users, 
-  FileText,  
-  Building,
+import {
+  Users,
+  FileText,
   MessageSquare,
   Layers,
   BookOpen
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useApplications } from "./hooks/useAgentDashboard";
-import { motion } from "framer-motion";
-import { LogoLoading } from "@/components/ui/logo-loading";
+import LogoLoading from "@/components/ui/logo-loading";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 interface UserData {
   email: string;
@@ -71,29 +70,16 @@ export default function AgentDashboard() {
   }, [router, supabase.auth]);
 
   if (isLoading || !userData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <LogoLoading />
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center bg-white">
+      <LogoLoading />
+    </div>;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-            <Building className="w-7 h-7 text-white" />
-          </div>
-          <div className="font-heading">
-            <h2 className="text-2xl sm:text-3xl font-bold text-edvios-blue">Agent Portal</h2>
-            <p className="text-gray-600">Welcome back, {userData.name}</p>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-6">
+        <Breadcrumb items={[{ label: "Agent Portal", active: true }]} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <Card >
@@ -149,13 +135,12 @@ export default function AgentDashboard() {
                   {applications.map((client, idx) => (
                     <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-[#99c12a] rounded-full flex items-center justify-center text-white font-semibold">
+                        <div className="w-10 h-10 bg-edvios-green/10 text-edvios-green rounded-full flex items-center justify-center font-bold">
                           {client.student.firstName?.split(' ').map(n => n[0]).join('')}
                         </div>
                         <div>
                           <p className="font-medium text-gray-900">{client.student.firstName}</p>
                           <p className="text-sm text-gray-500">{client.student.email}</p>
-                          {/* <p className="text-xs text-gray-400 mt-1">{client.applications} applications</p> */}
                         </div>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800`}>
@@ -173,8 +158,6 @@ export default function AgentDashboard() {
 
           {/* Tasks & Quick Actions */}
           <div>
-
-
             <Card className="mt-6">
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
@@ -194,10 +177,9 @@ export default function AgentDashboard() {
                 </Button>
               </CardContent>
             </Card>
-
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

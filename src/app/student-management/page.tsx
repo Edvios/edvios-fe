@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, GraduationCap, XCircle, RotateCcw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useStudents } from './hooks/use-students';
@@ -9,8 +9,8 @@ import { deleteStudent } from './api/student.api';
 import { StudentsTable } from './components/StudentsTable';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { AppToast } from '@/utils/toast-utils';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 const StudentManagementPage = () => {
   const router = useRouter();
@@ -42,12 +42,6 @@ const StudentManagementPage = () => {
     pageSize,
   });
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    return [
-      { label: 'Total Students', value: total, icon: GraduationCap, color: 'bg-edvios-green' },
-    ];
-  }, [total]);
 
   const handleViewProfile = (student: Student) => {
     router.push(`/student-management/${student.id}`);
@@ -73,66 +67,41 @@ const StudentManagementPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB] p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="font-heading">
-            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Student Management</h2>
-            <p className="mt-1 text-gray-600">
-              Efficiently track and manage international student applications, academic records, and documentation.
-            </p>
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="w-full space-y-4">
+        <div className="flex items-center justify-between">
+          <Breadcrumb items={[{ label: "Student Management", active: true }]} className="mb-0" />
+          <div className="flex items-center gap-2 bg-edvios-green/10 px-3 py-1.5 rounded-full border border-edvios-green/20">
+            <GraduationCap className="w-4 h-4 text-edvios-green" />
+            <span className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">Total Students:</span>
+            <span className="text-sm font-black text-edvios-green">{loading ? '...' : total}</span>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={index} className="border-none shadow-xl overflow-hidden group hover:scale-[1.02] transition-all duration-300">
-                <CardContent className="p-0">
-                  <div className={`bg-white p-6 flex items-center justify-between border-l-4 ${index === 0 ? 'border-edvios-green' : 'border-edvios-blue'}`}>
-                    <div>
-                      <p className="text-gray-400 font-bold text-[10px] uppercase tracking-widest mb-1">{stat.label}</p>
-                      <p className="text-3xl font-black text-gray-900">
-                        {loading ? '...' : stat.value}
-                      </p>
-                    </div>
-                    <div className={`${stat.color} p-4 rounded-2xl group-hover:rotate-12 transition-transform duration-500 shadow-lg shadow-edvios-green/20`}>
-                      <Icon className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row gap-4">
+        {/* Search & Action Bar - Highly Compact */}
+        <div className="flex flex-col md:flex-row gap-3 pt-2">
           <div className="flex-1 relative group">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 transition-colors group-focus-within:text-edvios-green" />
+            <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 transition-colors group-focus-within:text-edvios-green" />
             <Input
-              placeholder="Search by name, email, or student ID..."
+              placeholder="Search by name, email, or ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 border-none shadow-lg bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-edvios-green transition-all text-sm md:text-base font-medium"
+              className="pl-10 h-10 border border-gray-200 bg-white rounded-md focus-visible:ring-1 focus-visible:ring-edvios-green transition-all text-sm font-medium"
             />
           </div>
           <Button
             variant="outline"
-            className="h-14 px-8 gap-2 rounded-2xl border-2 border-gray-100 bg-white hover:bg-edvios-green hover:text-white hover:border-edvios-green transition-all font-bold shadow-md"
+            className="h-10 px-4 gap-2 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-400 font-bold text-[10px] uppercase tracking-widest transition-all"
             onClick={resetFilters}
           >
-            <RotateCcw className="w-5 h-5" /> Reset Filters
+            <RotateCcw className="w-4 h-4" /> Reset
           </Button>
         </div>
 
 
         {/* Error */}
         {error && (
-          <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+          <div className="p-4 bg-red-50 border border-red-100 rounded-lg text-red-600 flex items-center gap-3 transition-opacity duration-200">
             <XCircle className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm font-medium">{error}</span>
           </div>
@@ -142,7 +111,7 @@ const StudentManagementPage = () => {
         <div className="relative">
           {actionLoading && (
             <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-2xl">
-              <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-4 border-edvios-green border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           <StudentsTable
