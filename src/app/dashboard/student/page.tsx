@@ -3,10 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { NotificationBell } from "@/app/notifications/components/notification-bell";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StudentTab, studentTabLabels } from "./enums/student-tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { StudentTab } from "./enums/student-tabs";
 import type { UserData } from "@/app/dashboard/student/types/dashboard.types";
 import { useStudentDashboard } from "./hooks/use-student-dashboard";
 import {
@@ -16,10 +14,11 @@ import {
   FileText,
   FolderCheck,
   GraduationCap,
-  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import LogoLoading from "@/components/ui/logo-loading";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { UserTypeToggle } from "@/app/auth/login/components/toggle";
 
 const statIcons: Record<string, LucideIcon> = {
   applications: FileText,
@@ -125,7 +124,6 @@ export default function StudentDashboard() {
   const documents: Record<string, unknown>[] = [];
 
   const tabOrder = useMemo(() => Object.values(StudentTab).filter((t) => t !== StudentTab.PROGRAMS) as StudentTab[], []);
-  const activeTabIndex = useMemo(() => tabOrder.indexOf(tabValue), [tabOrder, tabValue]);
 
 
   useEffect(() => {
@@ -143,43 +141,18 @@ export default function StudentDashboard() {
   // logout handled elsewhere; no-op here to avoid unused function
 
   if (!userData) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-    </div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <LogoLoading />
+      </div>
+    );
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50"
-    >
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-edvios-cap" style={{ backgroundColor: '#1c87e2', border: '1px solid rgba(0,0,0,0.06)' }}>
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-xl font-bold text-edvios-blue">Student Portal</p>
-                <p className="text-sm text-gray-500">Welcome back, {userData.firstName}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <NotificationBell role="student" />
-              <Button className="bg-edvios-green text-white" size="sm" onClick={() => router.push('/chat')}>
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Chat with Agent
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-6">
+        <Breadcrumb items={[{ label: "Student Portal", active: true }]} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
           {statCards.filter((s) => s.key !== "interviews").map((stat) => {
             const Icon = statIcons[stat.key] ?? FileText;
@@ -210,28 +183,11 @@ export default function StudentDashboard() {
         </div>
 
         <Tabs value={tabValue} onValueChange={(val) => setTabValue(val as StudentTab)} className="space-y-4">
-          <TabsList
-            className="relative w-full p-1 rounded-4xl bg-gray-100 overflow-hidden !bg-gray-100 !p-1 !rounded-4xl !w-full"
-            style={{ gridTemplateColumns: `repeat(${tabOrder.length}, 1fr)` }}
-          >
-            <div
-              className="absolute top-1 bottom-1 rounded-4xl transition-all duration-300 ease-in-out bg-edvios-green"
-              style={{
-                width: `calc(${100 / tabOrder.length}% - 8px)`,
-                left: `calc(${activeTabIndex * (100 / tabOrder.length)}% + 4px)`,
-              }}
-            />
-
-            {tabOrder.map((tab) => (
-              <TabsTrigger
-                key={tab}
-                value={tab}
-                className="relative z-10 px-2 py-2 duration-300 ease-in-out border-0 text-sm font-medium data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=inactive]:text-gray-700 !h-auto !rounded-4xl !border-0 !px-2 !py-2 !shadow-none !bg-transparent"
-              >
-                {studentTabLabels[tab]}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <UserTypeToggle
+            options={tabOrder}
+            value={tabValue}
+            onChange={(val: string) => setTabValue(val as StudentTab)}
+          />
 
           <TabsContent value={StudentTab.APPLICATIONS} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -255,8 +211,8 @@ export default function StudentDashboard() {
                           className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3"
                         >
                           <div className="flex items-start gap-3">
-                            <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
-                              <GraduationCap className="h-5 w-5 text-blue-600" />
+                            <div className="h-10 w-10 rounded-full bg-edvios-green/10 flex items-center justify-center">
+                              <GraduationCap className="h-5 w-5 text-edvios-green" />
                             </div>
                             <div>
                               {(() => {
@@ -376,8 +332,8 @@ export default function StudentDashboard() {
           {/* Programs tab removed per request */}
         </Tabs>
 
-      </main>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 // CountUp removed — keep UI unchanged

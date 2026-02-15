@@ -13,8 +13,6 @@ import {
     Building2,
     Globe,
     Mail,
-    Phone,
-    MapPin,
     FileText,
     Edit3,
     Loader2,
@@ -352,7 +350,7 @@ export default function AgentProfilePage() {
                     </Card>
 
                     {/* Registration Documents */}
-                     {/* Business Details */}
+                    {/* Business Details */}
                     <Card className="border-gray-200 shadow-sm">
                         <CardHeader className="border-b border-gray-100 pb-4">
                             <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
@@ -423,7 +421,7 @@ export default function AgentProfilePage() {
                         </CardContent>
                     </Card>
 
-                   
+
 
                     {/* Partnerships & Accreditations */}
                     <Card className="border-gray-200 shadow-sm lg:col-span-2">
@@ -491,7 +489,7 @@ export default function AgentProfilePage() {
                             </div>
                         </CardContent>
                     </Card>
-                     <Card className="border-gray-200 shadow-sm">
+                    <Card className="border-gray-200 shadow-sm">
                         <CardHeader className="border-b border-gray-100 pb-4">
                             <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
                                 <FileText className="w-5 h-5 text-gray-600" />
@@ -514,12 +512,12 @@ export default function AgentProfilePage() {
                                 )}
                             </div>
 
-                           
+
 
                         </CardContent>
                     </Card>
 
-                   
+
                     {/* Services Provided */}
                     <Card className="border-gray-200 shadow-sm lg:col-span-2">
                         <CardHeader className="border-b border-gray-100 pb-4">

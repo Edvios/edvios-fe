@@ -12,6 +12,7 @@ import { ProgramApplicationRequest } from '@/app/program-finder/dtos/program.dto
 import { ProgramService } from '@/app/program-finder/services/program.service';
 import { usePrograms } from '@/app/program-finder/hooks/use-programs';
 import { SearchX, Loader2 } from 'lucide-react';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 export default function ProgramFinderPage() {
     const { initialData, filteredData, filters, loading, updateFilter, resetFilters, changePage } = usePrograms();
@@ -36,30 +37,28 @@ export default function ProgramFinderPage() {
     };
 
     return (
-        <div className="mx-auto w-full max-w-425 p-4 md:p-6 lg:p-8">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <p className="text-3xl font-bold tracking-tight text-edvios-blue">Find Your Program</p>
-                    <p className="text-muted-foreground mt-1">Discover universities and courses that match your goals.</p>
+        <div className="bg-background py-8 px-4 sm:px-6 lg:px-8">
+            <div className="w-full space-y-6">
+                <div className="flex items-center justify-between">
+                    <Breadcrumb items={[{ label: "Program Finder", active: true }]} className="mb-0" />
+                    {filteredData && (
+                        <div className="flex items-center gap-2 bg-edvios-green/10 px-3 py-1.5 rounded-full border border-edvios-green/20">
+                            <span className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">Found:</span>
+                            <span className="text-sm font-black text-edvios-green">{filteredData.pagination.total}</span>
+                        </div>
+                    )}
                 </div>
-                {filteredData && (
-                    <div className="text-sm text-muted-foreground">
-                        Showing <span className="font-semibold text-gray-900">{filteredData.programs.length}</span> of{' '}
-                        <span className="font-semibold text-gray-900">{filteredData.pagination.total}</span> programs
-                    </div>
-                )}
-            </div>
-            
-            <div className="mb-8">
-                <ProgramFiltersSidebar
-                    filters={filters}
-                    initialData={initialData}
-                    onFilterChange={updateFilter}
-                    onReset={resetFilters}
-                />
-            </div>
 
-            <main>
+                <div className="mb-8">
+                    <ProgramFiltersSidebar
+                        filters={filters}
+                        initialData={initialData}
+                        onFilterChange={updateFilter}
+                        onReset={resetFilters}
+                    />
+                </div>
+
+                <main>
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-20">
                             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-4" />
@@ -99,22 +98,23 @@ export default function ProgramFinderPage() {
                             </button>
                         </div>
                     )}
-            </main>
+                </main>
 
-            <ProgramDetailsDialog
-                program={selectedProgram}
-                open={isDetailsOpen}
-                onOpenChange={setIsDetailsOpen}
-                onApplyClick={handleApplyClick}
-            />
+                <ProgramDetailsDialog
+                    program={selectedProgram}
+                    open={isDetailsOpen}
+                    onOpenChange={setIsDetailsOpen}
+                    onApplyClick={handleApplyClick}
+                />
 
-            <ProgramApplyDialog
-                program={programToApply}
-                open={isApplyOpen}
-                onOpenChange={setIsApplyOpen}
-                onSubmit={handleApplySubmit}
-                intakes={initialData?.intakes ?? []}
-            />
+                <ProgramApplyDialog
+                    program={programToApply}
+                    open={isApplyOpen}
+                    onOpenChange={setIsApplyOpen}
+                    onSubmit={handleApplySubmit}
+                    intakes={initialData?.intakes ?? []}
+                />
+            </div>
         </div>
     );
 }

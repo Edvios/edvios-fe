@@ -29,8 +29,43 @@ export function Table<T extends { id: string }>({
 }: TableProps<T>) {
   if (loading) {
     return (
-      <div className="flex justify-center py-10 text-muted-foreground">
-        Loading data...
+      <div className="space-y-4">
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-muted">
+              <tr>
+                {columns.map((col, index) => (
+                  <th key={index} className="px-4 py-3 text-left font-medium">
+                    <div className="h-4 w-24 bg-gray-200 animate-pulse rounded" />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, i) => (
+                <tr key={i} className="border-b border-gray-100 last:border-0">
+                  {columns.map((_, j) => (
+                    <td key={j} className="px-4 py-4">
+                      <div className="h-4 w-full bg-gray-100 animate-pulse rounded" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="md:hidden space-y-4 p-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-white rounded-md border border-gray-200 p-4 space-y-4">
+              {[...Array(3)].map((_, j) => (
+                <div key={j} className="space-y-2">
+                  <div className="h-3 w-16 bg-gray-100 animate-pulse rounded" />
+                  <div className="h-4 w-full bg-gray-50 animate-pulse rounded" />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -48,12 +83,12 @@ export function Table<T extends { id: string }>({
       {/* Desktop View */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-muted">
+          <thead className="bg-transparent border-b border-gray-100">
             <tr>
               {columns.map((col, index) => (
                 <th
                   key={index}
-                  className="px-4 py-3 text-left font-medium"
+                  className="px-4 py-4 text-left font-bold text-black uppercase tracking-wider text-[10px]"
                 >
                   {col.header}
                 </th>
@@ -83,7 +118,7 @@ export function Table<T extends { id: string }>({
       {/* Mobile View */}
       <div className="md:hidden space-y-4 p-4">
         {data.map((row) => (
-          <div key={row.id} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div key={row.id} className="bg-white rounded-md border border-gray-200 overflow-hidden">
             {columns.map((col, index) => (
               <div key={index} className={`p-4 ${index !== columns.length - 1 ? 'border-b border-gray-50' : ''}`}>
                 <div className="flex flex-col gap-1">
@@ -104,29 +139,29 @@ export function Table<T extends { id: string }>({
 
       {/* Pagination */}
       {pagination && (
-        <div className="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
-          <span className="text-sm text-muted-foreground order-2 sm:order-1">
-            Page {pagination.currentPage} of{" "}
+        <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-4 border-t border-gray-50">
+          <span className="text-xs font-bold uppercase tracking-widest text-gray-400 order-2 sm:order-1 px-2">
+            Page {pagination.currentPage} <span className="mx-1">/</span>{" "}
             {Math.ceil(pagination.totalItems / pagination.pageSize)}
           </span>
 
-          <div className="flex gap-2 order-1 sm:order-2 w-full sm:w-auto">
+          <div className="flex gap-2 order-1 sm:order-2 w-full sm:w-auto px-2">
             <Button
               variant="outline"
-              size="sm"
-              className="flex-1 sm:flex-none"
+              size="icon"
+              className="w-8 h-8 rounded-full border-gray-200 hover:border-edvios-green hover:text-edvios-green transition-all"
               disabled={pagination.currentPage === 1}
               onClick={() =>
                 pagination.onPageChange(pagination.currentPage - 1)
               }
             >
-              Previous
+              <span className="text-xs">{"<"}</span>
             </Button>
 
             <Button
               variant="outline"
-              size="sm"
-              className="flex-1 sm:flex-none"
+              size="icon"
+              className="w-8 h-8 rounded-full border-gray-200 hover:border-edvios-green hover:text-edvios-green transition-all"
               disabled={
                 pagination.currentPage >=
                 Math.ceil(
@@ -137,7 +172,7 @@ export function Table<T extends { id: string }>({
                 pagination.onPageChange(pagination.currentPage + 1)
               }
             >
-              Next
+              <span className="text-xs">{">"}</span>
             </Button>
           </div>
         </div>

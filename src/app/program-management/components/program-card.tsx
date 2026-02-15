@@ -1,34 +1,31 @@
 "use client";
 
 import React, { useState } from 'react';
-import { cn } from '@/utils/cn';
 import {
-  Building,
-  MapPin,
-  Calendar,
-  Edit,
+  MoreHorizontal,
   Trash2,
-  Loader2,
+  Edit,
 } from 'lucide-react';
 
 import type { Program } from '../types';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-} from '../../../components/ui/card';
-import { Badge } from '../../../components/ui/badge';
-import { Button } from '../../../components/ui/button';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogAction,
   AlertDialogCancel,
-  AlertDialogTrigger,
-} from '../../../components/ui/alert-dialog';
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 type Props = {
   program: Program;
@@ -37,263 +34,179 @@ type Props = {
 };
 
 export default function ProgramCard({ program, onEdit, onDelete }: Props) {
-  const [showDetails, setShowDetails] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const p = program;
-  const badges = p.badges || [];
-  const tags = p.tags || [];
 
-  // Helper to safely extract string from potential objects
-  const toString = (val: unknown): string => {
-    if (!val) return '—';
-    if (typeof val === 'string') return val;
-    if (typeof val === 'number') return String(val);
-    if (typeof val === 'object' && val !== null) {
-      const obj = val as Record<string, unknown>;
-      return (obj.name as string) || (obj.label as string) || (obj.title as string) || JSON.stringify(val);
-    }
-    return String(val);
-  };
-
-  // Extract values from nested objects
-  const institutionName = p.institution?.name || p.university || p.institutionName || '—';
-  const institutionCity = p.institution?.city || p.institutionCity || p.location || '—';
-  const intakeName = p.intake?.name || p.intakeName || '—';
-  const subjectName = p.subject?.name || p.subjectName || '—';
+  const institutionName = p.institution?.name || p.university || '—';
+  const location = p.institution?.country || p.institution?.city || p.location || '—';
+  const intake = p.intake?.name || p.intakeName || '—';
+  const tuition = p.tuitionFee || p.tuition || '—';
+  const duration = p.duration || '—';
+  const level = p.level || '—';
+  const subject = p.subject?.name || p.subjectName || '—';
   const ranking = p.institution?.ranking ? String(p.institution.ranking) : (p.ranking || '—');
+  const appFee = p.applicationFee || '—';
+  const status = p.status || 'AVAILABLE'; // Default to AVAILABLE if undefined as per request example style
+  const englishTest = p.englishTestScore || '—';
+  const ucas = p.ucasCode || '—';
 
-  const formatDate = (val?: string | null) => {
-    if (!val) return '—';
+  const formatDate = (dateUnparsed: string | undefined) => {
+    if (!dateUnparsed) return '—';
     try {
-      const d = new Date(val);
-      if (!isNaN(d.getTime())) return d.toLocaleDateString();
+      const d = new Date(dateUnparsed);
+      if (isNaN(d.getTime())) return dateUnparsed;
+      return d.toLocaleDateString();
     } catch {
-      return val;
+      return dateUnparsed;
     }
-    return val;
   };
 
-  const handleDelete = async () => {
-    if (!onDelete) return;
-    
-    setDeleting(true);
-    try {
-      await onDelete(p.id);
-    } catch (error) {
-      console.error('Delete failed:', error);
-    } finally {
-      setDeleting(false);
-    }
-  };
+  const deadline = formatDate(p.applicationDeadline);
+
 
   return (
-    <Card
-      className={cn(
-        // base program card sizing
-        'relative w-full md:max-w-[900px] transition-shadow overflow-hidden border-gray-200 min-w-0',
-        // default is a bit shorter; institution style wants full height and stronger shadow
-        showDetails ? 'hover:shadow-lg h-full flex flex-col' : 'hover:shadow-md h-auto flex flex-col'
-      )}
-    >
-      {/* full-height left color stripe */}
-      <div className="absolute left-0 top-0 bottom-0 w-3 md:w-4 bg-edvios-green rounded-l-md" />
+    <>
+      <div className="group relative flex flex-col sm:flex-row gap-4 p-5 border border-transparent border-b-gray-100 hover:border-gray-200 hover:bg-gray-50/50 hover:shadow-sm transition-all rounded-lg bg-white">
+        {/* Left: Image / Icon Placeholder */}
+        <div className="shrink-0">
+          <div className="w-16 h-16 sm:w-24 sm:h-24 bg-gray-900 rounded-md flex items-center justify-center text-white shadow-sm ring-1 ring-gray-900/5">
+            <span className="font-bold text-xl uppercase tracking-widest">{institutionName.substring(0, 2)}</span>
+          </div>
+        </div>
 
-      <div className="flex flex-row min-w-0">
-        <CardContent
-          className={cn(
-            // default compact padding for program list
-            'flex-1 min-w-0 overflow-visible',
-            showDetails ? 'p-4 md:p-5 lg:p-6 flex flex-col flex-1' : 'p-2 pl-6 md:pl-8'
-          )}
-        >
-          <div className="flex flex-col">
-            <h3 
-              onClick={() => setShowDetails(s => !s)} 
-              className="cursor-pointer font-bold text-lg md:text-xl text-gray-900 mb-1 line-clamp-2"
-            >
-              {p.title}
-            </h3>
-
-            {/* University & location under title */}
-            <div className="mt-1">
-              <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
-                <Building size={16} className="text-gray-500" />
-                <div className="font-medium truncate max-w-full text-sm">
-                  {institutionName}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                <div className="flex items-center gap-1.5">
-                  <MapPin size={14} />
-                  <div className="text-sm break-words">
-                    {institutionCity}
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={14} />
-                  <div className="text-sm break-words">
-                    {intakeName}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mb-3 max-w-full">
-                {subjectName !== '—' && (
-                  <Badge variant="secondary" className="border-0 bg-blue-100 text-blue-700 text-[9px] px-2 py-0.5">
-                    Subject: {subjectName}
-                  </Badge>
-                )}
-                {badges.slice(0, 4).map((badge, idx) => (
-                  <Badge key={idx} variant="secondary" className="border-0 bg-green-100 text-green-700 text-[9px] px-2 py-0.5">
-                    {toString(badge)}
-                  </Badge>
-                ))}
-                {tags.slice(0, 4).map((tag, idx) => (
-                  <Badge key={idx} variant="secondary" className="border-0 bg-orange-100 text-orange-800 text-[9px] px-2 py-0.5">
-                    {toString(tag)}
-                  </Badge>
-                ))}
-              </div>
-
-              <div className="border-t border-gray-200 my-3" />
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-3">
-                <div>
-                  <div className="text-gray-500">Ranking</div>
-                  <div className="font-semibold text-sm text-gray-900">
-                    {ranking}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">Tuition (1st year)</div>
-                  <div className="font-medium text-sm break-words">
-                    {toString(p.tuitionFee) || toString(p.tuition) || '—'}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">Application Deadline</div>
-                  <div className="font-medium text-sm break-words">
-                    {formatDate(p.applicationDeadline)}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">Application Fee</div>
-                  <div className="font-medium text-sm break-words">
-                    {toString(p.applicationFee)}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">Duration</div>
-                  <div className="font-medium text-sm break-words">
-                    {toString(p.duration)}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">Status</div>
-                  <div className="mt-1">
-                    <Badge variant="secondary" className="px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-800 border-0 text-[11px]">
-                      {toString(p.status) || toString(p.availability) || '—'}
-                    </Badge>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">English Test</div>
-                  <div className="font-medium text-sm break-words">
-                    {toString(p.englishTestScore)}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">Level</div>
-                  <div className="font-medium text-sm break-words">
-                    {toString(p.level) || toString(p.degree) || toString(p.category) || '—'}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-gray-500">UCAS Code</div>
-                  <div className="font-medium text-sm break-words">
-                    {toString(p.ucasCode)}
-                  </div>
-                </div>
-              </div>
-
+        {/* Middle: Content */}
+        <div className="flex-1 min-w-0 flex flex-col gap-3">
+          {/* Header Row */}
+          <div>
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="font-bold text-lg text-gray-900 leading-tight group-hover:text-edvios-green transition-colors">
+                {p.title}
+              </h3>
+            </div>
+            <div className="text-sm text-gray-500 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="font-medium text-gray-700">{institutionName}</span>
+              <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+              <span>{location}</span>
+              <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+              {/* Subject */}
+              <span className="text-gray-600">Subject: <span className="font-medium text-gray-800">{subject}</span></span>
+              {p.scholarshipAvailable && (
+                <Badge variant="outline" className="ml-2 border-edvios-green/20 text-edvios-green bg-edvios-green/5 text-[10px] uppercase font-bold tracking-wider h-5 px-1.5">
+                  Scholarship
+                </Badge>
+              )}
             </div>
           </div>
-        </CardContent>
-      </div>
 
-      <div className="mt-auto border-t border-gray-200 pt-2 md:pt-3 px-3 md:px-4">
-        <div className="flex justify-end">
-          <div className="flex items-center gap-2">
-            <Button
-              className="bg-edvios-green hover:opacity-90 text-xs md:text-sm h-7 md:h-8 px-2 md:px-3"
-              onClick={() => onEdit?.(p)}
-            >
-              <div className="flex items-center gap-2">
-                <Edit size={14} />
-                <span>Edit</span>
-              </div>
-            </Button>
+          {/* Details Grid - Responsive 2 to 4 columns */}
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-3 gap-x-4 pt-1">
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline" className="h-7 md:h-8 px-2 md:px-3 flex items-center gap-2">
-                  <Trash2 size={14} />
-                  <span>Delete</span>
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete program</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete this program? This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="bg-edvios-green text-white"
-                    onClick={handleDelete}
-                    disabled={deleting}
-                  >
-                    <div className="flex items-center gap-2">
-                      {deleting ? <Loader2 className="animate-spin" size={14} /> : <Trash2 size={14} />}
-                      {deleting ? 'Deleting...' : 'Delete'}
-                    </div>
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {/* Tuple 1 */}
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Ranking</span>
+              <span className="text-xs font-semibold text-gray-700">{ranking}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Tuition (1st year)</span>
+              <span className="text-xs font-semibold text-gray-700">{tuition}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Duration</span>
+              <span className="text-xs font-semibold text-gray-700">{duration}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">App Deadline</span>
+              <span className="text-xs font-semibold text-gray-700">{deadline}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">App Fee</span>
+              <span className="text-xs font-semibold text-gray-700">{appFee}</span>
+            </div>
+
+            {/* Row 2 on large screens */}
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Level</span>
+              <span className="text-xs font-semibold text-gray-700">{level}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">English Test</span>
+              <span className="text-xs font-semibold text-gray-700">{englishTest}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Intake</span>
+              <span className="text-xs font-semibold text-gray-700">{intake}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">UCAS Code</span>
+              <span className="text-xs font-semibold text-gray-700">{ucas}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Status</span>
+              <span className="text-xs font-bold text-edvios-green">{status}</span>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex sm:flex-col items-center sm:items-end justify-start sm:justify-start gap-3 ml-0 sm:ml-4 pl-0 sm:pl-4 sm:border-l border-gray-100 min-w-[50px]">
+          <div className="sm:hidden absolute top-4 right-4 z-10">
+            <ProgramActions onEdit={() => onEdit?.(program)} onDelete={() => setShowDeleteDialog(true)} />
+          </div>
+          <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity">
+            <ProgramActions onEdit={() => onEdit?.(program)} onDelete={() => setShowDeleteDialog(true)} />
           </div>
         </div>
       </div>
 
-      {showDetails && p.raw && (
-        <div className="px-6 pb-6 pt-2 text-sm text-gray-700 border-t">
-          <div className="font-medium mb-2">Additional fields</div>
-          <div className="grid gap-2">
-            {Object.entries(p.raw)
-              .filter(([k]) => !['id', 'title', 'university', 'location', 'ranking'].includes(k))
-              .map(([k, v]) => (
-                <div key={k} className="flex gap-3">
-                  <div className="text-gray-500 w-40">{k}</div>
-                  <div className="break-words">
-                    {typeof v === 'object' ? JSON.stringify(v) : String(v)}
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-    </Card>
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete
+              <span className="font-semibold text-gray-900"> {p.title} </span>
+              and remove it from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction className="bg-red-600 hover:bg-red-700" onClick={() => onDelete?.(p.id)}>
+              Delete Program
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+}
+
+function ProgramActions({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-gray-100 rounded-full">
+          <MoreHorizontal className="w-4 h-4 text-gray-400" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuItem onClick={onEdit} className="cursor-pointer">
+          <Edit className="w-3.5 h-3.5 mr-2 text-gray-500" />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onDelete} className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50">
+          <Trash2 className="w-3.5 h-3.5 mr-2" />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

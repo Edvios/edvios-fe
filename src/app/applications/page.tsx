@@ -3,22 +3,23 @@
 
 import { useState, useCallback, useMemo } from 'react'
 import { GraduationCap, CheckCircle2, Clock, XCircle } from 'lucide-react'
-import { Card } from '@/components/ui/card'
 import { useApplications } from '@/app/applications/hooks/use-applications'
 import { ApplicationCard } from '@/app/applications/components/ApplicationCard'
 import { ApplicationFilters } from '@/app/applications/components/ApplicationFilters'
 import { Pagination } from '@/app/applications/components/Pagination'
 import { ApplicationStatus } from '@/app/applications/enums/application.enum'
-import { StatsCard } from '@/app/institution-management/components/StatsCard'
+import { StatsCard } from '@/components/shared/stats-card'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { ApplicationCardSkeleton } from '@/app/applications/components/ApplicationCardSkeleton'
 
 export default function AdminPanel() {
   const [filter, setFilter] = useState<'all' | ApplicationStatus>('all')
-  
-  const { 
-    applications, 
-    loading, 
-    countsLoading, 
-    metrics, 
+
+  const {
+    applications,
+    loading,
+    countsLoading,
+    metrics,
     updateApplicationStatus,
     paginationParams,
     totalItems,
@@ -31,75 +32,56 @@ export default function AdminPanel() {
     filter === 'all' ? undefined : filter
   )
 
-  // Memoized filter handler
   const handleFilterChange = useCallback((val: 'all' | ApplicationStatus) => {
     setFilter(val)
   }, [])
 
-  // Memoized stats section
-  const statsSection = useMemo(() => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <StatsCard
-        label="Total Applications"
-        value={metrics.total}
-        icon={GraduationCap}
-      />
-      <StatsCard
-        label="Submitted"
-        value={metrics.pending}
-        icon={Clock}
-        valueColor="text-blue-600"
-      />
-      <StatsCard
-        label="Approved"
-        value={metrics.approved}
-        icon={CheckCircle2}
-        valueColor="text-green-600"
-      />
-      <StatsCard
-        label="Rejected"
-        value={metrics.rejected}
-        icon={XCircle}
-        valueColor="text-red-600"
-      />
-    </div>
-  ), [metrics])
-
-  if (loading || countsLoading) {
+  // Stats skeleton for initial load
+  const statsSection = useMemo(() => {
     return (
-      <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-12">
-            <p className="text-gray-600">Loading applications...</p>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <StatsCard
+          label="Total Applications"
+          value={metrics.total}
+          icon={GraduationCap}
+          loading={countsLoading}
+        />
+        <StatsCard
+          label="Submitted"
+          value={metrics.pending}
+          icon={Clock}
+          valueColor="text-blue-600"
+          loading={countsLoading}
+        />
+        <StatsCard
+          label="Approved"
+          value={metrics.approved}
+          icon={CheckCircle2}
+          valueColor="text-green-600"
+          loading={countsLoading}
+        />
+        <StatsCard
+          label="Rejected"
+          value={metrics.rejected}
+          icon={XCircle}
+          valueColor="text-red-600"
+          loading={countsLoading}
+        />
       </div>
     )
-  }
+  }, [metrics, countsLoading])
 
   return (
-    <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-6">
+        <Breadcrumb items={[{ label: "Application Management", active: true }]} />
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-3xl font-bold text-edvios-blue">Application Management</p>
-            <p className="mt-1 text-gray-600">
-              Review and manage student applications
-            </p>
-          </div>
-        </div>
-
-        {/* Stats Cards */}
         {statsSection}
 
-
-        {/* Main Content Card */}
-        <Card className="border-gray-200 overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
+        <div className="border border-gray-100 rounded-lg overflow-hidden bg-white">
+          <div className="p-6 border-b border-gray-100">
             <div className="flex items-center justify-between flex-wrap gap-4">
-              <h2 className="text-xl font-semibold text-gray-900">Applications</h2>
+              <h2 className="text-sm font-bold text-black uppercase tracking-wider">Applications</h2>
               <ApplicationFilters
                 currentFilter={filter}
                 onFilterChange={handleFilterChange}
@@ -108,8 +90,13 @@ export default function AdminPanel() {
           </div>
 
           <div className="p-6">
-            {/* Applications List */}
-            {applications.length === 0 ? (
+            {loading ? (
+              <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <ApplicationCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : applications.length === 0 ? (
               <div className="text-center py-12">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
                   <GraduationCap className="w-8 h-8 text-gray-400" />
@@ -125,7 +112,7 @@ export default function AdminPanel() {
               </div>
             ) : (
               <>
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {applications.map((application) => (
                     <ApplicationCard
                       key={application.id}
@@ -135,7 +122,6 @@ export default function AdminPanel() {
                   ))}
                 </div>
 
-                {/* Pagination */}
                 <Pagination
                   currentPage={paginationParams.page || 1}
                   totalPages={totalPages}
@@ -149,8 +135,7 @@ export default function AdminPanel() {
               </>
             )}
           </div>
-        </Card>
-
+        </div>
       </div>
     </div>
   )

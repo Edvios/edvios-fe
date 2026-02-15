@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import {
   Users,
   Home,
@@ -16,6 +17,8 @@ import {
   BookOpen,
   LucideUserPlus2,
   Calendar,
+  Menu,
+  PanelLeftIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -29,7 +32,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { logout } from "@/app/auth/login/api/auth.api";
@@ -122,7 +124,7 @@ const adminItems = [
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { state, isMobile, setOpenMobile } = useSidebar();
+  const { state, isMobile, setOpenMobile, toggleSidebar } = useSidebar();
   const [userData, setUserData] = useState<UserData | null>(null);
 
   const isCollapsed = state === "collapsed";
@@ -177,27 +179,53 @@ export function AppSidebar() {
   }, [userData?.role]);
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="flex flex-col p-0">
-        {/* Centered Trigger Container */}
-        <div className={`flex items-center pt-4 ${isCollapsed ? "justify-center" : "justify-end px-4"}`}>
-          <SidebarTrigger className="opacity-70 hover:opacity-100 transition-opacity scale-110" />
-        </div>
+    <Sidebar collapsible="icon" className="bg-sidebar">
+      <SidebarHeader className="bg-transparent h-20 flex flex-col justify-center px-4">
+        <div className={`flex items-center w-full ${isCollapsed ? "justify-center" : "justify-between"}`}>
 
-        {/* Logo area */}
-        <div className="mt-2 flex items-center justify-center min-h-[50px]">
-          {isCollapsed && !isMobile ? (
-            <Image src="/logo.png" alt="Logo" width={36} height={36} className="object-contain" />
-          ) : (
-            <Image src="/logoWithLetters.png" alt="Logo" width={180} height={40} className="object-contain" />
+          {/* Logo - Only show when NOT collapsed */}
+          {!isCollapsed && (
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              className="flex items-center"
+            >
+              <Image
+                src="/logoWithLetters.png"
+                alt="Logo"
+                width={160}
+                height={50}
+                className="object-contain"
+                priority
+              />
+            </motion.div>
           )}
+
+          {/* Trigger Icon - Hamburger when collapsed, PanelLeft when expanded */}
+          <Button
+            onClick={toggleSidebar}
+            variant="ghost"
+            size="icon"
+            className={`
+              text-edvios-green hover:bg-edvios-green/10 
+              transition-colors duration-200
+              ${isCollapsed ? "mx-auto" : ""}
+            `}
+          >
+            {isCollapsed ? <Menu className="size-6" /> : <PanelLeftIcon className="size-6" />}
+            <span className="sr-only">Toggle Sidebar</span>
+          </Button>
         </div>
       </SidebarHeader>
+
+      <div className="px-4">
+        <div className="h-[1px] w-full bg-edvios-blue/20" />
+      </div>
 
       <SidebarContent className="mt-4">
         <SidebarGroup>
           <SidebarGroupContent>
-            {/* Tightened vertical gap between items */}
             <SidebarMenu className={isCollapsed ? "items-center gap-3" : "gap-1 px-3"}>
               {menuItems.map((item) => {
                 const isActive = pathname === item.url;
@@ -207,21 +235,22 @@ export function AppSidebar() {
                       asChild
                       tooltip={item.title}
                       className={`
-                        relative transition-all duration-300 ease-in-out group/menu-item
-                        ${isCollapsed ? "h-14 w-14 justify-center" : "h-11 w-full px-4"}
+                        relative transition-all duration-200 ease-in-out group/menu-item
+                        ${isCollapsed ? "h-12 w-12 justify-center" : "h-11 w-full px-4"}
                         ${isActive
-                          ? "sidebar-item-active text-white rounded-xl shadow-lg hover:text-white"
-                          : "text-muted-foreground hover:bg-accent/50 rounded-lg"
+                          ? "bg-edvios-green text-white shadow-md hover:bg-edvios-green hover:text-white"
+                          : "text-black hover:bg-edvios-green/10 hover:text-edvios-green"
                         }
+                        rounded-xl
                       `}
                     >
                       <Link href={item.url} onClick={handleMobileClose} className="flex items-center">
                         <item.icon
-                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0`}
+                          className={`${isCollapsed ? "size-6" : "size-5"} shrink-0 ${isActive ? "text-white" : "text-edvios-green"}`}
                           strokeWidth={isActive ? 2.5 : 2}
                         />
                         {!isCollapsed && (
-                          <span className={`ml-3 text-sm tracking-wide relative z-20 ${isActive ? "font-bold" : "font-medium"}`}>
+                          <span className={`ml-3 text-sm tracking-wide ${isActive ? "font-semibold" : "font-medium"}`}>
                             {item.title}
                           </span>
                         )}
@@ -235,18 +264,19 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 bg-transparent border-none">
+      <SidebarFooter className="p-4 bg-transparent">
         <SidebarMenu className={isCollapsed ? "items-center" : ""}>
           <SidebarMenuItem className="w-full flex justify-center">
             <SidebarMenuButton
               onClick={handleLogout}
               tooltip="Logout"
               className={`
-                transition-all duration-200 text-muted-foreground hover:text-destructive hover:bg-destructive/5
-                ${isCollapsed ? "h-14 w-14 justify-center rounded-xl" : "h-11 w-full px-4 rounded-lg"}
+                transition-all duration-200 
+                ${isCollapsed ? "h-12 w-12 justify-center rounded-xl" : "h-11 w-full px-4 rounded-xl"}
+                text-black hover:text-destructive hover:bg-destructive/10
               `}
             >
-              <LogOut className={isCollapsed ? "size-10" : "size-7"} strokeWidth={2} />
+              <LogOut className={`shrink-0 ${isCollapsed ? "size-6" : "size-5"} text-edvios-green group-hover:text-destructive`} strokeWidth={2} />
               {!isCollapsed && <span className="ml-3 text-sm font-medium">Logout</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>

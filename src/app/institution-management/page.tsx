@@ -6,7 +6,6 @@ import { Plus, School, CheckCircle2, BookOpen, Award } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useInstitutions } from '@/app/institution-management/hooks/use-institutions'
-import { StatsCard } from './components/StatsCard'
 import { InstitutionFilters } from './components/InstitutionFilters'
 import { InstitutionList } from './components/InstitutionList'
 import { OverviewTab } from './components/OverviewTab'
@@ -14,10 +13,12 @@ import { Pagination } from './components/Pagination'
 import { CreateInstitutionDialog } from './components/CreateInstitutionDialog'
 import { TabType } from '@/app/institution-management/enums/institute-managemet.enum'
 import { UserTypeToggle } from '@/app/auth/login/components/toggle'
+import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { StatsCard } from '@/components/shared/stats-card'
 
 export default function InstitutionManagementPage() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
-  
+
   const {
     institutions,
     isLoading,
@@ -52,39 +53,32 @@ export default function InstitutionManagementPage() {
         label="Total Institutions"
         value={metrics.totalInstitutions}
         icon={School}
+        loading={isLoading}
       />
       <StatsCard
         label="Active Partners"
         value={metrics.activeCount}
         icon={CheckCircle2}
         valueColor="text-green-600"
+        loading={isLoading}
       />
       <StatsCard
         label="Total Programs"
         value={metrics.totalPrograms.toLocaleString()}
         icon={BookOpen}
         valueColor="text-purple-600"
+        loading={isLoading}
       />
       <StatsCard
         label="Premium Partners"
         value={metrics.premiumCount}
         icon={Award}
         valueColor="text-amber-600"
+        loading={isLoading}
       />
     </div>
-  ), [metrics])
+  ), [metrics, isLoading])
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-12">
-            <p className="text-gray-600">Loading institutions...</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   if (error) {
     return (
@@ -99,21 +93,15 @@ export default function InstitutionManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-3xl font-bold text-edvios-blue">Institution Management</p>
-            <p className="mt-1 text-gray-600">
-              Manage partnerships with educational institutions worldwide
-            </p>
-          </div>
-          <Button 
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-6">
+        <div className="flex items-center justify-between">
+          <Breadcrumb items={[{ label: "Institution Management", active: true }]} className="mb-0" />
+          <Button
             onClick={() => setCreateDialogOpen(true)}
+            className="bg-edvios-green hover:bg-edvios-green/90 text-white font-bold text-xs uppercase tracking-widest h-10 px-6 rounded-md shadow-none"
           >
-            <Plus size={18} className="mr-2" />
+            <Plus size={16} className="mr-2" />
             Add Institution
           </Button>
         </div>
@@ -139,6 +127,7 @@ export default function InstitutionManagementPage() {
                 partnershipDistribution={partnershipDistribution}
                 totalStudents={metrics.totalStudents}
                 totalInternational={metrics.totalInternational}
+                loading={isLoading}
               />
             )}
 
@@ -156,7 +145,7 @@ export default function InstitutionManagementPage() {
                   onTypeChange={handleTypeChange}
                 />
 
-                <InstitutionList institutions={institutions} />
+                <InstitutionList institutions={institutions} loading={isLoading} />
 
                 {/* Pagination */}
                 {institutions.length > 0 && (
