@@ -19,6 +19,7 @@ import {
   MessageCircle,
   type LucideIcon,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const statIcons: Record<string, LucideIcon> = {
   applications: FileText,
@@ -148,9 +149,14 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50"
+    >
       {/* Header */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-10">
+      <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -371,8 +377,7 @@ export default function StudentDashboard() {
         </Tabs>
 
       </main>
-    </div>
-
+    </motion.div>
   );
 }
 // CountUp removed — keep UI unchanged
