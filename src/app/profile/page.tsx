@@ -143,7 +143,7 @@ export default function StudentProfilePage() {
   const [formProfile, setFormProfile] = useState<StudentProfile>(profileData ?? ({} as StudentProfile));
   // date picker state removed — not used
   const [gpaInput, setGpaInput] = useState<string>(String(profileData?.gpa ?? ""));
-  
+
   const initials = useMemo(() => {
     const name = displayProfile.firstName
       ? `${displayProfile.firstName} ${displayProfile.lastName ?? ""}`.trim()
@@ -180,7 +180,7 @@ export default function StudentProfilePage() {
     } as React.CSSProperties;
   };
 
-  
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -195,8 +195,8 @@ export default function StudentProfilePage() {
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                        <h2 className="text-2xl font-bold text-gray-900">{(displayProfile.firstName ? `${displayProfile.firstName} ${displayProfile.lastName ?? ""}`.trim() : displayProfile.email) ?? "-"}</h2>
-                        <span className="text-sm text-gray-500">Institution: {displayProfile.currentInstitution ?? "-"}</span>
+                      <h2 className="text-2xl font-bold text-gray-900">{(displayProfile.firstName ? `${displayProfile.firstName} ${displayProfile.lastName ?? ""}`.trim() : displayProfile.email) ?? "-"}</h2>
+                      <span className="text-sm text-gray-500">Institution: {displayProfile.currentInstitution ?? "-"}</span>
                     </div>
                     <div className="flex items-center space-x-2 mt-2">
                       <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">{displayProfile.currentEducationLevel ?? "Student"}</span>
@@ -206,7 +206,7 @@ export default function StudentProfilePage() {
                 </div>
                 <div className="mt-4 md:mt-0 flex items-center space-x-2">
                   {!isEditing ? (
-                      <Button className="bg-edvios-green text-white hover:opacity-95" size="sm" onClick={() => setIsEditing(true)}>
+                    <Button className="bg-edvios-green text-white hover:opacity-95" size="sm" onClick={() => setIsEditing(true)}>
                       <Edit3 className="w-4 h-4 text-white" />
                       Edit Profile
                     </Button>
@@ -218,7 +218,7 @@ export default function StudentProfilePage() {
                         onClick={async () => {
                           // Save only changed fields to backend
                           try {
-                            let apiPath = "/profile/api";
+
                             if (typeof window !== "undefined") {
                               const userSession = sessionStorage.getItem("user-session");
                               if (userSession) {
@@ -239,7 +239,7 @@ export default function StudentProfilePage() {
                                       return undefined;
                                     })();
                                     if (val !== undefined && val !== null) {
-                                      apiPath = `/profile/api?studentId=${encodeURIComponent(String(val))}`;
+
                                     }
                                   }
                                 } catch {
@@ -251,7 +251,7 @@ export default function StudentProfilePage() {
                             // Create a merged payload that only applies edited fields
                             // and keeps nested `user` fields in sync.
                             let payloadAny: Record<string, unknown> | undefined;
-                              try {
+                            try {
                               payloadAny = applyUpdatesToDto(displayProfile as AnyRecord, formProfile as AnyRecord);
                             } catch (e) {
                               // fallback to shallow merge if helper fails
@@ -281,14 +281,14 @@ export default function StudentProfilePage() {
                             alert("Failed to save profile: " + msg);
                           }
                         }}
-                        >
+                      >
                         {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                         Save Changes
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                          onClick={() => {
+                        onClick={() => {
                           // discard changes
                           setFormProfile(displayProfile);
                           resetProfile();
@@ -343,190 +343,190 @@ export default function StudentProfilePage() {
           <div className="hidden md:block">
             <TabsContent value={ProfileTab.OVERVIEW}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="shadow-sm">
-              <CardHeader>
-                <div className="flex items-center space-x-2">
-                  <User className="w-5 h-5 text-gray-500" />
-                  <CardTitle>Personal Information</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm text-gray-700">
-                
-                {/* First / Last name editable fields */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500">First Name</p>
-                    {isEditing ? (
-                      <Input
-                        value={formProfile.firstName ?? ""}
-                        onChange={(e) => setFormProfile((prev) => ({ ...prev, firstName: e.target.value }))}
-                      />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.firstName ?? "-"}</p>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Last Name</p>
-                    {isEditing ? (
-                      <Input
-                        value={formProfile.lastName ?? ""}
-                        onChange={(e) => setFormProfile((prev) => ({ ...prev, lastName: e.target.value }))}
-                      />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.lastName ?? "-"}</p>
-                    )}
-                  </div>
-                </div>
+                <Card className="shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <User className="w-5 h-5 text-gray-500" />
+                      <CardTitle>Personal Information</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm text-gray-700">
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500">Email</p>
-                    {isEditing ? (
-                      <Input value={formProfile.email ?? ""} onChange={(e) => setFormProfile({ ...formProfile, email: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.email ?? "-"}</p>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Phone</p>
-                    {isEditing ? (
-                      <Input value={formProfile.phone ?? ""} onChange={(e) => setFormProfile({ ...formProfile, phone: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.phone ?? "-"}</p>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Date of Birth</p>
-                    {isEditing ? (
-                      <Input type="date" value={formProfile.dob ? String(formProfile.dob).slice(0, 10) : ""} onChange={(e) => setFormProfile({ ...formProfile, dob: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.dob ? new Date(displayProfile.dob).toLocaleDateString() : "-"}</p>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Nationality</p>
-                    {isEditing ? (
-                      <Input value={formProfile.nationality ?? ""} onChange={(e) => setFormProfile({ ...formProfile, nationality: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.nationality ?? "-"}</p>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Institution</p>
-                    {isEditing ? (
-                      <Input value={formProfile.currentInstitution ?? ""} onChange={(e) => setFormProfile({ ...formProfile, currentInstitution: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.currentInstitution ?? "-"}</p>
-                    )}
-                  </div>
-                </div>
+                    {/* First / Last name editable fields */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">First Name</p>
+                        {isEditing ? (
+                          <Input
+                            value={formProfile.firstName ?? ""}
+                            onChange={(e) => setFormProfile((prev) => ({ ...prev, firstName: e.target.value }))}
+                          />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.firstName ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Last Name</p>
+                        {isEditing ? (
+                          <Input
+                            value={formProfile.lastName ?? ""}
+                            onChange={(e) => setFormProfile((prev) => ({ ...prev, lastName: e.target.value }))}
+                          />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.lastName ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
 
-                <div>
-                  <p className="text-xs text-gray-500">Address</p>
-                  {isEditing ? (
-                    <Input value={formProfile.address ?? formProfile.adress ?? ""} onChange={(e) => setFormProfile({ ...formProfile, address: e.target.value })} />
-                  ) : (
-                    <p className="font-medium text-gray-900">{displayAddress ?? "-"}</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="shadow-sm">
-              <CardHeader>
-                <div className="flex items-center space-x-2">
-                  <GraduationCap className="w-5 h-5 text-gray-500" />
-                  <CardTitle>Academic & Preferences</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm text-gray-700">
-                <div>
-                  <p className="text-xs text-gray-500">Current Education Level</p>
-                  {isEditing ? (
-                    <Input value={formProfile.currentEducationLevel ?? ""} onChange={(e) => setFormProfile({ ...formProfile, currentEducationLevel: e.target.value })} />
-                  ) : (
-                    <p className="font-medium text-gray-900">{displayProfile.currentEducationLevel ?? "-"}</p>
-                  )}
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500">Field Of Study</p>
-                    {isEditing ? (
-                      <Input value={String(formProfile.fieldOfStudy ?? "")} onChange={(e) => setFormProfile({ ...formProfile, fieldOfStudy: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.fieldOfStudy ?? "-"}</p>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">GPA</p>
-                    {isEditing ? (
-                      <Input
-                        value={gpaInput}
-                        onChange={(e) => setGpaInput(e.target.value)}
-                        onBlur={() => setFormProfile({ ...formProfile, gpa: gpaInput === "" ? undefined : Number(gpaInput) })}
-                      />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.gpa ?? "-"}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500">Preferred Program</p>
-                    {isEditing ? (
-                      <Input value={formProfile.preferredProgram ?? ""} onChange={(e) => setFormProfile({ ...formProfile, preferredProgram: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.preferredProgram ?? "-"}</p>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Preferred Destination</p>
-                    {isEditing ? (
-                      <Input value={formProfile.preferredDestination ?? ""} onChange={(e) => setFormProfile({ ...formProfile, preferredDestination: e.target.value })} />
-                    ) : (
-                      <p className="font-medium text-gray-900">{displayProfile.preferredDestination ?? "-"}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-start space-x-2 bg-blue-50 border border-blue-100 rounded-lg p-3">
-                  <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5" />
-                  <p className="text-xs text-blue-800">Keep your preferences up to date for accurate applications.</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          </TabsContent>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Email</p>
+                        {isEditing ? (
+                          <Input value={formProfile.email ?? ""} onChange={(e) => setFormProfile({ ...formProfile, email: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.email ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Phone</p>
+                        {isEditing ? (
+                          <Input value={formProfile.phone ?? ""} onChange={(e) => setFormProfile({ ...formProfile, phone: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.phone ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Date of Birth</p>
+                        {isEditing ? (
+                          <Input type="date" value={formProfile.dob ? String(formProfile.dob).slice(0, 10) : ""} onChange={(e) => setFormProfile({ ...formProfile, dob: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.dob ? new Date(displayProfile.dob).toLocaleDateString() : "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Nationality</p>
+                        {isEditing ? (
+                          <Input value={formProfile.nationality ?? ""} onChange={(e) => setFormProfile({ ...formProfile, nationality: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.nationality ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Institution</p>
+                        {isEditing ? (
+                          <Input value={formProfile.currentInstitution ?? ""} onChange={(e) => setFormProfile({ ...formProfile, currentInstitution: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.currentInstitution ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
 
-          <TabsContent value={ProfileTab.APPLICATIONS}>
-            <Card className="shadow-sm">
-              <CardContent>
-                <p className="text-sm text-gray-700">Applications content coming soon.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    <div>
+                      <p className="text-xs text-gray-500">Address</p>
+                      {isEditing ? (
+                        <Input value={formProfile.address ?? formProfile.adress ?? ""} onChange={(e) => setFormProfile({ ...formProfile, address: e.target.value })} />
+                      ) : (
+                        <p className="font-medium text-gray-900">{displayAddress ?? "-"}</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <GraduationCap className="w-5 h-5 text-gray-500" />
+                      <CardTitle>Academic & Preferences</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm text-gray-700">
+                    <div>
+                      <p className="text-xs text-gray-500">Current Education Level</p>
+                      {isEditing ? (
+                        <Input value={formProfile.currentEducationLevel ?? ""} onChange={(e) => setFormProfile({ ...formProfile, currentEducationLevel: e.target.value })} />
+                      ) : (
+                        <p className="font-medium text-gray-900">{displayProfile.currentEducationLevel ?? "-"}</p>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Field Of Study</p>
+                        {isEditing ? (
+                          <Input value={String(formProfile.fieldOfStudy ?? "")} onChange={(e) => setFormProfile({ ...formProfile, fieldOfStudy: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.fieldOfStudy ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">GPA</p>
+                        {isEditing ? (
+                          <Input
+                            value={gpaInput}
+                            onChange={(e) => setGpaInput(e.target.value)}
+                            onBlur={() => setFormProfile({ ...formProfile, gpa: gpaInput === "" ? undefined : Number(gpaInput) })}
+                          />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.gpa ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Preferred Program</p>
+                        {isEditing ? (
+                          <Input value={formProfile.preferredProgram ?? ""} onChange={(e) => setFormProfile({ ...formProfile, preferredProgram: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.preferredProgram ?? "-"}</p>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Preferred Destination</p>
+                        {isEditing ? (
+                          <Input value={formProfile.preferredDestination ?? ""} onChange={(e) => setFormProfile({ ...formProfile, preferredDestination: e.target.value })} />
+                        ) : (
+                          <p className="font-medium text-gray-900">{displayProfile.preferredDestination ?? "-"}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-2 bg-blue-50 border border-blue-100 rounded-lg p-3">
+                      <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5" />
+                      <p className="text-xs text-blue-800">Keep your preferences up to date for accurate applications.</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
 
-          <TabsContent value={ProfileTab.DOCUMENTS}>
-            <Card className="shadow-sm">
-              <CardContent>
-                <p className="text-sm text-gray-700">Documents content coming soon.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            <TabsContent value={ProfileTab.APPLICATIONS}>
+              <Card className="shadow-sm">
+                <CardContent>
+                  <p className="text-sm text-gray-700">Applications content coming soon.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-          <TabsContent value={ProfileTab.PROGRESS}>
-            <Card className="shadow-sm">
-              <CardContent>
-                <p className="text-sm text-gray-700">Progress content coming soon.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            <TabsContent value={ProfileTab.DOCUMENTS}>
+              <Card className="shadow-sm">
+                <CardContent>
+                  <p className="text-sm text-gray-700">Documents content coming soon.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-          <TabsContent value={ProfileTab.SUPPORT}>
-            <Card className="shadow-sm">
-              <CardContent>
-                <p className="text-sm text-gray-700">Support content coming soon.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            <TabsContent value={ProfileTab.PROGRESS}>
+              <Card className="shadow-sm">
+                <CardContent>
+                  <p className="text-sm text-gray-700">Progress content coming soon.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value={ProfileTab.SUPPORT}>
+              <Card className="shadow-sm">
+                <CardContent>
+                  <p className="text-sm text-gray-700">Support content coming soon.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
           </div>
 
           {/* Mobile: show all sections stacked with headings */}
@@ -546,7 +546,7 @@ export default function StudentProfilePage() {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4 text-sm text-gray-700">
-                    
+
                     {/* First / Last name editable fields */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>

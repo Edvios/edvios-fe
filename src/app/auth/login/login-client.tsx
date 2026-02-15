@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { AuthTabEnum, UserTypeEnum } from "./enums/auth.enum";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<string>(AuthTabEnum.LOGIN);
   const { loginData, updateLoginData } = useLoginForm();
   const { registerData, updateRegisterData } = useRegisterForm();
@@ -25,6 +27,24 @@ export default function LoginPage() {
     mass: 1.2
   } as const;
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    }
+  } as any;
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: { opacity: 1, x: 0 }
+  };
+
   const onSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     await handleLogin(loginData);
@@ -36,36 +56,55 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 md:p-8 overflow-x-hidden">
-      
-      <div className="w-full max-w-6xl flex items-center justify-center">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 md:p-8 overflow-x-hidden relative">
+      {/* Premium Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-edvios-green/5 blur-[120px] rounded-full" />
+        <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-edvios-blue/5 blur-[120px] rounded-full" />
+      </div>
+
+      <div className="w-full max-w-6xl flex items-center justify-center relative z-10">
         <motion.div
           layout
-          transition={slowSmoothTransition}
-          className="w-full shadow-2xl border border-gray-100 overflow-hidden rounded-2xl bg-white"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="w-full shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-white/50 overflow-hidden rounded-3xl bg-white"
         >
           <motion.div layout className="grid md:grid-cols-2 items-stretch md:min-h-[650px]">
-            
-            {/* Left Side: Solid Edvios Green Background */}
-            <div className="hidden md:flex relative w-full h-full items-center justify-center bg-edvios-green">
+
+            {/* Left Side: Solid Edvios Green Background with subtle animation */}
+            <div className="hidden md:flex relative w-full h-full items-center justify-center bg-edvios-green overflow-hidden">
+              <motion.div
+                animate={{
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, 0]
+                }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                className="absolute inset-0 bg-[url('/grid.svg')] opacity-10 bg-center"
+              />
               {/* Fade In / Fade Out Logo Animation */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeTab} 
-                  initial={{ opacity: 0, y: 10 }} // Starts slightly lower and invisible
-                  animate={{ opacity: 1, y: 0 }}  // Fades in and slides to center
-                  exit={{ opacity: 0, y: -10 }}   // Fades out and slides slightly up
-                  transition={{ 
-                    duration: 0.5, 
-                    ease: "easeInOut" 
+                  key={activeTab}
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 1.1, y: -20 }}
+                  transition={{
+                    duration: 0.6,
+                    ease: [0.22, 1, 0.36, 1]
                   }}
-                  className="relative z-10 w-72 h-36"
+                  className="relative z-10 w-72 h-36 drop-shadow-2xl"
                 >
                   <Image
                     src="/logoWithLetters.png"
                     alt="Edvios Logo"
                     fill
-                    className="object-contain brightness-0 invert" 
+                    className="object-contain brightness-0 invert"
                     priority
                   />
                 </motion.div>
@@ -81,8 +120,8 @@ export default function LoginPage() {
                       {activeTab === AuthTabEnum.LOGIN ? "Welcome Back" : "Create Account"}
                     </CardTitle>
                     <CardDescription className="text-gray-500 mt-1">
-                      {activeTab === AuthTabEnum.LOGIN 
-                        ? "Sign in to your account" 
+                      {activeTab === AuthTabEnum.LOGIN
+                        ? "Sign in to your account"
                         : "Join Edvios and start your journey"}
                     </CardDescription>
                   </motion.div>
@@ -90,6 +129,23 @@ export default function LoginPage() {
 
                 <CardContent className="px-0">
                   <div className="space-y-6">
+                    {/* Status Messages */}
+                    <div className="space-y-4 mb-4">
+                      {searchParams.get('registered') === 'true' && (
+                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative text-sm" role="alert">
+                          <strong className="font-bold">Registration Successful!</strong>
+                          <span className="block sm:inline"> Your account is pending admin approval. You will be able to login once approved.</span>
+                        </div>
+                      )}
+
+                      {searchParams.get('verified') === 'true' && (
+                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative text-sm" role="alert">
+                          <strong className="font-bold">Email Verified!</strong>
+                          <span className="block sm:inline"> You can now log in to your account.</span>
+                        </div>
+                      )}
+                    </div>
+
                     <UserTypeToggle
                       options={[AuthTabEnum.LOGIN, AuthTabEnum.REGISTER]}
                       value={activeTab}
@@ -97,121 +153,132 @@ export default function LoginPage() {
                       disabled={isLoading}
                     />
 
-                    <AnimatePresence mode="popLayout" initial={false}>
+                    <AnimatePresence mode="wait" initial={false}>
                       {activeTab === AuthTabEnum.LOGIN ? (
                         <motion.div
                           key="login-form"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 20 }}
-                          transition={slowSmoothTransition}
-                          className="space-y-4"
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          variants={containerVariants}
+                          className="space-y-5"
                         >
-                          <div className="space-y-2">
-                            <Label htmlFor="login-email">Email</Label>
-                            <Input 
-                              id="login-email" 
-                              type="email" 
-                              placeholder="Enter your email address" 
-                              value={loginData.email} 
-                              onChange={(e) => updateLoginData("email", e.target.value)} 
+                          <motion.div variants={itemVariants} className="space-y-2.5">
+                            <Label htmlFor="login-email" className="text-sm font-semibold text-slate-700 ml-1">Email</Label>
+                            <Input
+                              id="login-email"
+                              type="email"
+                              placeholder="Enter your email address"
+                              value={loginData.email}
+                              onChange={(e) => updateLoginData("email", e.target.value)}
+                              className="focus:ring-edvios-blue/20"
                             />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="login-password">Password</Label>
-                            <Input 
-                              id="login-password" 
-                              type="password" 
-                              placeholder="Enter your password" 
-                              value={loginData.password} 
-                              onChange={(e) => updateLoginData("password", e.target.value)} 
+                          </motion.div>
+                          <motion.div variants={itemVariants} className="space-y-2.5">
+                            <div className="flex justify-between items-center">
+                              <Label htmlFor="login-password" silver-700 className="text-sm font-semibold text-slate-700 ml-1">Password</Label>
+                              <button type="button" className="text-xs font-medium text-edvios-blue hover:underline">Forgot password?</button>
+                            </div>
+                            <Input
+                              id="login-password"
+                              type="password"
+                              placeholder="Enter your password"
+                              value={loginData.password}
+                              onChange={(e) => updateLoginData("password", e.target.value)}
+                              className="focus:ring-edvios-blue/20"
                             />
-                          </div>
-                          <Button 
-                            onClick={onSubmitLogin} 
-                            className="w-full h-10 mt-2 bg-edvios-blue hover:opacity-90 transition-all"
-                            disabled={isLoading}
-                          >
-                            <LogIn className="w-4 h-4 mr-2" /> {isLoading ? "Logging in..." : "Login"}
-                          </Button>
+                          </motion.div>
+                          <motion.div variants={itemVariants}>
+                            <Button
+                              onClick={onSubmitLogin}
+                              className="w-full h-12 mt-4 bg-edvios-blue hover:bg-edvios-blue/90 shadow-lg shadow-edvios-blue/20 hover:shadow-xl hover:-translate-y-0.5 transition-all text-white font-bold rounded-xl"
+                              disabled={isLoading}
+                            >
+                              <LogIn className="w-5 h-5 mr-2" /> {isLoading ? "Logging in..." : "Login to Dashboard"}
+                            </Button>
+                          </motion.div>
                         </motion.div>
                       ) : (
                         <motion.div
                           key="register-form"
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -20 }}
-                          transition={slowSmoothTransition}
-                          className="space-y-4"
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          variants={containerVariants}
+                          className="space-y-5"
                         >
-                          <UserTypeToggle
-                            options={[UserTypeEnum.STUDENT, UserTypeEnum.AGENT]}
-                            value={registerData.role}
-                            onChange={(value) => updateRegisterData("role", value)}
-                            disabled={isLoading}
-                          />
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label>First Name</Label>
-                              <Input 
-                                placeholder="Enter your first name" 
-                                value={registerData.firstName} 
-                                onChange={(e) => updateRegisterData("firstName", e.target.value)} 
-                              />
-                            </div>
-                            <div className="space-y-2">
-                              <Label>Last Name</Label>
-                              <Input 
-                                placeholder="Enter your last name" 
-                                value={registerData.lastName} 
-                                onChange={(e) => updateRegisterData("lastName", e.target.value)} 
-                              />
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label>Email Address</Label>
-                            <Input 
-                              type="email" 
-                              placeholder="Enter your email address" 
-                              value={registerData.email} 
-                              onChange={(e) => updateRegisterData("email", e.target.value)} 
+                          <motion.div variants={itemVariants}>
+                            <UserTypeToggle
+                              options={[UserTypeEnum.STUDENT, UserTypeEnum.AGENT]}
+                              value={registerData.role}
+                              onChange={(value) => updateRegisterData("role", value)}
+                              disabled={isLoading}
                             />
-                          </div>
-                          <div className="space-y-2">
-                            <Label>Phone Number</Label>
-                            <Input 
-                              placeholder="Enter your phone number" 
-                              value={registerData.phone} 
-                              onChange={(e) => updateRegisterData("phone", e.target.value)} 
+                          </motion.div>
+                          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2.5">
+                              <Label className="text-sm font-semibold text-slate-700 ml-1">First Name</Label>
+                              <Input
+                                placeholder="First name"
+                                value={registerData.firstName}
+                                onChange={(e) => updateRegisterData("firstName", e.target.value)}
+                              />
+                            </div>
+                            <div className="space-y-2.5">
+                              <Label className="text-sm font-semibold text-slate-700 ml-1">Last Name</Label>
+                              <Input
+                                placeholder="Last name"
+                                value={registerData.lastName}
+                                onChange={(e) => updateRegisterData("lastName", e.target.value)}
+                              />
+                            </div>
+                          </motion.div>
+                          <motion.div variants={itemVariants} className="space-y-2.5">
+                            <Label className="text-sm font-semibold text-slate-700 ml-1">Email Address</Label>
+                            <Input
+                              type="email"
+                              placeholder="your@email.com"
+                              value={registerData.email}
+                              onChange={(e) => updateRegisterData("email", e.target.value)}
                             />
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label>Password</Label>
-                              <Input 
-                                type="password" 
-                                placeholder="Enter your password" 
-                                value={registerData.password} 
-                                onChange={(e) => updateRegisterData("password", e.target.value)} 
+                          </motion.div>
+                          <motion.div variants={itemVariants} className="space-y-2.5">
+                            <Label className="text-sm font-semibold text-slate-700 ml-1">Phone Number</Label>
+                            <Input
+                              placeholder="+1 (555) 000-0000"
+                              value={registerData.phone}
+                              onChange={(e) => updateRegisterData("phone", e.target.value)}
+                            />
+                          </motion.div>
+                          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2.5">
+                              <Label className="text-sm font-semibold text-slate-700 ml-1">Password</Label>
+                              <Input
+                                type="password"
+                                placeholder="Min. 8 chars"
+                                value={registerData.password}
+                                onChange={(e) => updateRegisterData("password", e.target.value)}
                               />
                             </div>
-                            <div className="space-y-2">
-                              <Label>Confirm Password</Label>
-                              <Input 
-                                type="password" 
-                                placeholder="Confirm your password" 
-                                value={registerData.confirmPassword} 
-                                onChange={(e) => updateRegisterData("confirmPassword", e.target.value)} 
+                            <div className="space-y-2.5">
+                              <Label className="text-sm font-semibold text-slate-700 ml-1">Confirm</Label>
+                              <Input
+                                type="password"
+                                placeholder="Repeat password"
+                                value={registerData.confirmPassword}
+                                onChange={(e) => updateRegisterData("confirmPassword", e.target.value)}
                               />
                             </div>
-                          </div>
-                          <Button 
-                            onClick={onSubmitRegister} 
-                            className="w-full h-10 mt-2 bg-edvios-green hover:opacity-90 transition-all"
-                            disabled={isLoading}
-                          >
-                            <UserPlus className="w-4 h-4 mr-2" /> {isLoading ? "Creating Account..." : "Create Account"}
-                          </Button>
+                          </motion.div>
+                          <motion.div variants={itemVariants}>
+                            <Button
+                              onClick={onSubmitRegister}
+                              className="w-full h-12 mt-4 bg-edvios-green hover:bg-edvios-green/90 shadow-lg shadow-edvios-green/20 hover:shadow-xl hover:-translate-y-0.5 transition-all text-white font-bold rounded-xl"
+                              disabled={isLoading}
+                            >
+                              <UserPlus className="w-5 h-5 mr-2" /> {isLoading ? "Creating Account..." : "Start Your Journey"}
+                            </Button>
+                          </motion.div>
                         </motion.div>
                       )}
                     </AnimatePresence>

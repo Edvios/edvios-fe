@@ -209,28 +209,16 @@ export function AppSidebar() {
                       className={`
                         relative transition-all duration-300 ease-in-out group/menu-item
                         ${isCollapsed ? "h-14 w-14 justify-center" : "h-11 w-full px-4"}
-                        ${isActive 
-                          ? "text-white hover:text-white" 
-                          : "text-muted-foreground hover:bg-transparent hover:text-foreground"
+                        ${isActive
+                          ? "sidebar-item-active text-white rounded-xl shadow-lg hover:text-white"
+                          : "text-muted-foreground hover:bg-accent/50 rounded-lg"
                         }
                       `}
                     >
-                      <Link href={item.url} onClick={handleMobileClose} className="flex items-center relative z-10 w-full h-full">
-                        {isActive && (
-                          <motion.div
-                            layoutId="active-sidebar-item"
-                            className="absolute inset-0 bg-edvios-blue rounded-xl shadow-lg -z-10"
-                            initial={false}
-                            transition={{
-                              type: "spring",
-                              stiffness: 300,
-                              damping: 30
-                            }}
-                          />
-                        )}
-                        <item.icon 
-                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0 relative z-20`} 
-                          strokeWidth={isActive ? 2.5 : 2} 
+                      <Link href={item.url} onClick={handleMobileClose} className="flex items-center">
+                        <item.icon
+                          className={`${isCollapsed ? "size-10" : "size-6"} shrink-0`}
+                          strokeWidth={isActive ? 2.5 : 2}
                         />
                         {!isCollapsed && (
                           <span className={`ml-3 text-sm tracking-wide relative z-20 ${isActive ? "font-bold" : "font-medium"}`}>
