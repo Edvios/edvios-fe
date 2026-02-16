@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, startTransition } from 'react';
-import { Search, X, Plus } from 'lucide-react';
+import { Search, Plus, RotateCcw } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
 import ProgramCard from './components/program-card';
@@ -10,6 +10,14 @@ import { usePrograms } from './hooks/use-programs';
 import type { Institution, Intake, Subject, Program } from './types';
 import { StudyLevel, Country, ProgramStatus } from './enums';
 import { LogoLoading } from '@/components/ui/logo-loading';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 // Debounce hook
 function useDebounce<T>(value: T, delay: number): T {
@@ -31,7 +39,7 @@ function useDebounce<T>(value: T, delay: number): T {
 export default function ProgramManagementPage() {
   const [searchInput, setSearchInput] = useState('');
   const debouncedSearch = useDebounce(searchInput, 500);
-  
+
   const [selectedInstitutionId, setSelectedInstitutionId] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
@@ -48,10 +56,9 @@ export default function ProgramManagementPage() {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [intakes, setIntakes] = useState<Intake[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  
+
   const {
     programs,
-    total,
     totalPages,
     loading,
     page,
@@ -77,22 +84,22 @@ export default function ProgramManagementPage() {
   useEffect(() => {
     if (initialData && typeof initialData === 'object') {
       const data = initialData as Record<string, unknown>;
-      
+
       // Batch state updates to avoid cascading renders
       const updates: {
         institutes?: Institution[];
         intakes?: Intake[];
         subjects?: Subject[];
       } = {};
-      
+
       if (data.institutes && Array.isArray(data.institutes)) {
         updates.institutes = data.institutes;
       }
-      
+
       if (data.intakes && Array.isArray(data.intakes)) {
         updates.intakes = data.intakes;
       }
-      
+
       if (data.subjects && Array.isArray(data.subjects)) {
         updates.subjects = data.subjects;
       }
@@ -109,7 +116,7 @@ export default function ProgramManagementPage() {
   // Update filters when debounced search changes
   useEffect(() => {
     const filters: Record<string, unknown> = {};
-    
+
     if (debouncedSearch) filters.search = debouncedSearch;
     if (selectedInstitutionId) filters.institutionId = selectedInstitutionId;
     if (selectedCountry) filters.country = selectedCountry;
@@ -210,133 +217,125 @@ export default function ProgramManagementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/20 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-          <div className="font-heading">
-            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Program Management</h2>
-            <p className="mt-1 text-gray-600">Explore and manage educational programs globally</p>
-          </div>
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-6">
+        <div className="flex items-center justify-between">
+          <Breadcrumb items={[{ label: "Program Management", active: true }]} className="mb-0" />
           <Button
             onClick={handleAddNew}
-            className="bg-edvios-green hover:from-orange-600 hover:to-green-600 text-white"
+            className="bg-edvios-green hover:bg-edvios-green/90 text-white font-bold text-xs uppercase tracking-widest h-10 px-6 rounded-md shadow-none"
           >
-            <Plus size={20} className="mr-2" />
+            <Plus size={16} className="mr-2" />
             Add New Program
           </Button>
         </div>
 
-        {/* Search bar */}
-        <div className="mb-6">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+        <div className="flex flex-col lg:flex-row gap-3 pt-2">
+          <div className="flex-1 relative group">
+            <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 transition-colors group-focus-within:text-edvios-green" />
             <input
               type="text"
               placeholder="Search programs..."
               value={searchInput}
               onChange={e => setSearchInput(e.target.value)}
-              className="w-full max-w-3xl pl-12 pr-4 h-12 rounded-md bg-white text-gray-900 border border-gray-200"
+              className="w-full pl-10 h-10 border border-gray-100 bg-white rounded-md focus-visible:ring-1 focus-visible:ring-edvios-green text-sm font-medium outline-none"
             />
-            {searchInput && (
-              <X
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600"
-                size={18}
-                onClick={() => setSearchInput('')}
-              />
-            )}
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="mb-6">
-          <div className="flex flex-wrap items-center gap-3">
-            <select
-              value={selectedInstitutionId}
-              onChange={e => setSelectedInstitutionId(e.target.value)}
-              className="h-10 px-4 rounded-md bg-white text-sm border border-gray-200 min-w-[200px]"
-            >
-              <option value="">All Institutions</option>
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <Select value={selectedInstitutionId} onValueChange={setSelectedInstitutionId}>
+            <SelectTrigger className="w-[140px] h-9 text-[10px] uppercase font-bold tracking-wider">
+              <SelectValue placeholder="Institutions" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Institutions</SelectItem>
               {institutions.map(inst => (
-                <option key={inst.id} value={inst.id}>{inst.name}</option>
+                <SelectItem key={inst.id} value={inst.id}>{inst.name}</SelectItem>
               ))}
-            </select>
+            </SelectContent>
+          </Select>
 
-            <select
-              value={selectedCountry}
-              onChange={e => setSelectedCountry(e.target.value)}
-              className="h-10 px-4 rounded-md bg-white text-sm border border-gray-200 min-w-[150px]"
-            >
-              <option value="">All Countries</option>
+          <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+            <SelectTrigger className="w-[120px] h-9 text-[10px] uppercase font-bold tracking-wider">
+              <SelectValue placeholder="Countries" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Countries</SelectItem>
               {Object.values(Country).map(country => (
-                <option key={country} value={country}>{country}</option>
+                <SelectItem key={country} value={country}>{country}</SelectItem>
               ))}
-            </select>
+            </SelectContent>
+          </Select>
 
-            <select
-              value={selectedLevel}
-              onChange={e => setSelectedLevel(e.target.value)}
-              className="h-10 px-4 rounded-md bg-white text-sm border border-gray-200 min-w-[150px]"
-            >
-              <option value="">All Levels</option>
+          <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+            <SelectTrigger className="w-[120px] h-9 text-[10px] uppercase font-bold tracking-wider">
+              <SelectValue placeholder="Levels" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Levels</SelectItem>
               {Object.entries(StudyLevel).map(([key, value]) => (
-                <option key={key} value={key}>{value}</option>
+                <SelectItem key={key} value={key}>{value}</SelectItem>
               ))}
-            </select>
+            </SelectContent>
+          </Select>
 
-            <select
-              value={selectedIntake}
-              onChange={e => setSelectedIntake(e.target.value)}
-              className="h-10 px-4 rounded-md bg-white text-sm border border-gray-200 min-w-[150px]"
-            >
-              <option value="">All Intakes</option>
+          <Select value={selectedIntake} onValueChange={setSelectedIntake}>
+            <SelectTrigger className="w-[120px] h-9 text-[10px] uppercase font-bold tracking-wider">
+              <SelectValue placeholder="Intakes" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Intakes</SelectItem>
               {intakes.map(intake => (
-                <option key={intake.id} value={intake.id}>{intake.name}</option>
+                <SelectItem key={intake.id} value={intake.id}>{intake.name}</SelectItem>
               ))}
-            </select>
+            </SelectContent>
+          </Select>
 
-            <select
-              value={selectedSubject}
-              onChange={e => setSelectedSubject(e.target.value)}
-              className="h-10 px-4 rounded-md bg-white text-sm border border-gray-200 min-w-[150px]"
-            >
-              <option value="">All Subjects</option>
+          <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+            <SelectTrigger className="w-[120px] h-9 text-[10px] uppercase font-bold tracking-wider">
+              <SelectValue placeholder="Subjects" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Subjects</SelectItem>
               {subjects.map(subject => (
-                <option key={subject.id} value={subject.id}>{subject.name}</option>
+                <SelectItem key={subject.id} value={subject.id}>{subject.name}</SelectItem>
               ))}
-            </select>
+            </SelectContent>
+          </Select>
 
-            <select
-              value={selectedScholarship}
-              onChange={e => setSelectedScholarship(e.target.value)}
-              className="h-10 px-4 rounded-md bg-white text-sm border border-gray-200 min-w-[150px]"
+          <Select value={selectedScholarship} onValueChange={setSelectedScholarship}>
+            <SelectTrigger className="w-[120px] h-9 text-[10px] uppercase font-bold tracking-wider">
+              <SelectValue placeholder="Scholarship" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Any Scholarship</SelectItem>
+              <SelectItem value="true">Available</SelectItem>
+              <SelectItem value="false">Not Available</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={selectedEnglishWaiver} onValueChange={setSelectedEnglishWaiver}>
+            <SelectTrigger className="w-[130px] h-9 text-[10px] uppercase font-bold tracking-wider">
+              <SelectValue placeholder="English Waiver" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Any Waiver</SelectItem>
+              <SelectItem value="true">Available</SelectItem>
+              <SelectItem value="false">Not Available</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleClearFilters}
+              className="h-9 px-3 gap-2 rounded-md border border-gray-100 bg-gray-50 text-black font-bold text-[10px] uppercase tracking-widest hover:bg-gray-100"
             >
-              <option value="">Scholarship: Any</option>
-              <option value="true">Available</option>
-              <option value="false">Not Available</option>
-            </select>
-
-            <select
-              value={selectedEnglishWaiver}
-              onChange={e => setSelectedEnglishWaiver(e.target.value)}
-              className="h-10 px-4 rounded-md bg-white text-sm border border-gray-200 min-w-[150px]"
-            >
-              <option value="">English Waiver: Any</option>
-              <option value="true">Available</option>
-              <option value="false">Not Available</option>
-            </select>
-
-            {hasActiveFilters && (
-              <Button
-                variant="outline"
-                onClick={handleClearFilters}
-                className="h-10"
-              >
-                <X size={16} />
-                Clear Filters
-              </Button>
-            )}
-          </div>
+              <RotateCcw className="w-3 h-3" /> Reset
+            </Button>
+          )}
         </div>
         {/* Main content */}
         <section className="relative min-h-[400px]">
@@ -345,13 +344,13 @@ export default function ProgramManagementPage() {
               <LogoLoading size="sm" />
             </div>
           )}
-          
+
           {programs.length === 0 && !loading ? (
             <div className="text-center py-16 text-gray-500">
               No programs found. Try adjusting your filters.
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-3">
               {programs.map(program => (
                 <ProgramCard
                   key={program.id}
@@ -364,26 +363,32 @@ export default function ProgramManagementPage() {
           )}
         </section>
 
-        {/* Pagination */}
+        {/* Pagination - Round buttons */}
         {!loading && programs.length > 0 && (
-          <div className="mt-8 flex justify-center items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={previousPage}
-              disabled={!hasPreviousPage}
-            >
-              Previous
-            </Button>
-            <span className="text-sm text-gray-600">
-              Page {page + 1} of {totalPages} ({total} total)
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between py-6 border-t border-gray-50">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+              Page {page + 1} <span className="mx-1">/</span> {totalPages}
             </span>
-            <Button
-              variant="outline"
-              onClick={nextPage}
-              disabled={!hasNextPage}
-            >
-              Next
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="w-8 h-8 rounded-full border-gray-100 hover:border-edvios-green hover:text-edvios-green transition-all"
+                onClick={previousPage}
+                disabled={!hasPreviousPage}
+              >
+                <span className="text-xs">{"<"}</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="w-8 h-8 rounded-full border-gray-100 hover:border-edvios-green hover:text-edvios-green transition-all"
+                onClick={nextPage}
+                disabled={!hasNextPage}
+              >
+                <span className="text-xs">{">"}</span>
+              </Button>
+            </div>
           </div>
         )}
 
@@ -411,7 +416,7 @@ export default function ProgramManagementPage() {
                 level: editingProgram.level as StudyLevel | undefined,
                 englishTestScore: editingProgram.englishTestScore || '',
                 scholarship: editingProgram.scholarshipAvailable || editingProgram.scholarship || false,
-                applicationDeadline: editingProgram.applicationDeadline ? 
+                applicationDeadline: editingProgram.applicationDeadline ?
                   new Date(editingProgram.applicationDeadline).toISOString().slice(0, 16) : '',
                 subjectId: editingProgram.subject?.id || editingProgram.subjectId || '',
                 subjectName: editingProgram.subject?.name || editingProgram.subjectName || '',

@@ -11,8 +11,6 @@ import {
     Trash2,
     CheckCircle,
     Mail,
-    Building2,
-    Clock,
     Phone
 } from 'lucide-react';
 
@@ -81,14 +79,10 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
         {
             header: 'Agent',
             Cell: ({ row }: { row: Agent }) => (
-                <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-edvios-green flex items-center justify-center text-white font-bold text-lg shadow-md">
-                        {(row.firstName?.[0] || '') + (row.lastName?.[0] || '')}
-                    </div>
-                    <div>
-                        <div className="font-bold text-gray-900 text-base">{row.firstName} {row.lastName}</div>
-                        <div className="flex items-center gap-2 text-xs text-edvios-blue font-mono">
-                            <Clock className="w-3 h-3" />
+                <div className="flex items-center gap-2">
+                    <div className="min-w-0">
+                        <div className="font-bold text-gray-900 text-sm md:text-base truncate">{row.firstName} {row.lastName}</div>
+                        <div className="flex items-center gap-2 text-[10px] md:text-xs text-edvios-green font-bold uppercase tracking-widest mt-0.5">
                             Joined {new Date(row.createdAt).toLocaleDateString()}
                         </div>
                     </div>
@@ -100,12 +94,12 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
             Cell: ({ row }: { row: Agent }) => (
                 <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Mail className="w-4 h-4 text-edvios-blue" />
+                        <Mail className="w-4 h-4 text-gray-400" />
                         {row.email}
                     </div>
                     {row.phone && (
                         <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
-                            <Phone className="w-4 h-4 text-edvios-blue" />
+                            <Phone className="w-4 h-4 text-gray-400" />
                             {row.phone}
                         </div>
                     )}
@@ -124,7 +118,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => onViewProfile(row)}
-                        className="hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all h-10 w-10 p-0"
+                        className="text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-all h-10 w-10 p-0"
                         title="View Profile"
                     >
                         <Eye className="w-5 h-5" />
@@ -135,7 +129,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                             variant="ghost"
                             size="sm"
                             onClick={() => setApproveDialog({ open: true, agentId: row.id })}
-                            className="hover:bg-edvios-green/10 hover:text-edvios-blue text-edvios-blue rounded-xl transition-all h-10 w-10 p-0"
+                            className="text-gray-400 hover:bg-edvios-green/10 hover:text-edvios-blue rounded-md transition-all h-10 w-10 p-0"
                             title="Approve Agent"
                         >
                             <CheckCircle className="w-5 h-5" />
@@ -146,7 +140,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => setDeleteDialog({ open: true, agentId: row.id })}
-                        className="hover:bg-red-50 hover:text-red-600 text-red-400 rounded-xl transition-all h-10 w-10 p-0"
+                        className="text-gray-400 hover:bg-red-50 hover:text-red-600 rounded-md transition-all h-10 w-10 p-0"
                         title="Delete Agent"
                     >
                         <Trash2 className="w-5 h-5" />
@@ -158,7 +152,7 @@ export const AgentsTable: React.FC<AgentsTableProps> = ({
 
     return (
         <>
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl overflow-hidden">
+            <div className="bg-white rounded-lg border border-gray-100 overflow-hidden">
                 <Table
                     data={agents}
                     columns={columns}

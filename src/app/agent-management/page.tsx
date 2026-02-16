@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Users, ShieldCheck, Clock, RotateCcw, XCircle, Filter } from 'lucide-react';
+import { Search, Users, Clock, RotateCcw, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAgents } from './hooks/use-agents';
 import { Agent, AgentStatus } from './types/agent.types';
@@ -9,7 +9,6 @@ import { approveAgent, deleteAgent } from './api/agent.api';
 import { AgentsTable } from './components/AgentsTable';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -18,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AppToast } from '@/utils/toast-utils';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { StatsCard } from '@/components/shared/stats-card';
 
 const AgentManagementPage = () => {
   const router = useRouter();
@@ -96,96 +97,71 @@ const AgentManagementPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB] p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 font-heading">
-          <div className="font-heading">
-            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Agent Management</h2>
-            <p className="mt-1 text-gray-600">
-              Manage and monitor recruitment agents
-            </p>
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="w-full space-y-6">
+        <Breadcrumb items={[{ label: "Agent Management", active: true }]} />
+
+        {/* Stats - More professional and themed */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {stats.map((stat, index) => (
+            <StatsCard
+              key={index}
+              label={stat.label}
+              value={stat.value}
+              icon={stat.icon}
+              loading={loading}
+            />
+          ))}
+        </div>
+
+        {/* Filters - Compact Toolstrip */}
+        <div className="flex flex-col lg:flex-row gap-3 pt-2">
+          <div className="flex-1 relative group">
+            <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 transition-colors group-focus-within:text-edvios-green" />
+            <Input
+              placeholder="Search by agent name, email or organization..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-10 border border-gray-100 bg-white rounded-md focus-visible:ring-1 focus-visible:ring-edvios-green text-sm font-medium"
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v as AgentStatus); setCurrentPage(1); }}>
+              <SelectTrigger className="h-10 w-full sm:w-40 border border-gray-100 bg-white rounded-md font-bold text-[10px] uppercase tracking-widest focus:ring-1 focus:ring-edvios-green">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent className="rounded-md">
+                <SelectItem value="ALL">All Statuses</SelectItem>
+                <SelectItem value="AGENT">Approved</SelectItem>
+                <SelectItem value="PENDING_AGENT">Pending</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-10 px-4 gap-2 rounded-md border border-gray-100 bg-gray-50 text-black font-bold text-xs uppercase tracking-wider hover:bg-gray-100 transition-all"
+              onClick={resetFilters}
+            >
+              <RotateCcw className="w-3.5 h-3.5" /> Reset
+            </Button>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={index} className="border-none shadow-xl overflow-hidden group hover:-translate-y-1 transition-all duration-500">
-                <CardContent className="p-0">
-                  <div className={`bg-linear-to-br ${stat.color} p-5 md:p-6 text-white flex items-center justify-between`}>
-                    <div>
-                      <p className="text-white/80 font-medium mb-1 uppercase tracking-wider text-[10px] md:text-xs">{stat.label}</p>
-                      <p className="text-3xl md:text-4xl font-bold">
-                        {loading ? '...' : stat.value}
-                      </p>
-                    </div>
-                    <div className="bg-white/20 p-3 md:p-4 rounded-xl md:rounded-2xl backdrop-blur-md group-hover:scale-110 transition-transform duration-500">
-                      <Icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {/* Filters */}
-        <Card className="border-none shadow-xl bg-white rounded-2xl md:rounded-3xl overflow-visible">
-          <CardContent className="p-4 md:p-6">
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="flex-1 relative w-full">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <Input
-                  placeholder="Search by agent name, email or organization..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-14 border-none bg-gray-50/50 rounded-2xl focus-visible:ring-2 focus-visible:ring-edvios-green text-sm md:text-base"
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v as AgentStatus); setCurrentPage(1); }}>
-                  <SelectTrigger className="h-14 w-full lg:w-48 border-none bg-gray-50/50 rounded-2xl font-semibold focus:ring-2 focus:ring-edvios-green">
-                    <div className="flex items-center gap-2">
-                      <Filter className="w-4 h-4 text-edvios-blue" />
-                      <SelectValue placeholder="Status" />
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-none shadow-2xl">
-                    <SelectItem value="ALL">All Statuses</SelectItem>
-                    <SelectItem value="AGENT">Approved</SelectItem>
-                    <SelectItem value="PENDING_AGENT">Pending</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Button
-                  variant="outline"
-                  className="h-14 px-6 gap-2 rounded-2xl border-none bg-edvios-green/10 text-edvios-blue hover:bg-edvios-green/20 transition-all font-bold w-full sm:w-auto"
-                  onClick={resetFilters}
-                >
-                  <RotateCcw className="w-5 h-5" /> Reset
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Error */}
         {error && (
-          <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+          <div className="p-4 bg-red-50 border border-red-100 rounded-lg text-red-600 flex items-center gap-3 transition-opacity duration-200">
             <XCircle className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm font-medium">{error}</span>
           </div>
         )}
 
-        {/* Table */}
+        {/* Table container */}
         <div className="relative">
           {actionLoading && (
-            <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] z-10 flex items-center justify-center rounded-2xl md:rounded-3xl">
-              <div className="w-10 md:w-12 h-10 md:h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin shadow-lg" />
+            <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] z-10 flex items-center justify-center rounded-lg">
+              <div className="w-10 h-10 border-4 border-edvios-green border-t-transparent rounded-full animate-spin shadow-lg" />
             </div>
           )}
           <AgentsTable

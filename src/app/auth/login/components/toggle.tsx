@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 
 interface UserTypeToggleProps {
   options: string[];
@@ -15,26 +15,11 @@ export function UserTypeToggle({
   disabled = false,
   label,
 }: UserTypeToggleProps) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Force horizontal layout on all screens
-  const gridCols = `grid-cols-${options.length}`;
-  
   // Calculate sliding background position and width
   const getBackgroundPosition = () => {
     const index = options.findIndex(opt => opt === value);
     const percentage = 100 / options.length;
-    
+
     // Consistent horizontal calculation for all screens
     return {
       width: `calc(${percentage}% - 8px)`,
@@ -53,22 +38,22 @@ export function UserTypeToggle({
           {label}
         </label>
       )}
-      
-      <div 
+
+      <div
         className="grid gap-1 p-1 rounded-4xl bg-gray-100 relative"
         style={{
           gridTemplateColumns: `repeat(${options.length}, 1fr)`,
         }}
       >
         {/* Sliding background indicator */}
-        <div 
+        <div
           className="absolute rounded-4xl shadow-sm border-[1px] border-edvios-green "
           style={{
             ...backgroundStyle,
             transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         />
-        
+
         {options.map((option) => (
           <button
             key={option}

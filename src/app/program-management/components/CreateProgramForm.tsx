@@ -147,12 +147,12 @@ const CreateProgramForm: React.FC<CreateProgramFormProps> = ({
         institutionId: form.institutionId || '',
         status: form.status || 'AVAILABLE',
       };
-      
+
       // Include id when editing
       if (isEdit && form.id) {
         backendData.id = form.id;
       }
-      
+
       await onSubmit(backendData);
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -197,60 +197,60 @@ const CreateProgramForm: React.FC<CreateProgramFormProps> = ({
             )}
           </div>
 
-      {/* University */}
-      <div className="space-y-2">
-        <Label htmlFor="university">
-          University <span className="text-red-500">*</span>
-        </Label>
-        <Select
-          value={form.institutionId}
-          onValueChange={(value) => {
-            const institution = institutions.find(i => i.id === value);
-            updateField('institutionId', value);
-            updateField('university', institution?.name || '');
-          }}
-        >
-          <SelectTrigger className={errors.university ? 'border-red-300' : ''}>
-            <SelectValue placeholder="Select university" />
-          </SelectTrigger>
-          <SelectContent>
-            {institutions.map((inst) => (
-              <SelectItem key={inst.id} value={inst.id}>
-                {inst.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.university && (
-          <div className="mt-1 text-sm text-red-600">{errors.university}</div>
-        )}
-      </div>
-
-      {/* Location */}
-      <div className="space-y-2">
-        <Label htmlFor="location">Location</Label>
-        <Select
-          value={form.location}
-          onValueChange={(value) => updateField('location', value)}
-        >
-          <SelectTrigger className={errors.location ? 'border-red-300' : ''}>
-            <SelectValue placeholder="Select country" />
-          </SelectTrigger>
-          <SelectContent>
-            {form.location && !locations.includes(form.location) && (
-              <SelectItem value={form.location}>{form.location}</SelectItem>
+          {/* University */}
+          <div className="space-y-2">
+            <Label htmlFor="university">
+              University <span className="text-red-500">*</span>
+            </Label>
+            <Select
+              value={form.institutionId}
+              onValueChange={(value) => {
+                const institution = institutions.find(i => i.id === value);
+                updateField('institutionId', value);
+                updateField('university', institution?.name || '');
+              }}
+            >
+              <SelectTrigger className={errors.university ? 'border-red-300' : ''}>
+                <SelectValue placeholder="Select university" />
+              </SelectTrigger>
+              <SelectContent>
+                {institutions.map((inst) => (
+                  <SelectItem key={inst.id} value={inst.id}>
+                    {inst.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.university && (
+              <div className="mt-1 text-sm text-red-600">{errors.university}</div>
             )}
-            {locations.map((loc) => (
-              <SelectItem key={loc} value={loc}>
-                {loc}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.location && (
-          <div className="mt-1 text-sm text-red-600">{errors.location}</div>
-        )}
-      </div>
+          </div>
+
+          {/* Location */}
+          <div className="space-y-2">
+            <Label htmlFor="location">Location</Label>
+            <Select
+              value={form.location}
+              onValueChange={(value) => updateField('location', value)}
+            >
+              <SelectTrigger className={errors.location ? 'border-red-300' : ''}>
+                <SelectValue placeholder="Select country" />
+              </SelectTrigger>
+              <SelectContent>
+                {form.location && !locations.includes(form.location) && (
+                  <SelectItem value={form.location}>{form.location}</SelectItem>
+                )}
+                {locations.map((loc) => (
+                  <SelectItem key={loc} value={loc}>
+                    {loc}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.location && (
+              <div className="mt-1 text-sm text-red-600">{errors.location}</div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -275,37 +275,37 @@ const CreateProgramForm: React.FC<CreateProgramFormProps> = ({
             )}
           </div>
 
-      {/* Application Fee */}
-      <div className="space-y-2">
-        <Label htmlFor="applicationFee">Application Fee</Label>
-        <Input
-          id="applicationFee"
-          type="text"
-          value={form.applicationFee}
-          onChange={(e) => updateField('applicationFee', e.target.value)}
-          className={errors.applicationFee ? 'border-red-300' : ''}
-          placeholder="e.g., $100"
-        />
-        {errors.applicationFee && (
-          <div className="mt-1 text-sm text-red-600">{errors.applicationFee}</div>
-        )}
-      </div>
+          {/* Application Fee */}
+          <div className="space-y-2">
+            <Label htmlFor="applicationFee">Application Fee</Label>
+            <Input
+              id="applicationFee"
+              type="text"
+              value={form.applicationFee}
+              onChange={(e) => updateField('applicationFee', e.target.value)}
+              className={errors.applicationFee ? 'border-red-300' : ''}
+              placeholder="e.g., $100"
+            />
+            {errors.applicationFee && (
+              <div className="mt-1 text-sm text-red-600">{errors.applicationFee}</div>
+            )}
+          </div>
 
-      {/* Duration */}
-      <div className="space-y-2">
-        <Label htmlFor="duration">Duration</Label>
-        <Input
-          id="duration"
-          type="text"
-          value={form.duration}
-          onChange={(e) => updateField('duration', e.target.value)}
-          className={errors.duration ? 'border-red-300' : ''}
-          placeholder="36 months"
-        />
-        {errors.duration && (
-          <div className="mt-1 text-sm text-red-600">{errors.duration}</div>
-        )}
-      </div>
+          {/* Duration */}
+          <div className="space-y-2">
+            <Label htmlFor="duration">Duration</Label>
+            <Input
+              id="duration"
+              type="text"
+              value={form.duration}
+              onChange={(e) => updateField('duration', e.target.value)}
+              className={errors.duration ? 'border-red-300' : ''}
+              placeholder="36 months"
+            />
+            {errors.duration && (
+              <div className="mt-1 text-sm text-red-600">{errors.duration}</div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -341,84 +341,77 @@ const CreateProgramForm: React.FC<CreateProgramFormProps> = ({
             )}
           </div>
 
-      {/* Level */}
-      <div className="space-y-2">
-        <Label htmlFor="level">Level</Label>
-        <Select
-          value={form.level || ''}
-          onValueChange={(value) => updateField('level', value || undefined)}
-        >
-          <SelectTrigger className={errors.level ? 'border-red-300' : ''}>
-            <SelectValue placeholder="Select level" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.values(StudyLevel).map((v) => (
-              <SelectItem key={v} value={v}>
-                {getStudyLevelLabel(v)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.level && (
-          <div className="mt-1 text-sm text-red-600">{errors.level}</div>
-        )}
-      </div>
-        {errors.level && (
-          <div className="mt-1 text-sm text-red-600">{errors.level}</div>
-        )}
-      </div>
-
-      {/* English Test Score */}
-      <div className="space-y-2">
-        <label htmlFor="englishTestScore" className="block text-sm font-medium">
-          English Test Score
-        </label>
-        <input
-          id="englishTestScore"
-          type="text"
-          value={form.englishTestScore}
-          onChange={(e) => updateField('englishTestScore', e.target.value)}
-          className={`w-full mt-2 h-10 px-4 rounded-md border ${
-            errors.englishTestScore ? 'border-red-300' : 'border-gray-200'
-          } bg-transparent focus:ring-2 focus:ring-green-500`}
-          placeholder="e.g. IELTS 6.5"
-        />
-        {errors.englishTestScore && (
-          <div className="mt-1 text-sm text-red-600">{errors.englishTestScore}</div>
-        )}
-      </div>
-
-      {/* Subject */}
-      <div className="space-y-2">
-        <label htmlFor="subject" className="block text-sm font-medium">
-          Subject
-        </label>
-        <select
-          id="subject"
-          value={form.subjectId || ''}
-          onChange={(e) => {
-            const val = e.target.value;
-            const sub = subjectsList.find((s) => s.id === val);
-            updateField('subjectId', val || undefined);
-            updateField('subjectName', sub?.name ?? '');
-          }}
-          className={`w-full mt-2 px-4 h-10 rounded-md border ${
-            errors.subjectId ? 'border-red-300' : 'border-gray-200'
-          } bg-transparent focus:ring-2 focus:ring-green-500`}
-        >
-          <option value="">Select subject</option>
-          {subjectsList.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-        {errors.subjectId && (
-          <div className="mt-1 text-sm text-red-600">{errors.subjectId}</div>
-        )}
-      </div>
+          {/* Level */}
+          <div className="space-y-2">
+            <Label htmlFor="level">Level</Label>
+            <Select
+              value={form.level || ''}
+              onValueChange={(value) => updateField('level', value || undefined)}
+            >
+              <SelectTrigger className={errors.level ? 'border-red-300' : ''}>
+                <SelectValue placeholder="Select level" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(StudyLevel).map((v) => (
+                  <SelectItem key={v} value={v}>
+                    {getStudyLevelLabel(v)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.level && (
+              <div className="mt-1 text-sm text-red-600">{errors.level}</div>
+            )}
+          </div>
+          {errors.level && (
+            <div className="mt-1 text-sm text-red-600">{errors.level}</div>
+          )}
         </div>
-      
+
+        {/* English Test Score */}
+        <div className="space-y-2">
+          <Label htmlFor="englishTestScore">English Test Score</Label>
+          <Input
+            id="englishTestScore"
+            type="text"
+            value={form.englishTestScore}
+            onChange={(e) => updateField('englishTestScore', e.target.value)}
+            className={errors.englishTestScore ? 'border-red-300' : ''}
+            placeholder="e.g. IELTS 6.5"
+          />
+          {errors.englishTestScore && (
+            <div className="mt-1 text-sm text-red-600">{errors.englishTestScore}</div>
+          )}
+        </div>
+
+        {/* Subject */}
+        <div className="space-y-2">
+          <Label htmlFor="subject">Subject</Label>
+          <Select
+            value={form.subjectId || ''}
+            onValueChange={(value) => {
+              const sub = subjectsList.find((s) => s.id === value);
+              updateField('subjectId', value || undefined);
+              updateField('subjectName', sub?.name ?? '');
+            }}
+          >
+            <SelectTrigger className={errors.subjectId ? 'border-red-300' : ''}>
+              <SelectValue placeholder="Select subject" />
+            </SelectTrigger>
+            <SelectContent>
+              {subjectsList.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.subjectId && (
+            <div className="mt-1 text-sm text-red-600">{errors.subjectId}</div>
+          )}
+        </div>
+      </div>
+
 
       {/* Additional Settings Section */}
       <div className="space-y-4">
