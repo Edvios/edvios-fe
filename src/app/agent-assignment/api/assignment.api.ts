@@ -53,8 +53,17 @@ export const fetchSelectedAgent = async () => {
  */
 export const updateAgentStatus = async (agentId: string, selectedAgentId: string): Promise<void> => {
   try {
-    await axiosInstance.patch(`/auth/change-role/${agentId}`, { role: 'SELECTED_AGENT' });
     await axiosInstance.patch(`/auth/change-role/${selectedAgentId}`, { role: 'AGENT' });
+    try {
+      await axiosInstance.patch(`/auth/change-role/${agentId}`, { role: 'SELECTED_AGENT' });
+    } catch (secondError) {
+      try {
+        await axiosInstance.patch(`/auth/change-role/${selectedAgentId}`, { role: 'SELECTED_AGENT' });
+      } catch (rollbackError) {
+        console.error('Error rolling back agent status change:', rollbackError);
+      }
+      throw secondError;
+    }
   } catch (error) {
     console.error(`Error setting agent`, error);
     throw error;
