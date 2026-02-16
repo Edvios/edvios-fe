@@ -11,8 +11,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Users, GraduationCap, Target, Plane, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2 } from 'lucide-react';
+import { Users, GraduationCap, Target, Plane, FileText, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from 'next/navigation';
+import { logout } from '@/app/auth/login/api/auth.api';
 import { useRegistration } from './hooks/use-registration';
 import { StudentRegistrationData } from './types';
 import { useCloudinaryUpload } from '@/hooks/use-cloudinary-upload';
@@ -24,6 +26,7 @@ interface StudentRegistrationFormProps {
 }
 
 const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSubmit, onClose }) => {
+  const router = useRouter();
   const {
     currentStep,
     formData,
@@ -37,6 +40,11 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
   } = useRegistration();
 
   const { uploadMultipleFiles, isUploading, uploadProgress } = useCloudinaryUpload();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/auth/login');
+  };
 
   const stepIcons = [Users, GraduationCap, Target, Plane, FileText, CheckCircle];
 
@@ -833,6 +841,14 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onSub
 
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10 pt-4">
               <div className="flex gap-2 order-2 sm:order-1">
+                <Button
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
                 {currentStep > 1 && (
                   <Button
                     variant="outline"
