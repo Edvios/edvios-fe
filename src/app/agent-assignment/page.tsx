@@ -7,6 +7,7 @@ import { AssignmentsTable } from './components/AssignmentsTable';
 import { SelectedAgentCard } from './components/SelectedAgentCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 const AgentAssignmentPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,33 +38,29 @@ const AgentAssignmentPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFCFB] via-white to-green-50/30 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
-          <div className="font-heading">
-            <h2 className="text-3xl sm:text-4xl font-bold text-edvios-blue">Agent Assignment</h2>
-            <p className="mt-1 text-gray-600">Assign students to recruitment agents</p>
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="w-full space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <Breadcrumb items={[{ label: "Agent Assignment", active: true }]} />
+          <div className="w-full md:w-auto">
+            <SelectedAgentCard />
           </div>
         </div>
 
-        {/* Selected Agent Card */}
-        <SelectedAgentCard />
-
-        {/* Search Bar */}
-        <div className="flex flex-col md:flex-row gap-3 items-center">
+        {/* Search Bar - Compact toolstrip look */}
+        <div className="flex flex-col md:flex-row gap-3 pt-2">
           <div className="flex-1 relative w-full group">
             <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 transition-colors group-focus-within:text-green-500" />
             <Input
               placeholder="Search by student name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-11 border-none shadow-md bg-white rounded-2xl focus-visible:ring-2 focus-visible:ring-green-500 text-sm"
+              className="pl-10 h-10 border border-gray-100 bg-white rounded-md focus-visible:ring-1 focus-visible:ring-green-500 text-sm"
             />
           </div>
           <Button
             variant="outline"
-            className="w-full md:w-auto h-11 px-6 gap-2 rounded-2xl border-none shadow-md bg-white hover:bg-green-50 hover:text-green-600 transition-all font-semibold text-sm"
+            className="w-full md:w-auto h-10 px-4 gap-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 font-bold text-xs uppercase transition-all"
             onClick={resetFilters}
           >
             <RotateCcw className="w-4 h-4" /> Reset
@@ -72,7 +69,7 @@ const AgentAssignmentPage = () => {
 
         {/* Error */}
         {error && (
-          <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+          <div className="p-4 bg-red-50 border border-red-100 rounded-lg text-red-600 flex items-center gap-3 transition-opacity duration-200">
             <XCircle className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm font-medium">{error}</span>
           </div>

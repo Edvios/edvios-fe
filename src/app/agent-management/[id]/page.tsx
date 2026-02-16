@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
-    ArrowLeft,
     Mail,
     Phone,
     MapPin,
@@ -24,12 +23,12 @@ import {
     CheckCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { Badge } from '@/components/ui/badge';
 import { Agent } from '../types/agent.types';
 import { getAgent, approveAgent } from '../api/agent.api';
 import { AppToast } from '@/utils/toast-utils';
-import {LucideIcon} from 'lucide-react';   
+import { LucideIcon } from 'lucide-react';
 
 const AgentProfilePage = () => {
     const params = useParams();
@@ -40,7 +39,7 @@ const AgentProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState(false);
 
-    const fetchAgentData = async () => {
+    const fetchAgentData = useCallback(async () => {
         try {
             setLoading(true);
             const data = await getAgent(agentId);
@@ -52,13 +51,13 @@ const AgentProfilePage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [agentId, router]);
 
     useEffect(() => {
         if (agentId) {
             fetchAgentData();
         }
-    }, [agentId, router]);
+    }, [agentId, fetchAgentData]);
 
     const handleApprove = async () => {
         if (!agent) return;
@@ -67,7 +66,7 @@ const AgentProfilePage = () => {
             await approveAgent(agent.id);
             AppToast.success('Agent approved successfully');
             fetchAgentData(); // Refresh data
-        } catch (error) {
+        } catch {
             AppToast.error('Failed to approve agent');
         } finally {
             setActionLoading(false);
@@ -90,78 +89,55 @@ const AgentProfilePage = () => {
     const fullName = `${agent.firstName} ${agent.lastName}`.trim() || agent.agentName || 'Unknown Agent';
 
     return (
-        <div className="min-h-screen bg-[#FDFCFB] pb-12">
-            {/* Header / Navigation */}
-            <div className="bg-white border-b border-gray-100 sticky top-0 z-10 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-                    <Button
-                        variant="ghost"
-                        onClick={() => router.push('/agent-management')}
-                        className="gap-2 hover:bg-edvios-green/10 text-gray-600 hover:text-edvios-green transition-all"
-                    >
-                        <ArrowLeft className="w-4 h-4" /> Back to List
-                    </Button>
-                    <div className="hidden md:flex items-center gap-2">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Agent Profile</span>
-                        <div className="w-1 h-1 rounded-full bg-gray-300"></div>
-                        <span className="text-xs font-bold text-edvios-green">{fullName}</span>
-                    </div>
+        <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+            <div className="w-full space-y-6">
+                <div className="flex items-center justify-between">
+                    <Breadcrumb
+                        items={[
+                            { label: "Agent Management", href: "/agent-management" },
+                            { label: fullName, active: true }
+                        ]}
+                        className="mb-0"
+                    />
+                    {agent.role === 'PENDING_AGENT' && (
+                        <Button
+                            onClick={handleApprove}
+                            disabled={actionLoading}
+                            className="bg-edvios-green hover:bg-edvios-green/90 text-white font-bold text-xs uppercase tracking-widest h-10 px-6 rounded-md shadow-none"
+                        >
+                            {actionLoading
+                                ? <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                                : <CheckCircle className="w-4 h-4 mr-2" />
+                            }
+                            Approve Agent
+                        </Button>
+                    )}
                 </div>
-            </div>
 
-            <div className="max-w-7xl mx-auto px-4 md:px-8 mt-8">
-                <Card className="border-none shadow-2xl overflow-hidden rounded-3xl">
-                    <div className=" h-40 md:h-50 w-full relative">
-                        {agent.role === 'PENDING_AGENT' && (
-                            <div className="md:mb-4 shrink-0 p-2 flex justify-end">
-                                <Button
-                                    onClick={handleApprove}
-                                    disabled={actionLoading}
-                                    className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-8 py-6 rounded-2xl shadow-xl  transition-all hover:scale-105 active:scale-95"
-                                >
-                                    {actionLoading 
-                                        ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> 
-                                        : <CheckCircle className="w-5 h-5 mr-2" />
-                                    }
-                                    Approve Agent Access
-                                </Button>
-                            </div>
-                        )}
-
-                        <div className="absolute -bottom-16 left-6 md:left-12 flex flex-col md:flex-row items-center md:items-end gap-4 md:gap-8 text-center md:text-left w-[calc(100%-48px)]">
-                            <div className="hidden md:flex w-32 h-32 md:w-44 md:h-44 rounded-3xl bg-white shadow-2xl items-center justify-center text-edvios-green font-bold text-4xl md:text-6xl border-8 border-white shrink-0">
+                <div className="bg-white border border-gray-100 rounded-lg overflow-hidden">
+                    <div className="bg-edvios-green/5 h-32 w-full relative group">
+                        <div className="absolute -bottom-10 left-8 flex items-end gap-4 overflow-visible">
+                            <div className="w-24 h-24 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-edvios-green font-bold text-3xl shadow-sm">
                                 {(agent.firstName?.[0] || '') + (agent.lastName?.[0] || '')}
                             </div>
-
-                            
-                            <div className="md:mb-4 flex-1">
-                                <p className="text-3xl md:text-5xl font-black text-edvios-blue drop-shadow-sm truncate">{fullName}</p>
-                                <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-3">
+                            <div className="mb-2">
+                                <h1 className="text-2xl font-bold text-edvios-blue">{fullName}</h1>
+                                <div className="flex gap-2 mt-1">
                                     <Badge
                                         className={
                                             agent.role === 'AGENT'
-                                                ? 'bg-white text-edvios-green border-none shadow-lg px-4 py-1.5 rounded-xl font-bold text-xs'
-                                                : 'bg-yellow-400 text-yellow-900 border-none shadow-lg px-4 py-1.5 rounded-xl font-bold text-xs'
+                                                ? 'bg-edvios-green/10 text-edvios-green border-edvios-green/20 px-2 py-0.5 rounded-full font-bold text-[10px]'
+                                                : 'bg-yellow-100 text-yellow-700 border-yellow-200 px-2 py-0.5 rounded-full font-bold text-[10px]'
                                         }
                                     >
-                                        {agent.role === 'AGENT' ? '✓ APPROVED AGENT' : '⧗ PENDING APPROVAL'}
+                                        {agent.role === 'AGENT' ? 'APPROVED' : 'PENDING'}
                                     </Badge>
-
-                                    {/* {agent.agentTier && (
-                                        <Badge className="bg-blue-600 text-white border-none shadow-lg px-4 py-1.5 rounded-xl font-bold text-xs uppercase">
-                                            {agent.agentTier} TIER
-                                        </Badge>
-                                    )} */}
-
-                                 
                                 </div>
                             </div>
-
-                           
                         </div>
                     </div>
 
-                    <CardContent className="p-6 md:p-12 pt-28 md:pt-32 space-y-16 bg-white">
+                    <div className="p-8 pt-16 space-y-12 bg-white">
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                             {/* Left Content Area */}
@@ -215,25 +191,25 @@ const AgentProfilePage = () => {
                                         <DetailItem icon={Award} label="Active Counsellors" value={agent.numberOfCounsellors?.toString() || 'N/A'} />
 
                                         <div className="sm:col-span-2">
-                                            <div className="p-8 bg-gray-50 rounded-[2rem] border border-gray-100 flex flex-col gap-6 shadow-sm">
+                                            <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 flex flex-col gap-6">
                                                 <div>
-                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-3">Primary Markets</p>
+                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3">Primary Markets</p>
                                                     <div className="flex flex-wrap gap-2">
                                                         {agent.primaryStudentMarkets && agent.primaryStudentMarkets.length > 0 ? (
                                                             agent.primaryStudentMarkets.map((m, i) => (
-                                                                <span key={i} className="px-4 py-2 bg-white border border-edvios-green/20 text-edvios-green text-sm font-bold rounded-2xl shadow-sm">{m}</span>
+                                                                <span key={i} className="px-3 py-1 bg-white border border-gray-200 text-xs font-bold rounded text-gray-700">{m}</span>
                                                             ))
-                                                        ) : <span className="text-gray-400 text-sm italic">N/A</span>}
+                                                        ) : <span className="text-gray-400 text-xs italic">N/A</span>}
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-3">Main Destinations</p>
+                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3">Main Destinations</p>
                                                     <div className="flex flex-wrap gap-2">
                                                         {agent.mainDestinations && agent.mainDestinations.length > 0 ? (
                                                             agent.mainDestinations.map((d, i) => (
-                                                                <span key={i} className="px-4 py-2 bg-white border border-blue-200 text-blue-600 text-sm font-bold rounded-2xl shadow-sm">{d}</span>
+                                                                <span key={i} className="px-3 py-1 bg-white border border-gray-200 text-xs font-bold rounded text-gray-700">{d}</span>
                                                             ))
-                                                        ) : <span className="text-gray-400 text-sm italic">N/A</span>}
+                                                        ) : <span className="text-gray-400 text-xs italic">N/A</span>}
                                                     </div>
                                                 </div>
                                             </div>
@@ -244,24 +220,22 @@ const AgentProfilePage = () => {
 
                             {/* Sidebar Area */}
                             <div className="space-y-12">
-                                {/* Verification Status Card */}
-                                <div className="rounded-[2.5rem] p-8 text-white shadow-2xl space-y-8">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 bg-edvios-green rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
-                                            <Shield className="w-7 h-7 text-white" />
+                                {/* Verification Status Info */}
+                                <div className="rounded-lg p-6 bg-gray-50 border border-gray-100 space-y-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-edvios-green/10 rounded flex items-center justify-center">
+                                            <Shield className="w-5 h-5 text-edvios-green" />
                                         </div>
                                         <div>
-                                            <h4 className="text-lg font-black tracking-tight">System Status</h4>
-                                            <p className="text-xs text-gray-400 font-medium">Verification record</p>
+                                            <h4 className="text-sm font-bold text-gray-900">System Status</h4>
+                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Verification record</p>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4 pt-6 border-t border-white/10">
+                                    <div className="space-y-2 pt-4 border-t border-gray-200">
                                         <Row label="Member Since" value={new Date(agent.createdAt).toLocaleDateString()} />
                                         <Row label="Security Role" value={agent.role} />
                                     </div>
-
-                                    
                                 </div>
 
                                 {/* Accreditations & Boolean Checks */}
@@ -293,26 +267,25 @@ const AgentProfilePage = () => {
                         </div>
 
                         {/* Services & Reason Section */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8">
-                            <div className="space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                            <div className="space-y-4">
                                 <SectionHeader icon={Info} title="Services Provided" />
-                                <div className="flex flex-wrap gap-3">
+                                <div className="flex flex-wrap gap-2">
                                     {agent.servicesProvided && agent.servicesProvided.length > 0 ? (
                                         agent.servicesProvided.map((s, i) => (
-                                            <div key={i} className="flex items-center gap-3 px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 group hover:border-edvios-green transition-all">
-                                                <div className="w-2 h-2 rounded-full bg-edvios-green group-hover:scale-150 transition-transform"></div>
-                                                <span className="text-sm font-bold text-gray-700 uppercase tracking-tight">{s.replace(/_/g, ' ')}</span>
+                                            <div key={i} className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded border border-gray-100 group">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-edvios-green"></div>
+                                                <span className="text-xs font-bold text-gray-600 uppercase tracking-tight">{s.replace(/_/g, ' ')}</span>
                                             </div>
                                         ))
                                     ) : <p className="text-gray-400 text-xs italic">None listed</p>}
                                 </div>
                             </div>
 
-                            <div className="space-y-8">
+                            <div className="space-y-4">
                                 <SectionHeader icon={FileText} title="Goal/Mission on Platform" />
-                                <div className="p-8 bg-blue-50/50 rounded-[2.5rem] border border-blue-100 relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
-                                    <p className="text-sm md:text-base text-blue-900 leading-relaxed font-medium italic relative z-10">
+                                <div className="p-6 bg-background rounded-lg border border-gray-100">
+                                    <p className="text-sm text-gray-600 leading-relaxed font-medium italic">
                                         &quot;{agent.reasonToUseEdvios || 'No specific mission provided at registration.'}&quot;
                                     </p>
                                 </div>
@@ -320,42 +293,42 @@ const AgentProfilePage = () => {
                         </div>
 
                         {/* Section: Documents */}
-                        <div className="space-y-10 pt-8">
+                        <div className="space-y-6 pt-4">
                             <SectionHeader icon={FileText} title="Documentation & Compliance" />
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 {agent.businessRegistrationCertificate && (
                                     <DocumentCard
                                         title="Registration Certificate"
                                         url={agent.businessRegistrationCertificate}
-                                        subtitle="Primary Proof of Business"
+                                        subtitle="Primary Proof"
                                     />
                                 )}
                                 {agent.officeAddressProof && (
                                     <DocumentCard
                                         title="Office Address Proof"
                                         url={agent.officeAddressProof}
-                                        subtitle="Utility bill or lease agreement"
+                                        subtitle="Utility bill/Lease"
                                     />
                                 )}
                                 {!agent.businessRegistrationCertificate && !agent.officeAddressProof && (
-                                    <div className="col-span-full p-16 text-center bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
-                                        <FileText className="w-16 h-16 text-gray-300 mx-auto mb-6" />
-                                        <p className="text-gray-400 font-black uppercase tracking-widest">No digital documentation uploaded</p>
+                                    <div className="col-span-full p-12 text-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                                        <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                                        <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">No documentation uploaded</p>
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         {agent.notes && (
-                            <div className="space-y-6 pt-8">
-                                <SectionHeader icon={FileText} title="Internal Administrative Notes" />
-                                <div className="p-8 bg-yellow-50 rounded-[2rem] border border-yellow-200 shadow-sm">
-                                    <p className="text-sm text-yellow-900 font-medium leading-relaxed">{agent.notes}</p>
+                            <div className="space-y-4 pt-4">
+                                <SectionHeader icon={FileText} title="Administrative Notes" />
+                                <div className="p-6 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <p className="text-xs text-yellow-900 font-medium leading-relaxed">{agent.notes}</p>
                                 </div>
                             </div>
                         )}
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -364,20 +337,19 @@ const AgentProfilePage = () => {
 /* ------------------ Helpers ------------------ */
 
 const SectionHeader = ({ icon: Icon, title }: { icon: LucideIcon; title: string }) => (
-    <h3 className="text-xs md:text-sm font-black text-edvios-blue uppercase tracking-[0.3em] flex items-center gap-4 border-b-2 border-edvios-green/10 pb-6 mb-2">
-        <Icon className="w-6 h-6 text-edvios-green" /> {title}
+    <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2 border-b border-gray-100 pb-2">
+        <Icon className="w-3.5 h-3.5" /> {title}
     </h3>
 );
 
 const DetailItem = ({ icon: Icon, label, value, isLink }: { icon: LucideIcon; label: string; value: string; isLink?: boolean }) => (
-    <div className="flex items-start gap-4 p-1 hover:bg-edvios-green/5 rounded-[1.5rem] transition-all group border border-transparent hover:border-edvios-green/10 h-full min-w-0 w-full">
-        
-        <div className="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-edvios-green group-hover:bg-white transition-all shrink-0 shadow-sm group-hover:shadow-md group-hover:-translate-y-1">
+    <div className="flex items-start gap-3 py-2">
+        <div className="w-8 h-8 rounded bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 shrink-0">
             <Icon className="w-4 h-4" />
         </div>
 
-        <div className="min-w-0 flex-1 py-1 w-full">
-            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">
+        <div className="min-w-0 flex-1">
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">
                 {label}
             </p>
 
@@ -386,13 +358,13 @@ const DetailItem = ({ icon: Icon, label, value, isLink }: { icon: LucideIcon; la
                     href={value.startsWith('http') ? value : `https://${value}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-edvios-green font-black text-base break-all whitespace-pre-wrap hover:underline flex items-center gap-2"
+                    className="text-edvios-green font-bold text-sm break-all hover:underline flex items-center gap-2"
                 >
                     {value}
-                    <ExternalLink className="w-4 h-4 shrink-0" />
+                    <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                 </a>
             ) : (
-                <p className="text-gray-900 font-black text-base break-all whitespace-pre-wrap">
+                <p className="text-sm text-gray-900 font-medium break-all">
                     {value}
                 </p>
             )}
@@ -429,18 +401,14 @@ const DocumentCard = ({ title, url, subtitle }: { title: string; url: string; su
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col gap-5 p-8 bg-white border border-gray-100 rounded-[2.5rem] hover:border-edvios-green/50 hover:bg-edvios-green/5 transition-all group shadow-sm hover:shadow-xl text-center relative overflow-hidden"
+            className="flex items-center gap-3 p-4 bg-white border border-gray-100 rounded-lg hover:border-edvios-green/50 hover:bg-edvios-green/5 transition-all group shadow-sm"
         >
-            <div className="absolute top-0 left-0 w-1 h-full bg-edvios-green transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-edvios-green/10 flex items-center justify-center text-edvios-green group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-inner">
-                <FileText className="w-10 h-10" />
+            <div className="w-10 h-10 rounded bg-edvios-green/10 flex items-center justify-center text-edvios-green shrink-0">
+                <FileText className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-                <p className="text-sm font-black text-gray-900 mb-1">{title}</p>
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-4">{subtitle}</p>
-                <div className="flex items-center justify-center gap-2 text-xs font-black text-edvios-green opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                    VIEW DOCUMENT <ExternalLink className="w-3 h-3" />
-                </div>
+                <p className="text-[10px] font-bold text-gray-800 truncate mb-0.5">{title}</p>
+                <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest">{subtitle}</p>
             </div>
         </a>
     );
