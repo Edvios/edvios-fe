@@ -11,8 +11,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Briefcase, User, Building, Globe, Layers, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2, Settings } from 'lucide-react';
+import { Briefcase, User, Building, Globe, Layers, CheckCircle, ArrowRight, ArrowLeft, Send, Loader2, Settings, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from 'next/navigation';
+import { logout } from '@/app/auth/login/api/auth.api';
 import { useAgentRegistration } from './hooks/use-registration';
 import { AgentRegistrationData } from './types/registation.types';
 import { ServiceType, FeatureType } from './enums/registration.enums';
@@ -25,6 +27,7 @@ interface AgentRegistrationFormProps {
 }
 
 const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit, onClose }) => {
+    const router = useRouter();
     const {
         currentStep,
         formData,
@@ -38,6 +41,11 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
     } = useAgentRegistration();
 
     const { uploadFile, isUploading, uploadProgress } = useCloudinaryUpload();
+
+    const handleLogout = async () => {
+        await logout();
+        router.push('/auth/login');
+    };
 
     const stepIcons = [Briefcase, User, Building, Globe, Layers, Settings];
 
@@ -614,15 +622,25 @@ const AgentRegistrationForm: React.FC<AgentRegistrationFormProps> = ({ onSubmit,
                         </AnimatePresence>
 
                         <div className="flex justify-between items-center mt-12 pt-6 border-t border-gray-100">
-                            <Button
-                                variant="outline"
-                                onClick={handlePrevStep}
-                                disabled={currentStep === 1}
-                                className="w-32 hover:bg-gray-50 border-gray-200"
-                            >
-                                <ArrowLeft className="h-4 w-4 mr-2" />
-                                Previous
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={handleLogout}
+                                    className="hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                                >
+                                    <LogOut className="h-4 w-4 mr-2" />
+                                    Logout
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    onClick={handlePrevStep}
+                                    disabled={currentStep === 1}
+                                    className="hover:bg-gray-50 border-gray-200"
+                                >
+                                    <ArrowLeft className="h-4 w-4 mr-2" />
+                                    Previous
+                                </Button>
+                            </div>
 
                             {currentStep < totalSteps ? (
                                 <Button
