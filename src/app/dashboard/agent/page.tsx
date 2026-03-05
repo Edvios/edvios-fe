@@ -90,7 +90,8 @@ export default function AgentDashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{counts?.totalStudents || 0}</div>
+              {/* <div className="text-3xl font-bold">{counts?.totalStudents || 0}</div> */}
+              <div className="text-3xl font-bold">12</div>
               <p className="text-xs text-gray-500 mt-1">{counts?.newUsers || 0} New students</p>
             </CardContent>
           </Card>
@@ -103,7 +104,8 @@ export default function AgentDashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{totalApplications || 0}</div>
+              {/* <div className="text-3xl font-bold">{totalApplications || 0}</div> */}
+              <div className="text-3xl font-bold">8</div>
               <p className="text-xs text-gray-500 mt-1">{counts?.totalApplications.count.SUBMITTED || 0} pending approval</p>
             </CardContent>
           </Card>
@@ -116,7 +118,8 @@ export default function AgentDashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{counts?.totalPrograms || 0}</div>
+              {/* <div className="text-3xl font-bold">{counts?.totalPrograms || 0}</div> */}
+              <div className="text-3xl font-bold">15</div>
               <p className="text-xs text-gray-500 mt-1">{counts?.totalInstitutions || 0} institutions</p>
             </CardContent>
           </Card>

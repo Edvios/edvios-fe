@@ -164,6 +164,13 @@ export default function StudentDashboard() {
                   stat.key === "programs" ? "Total Programs" :
                     stat.label;
 
+            const dummyValues: Record<string, number> = {
+              applications: 7,
+              accepted: 3,
+              pending: 2,
+              programs: 11,
+            };
+
             return (
               <Card key={stat.key} className="border border-slate-100 shadow-sm">
                 <CardHeader className="pb-2">
@@ -175,7 +182,8 @@ export default function StudentDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="text-3xl font-semibold text-slate-900 text-center">{stat.value}</div>
+                  {/* <div className="text-3xl font-semibold text-slate-900 text-center">{stat.value}</div> */}
+                  <div className="text-3xl font-semibold text-slate-900 text-center">{dummyValues[stat.key] || 0}</div>
                 </CardContent>
               </Card>
             );
