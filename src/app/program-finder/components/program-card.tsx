@@ -24,29 +24,22 @@ interface ProgramCardProps {
 
 const InfoItem = ({
   icon: Icon,
-  name,
   label,
   highlight = false,
 }: {
   icon: React.ElementType;
-  name: string;
   label: string;
   highlight?: boolean;
 }) => (
-  <div className="flex items-start gap-2 min-w-0">
+  <div className="flex items-center gap-2 min-w-0">
     <Icon className="h-4 w-4 text-muted-foreground shrink-0" />
-    <div className="min-w-0">
-      <span className="block text-xs font-medium text-muted-foreground mb-0.5">
-        {name}
-      </span>
-      <span
-        className={`block truncate ${
-          highlight ? "font-semibold text-foreground" : "text-muted-foreground"
-        }`}
-      >
-        {label}
-      </span>
-    </div>
+    <span
+      className={`truncate ${
+        highlight ? "font-semibold text-foreground" : "text-muted-foreground"
+      }`}
+    >
+      {label}
+    </span>
   </div>
 );
 
@@ -87,43 +80,39 @@ export const ProgramCard: React.FC<ProgramCardProps> = ({
       <div className="absolute left-0 top-0 bottom-0 w-2 bg-edvios-green" />
 
       <CardHeader className="pb-2 pt-4">
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-2 md:gap-4">
+          <h3 className="text-base font-semibold truncate min-w-0">
+            {program.title}
+          </h3>
+
+          <p className="text-sm text-muted-foreground truncate min-w-0">
+            {program.institution}
+          </p>
+
           <div className="min-w-0">
-            <h3 className="text-base font-semibold !text-edvios-green truncate">
-              {program.title}
-            </h3>
-            <p className="text-sm text-muted-foreground truncate min-w-0">
-              {program.institution}
-            </p>
+            {program.scholarship && (
+              <span className="inline-block rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800">
+                Scholarship
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center justify-between gap-2">
-            <div className="min-w-0">
-              {program.scholarship && (
-                <span className="inline-block rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800">
-                  Scholarship
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground truncate min-w-0">
-              <MapPin className="h-4 w-4 shrink-0" />
-              <span className="truncate">
-                {program.location}, {program.country}
-              </span>
-            </div>
+          <div className="flex items-center gap-1.5 text-sm text-muted-foreground truncate min-w-0">
+            <MapPin className="h-4 w-4 shrink-0" />
+            <span className="truncate">
+              {program.location}, {program.country}
+            </span>
           </div>
         </div>
       </CardHeader>
 
       <CardContent className="pt-0 pb-3">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-          <InfoItem icon={GraduationCap} name="Level" label={program.level} />
-          <InfoItem icon={Calendar} name="Intake" label={program.intake} />
-          <InfoItem icon={Clock} name="Duration" label={program.duration} />
+          <InfoItem icon={GraduationCap} label={program.level} />
+          <InfoItem icon={Calendar} label={program.intake} />
+          <InfoItem icon={Clock} label={program.duration} />
           <InfoItem
             icon={Banknote}
-            name="Tuition Fee"
             label={program.tuitionFee}
             highlight
           />
