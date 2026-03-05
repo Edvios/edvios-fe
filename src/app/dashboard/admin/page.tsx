@@ -47,35 +47,40 @@ export default function ADMINDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <StatsCard
             label="Total Users"
-            value={stats.totalUsers.toLocaleString()}
+            /* value={stats.totalUsers.toLocaleString()} */
+            value="47"
             icon={Users}
             valueColor="text-black"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Active Agents"
-            value={stats.activeAgents.toLocaleString()}
+            /* value={stats.activeAgents.toLocaleString()} */
+            value="23"
             icon={User}
             valueColor="text-edvios-green"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Pending Agents"
-            value={stats.pendingAgents.toLocaleString()}
+            /* value={stats.pendingAgents.toLocaleString()} */
+            value="9"
             icon={UserPlus}
             valueColor="text-black"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Students"
-            value={stats.students.toLocaleString()}
+            /* value={stats.students.toLocaleString()} */
+            value="34"
             icon={GraduationCapIcon}
             valueColor="text-edvios-green"
             loading={isLoadingStats}
           />
           <StatsCard
             label="Pending Applications"
-            value={stats.applications.toLocaleString()}
+            /* value={stats.applications.toLocaleString()} */
+            value="16"
             icon={Form}
             valueColor="text-black"
             loading={isLoadingStats}
